@@ -1,0 +1,57 @@
+{
+  "name": "@croct/plug",
+  "version": "0.0.0-dev",
+  "description": "The hassle-free way to integrate Croct into any web application.",
+  "author": {
+    "name": "Croct",
+    "email": "plug-js+lib@croct.com",
+    "url": "https://croct.com"
+  },
+  "license": "UNLICENSED",
+  "types": "typings/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/croct-tech/plug-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/croct-tech/plug-js/issues"
+  },
+  "homepage": "https://github.com/croct-tech/plug-js#readme",
+  "scripts": {
+    "validate": "tsc --noEmit",
+    "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
+    "test": "jest -c jest.config.js",
+    "rollup": "rollup -c rollup.config.js",
+    "rollup-min": "rollup -c rollup.config.js --environment minify"
+  },
+  "dependencies": {
+    "@croct-tech/sdk": "0.0.1-alpha1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "dts-bundle-generator": "^3.3.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "jest": "^25.1.0",
+    "rollup": "^1.31.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^1.3.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.21.2",
+    "rollup-plugin-uglify": "^6.0.4",
+    "temp-dir": "^2.0.0",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5"
+  },
+  "browserslist": [
+    "last 1 version"
+  ],
+  "files": [
+    "build/index.js",
+    "build/index.d.ts"
+  ]
+}

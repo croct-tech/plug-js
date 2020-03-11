@@ -1,0 +1,113 @@
+name: Validations
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm audit
+
+  validate:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm run validate
+
+  lint:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - uses: paambaati/codeclimate-action@v2.5.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
+        with:
+          coverageCommand: npm test
+          coverageLocations:
+            ./coverage/lcov.info:lcov

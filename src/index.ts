@@ -8,7 +8,7 @@ import {
     EvaluationFacadeOptions as EvaluationOptions,
     SessionFacade,
     TrackerFacade,
-    UserFacade,
+    UserFacade
 } from '@croct-tech/sdk';
 
 class CroctPlug {
@@ -18,7 +18,7 @@ class CroctPlug {
         if (this.facade !== undefined) {
             const logger = this.facade.getLogger();
 
-            logger.log('Croct is already plugged in.');
+            logger.info('Croct is already plugged in.');
 
             return;
         }
@@ -84,7 +84,7 @@ class CroctPlug {
         try {
             await this.instance.close();
         } finally {
-            logger.log('🔌 App has been unplugged from Croct.');
+            logger.info('🔌 App has been unplugged from Croct.');
         }
     }
 }

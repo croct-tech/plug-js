@@ -1,0 +1,130 @@
+name: Test-build-deploy
+
+on:
+  push:
+  create:
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm audit
+
+  validate:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run validate
+
+  lint:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - run: npm test
+
+  deploy:
+    runs-on: ubuntu-18.04
+    needs:
+      - validate
+      - security-checks
+      - lint
+      - test
+    env:
+      GCLOUD_PROJECT: ${{ secrets.GCLOUD_PROJECT }}
+      GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
+      GITHUB_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build bundles
+        run: |-
+          npm run rollup
+          npm run rollup-min
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: bundle
+          path: dist

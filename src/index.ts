@@ -9,7 +9,7 @@ import {
     SessionFacade,
     TrackerFacade,
     UserFacade,
-} from '@croct/sdk';
+} from '@croct-tech/sdk';
 
 class CroctPlug {
     private facade?: SdkFacade;

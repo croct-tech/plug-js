@@ -8,7 +8,7 @@ import {
     EvaluationFacadeOptions as EvaluationOptions,
     SessionFacade,
     TrackerFacade,
-    UserFacade
+    UserFacade,
 } from '@croct-tech/sdk';
 
 class CroctPlug {
@@ -79,11 +79,17 @@ class CroctPlug {
     }
 
     public async unplug(): Promise<void> {
+        if (this.facade === undefined) {
+            return;
+        }
+
         const logger = this.instance.getLogger();
 
         try {
-            await this.instance.close();
+            await this.facade.close();
         } finally {
+            delete this.facade;
+
             logger.info('🔌 App has been unplugged from Croct.');
         }
     }

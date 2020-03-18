@@ -1,0 +1,81 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-base"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "parserOptions": {
+    "extends": "./tsconfig.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".ts", ".tsx"]
+      }
+    }
+  },
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "@typescript-eslint/explicit-member-accessibility": ["error"],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/member-delimiter-style": ["error", {
+      "multiline": {
+        "delimiter": "comma",
+        "requireLast": true
+      },
+      "singleline": {
+        "delimiter": "comma",
+        "requireLast": false
+      },
+      "overrides": {
+        "interface": {
+          "singleline": {
+            "delimiter": "semi"
+          },
+          "multiline": {
+            "delimiter": "semi"
+          }
+        }
+      }
+    }],
+    "@typescript-eslint/no-use-before-define": "off",
+    "semi": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "class-methods-use-this": "off",
+    "consistent-return": "off",
+    "default-case": "off",
+    "import/extensions": ["error", "never"],
+    "import/prefer-default-export": "off",
+    "indent": ["error", 4, {"SwitchCase": 1}],
+    "linebreak-style": ["error", "unix"],
+    "max-classes-per-file": "off",
+    "max-len": ["error", {"code": 120}],
+    "no-await-in-loop": "off",
+    "no-bitwise": "off",
+    "no-continue": "off",
+    "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+    "no-unused-vars": "off",
+    "no-use-before-define": "off",
+    "object-curly-newline": ["error", {"multiline": true, "consistent": true}],
+    "object-curly-spacing": ["error", "never"],
+    "object-shorthand": ["error", "consistent"]
+  },
+  "overrides": [
+    {
+      "files": ["test/**/*.ts"],
+      "extends": ["plugin:jest/recommended"],
+      "plugins": ["jest"],
+      "rules": {
+        "no-new-object": "off"
+      },
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}

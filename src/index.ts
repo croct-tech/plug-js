@@ -1,7 +1,4 @@
 import {
-    ExternalEvent as Event,
-    ExternalEventPayload as EventPayload,
-    ExternalEventType as EventType,
     JsonValue,
     SdkFacade,
     SdkFacadeConfiguration as Configuration,
@@ -9,6 +6,9 @@ import {
     SessionFacade,
     TrackerFacade,
     UserFacade,
+    ExternalEvent,
+    ExternalEventPayload,
+    ExternalEventType,
 } from '@croct-tech/sdk';
 
 class CroctPlug {
@@ -23,7 +23,7 @@ class CroctPlug {
             return;
         }
 
-        this.facade = SdkFacade.initialize(configuration);
+        this.facade = SdkFacade.init(configuration);
     }
 
     private get instance(): SdkFacade {
@@ -70,8 +70,8 @@ class CroctPlug {
         this.instance.unsetToken();
     }
 
-    public track(eventType: EventType, payload: EventPayload): Promise<Event> {
-        return this.instance.track(eventType, payload);
+    public track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>> {
+        return this.instance.track(type, payload);
     }
 
     public evaluate(expression: string, options: EvaluationOptions = {}): Promise<JsonValue> {
@@ -90,7 +90,7 @@ class CroctPlug {
         } finally {
             delete this.facade;
 
-            logger.info('🔌 App has been unplugged from Croct.');
+            logger.info('🔌 Croct has been unplugged.');
         }
     }
 }

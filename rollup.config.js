@@ -3,6 +3,7 @@ import typescript from 'rollup-plugin-typescript2';
 import tempDir from 'temp-dir';
 import {uglify} from 'rollup-plugin-uglify';
 import dts from 'rollup-plugin-dts';
+import commonjs from 'rollup-plugin-commonjs';
 
 export default () => {
     const minify = process.env.minify || false;
@@ -21,6 +22,7 @@ export default () => {
             },
             plugins: [
                 resolve(),
+                commonjs(),
                 typescript({
                     cacheRoot: `${tempDir}/.rpt2_cache`,
                     useTsconfigDeclarationDir: true

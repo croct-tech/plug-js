@@ -1,0 +1,146 @@
+name: Validate Tag
+
+on:
+  push:
+    tags:
+      - '**'
+    branches-ignore:
+      - '**'
+
+env:
+  BOOTSTRAP_ENDPOINT: https://main.test.croct.tech/client/web/bootstrap
+  TRACKER_ENDPOINT: wss://main.test.croct.tech/client/web/connect
+  EVALUATION_ENDPOINT: https://main.test.croct.tech/client/web/evaluate
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm audit
+
+  validate:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm run validate
+
+  lint:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
+          npm ci
+          rm -rf ~/.npmrc
+
+      - run: npm test
+
+  release:
+    runs-on: ubuntu-18.04
+    needs:
+      - security-checks
+      - validate
+      - lint
+      - test
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: autosuite/autolog@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-repository: ${{ github.repository }}
+      - uses: autosuite/autocommit@master
+        with:
+          name: Croct Bot
+          email: bot@croct.com
+          commit-message: |-
+            Update changelog to include changes since last version
+      - uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: docker://antonyurchenko/git-release:v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRAFT_RELEASE: "true"
+          PRE_RELEASE: "false"
+          CHANGELOG_FILE: "CHANGELOG.md"
+          ALLOW_EMPTY_CHANGELOG: "true"
+          ALLOW_TAG_PREFIX: "false"

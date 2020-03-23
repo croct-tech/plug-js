@@ -20,7 +20,7 @@
   "scripts": {
     "validate": "tsc --noEmit",
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "jest -c jest.config.js",
+    "test": "jest -c jest.config.js --coverage",
     "rollup": "rollup -c rollup.config.js",
     "rollup-min": "rollup -c rollup.config.js --environment minify"
   },

@@ -35,7 +35,7 @@ jobs:
           # Clear dependencies from package-lock.json
           mv package.json package-full.json
           cat package-full.json | \
-            jq 'del(.dependencies) | del(.devDependencies) | del(.testDependencies) | del(.jest)' | \
+            jq 'del(.dependencies) | del(.devDependencies) | del(.testDependencies) | del(.jest) | del(.scripts)' | \
             jq ".version = \"${GITHUB_REF##*/}\"" > package.json
           cat package.json
 

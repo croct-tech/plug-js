@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/croct-tech/plug-js/issues"
   },
-  "homepage": "https://github.com/croct-tech/plug-js#readme",
+  "homepage": "https://github.com/croct-tech/plug-js",
   "scripts": {
     "validate": "tsc --noEmit",
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",

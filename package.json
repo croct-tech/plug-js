@@ -8,6 +8,7 @@
     "url": "https://croct.com"
   },
   "license": "UNLICENSED",
+  "keywords": ["croct", "personalization", "integration", "javascript",  "typescript"],
   "types": "typings/index.d.ts",
   "repository": {
     "type": "git",

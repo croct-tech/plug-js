@@ -1,0 +1,34 @@
+name-template: 'Release $NEXT_PATCH_VERSION'
+tag-template: '$NEXT_PATCH_VERSION'
+prerelease: true
+categories:
+  - title: '🚀 Features'
+    labels:
+      - feature
+  - title: '🔧 Enhancements'
+    labels:
+      - enhancement
+  - title: '🐛 Bug Fixes'
+    labels:
+      - bug
+  - title: '🚧 Maintenance'
+    labels:
+      - maintenance
+change-template: '- $TITLE (#$NUMBER), thanks [$AUTHOR](https://github.com/$AUTHOR)!'
+sort-by: merged_at
+sort-direction: descending
+branches:
+  - master
+exclude-labels:
+  - wontfix
+  - duplicate
+  - invalid
+  - question
+no-changes-template: 'This release contains minor changes and bugfixes.'
+template: |-
+  ## What's Changed
+
+  $CHANGES
+
+  🎉 **Thanks to all contributors helping with this release:** 🎉
+  $CONTRIBUTORS

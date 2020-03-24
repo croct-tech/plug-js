@@ -8,7 +8,13 @@
     "url": "https://croct.com"
   },
   "license": "UNLICENSED",
-  "keywords": ["croct", "personalization", "integration", "javascript",  "typescript"],
+  "keywords": [
+    "croct",
+    "personalization",
+    "integration",
+    "javascript",
+    "typescript"
+  ],
   "types": "typings/index.d.ts",
   "repository": {
     "type": "git",
@@ -26,7 +32,7 @@
     "rollup-min": "rollup -c rollup.config.js --environment minify"
   },
   "dependencies": {
-    "@croct-tech/sdk": "0.0.1-alpha1"
+    "@croct-tech/sdk": "0.0.1-alpha2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

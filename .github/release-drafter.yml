@@ -30,5 +30,5 @@ template: |-
 
   $CHANGES
 
-  🎉 **Thanks to all contributors helping with this release:** 🎉
+  🎉 **Thanks to all contributors helping with this release:**
   $CONTRIBUTORS

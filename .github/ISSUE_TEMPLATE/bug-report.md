@@ -1,10 +1,10 @@
 ---
-name: "🐛 Bug report"
+name: "🐞 Bug report"
 about: "Create a report to help us improve"
 labels: bug
 ---
 
-## 🐛 Bug report
+## 🐞 Bug report
 Please describe the problem you are experiencing.
 
 ### Steps to reproduce

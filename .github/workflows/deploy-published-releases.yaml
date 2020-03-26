@@ -36,7 +36,7 @@ jobs:
           mv package.json package-full.json
           cat package-full.json | \
             jq 'del(.dependencies) | del(.devDependencies) | del(.testDependencies) | del(.jest) | del(.scripts)' | \
-            jq '.main = "dist/index.js" | .types = "dist/index.d.ts"' | \
+            jq '.main = "build/index.js" | .types = "build/index.d.ts"' | \
             jq ".version = \"${GITHUB_REF##*/}\"" > package.json
           cat package.json
 

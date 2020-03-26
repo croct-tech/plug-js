@@ -3,6 +3,9 @@ import {
     SdkFacade,
     SdkFacadeConfiguration as Configuration,
     EvaluationFacadeOptions as EvaluationOptions,
+    EvaluationErrorType,
+    EvaluationError,
+    ExpressionError,
     SessionFacade,
     TrackerFacade,
     UserFacade,
@@ -127,6 +130,9 @@ export {
     ExternalEventPayload,
     ExternalEvent,
     EvaluationOptions,
+    EvaluationErrorType,
+    EvaluationError,
+    ExpressionError,
     JsonValue,
 };
 

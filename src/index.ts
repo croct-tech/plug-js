@@ -11,7 +11,33 @@ import {
     ExternalEventType,
 } from '@croct-tech/sdk';
 
-class CroctPlug {
+export interface Plug {
+    readonly tracker: TrackerFacade;
+    readonly user: UserFacade;
+    readonly session: SessionFacade;
+
+    plug(configuration: Configuration): void;
+
+    isAnonymous(): boolean;
+
+    getUserId(): string | null;
+
+    identify(userId: string): void;
+
+    anonymize(): void;
+
+    setToken(token: string): void;
+
+    unsetToken(): void;
+
+    track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>>;
+
+    evaluate(expression: string, options?: EvaluationOptions): Promise<JsonValue>;
+
+    unplug(): Promise<void>;
+}
+
+class SingletonPlug implements Plug {
     private facade?: SdkFacade;
 
     public plug(configuration: Configuration): void {
@@ -95,4 +121,13 @@ class CroctPlug {
     }
 }
 
-export default new CroctPlug();
+export {
+    Configuration,
+    ExternalEventType,
+    ExternalEventPayload,
+    ExternalEvent,
+    EvaluationOptions,
+    JsonValue,
+};
+
+export default new SingletonPlug();

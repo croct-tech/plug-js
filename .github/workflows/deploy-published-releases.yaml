@@ -30,7 +30,6 @@ jobs:
       - name: Build bundles
         run: |-
           npm run rollup
-          npm run rollup-min
 
           # Clear dependencies from package-lock.json
           mv package.json package-full.json

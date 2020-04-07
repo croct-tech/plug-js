@@ -1,5 +1,5 @@
 import {SdkFacade, SdkFacadeConfiguration} from '@croct-tech/sdk';
-import croct from '../src/index';
+import {croct} from '../src/index';
 
 describe('The Croct plug', () => {
     const appId = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';

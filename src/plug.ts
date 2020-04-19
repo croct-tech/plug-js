@@ -15,6 +15,7 @@ export interface Plug {
     readonly tracker: TrackerFacade;
     readonly user: UserFacade;
     readonly session: SessionFacade;
+    readonly flushed: Promise<void>;
 
     plug(configuration: Configuration): void;
 
@@ -50,6 +51,10 @@ class GlobalPlug implements Plug {
         }
 
         this.facade = SdkFacade.init(configuration);
+    }
+
+    public get flushed(): Promise<void> {
+        return this.tracker.flushed;
     }
 
     private get instance(): SdkFacade {

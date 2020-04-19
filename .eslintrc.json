@@ -21,7 +21,6 @@
   },
   "rules": {
     "@typescript-eslint/explicit-member-accessibility": ["error"],
-    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/member-delimiter-style": ["error", {
       "multiline": {
         "delimiter": "comma",
@@ -42,8 +41,8 @@
         }
       }
     }],
+    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-use-before-define": "off",
-    "semi": "off",
     "arrow-parens": ["error", "as-needed"],
     "class-methods-use-this": "off",
     "consistent-return": "off",
@@ -57,13 +56,15 @@
     "no-await-in-loop": "off",
     "no-bitwise": "off",
     "no-continue": "off",
+    "no-multiple-empty-lines": ["error", {"max":  1}],
     "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "no-unused-vars": "off",
     "no-use-before-define": "off",
     "object-curly-newline": ["error", {"multiline": true, "consistent": true}],
     "object-curly-spacing": ["error", "never"],
-    "object-shorthand": ["error", "consistent"]
+    "object-shorthand": ["error", "consistent"],
+    "semi": "off"
   },
   "overrides": [
     {

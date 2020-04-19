@@ -41,6 +41,26 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledTimes(1);
     });
 
+    test('should provide a callback that is called when the current pending events are flushed', async () => {
+        const config: SdkFacadeConfiguration = {appId: appId};
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const flushed = jest.fn().mockResolvedValue(undefined);
+
+        Object.defineProperty(sdkFacade.tracker, 'flushed', {
+            get: flushed,
+        });
+
+        jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        await expect(croct.flushed).resolves.toBeUndefined();
+
+        expect(flushed).toHaveBeenCalledTimes(1);
+    });
+
     test('should provide a tracker facade', () => {
         const config: SdkFacadeConfiguration = {appId: appId};
         const sdkFacade = SdkFacade.init(config);

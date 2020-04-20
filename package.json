@@ -32,7 +32,7 @@
     "rollup-min": "rollup -c rollup.min-config.js"
   },
   "dependencies": {
-    "@croct-tech/sdk": "0.0.1-beta3"
+    "@croct-tech/sdk": "0.0.1-beta4"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

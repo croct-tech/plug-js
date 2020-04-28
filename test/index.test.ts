@@ -11,7 +11,6 @@ describe('The Croct plug', () => {
     });
 
     test('should initialize the SDK using the specified configuration', () => {
-        const initialize = jest.spyOn(SdkFacade, 'init');
         const config: SdkFacadeConfiguration = {
             appId: appId,
             track: false,
@@ -23,15 +22,19 @@ describe('The Croct plug', () => {
             },
         };
 
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
         croct.plug(config);
 
         expect(initialize).toBeCalledWith(config);
+
+        expect(croct.sdk).toBe(sdkFacade);
     });
 
     test('should not fail if plugged more than once', () => {
         const config: SdkFacadeConfiguration = {appId: appId};
         const sdkFacade = SdkFacade.init(config);
-
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
 
         croct.plug(config);

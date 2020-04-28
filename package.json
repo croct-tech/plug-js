@@ -15,7 +15,8 @@
     "javascript",
     "typescript"
   ],
-  "types": "typings/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/croct-tech/plug-js.git"
@@ -32,7 +33,7 @@
     "rollup-min": "rollup -c rollup.min-config.js"
   },
   "dependencies": {
-    "@croct-tech/sdk": "0.0.1"
+    "@croct-tech/sdk": "0.1.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",

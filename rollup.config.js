@@ -11,6 +11,7 @@ export default () => {
             output: {
                 file: 'build/index.js',
                 format: 'commonjs',
+                exports: 'named',
                 sourcemap: true,
             },
             plugins: [

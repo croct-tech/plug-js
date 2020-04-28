@@ -22,4 +22,4 @@ export {
     JsonValue,
 };
 
-export {default as croct, Plug} from './plug';
+export {default} from './plug';

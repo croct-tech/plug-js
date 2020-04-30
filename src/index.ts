@@ -41,7 +41,7 @@ export {
     EvaluationError,
     ExpressionError,
     JsonValue,
-    Plug
+    Plug,
 };
 
 export default new GlobalPlug();

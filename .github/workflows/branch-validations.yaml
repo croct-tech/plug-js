@@ -2,10 +2,14 @@ name: Validations
 
 on:
   push:
-    branches:
-      - '**'
     tags-ignore:
       - '**'
+    branches:
+      - master
+  pull_request:
+    types:
+      - synchronize
+      - opened
 
 jobs:
   security-checks:

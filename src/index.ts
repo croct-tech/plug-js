@@ -19,6 +19,7 @@ import {
     EventInfo,
     JsonValue,
 } from '@croct-tech/sdk';
+import {Plug, GlobalPlug} from './plug';
 
 export {
     Sdk,
@@ -40,6 +41,7 @@ export {
     EvaluationError,
     ExpressionError,
     JsonValue,
+    Plug,
 };
 
-export {default} from './plug';
+export default new GlobalPlug();

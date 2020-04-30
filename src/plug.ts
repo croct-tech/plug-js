@@ -39,7 +39,7 @@ export interface Plug {
     unplug(): Promise<void>;
 }
 
-class GlobalPlug implements Plug {
+export class GlobalPlug implements Plug {
     private instance?: SdkFacade;
 
     public plug(configuration: Configuration): void {
@@ -126,5 +126,3 @@ class GlobalPlug implements Plug {
         }
     }
 }
-
-export default new GlobalPlug();

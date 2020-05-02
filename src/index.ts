@@ -19,7 +19,7 @@ import {
     EventInfo,
     JsonValue,
 } from '@croct-tech/sdk';
-import {Plug, GlobalPlug} from './plug';
+import {Plug} from './plug';
 
 export {
     Sdk,
@@ -44,4 +44,4 @@ export {
     Plug,
 };
 
-export default new GlobalPlug();
+export {default} from './singleton';

@@ -7,7 +7,7 @@ import commonjs from 'rollup-plugin-commonjs';
 export default () => {
     return [
         {
-            input: 'src/plug.ts',
+            input: 'src/singleton.ts',
             output: {
                 file: 'build/plug.min.js',
                 name: 'croct',

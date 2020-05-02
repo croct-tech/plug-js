@@ -11,8 +11,8 @@
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
     <a href="https://bundlephobia.com/result?p=@croct/plug"><img alt="Gzipped Size" src="https://img.shields.io/bundlephobia/minzip/@croct/plug"/></a>
     <img alt="Build" src="https://github.com/croct-tech/plug-js/workflows/Validations/badge.svg" />
-    <a href="https://codeclimate.com/repos/5eac7bf47fb60e7491000860/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability" /></a>
-    <a href="https://codeclimate.com/repos/5eac7bf47fb60e7491000860/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage" /></a>
+    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability" /></a>
+    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage" /></a>
     <br />
     <br />
     <a href="https://github.com/croct-tech/plug-js/releases">Releases</a>

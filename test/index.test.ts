@@ -44,6 +44,42 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledTimes(1);
     });
 
+    test('should provide a callback that is called when the plug is plugged in', async () => {
+        const config: SdkFacadeConfiguration = {appId: appId};
+
+        // First time
+        const firstCallback = jest.fn();
+
+        const firstPromise = croct.plugged.then(firstCallback);
+
+        await new Promise(resolve => window.setTimeout(resolve, 15));
+
+        expect(firstCallback).not.toHaveBeenCalled();
+
+        croct.plug(config);
+
+        await firstPromise;
+
+        expect(firstCallback).toHaveBeenCalledWith(croct);
+
+        // Second time
+        await croct.unplug();
+
+        const secondCallback = jest.fn();
+
+        const secondPromise = croct.plugged.then(secondCallback);
+
+        await new Promise(resolve => window.setTimeout(resolve, 15));
+
+        expect(secondCallback).not.toHaveBeenCalled();
+
+        croct.plug(config);
+
+        await secondPromise;
+
+        expect(secondCallback).toHaveBeenCalledWith(croct);
+    });
+
     test('should provide a callback that is called when the current pending events are flushed', async () => {
         const config: SdkFacadeConfiguration = {appId: appId};
 
@@ -59,7 +95,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        await expect(croct.flushed).resolves.toBeUndefined();
+        await expect(croct.flushed).resolves.toBe(croct);
 
         expect(flushed).toHaveBeenCalledTimes(1);
     });

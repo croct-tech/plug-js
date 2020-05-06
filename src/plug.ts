@@ -16,7 +16,8 @@ export interface Plug {
     readonly user: UserFacade;
     readonly session: SessionFacade;
     readonly sdk: SdkFacade;
-    readonly flushed: Promise<void>;
+    readonly flushed: Promise<this>;
+    readonly plugged: Promise<this>;
 
     plug(configuration: Configuration): void;
 
@@ -42,6 +43,16 @@ export interface Plug {
 export class GlobalPlug implements Plug {
     private instance?: SdkFacade;
 
+    private initialize: {(): void};
+
+    private initialized: Promise<void>;
+
+    public constructor() {
+        this.initialized = new Promise(resolve => {
+            this.initialize = resolve
+        });
+    }
+
     public plug(configuration: Configuration): void {
         if (this.instance !== undefined) {
             const logger = this.instance.getLogger();
@@ -52,10 +63,15 @@ export class GlobalPlug implements Plug {
         }
 
         this.instance = SdkFacade.init(configuration);
+        this.initialize();
     }
 
-    public get flushed(): Promise<void> {
-        return this.tracker.flushed;
+    public get plugged(): Promise<this> {
+        return this.initialized.then(() => this);
+    }
+
+    public get flushed(): Promise<this> {
+        return this.tracker.flushed.then(() => this);
     }
 
     public get sdk(): SdkFacade {
@@ -121,6 +137,10 @@ export class GlobalPlug implements Plug {
             await this.instance.close();
         } finally {
             delete this.instance;
+
+            this.initialized = new Promise(resolve => {
+                this.initialize = resolve
+            });
 
             logger.info('🔌 Croct has been unplugged.');
         }

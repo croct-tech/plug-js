@@ -57,6 +57,7 @@ export class GlobalPlug implements Plug {
                 evaluator: sdk.evaluator,
                 user: sdk.user,
                 session: sdk.session,
+                tab: sdk.context.getTab(),
                 getLogger: (...namespace: string[]): Logger => {
                     return sdk.getLogger(PLUGIN_NAMESPACE, pluginName, ...namespace);
                 },

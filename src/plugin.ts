@@ -4,6 +4,7 @@ import {
     UserFacade,
     SessionFacade,
     Logger,
+    Tab,
 } from '@croct-tech/sdk';
 
 export interface PluginSdk {
@@ -11,6 +12,7 @@ export interface PluginSdk {
     readonly evaluator: Evaluator;
     readonly user: UserFacade;
     readonly session: SessionFacade;
+    readonly tab: Tab;
 
     getLogger(...namespace: string[]): Logger;
 

@@ -1,5 +1,14 @@
-import {SdkFacade, SdkFacadeConfiguration} from '@croct-tech/sdk';
+import {Logger, SdkFacade, SdkFacadeConfiguration} from '@croct-tech/sdk';
 import croct, {Configuration, Plugin, PluginController, PluginSdk} from '../src/index';
+
+function createLoggerMock(): Logger {
+    return {
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+    };
+}
 
 describe('The Croct plug', () => {
     const appId = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
@@ -70,6 +79,31 @@ describe('The Croct plug', () => {
         expect(barPlugin.initialize).toBeCalled();
     });
 
+    test('should log a warn message if multiple plugins share the same name', async () => {
+        const fooPlugin: Plugin = {
+            getName(): string {
+                return 'foo';
+            },
+            initialize(): void {
+                // does nothing
+            },
+        };
+
+        const logger: Logger = createLoggerMock();
+
+        croct.plug({
+            appId: appId,
+            plugins: [fooPlugin, fooPlugin],
+            logger: logger,
+        });
+
+        await croct.plugged;
+
+        expect(logger.warn).toHaveBeenCalledWith(
+            expect.stringContaining('Multiple plugins registered with name "foo" which may cause unexpected errors'),
+        );
+    });
+
     test('should handle failures enabling plugins', async () => {
         const fooController: PluginController = {
             enable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
@@ -80,7 +114,7 @@ describe('The Croct plug', () => {
                 return 'foo';
             },
             initialize(): PluginController {
-                return fooController
+                return fooController;
             },
         };
 
@@ -107,7 +141,7 @@ describe('The Croct plug', () => {
             initialize(): PluginController {
                 return {
                     enable: fooEnable,
-                }
+                };
             },
         };
 
@@ -120,7 +154,7 @@ describe('The Croct plug', () => {
             initialize(): PluginController {
                 return {
                     enable: barEnable,
-                }
+                };
             },
         };
 
@@ -455,7 +489,7 @@ describe('The Croct plug', () => {
             initialize(): PluginController {
                 return {
                     disable: fooDisable,
-                }
+                };
             },
         };
 
@@ -468,7 +502,7 @@ describe('The Croct plug', () => {
             initialize(): PluginController {
                 return {
                     disable: barDisable,
-                }
+                };
             },
         };
 
@@ -529,7 +563,7 @@ describe('The Croct plug', () => {
                 return 'foo';
             },
             initialize(): PluginController {
-                return fooController
+                return fooController;
             },
         };
 

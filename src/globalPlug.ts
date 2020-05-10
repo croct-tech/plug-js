@@ -46,11 +46,21 @@ export class GlobalPlug implements Plug {
 
         const logger = this.instance.getLogger();
         const pending: Promise<void>[] = [];
+        const initialized: string[] = [];
 
         for (const plugin of plugins ?? []) {
             const pluginName = plugin.getName();
 
+            if (initialized.includes(pluginName)) {
+                logger.warn(
+                    `Multiple plugins registered with name "${pluginName}" `
+                    + 'which may cause unexpected errors.',
+                );
+            }
+
             logger.debug(`Initializing plugin "${pluginName}"...`);
+
+            initialized.push(pluginName);
 
             const controller = plugin.initialize({
                 tracker: sdk.tracker,

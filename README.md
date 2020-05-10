@@ -29,7 +29,7 @@ The Plug JS provides the building blocks for crafting personalized experiences. 
 - **Zero configuration.** No setup steps required.
 - **No backend necessary.** Deliver personalized experiences from static sites.
 - **Fast queries.** Double-digit millisecond latency for real-time evaluations.
-- **Fully extensible API.** Easily extend the core functionality via lifecycle hooks.
+- **Fully extensible API.** Easily add and share new features via plugins.
 - **Type-Safe.** Typescript typings included.
 
 ## Installation

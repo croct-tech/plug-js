@@ -64,9 +64,9 @@ describe('The Croct plug', () => {
         });
 
         expect(initialize).toBeCalledWith(config);
-        expect(getLogger).toBeCalledWith('foo', 'namespace');
-        expect(getTabStorage).toBeCalledWith('foo', 'namespace');
-        expect(getBrowserStorage).toBeCalledWith('foo', 'namespace');
+        expect(getLogger).toBeCalledWith('Plugin', 'foo', 'namespace');
+        expect(getTabStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
+        expect(getBrowserStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
         expect(barPlugin.initialize).toBeCalled();
     });
 

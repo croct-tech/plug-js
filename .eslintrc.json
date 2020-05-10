@@ -43,6 +43,7 @@
     }],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-use-before-define": "off",
+    "arrow-body-style": "off",
     "arrow-parens": ["error", "as-needed"],
     "class-methods-use-this": "off",
     "consistent-return": "off",

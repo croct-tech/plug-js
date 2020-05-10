@@ -1,15 +1,20 @@
 import {
-    JsonValue,
-    SdkFacade,
-    SdkFacadeConfiguration as Configuration,
     EvaluationFacadeOptions as EvaluationOptions,
-    SessionFacade,
-    TrackerFacade,
-    UserFacade,
     ExternalEvent,
     ExternalEventPayload,
     ExternalEventType,
+    JsonValue,
+    SdkFacade,
+    SdkFacadeConfiguration,
+    SessionFacade,
+    TrackerFacade,
+    UserFacade,
 } from '@croct-tech/sdk';
+import {Plugin} from './plugin';
+
+export type Configuration = SdkFacadeConfiguration & {
+    plugins?: Plugin[],
+}
 
 export interface Plug {
     readonly tracker: TrackerFacade;
@@ -38,111 +43,4 @@ export interface Plug {
     evaluate(expression: string, options?: EvaluationOptions): Promise<JsonValue>;
 
     unplug(): Promise<void>;
-}
-
-export class GlobalPlug implements Plug {
-    private instance?: SdkFacade;
-
-    private initialize: {(): void};
-
-    private initialized: Promise<void>;
-
-    public constructor() {
-        this.initialized = new Promise(resolve => {
-            this.initialize = resolve
-        });
-    }
-
-    public plug(configuration: Configuration): void {
-        if (this.instance !== undefined) {
-            const logger = this.instance.getLogger();
-
-            logger.info('Croct is already plugged in.');
-
-            return;
-        }
-
-        this.instance = SdkFacade.init(configuration);
-        this.initialize();
-    }
-
-    public get plugged(): Promise<this> {
-        return this.initialized.then(() => this);
-    }
-
-    public get flushed(): Promise<this> {
-        return this.tracker.flushed.then(() => this);
-    }
-
-    public get sdk(): SdkFacade {
-        if (this.instance === undefined) {
-            throw new Error('Croct is not plugged in.');
-        }
-
-        return this.instance;
-    }
-
-    public get tracker(): TrackerFacade {
-        return this.sdk.tracker;
-    }
-
-    public get user(): UserFacade {
-        return this.sdk.user;
-    }
-
-    public get session(): SessionFacade {
-        return this.sdk.session;
-    }
-
-    public isAnonymous(): boolean {
-        return this.sdk.context.isAnonymous();
-    }
-
-    public getUserId(): string | null {
-        return this.sdk.context.getUser();
-    }
-
-    public identify(userId: string): void {
-        this.sdk.identify(userId);
-    }
-
-    public anonymize(): void {
-        this.sdk.anonymize();
-    }
-
-    public setToken(token: string): void {
-        this.sdk.setToken(token);
-    }
-
-    public unsetToken(): void {
-        this.sdk.unsetToken();
-    }
-
-    public track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>> {
-        return this.sdk.track(type, payload);
-    }
-
-    public evaluate(expression: string, options: EvaluationOptions = {}): Promise<JsonValue> {
-        return this.sdk.evaluate(expression, options);
-    }
-
-    public async unplug(): Promise<void> {
-        if (this.instance === undefined) {
-            return;
-        }
-
-        const logger = this.sdk.getLogger();
-
-        try {
-            await this.instance.close();
-        } finally {
-            delete this.instance;
-
-            this.initialized = new Promise(resolve => {
-                this.initialize = resolve
-            });
-
-            logger.info('🔌 Croct has been unplugged.');
-        }
-    }
 }

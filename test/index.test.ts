@@ -1,5 +1,5 @@
 import {SdkFacade, SdkFacadeConfiguration} from '@croct-tech/sdk';
-import croct from '../src/index';
+import croct, {Configuration, Plugin, PluginController, PluginSdk} from '../src/index';
 
 describe('The Croct plug', () => {
     const appId = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
@@ -30,6 +30,121 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(config);
 
         expect(croct.sdk).toBe(sdkFacade);
+    });
+
+    test('should initialize the specified plugins', () => {
+        const fooPlugin: Plugin = {
+            getName(): string {
+                return 'foo';
+            },
+            initialize(sdk: PluginSdk): void {
+                sdk.getLogger('namespace');
+                sdk.getTabStorage('namespace');
+                sdk.getBrowserStorage('namespace');
+            },
+        };
+
+        const barPlugin: Plugin = {
+            getName: (): string => 'bar',
+            initialize: jest.fn(),
+        };
+
+        const config: Configuration = {appId: appId};
+
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        const getLogger = jest.spyOn(sdkFacade, 'getLogger');
+        const getTabStorage = jest.spyOn(sdkFacade, 'getTabStorage');
+        const getBrowserStorage = jest.spyOn(sdkFacade, 'getBrowserStorage');
+
+        croct.plug({
+            appId: appId,
+            plugins: [fooPlugin, barPlugin],
+        });
+
+        expect(initialize).toBeCalledWith(config);
+        expect(getLogger).toBeCalledWith('Plugin', 'foo', 'namespace');
+        expect(getTabStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
+        expect(getBrowserStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
+        expect(barPlugin.initialize).toBeCalled();
+    });
+
+    test('should handle failures enabling plugins', async () => {
+        const fooController: PluginController = {
+            enable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
+        };
+
+        const fooPlugin: Plugin = {
+            getName(): string {
+                return 'foo';
+            },
+            initialize(): PluginController {
+                return fooController
+            },
+        };
+
+        croct.plug({
+            appId: appId,
+            plugins: [fooPlugin],
+        });
+
+        expect(fooController.enable).toHaveBeenCalled();
+
+        await expect(croct.plugged).resolves.toBe(croct);
+    });
+
+    test('should wait for the plugins to initialize', async () => {
+        let loadFooPlugin: () => void = jest.fn();
+        const fooEnable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {
+            loadFooPlugin = resolve;
+        }));
+
+        const fooPlugin: Plugin = {
+            getName(): string {
+                return 'foo';
+            },
+            initialize(): PluginController {
+                return {
+                    enable: fooEnable,
+                }
+            },
+        };
+
+        const barEnable = jest.fn();
+
+        const barPlugin: Plugin = {
+            getName(): string {
+                return 'bar';
+            },
+            initialize(): PluginController {
+                return {
+                    enable: barEnable,
+                }
+            },
+        };
+
+        croct.plug({
+            appId: appId,
+            plugins: [fooPlugin, barPlugin],
+        });
+
+        const plugged = jest.fn();
+        const promise = croct.plugged.then(plugged);
+
+        expect(fooEnable).toHaveBeenCalledTimes(1);
+        expect(barEnable).toHaveBeenCalledTimes(1);
+        expect(plugged).not.toHaveBeenCalled();
+
+        await new Promise(resolve => window.setTimeout(resolve, 15));
+
+        expect(plugged).not.toHaveBeenCalled();
+
+        loadFooPlugin();
+
+        await promise;
+
+        expect(plugged).toHaveBeenCalled();
     });
 
     test('should not fail if plugged more than once', () => {
@@ -327,6 +442,66 @@ describe('The Croct plug', () => {
         expect(() => croct.evaluate('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
     });
 
+    test('should wait for the plugins to disable before closing the SDK', async () => {
+        let unloadFooPlugin: () => void = jest.fn();
+        const fooDisable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {
+            unloadFooPlugin = resolve;
+        }));
+
+        const fooPlugin: Plugin = {
+            getName(): string {
+                return 'foo';
+            },
+            initialize(): PluginController {
+                return {
+                    disable: fooDisable,
+                }
+            },
+        };
+
+        const barDisable = jest.fn();
+
+        const barPlugin: Plugin = {
+            getName(): string {
+                return 'bar';
+            },
+            initialize(): PluginController {
+                return {
+                    disable: barDisable,
+                }
+            },
+        };
+
+        const config: SdkFacadeConfiguration = {appId: appId};
+        const sdkFacade = SdkFacade.init(config);
+
+        jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        const close = jest.spyOn(sdkFacade, 'close');
+
+        croct.plug({
+            appId: appId,
+            plugins: [fooPlugin, barPlugin],
+        });
+
+        const unplugged = jest.fn();
+        const promise = croct.unplug().then(unplugged);
+
+        expect(fooDisable).toHaveBeenCalledTimes(1);
+        expect(barDisable).toHaveBeenCalledTimes(1);
+        expect(close).not.toHaveBeenCalled();
+
+        await new Promise(resolve => window.setTimeout(resolve, 15));
+
+        expect(unplugged).not.toHaveBeenCalled();
+
+        unloadFooPlugin();
+
+        await promise;
+
+        expect(unplugged).toHaveBeenCalled();
+    });
+
     test('should close the SDK', async () => {
         const config: SdkFacadeConfiguration = {appId: appId};
         const sdkFacade = SdkFacade.init(config);
@@ -342,5 +517,38 @@ describe('The Croct plug', () => {
         await croct.unplug();
 
         expect(close).toBeCalled();
+    });
+
+    test('should close the SDK even if a plugin fail to disable', async () => {
+        const fooController: PluginController = {
+            disable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
+        };
+
+        const fooPlugin: Plugin = {
+            getName(): string {
+                return 'foo';
+            },
+            initialize(): PluginController {
+                return fooController
+            },
+        };
+
+        const config: SdkFacadeConfiguration = {appId: appId};
+        const sdkFacade = SdkFacade.init(config);
+
+        jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        const close = jest.spyOn(sdkFacade, 'close');
+
+        croct.plug({
+            appId: appId,
+            plugins: [fooPlugin],
+        });
+
+        await expect(croct.unplug()).resolves.toBeUndefined();
+
+        expect(fooController.disable).toHaveBeenCalledTimes(1);
+
+        expect(close).toHaveBeenCalled();
     });
 });

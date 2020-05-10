@@ -13,6 +13,8 @@ import {
 import {Plug, Configuration} from './plug';
 import {PluginController} from './plugin';
 
+const PLUGIN_NAMESPACE = 'Plugin';
+
 export class GlobalPlug implements Plug {
     private instance?: SdkFacade;
 
@@ -43,7 +45,7 @@ export class GlobalPlug implements Plug {
         this.instance = sdk;
 
         const logger = this.instance.getLogger();
-        const initialization: Promise<void>[] = [];
+        const pending: Promise<void>[] = [];
 
         for (const plugin of plugins ?? []) {
             const pluginName = plugin.getName();
@@ -55,9 +57,15 @@ export class GlobalPlug implements Plug {
                 evaluator: sdk.evaluator,
                 user: sdk.user,
                 session: sdk.session,
-                getLogger: (...namespace: string[]): Logger => sdk.getLogger(pluginName, ...namespace),
-                getTabStorage: (...namespace: string[]): Storage => sdk.getTabStorage(pluginName, ...namespace),
-                getBrowserStorage: (...namespace: string[]): Storage => sdk.getBrowserStorage(pluginName, ...namespace),
+                getLogger: (...namespace: string[]): Logger => {
+                    return sdk.getLogger(PLUGIN_NAMESPACE, pluginName, ...namespace);
+                },
+                getTabStorage: (...namespace: string[]): Storage => {
+                    return sdk.getTabStorage(PLUGIN_NAMESPACE, pluginName, ...namespace);
+                },
+                getBrowserStorage: (...namespace: string[]): Storage => {
+                    return sdk.getBrowserStorage(PLUGIN_NAMESPACE, pluginName, ...namespace);
+                },
             });
 
             logger.debug(`Plugin "${pluginName}" initialized`);
@@ -71,20 +79,24 @@ export class GlobalPlug implements Plug {
             if (typeof controller.enable === 'function') {
                 const promise = controller.enable();
 
-                if (promise instanceof Promise) {
-                    initialization.push(
-                        promise
-                            .then(() => logger.debug(`Plugin "${pluginName}" enabled`))
-                            .catch(() => logger.error(`Failed to enable plugin "${pluginName}"`)),
-                    );
+                if (!(promise instanceof Promise)) {
+                    logger.debug(`Plugin "${pluginName}" enabled`);
+
+                    continue;
                 }
+
+                pending.push(
+                    promise
+                        .then(() => logger.debug(`Plugin "${pluginName}" enabled`))
+                        .catch(() => logger.error(`Failed to enable plugin "${pluginName}"`)),
+                );
             }
         }
 
-        Promise.all(initialization).then(() => {
+        Promise.all(pending).then(() => {
             this.initialize();
 
-            logger.debug('Initialization completed');
+            logger.debug('Initialization complete');
         });
     }
 
@@ -165,13 +177,17 @@ export class GlobalPlug implements Plug {
 
             const promise = controller.disable();
 
-            if (promise instanceof Promise) {
-                pending.push(
-                    promise
-                        .then(() => logger.debug(`Plugin "${pluginName}" disabled`))
-                        .catch(() => logger.error(`Failed to disable "${pluginName}"`)),
-                );
+            if (!(promise instanceof Promise)) {
+                logger.debug(`Plugin "${pluginName}" disabled`);
+
+                continue;
             }
+
+            pending.push(
+                promise
+                    .then(() => logger.debug(`Plugin "${pluginName}" disabled`))
+                    .catch(() => logger.error(`Failed to disable "${pluginName}"`)),
+            );
         }
 
         await Promise.all(pending);

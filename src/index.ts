@@ -1,6 +1,5 @@
 import {
     SdkFacade as Sdk,
-    SdkFacadeConfiguration as Configuration,
     Logger,
     UserFacade,
     SessionFacade,
@@ -19,11 +18,11 @@ import {
     EventInfo,
     JsonValue,
 } from '@croct-tech/sdk';
-import {Plug} from './plug';
+import {Plug, Configuration} from './plug';
+import {Plugin, PluginController, PluginSdk} from './plugin';
 
 export {
     Sdk,
-    Configuration,
     UserFacade,
     SessionFacade,
     Tracker,
@@ -42,6 +41,10 @@ export {
     ExpressionError,
     JsonValue,
     Plug,
+    Configuration,
+    Plugin,
+    PluginController,
+    PluginSdk,
 };
 
 export {default} from './singleton';

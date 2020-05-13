@@ -21,14 +21,17 @@ export interface PluginSdk {
     getBrowserStorage(...namespace: string[]): Storage;
 }
 
-export interface PluginController {
-    enable?(): Promise<void>|void;
+export interface PluginArguments<T = any> {
+    options: T;
+    sdk: PluginSdk;
+}
 
-    disable?(): Promise<void>|void;
+export interface PluginFactory<T = any> {
+    (args: PluginArguments<T>): Plugin;
 }
 
 export interface Plugin {
-    getName(): string;
+    enable(): Promise<void>|void;
 
-    initialize(sdk: PluginSdk): PluginController|void;
+    disable?(): Promise<void>|void;
 }

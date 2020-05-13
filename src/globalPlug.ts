@@ -11,14 +11,16 @@ import {
     UserFacade,
 } from '@croct-tech/sdk';
 import {Plug, Configuration} from './plug';
-import {PluginController} from './plugin';
+import {Plugin, PluginFactory} from './plugin';
 
 const PLUGIN_NAMESPACE = 'Plugin';
 
-export class GlobalPlug implements Plug {
+export default class GlobalPlug implements Plug {
+    private pluginFactories: {[key: string]: PluginFactory} = {};
+
     private instance?: SdkFacade;
 
-    private plugins: {[key: string]: PluginController} = {};
+    private plugins: {[key: string]: Plugin} = {};
 
     private initialize: {(): void};
 
@@ -28,6 +30,14 @@ export class GlobalPlug implements Plug {
         this.initialized = new Promise(resolve => {
             this.initialize = resolve;
         });
+    }
+
+    public extend(name: string, plugin: PluginFactory): void {
+        if (this.pluginFactories[name] !== undefined) {
+            throw new Error(`Another plugin is already registered with name "${name}".`);
+        }
+
+        this.pluginFactories[name] = plugin;
     }
 
     public plug(configuration: Configuration): void {
@@ -46,62 +56,59 @@ export class GlobalPlug implements Plug {
 
         const logger = this.instance.getLogger();
         const pending: Promise<void>[] = [];
-        const initialized: string[] = [];
 
-        for (const plugin of plugins ?? []) {
-            const pluginName = plugin.getName();
+        for (const [name, options] of Object.entries(plugins ?? {})) {
+            logger.debug(`Initializing plugin "${name}"...`);
 
-            if (initialized.includes(pluginName)) {
-                logger.warn(
-                    `Multiple plugins registered with name "${pluginName}" `
-                    + 'which may cause unexpected errors.',
-                );
-            }
+            const factory = this.pluginFactories[name];
 
-            logger.debug(`Initializing plugin "${pluginName}"...`);
+            if (factory === undefined) {
+                logger.error(`Plugin "${name}" is not registered.`);
 
-            initialized.push(pluginName);
-
-            const controller = plugin.initialize({
-                tracker: sdk.tracker,
-                evaluator: sdk.evaluator,
-                user: sdk.user,
-                session: sdk.session,
-                tab: sdk.context.getTab(),
-                getLogger: (...namespace: string[]): Logger => {
-                    return sdk.getLogger(PLUGIN_NAMESPACE, pluginName, ...namespace);
-                },
-                getTabStorage: (...namespace: string[]): Storage => {
-                    return sdk.getTabStorage(PLUGIN_NAMESPACE, pluginName, ...namespace);
-                },
-                getBrowserStorage: (...namespace: string[]): Storage => {
-                    return sdk.getBrowserStorage(PLUGIN_NAMESPACE, pluginName, ...namespace);
-                },
-            });
-
-            logger.debug(`Plugin "${pluginName}" initialized`);
-
-            if (typeof controller !== 'object') {
                 continue;
             }
 
-            this.plugins[pluginName] = controller;
+            const plugin = factory({
+                options: options,
+                sdk: {
+                    tracker: sdk.tracker,
+                    evaluator: sdk.evaluator,
+                    user: sdk.user,
+                    session: sdk.session,
+                    tab: sdk.context.getTab(),
+                    getLogger: (...namespace: string[]): Logger => {
+                        return sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace);
+                    },
+                    getTabStorage: (...namespace: string[]): Storage => {
+                        return sdk.getTabStorage(PLUGIN_NAMESPACE, name, ...namespace);
+                    },
+                    getBrowserStorage: (...namespace: string[]): Storage => {
+                        return sdk.getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace);
+                    },
+                },
+            });
 
-            if (typeof controller.enable === 'function') {
-                const promise = controller.enable();
+            logger.debug(`Plugin "${name}" initialized`);
 
-                if (!(promise instanceof Promise)) {
-                    logger.debug(`Plugin "${pluginName}" enabled`);
-
-                    continue;
-                }
-
-                pending.push(
-                    promise
-                        .then(() => logger.debug(`Plugin "${pluginName}" enabled`))
-                        .catch(() => logger.error(`Failed to enable plugin "${pluginName}"`)),
-                );
+            if (typeof plugin !== 'object') {
+                continue;
             }
+
+            this.plugins[name] = plugin;
+
+            const promise = plugin.enable();
+
+            if (!(promise instanceof Promise)) {
+                logger.debug(`Plugin "${name}" enabled`);
+
+                continue;
+            }
+
+            pending.push(
+                promise
+                    .then(() => logger.debug(`Plugin "${name}" enabled`))
+                    .catch(() => logger.error(`Failed to enable plugin "${name}"`)),
+            );
         }
 
         Promise.all(pending).then(() => {

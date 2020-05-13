@@ -1,22 +1,35 @@
 import {Logger, SdkFacade, SdkFacadeConfiguration} from '@croct-tech/sdk';
-import croct, {Configuration, Plugin, PluginController, PluginSdk} from '../src/index';
-
-function createLoggerMock(): Logger {
-    return {
-        debug: jest.fn(),
-        info: jest.fn(),
-        warn: jest.fn(),
-        error: jest.fn(),
-    };
-}
+import {Configuration} from '../src/plug';
+import {Plugin, PluginFactory} from '../src/plugin';
+import GlobalPlug from '../src/globalPlug';
 
 describe('The Croct plug', () => {
     const appId = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
+
+    let croct: GlobalPlug;
+
+    beforeEach(() => {
+        croct = new GlobalPlug();
+    });
 
     afterEach(async () => {
         jest.restoreAllMocks();
 
         await croct.unplug();
+    });
+
+    test('should disallow plugin overriding', () => {
+        croct.extend('foo', () => ({
+            enable: jest.fn(),
+        }));
+
+        function override(): void {
+            croct.extend('foo', () => ({
+                enable: jest.fn(),
+            }));
+        }
+
+        expect(override).toThrow('Another plugin is already registered with name "foo"');
     });
 
     test('should initialize the SDK using the specified configuration', () => {
@@ -41,22 +54,38 @@ describe('The Croct plug', () => {
         expect(croct.sdk).toBe(sdkFacade);
     });
 
-    test('should initialize the specified plugins', () => {
-        const fooPlugin: Plugin = {
-            getName(): string {
-                return 'foo';
-            },
-            initialize(sdk: PluginSdk): void {
-                sdk.getLogger('namespace');
-                sdk.getTabStorage('namespace');
-                sdk.getBrowserStorage('namespace');
-            },
+    test('should log an error if a plugin is not registered', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
         };
 
-        const barPlugin: Plugin = {
-            getName: (): string => 'bar',
-            initialize: jest.fn(),
-        };
+        croct.plug({
+            appId: appId,
+            plugins: {foo: true},
+            logger: logger,
+        });
+
+        await croct.plugged;
+
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered.'),
+        );
+    });
+
+    test('should initialize the specified plugins', () => {
+        const fooFactory: PluginFactory = jest.fn().mockImplementation(({sdk}) => {
+            sdk.getLogger('namespace');
+            sdk.getTabStorage('namespace');
+            sdk.getBrowserStorage('namespace');
+        });
+
+        const barFactory: PluginFactory = jest.fn();
+
+        croct.extend('foo', fooFactory);
+        croct.extend('bar', barFactory);
 
         const config: Configuration = {appId: appId};
 
@@ -69,98 +98,62 @@ describe('The Croct plug', () => {
 
         croct.plug({
             appId: appId,
-            plugins: [fooPlugin, barPlugin],
+            plugins: {
+                foo: true,
+                bar: false,
+            },
         });
 
         expect(initialize).toBeCalledWith(config);
+
+        expect(fooFactory).toBeCalledWith(expect.objectContaining({options: true}));
+        expect(barFactory).toBeCalledWith(expect.objectContaining({options: false}));
+
         expect(getLogger).toBeCalledWith('Plugin', 'foo', 'namespace');
         expect(getTabStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
         expect(getBrowserStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
-        expect(barPlugin.initialize).toBeCalled();
-    });
-
-    test('should log a warn message if multiple plugins share the same name', async () => {
-        const fooPlugin: Plugin = {
-            getName(): string {
-                return 'foo';
-            },
-            initialize(): void {
-                // does nothing
-            },
-        };
-
-        const logger: Logger = createLoggerMock();
-
-        croct.plug({
-            appId: appId,
-            plugins: [fooPlugin, fooPlugin],
-            logger: logger,
-        });
-
-        await croct.plugged;
-
-        expect(logger.warn).toHaveBeenCalledWith(
-            expect.stringContaining('Multiple plugins registered with name "foo" which may cause unexpected errors'),
-        );
     });
 
     test('should handle failures enabling plugins', async () => {
-        const fooController: PluginController = {
+        const plugin: Plugin = {
             enable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
         };
 
-        const fooPlugin: Plugin = {
-            getName(): string {
-                return 'foo';
-            },
-            initialize(): PluginController {
-                return fooController;
-            },
-        };
+        croct.extend('foo', () => plugin);
 
         croct.plug({
             appId: appId,
-            plugins: [fooPlugin],
+            plugins: {foo: true},
         });
 
-        expect(fooController.enable).toHaveBeenCalled();
+        expect(plugin.enable).toHaveBeenCalled();
 
         await expect(croct.plugged).resolves.toBe(croct);
     });
 
     test('should wait for the plugins to initialize', async () => {
         let loadFooPlugin: () => void = jest.fn();
+
         const fooEnable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {
             loadFooPlugin = resolve;
         }));
 
-        const fooPlugin: Plugin = {
-            getName(): string {
-                return 'foo';
-            },
-            initialize(): PluginController {
-                return {
-                    enable: fooEnable,
-                };
-            },
-        };
+        croct.extend('foo', () => ({
+            enable: fooEnable,
+        }));
 
         const barEnable = jest.fn();
 
-        const barPlugin: Plugin = {
-            getName(): string {
-                return 'bar';
-            },
-            initialize(): PluginController {
-                return {
-                    enable: barEnable,
-                };
-            },
-        };
+        croct.extend('bar', () => ({
+            enable: barEnable,
+        }));
 
         croct.plug({
             appId: appId,
-            plugins: [fooPlugin, barPlugin],
+            plugins: {
+                foo: true,
+                bar: true,
+            },
         });
 
         const plugged = jest.fn();
@@ -482,29 +475,17 @@ describe('The Croct plug', () => {
             unloadFooPlugin = resolve;
         }));
 
-        const fooPlugin: Plugin = {
-            getName(): string {
-                return 'foo';
-            },
-            initialize(): PluginController {
-                return {
-                    disable: fooDisable,
-                };
-            },
-        };
+        croct.extend('foo', () => ({
+            enable: jest.fn(),
+            disable: fooDisable,
+        }));
 
         const barDisable = jest.fn();
 
-        const barPlugin: Plugin = {
-            getName(): string {
-                return 'bar';
-            },
-            initialize(): PluginController {
-                return {
-                    disable: barDisable,
-                };
-            },
-        };
+        croct.extend('bar', () => ({
+            enable: jest.fn(),
+            disable: barDisable,
+        }));
 
         const config: SdkFacadeConfiguration = {appId: appId};
         const sdkFacade = SdkFacade.init(config);
@@ -515,7 +496,10 @@ describe('The Croct plug', () => {
 
         croct.plug({
             appId: appId,
-            plugins: [fooPlugin, barPlugin],
+            plugins: {
+                foo: true,
+                bar: true,
+            },
         });
 
         const unplugged = jest.fn();
@@ -554,18 +538,12 @@ describe('The Croct plug', () => {
     });
 
     test('should close the SDK even if a plugin fail to disable', async () => {
-        const fooController: PluginController = {
+        const plugin: Plugin = {
+            enable: jest.fn(),
             disable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
         };
 
-        const fooPlugin: Plugin = {
-            getName(): string {
-                return 'foo';
-            },
-            initialize(): PluginController {
-                return fooController;
-            },
-        };
+        croct.extend('foo', () => plugin);
 
         const config: SdkFacadeConfiguration = {appId: appId};
         const sdkFacade = SdkFacade.init(config);
@@ -576,12 +554,12 @@ describe('The Croct plug', () => {
 
         croct.plug({
             appId: appId,
-            plugins: [fooPlugin],
+            plugins: {foo: true},
         });
 
         await expect(croct.unplug()).resolves.toBeUndefined();
 
-        expect(fooController.disable).toHaveBeenCalledTimes(1);
+        expect(plugin.disable).toHaveBeenCalledTimes(1);
 
         expect(close).toHaveBeenCalled();
     });

@@ -10,10 +10,13 @@ import {
     TrackerFacade,
     UserFacade,
 } from '@croct-tech/sdk';
-import {Plugin} from './plugin';
+
+interface PluginConfigurations {
+    [key: string]: any;
+}
 
 export type Configuration = SdkFacadeConfiguration & {
-    plugins?: Plugin[],
+    plugins?: PluginConfigurations,
 }
 
 export interface Plug {

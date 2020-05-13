@@ -1,3 +1,3 @@
-import {GlobalPlug} from './globalPlug';
+import GlobalPlug from './globalPlug';
 
 export default new GlobalPlug();

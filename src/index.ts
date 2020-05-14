@@ -19,7 +19,7 @@ import {
     JsonValue,
 } from '@croct-tech/sdk';
 import {Plug, Configuration} from './plug';
-import {Plugin, PluginFactory, PluginSdk} from './plugin';
+import {Plugin, PluginArguments, PluginFactory, PluginSdk} from './plugin';
 
 export {
     Sdk,
@@ -43,6 +43,7 @@ export {
     Plug,
     Configuration,
     PluginFactory,
+    PluginArguments,
     Plugin,
     PluginSdk,
 };

@@ -55,12 +55,14 @@ jobs:
           path: build
 
       - name: Authenticate to GCP
+        if: ${{ !github.event.release.prerelease }}
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: 290.0.0
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Deploy to GCS
+        if: ${{ !github.event.release.prerelease }}
         env:
           GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
         run: |-
@@ -69,7 +71,16 @@ jobs:
           # Allow for faster updates during beta, should be removed once its stable enough to distribute over global cdn
           gsutil -m setmeta -h "Cache-Control: no-cache, no-store, no-transform" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
 
+      - name: npm publish prerelease
+        if: ${{ github.event.release.prerelease }}
+        run: |-
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+          npm publish --access public --tag next
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: npm publish
+        if: ${{ !github.event.release.prerelease }}
         run: |-
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
           npm publish --access public

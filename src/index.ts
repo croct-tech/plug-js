@@ -1,6 +1,7 @@
 import {
     SdkFacade as Sdk,
     Logger,
+    Tab,
     UserFacade,
     SessionFacade,
     TrackerFacade as Tracker,
@@ -23,6 +24,7 @@ import {Plugin, PluginArguments, PluginFactory, PluginSdk} from './plugin';
 
 export {
     Sdk,
+    Tab,
     UserFacade,
     SessionFacade,
     Tracker,

@@ -55,6 +55,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.BOT_TOKEN }}
 
       - name: Bundle package
+        if: ${{ !github.event.release.prerelease }}
         run: |-
           rm -rf build
           npm run bundle

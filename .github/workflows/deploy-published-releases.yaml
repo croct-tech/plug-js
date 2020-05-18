@@ -23,7 +23,6 @@ jobs:
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |-
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CROCT_BOT_TOKEN }}" >> ~/.npmrc
           npm ci
           rm -rf ~/.npmrc
 

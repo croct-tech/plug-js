@@ -1,32 +1,39 @@
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import tempDir from 'temp-dir';
-import dts from 'rollup-plugin-dts';
-import commonjs from 'rollup-plugin-commonjs';
+import {uglify} from 'rollup-plugin-uglify';
+import commonjs from '@rollup/plugin-commonjs';
 
 export default () => {
     return [
         {
             input: 'src/index.ts',
             output: {
-                file: 'build/index.js',
-                format: 'commonjs',
-                exports: 'named',
-                sourcemap: true,
+                file: 'build/plug.min.js',
+                name: 'croct',
+                format: 'iife',
+            },
+            treeshake: {
+                propertyReadSideEffects: false,
             },
             plugins: [
                 resolve(),
                 commonjs(),
                 typescript({
                     cacheRoot: `${tempDir}/.rpt2_cache`,
-                    useTsconfigDeclarationDir: true,
+                    tsconfigOverride: {
+                        compilerOptions: {
+                            module: "ES2015"
+                        }
+                    },
+                }),
+                uglify({
+                    compress: {
+                        unused: true,
+                        dead_code: true,
+                    },
                 }),
             ],
-        },
-        {
-            input: './build/declarations/index.d.ts',
-            output: [{file: 'build/index.d.ts', format: 'commonjs'}],
-            plugins: [dts({respectExternal: true})],
         },
     ];
 };

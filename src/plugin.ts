@@ -1,15 +1,13 @@
-import {
-    TrackerFacade as Tracker,
-    EvaluatorFacade as Evaluator,
-    UserFacade,
-    SessionFacade,
-    Logger,
-    Tab,
-} from '@croct-tech/sdk';
+import TrackerFacade from '@croct/sdk/facade/trackerFacade';
+import EvaluatorFacade from '@croct/sdk/facade/evaluatorFacade';
+import UserFacade from '@croct/sdk/facade/userFacade';
+import SessionFacade from '@croct/sdk/facade/sessionFacade';
+import Tab from '@croct/sdk/tab';
+import {Logger} from '@croct/sdk/logging';
 
 export interface PluginSdk {
-    readonly tracker: Tracker;
-    readonly evaluator: Evaluator;
+    readonly tracker: TrackerFacade;
+    readonly evaluator: EvaluatorFacade;
     readonly user: UserFacade;
     readonly session: SessionFacade;
     readonly tab: Tab;

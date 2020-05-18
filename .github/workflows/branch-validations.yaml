@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Check dependency vulnerabilities
-        - run: npm audit
+        run: npm audit
 
   validate:
     runs-on: ubuntu-18.04
@@ -54,7 +54,7 @@ jobs:
         run: npm ci
 
       - name: Check compilation errors
-          - run: npm run validate
+        run: npm run validate
 
   lint:
     runs-on: ubuntu-18.04
@@ -79,7 +79,7 @@ jobs:
         run: npm ci
 
       - name: Check coding standard violations
-          - run: npm run lint
+        run: npm run lint
 
   test:
     runs-on: ubuntu-18.04

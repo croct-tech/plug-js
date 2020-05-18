@@ -27,32 +27,38 @@ jobs:
           npm ci
           rm -rf ~/.npmrc
 
-      - name: Build bundles
+      - name: Build package
         run: |-
-          npm run rollup
-          npm run rollup-min
+          npm run build
 
-          # Clear dependencies from package-lock.json
-          mv package.json package-full.json
-          cat package-full.json | \
-            jq 'del(.dependencies) | del(.devDependencies) | del(.testDependencies) | del(.jest) | del(.scripts)' | \
-            jq '.main = "build/index.js" | .types = "build/index.d.ts"' | \
-            jq ".version = \"${GITHUB_REF##*/}\"" > package.json
-          cat package.json
+      - name: Prepare release
+        run: |-
+          cp package.json LICENSE README.md build/
+          cd build
+          sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
 
-          echo
-          echo "Clearing lock"
-          echo
+      - name: Publish pre-release to NPM
+        if: ${{ github.event.release.prerelease }}
+        run: |-
+          cd build
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+          npm publish --access public --tag next
+        env:
+          NPM_TOKEN: ${{ secrets.BOT_TOKEN }}
 
-          rm -rf node_modules
-          npm install
-          rm package-full.json
+      - name: Publish release to NPM
+        if: ${{ !github.event.release.prerelease }}
+        run: |-
+          cd build
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.BOT_TOKEN }}
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: bundle
-          path: build
+      - name: Bundle package
+        run: |-
+          rm -rf build
+          npm run bundle
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}
@@ -70,19 +76,3 @@ jobs:
 
           # Allow for faster updates during beta, should be removed once its stable enough to distribute over global cdn
           gsutil -m setmeta -h "Cache-Control: no-cache, no-store, no-transform" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
-
-      - name: npm publish prerelease
-        if: ${{ github.event.release.prerelease }}
-        run: |-
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-          npm publish --access public --tag next
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: npm publish
-        if: ${{ !github.event.release.prerelease }}
-        run: |-
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-          npm publish --access public
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

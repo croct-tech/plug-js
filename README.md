@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://croct.com">
-        <img src="https://github.com/croct-tech/repository-template-php/raw/master/images/logo.svg" alt="Croct" width="80" height="80" />
+        <img src="https://cdn.croct.io/brand/logo/repo-icon-green.svg" alt="Croct" height="80" />
     </a>
     <br />
     <strong>Plug JS</strong>
@@ -9,17 +9,17 @@
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
+    <a href="https://github.com/croct-tech/plug-js/actions?query=workflow%3AValidations"><img alt="Build" src="https://github.com/croct-tech/plug-js/workflows/Validations/badge.svg"/></a>
+    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability"/></a>
+    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
     <a href="https://bundlephobia.com/result?p=@croct/plug"><img alt="Gzipped Size" src="https://img.shields.io/bundlephobia/minzip/@croct/plug"/></a>
-    <img alt="Build" src="https://github.com/croct-tech/plug-js/workflows/Validations/badge.svg" />
-    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability" /></a>
-    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage" /></a>
     <br />
     <br />
-    <a href="https://github.com/croct-tech/plug-js/releases">Releases</a>
+    <a href="https://github.com/croct-tech/plug-js/releases">📦Releases</a>
     ·
-    <a href="https://github.com/croct-tech/plug-js/issues">Report Bug</a>
+    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">🐞Report Bug</a>
     ·
-    <a href="https://github.com/croct-tech/plug-js/issues">Request Feature</a>
+    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨Request Feature</a>
 </p>
 
 ## Introduction
@@ -90,7 +90,6 @@ Then, to run all tests:
 npm test
 ```
 
-## Copyright Notice
-Copyright © 2015-2020 Croct Limited, All Rights Reserved.
+## License
 
-All information contained herein is, and remains the property of Croct Limited. The intellectual, design and technical concepts contained herein are proprietary to Croct Limited s and may be covered by U.S. and Foreign Patents, patents in process, and are protected by trade secret or copyright law. Dissemination of this information or reproduction of this material is strictly forbidden unless prior written permission is obtained from Croct Limited.
+This project is released under the [MIT License](LICENSE).

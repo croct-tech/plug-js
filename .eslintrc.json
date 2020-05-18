@@ -49,6 +49,7 @@
     "consistent-return": "off",
     "default-case": "off",
     "import/extensions": ["error", "never"],
+    "import/no-unresolved": "off",
     "import/prefer-default-export": "off",
     "indent": ["error", 4, {"SwitchCase": 1}],
     "linebreak-style": ["error", "unix"],

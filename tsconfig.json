@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es2015",
+    "module": "CommonJS",
     "target": "es5",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
@@ -13,11 +13,9 @@
     "noUnusedParameters": true,
     "strictNullChecks": true,
     "removeComments": false,
-    "sourceMap": true,
     "outDir": "build",
     "downlevelIteration": true,
     "declaration": true,
-    "declarationDir": "build/declarations",
     "lib": ["es6", "dom", "dom.iterable", "es2018.promise"]
   },
   "include": [

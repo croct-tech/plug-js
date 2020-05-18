@@ -1,7 +1,7 @@
-import {Logger, SdkFacade, SdkFacadeConfiguration} from '@croct-tech/sdk';
-import {Configuration} from '../src/plug';
+import SdkFacade, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
-import GlobalPlug from '../src/globalPlug';
+import {GlobalPlug, Configuration} from '../src/plug';
 
 describe('The Croct plug', () => {
     const appId = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';

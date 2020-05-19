@@ -1,4 +1,5 @@
 export * from '@croct/sdk/validation';
+export * from '@croct/sdk/error';
 export * from '@croct/sdk/validation/jsonType';
 export {default as MixedSchema} from '@croct/sdk/validation/mixedSchema';
 export {default as BooleanType} from '@croct/sdk/validation/booleanType';

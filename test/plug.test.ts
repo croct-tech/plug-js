@@ -54,6 +54,27 @@ describe('The Croct plug', () => {
         expect(croct.sdk).toBe(sdkFacade);
     });
 
+    test('should log failures initializing plugins', () => {
+        croct.extend('foo', () => {
+            throw new Error('Failure');
+        });
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: appId,
+            logger: logger,
+            plugins: {foo: true},
+        });
+
+        expect(logger.error).toBeCalledWith('[Croct] Failed to initialize plugin "foo": failure');
+    });
+
     test('should log an error if a plugin is not registered', async () => {
         const logger: Logger = {
             debug: jest.fn(),

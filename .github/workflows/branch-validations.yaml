@@ -105,7 +105,7 @@ jobs:
 
       - uses: paambaati/codeclimate-action@v2.5.4
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TOKEN }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: npm test
           coverageLocations:

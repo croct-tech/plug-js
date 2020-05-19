@@ -72,10 +72,12 @@ describe('The Croct plug', () => {
             plugins: {foo: true},
         });
 
-        expect(logger.error).toBeCalledWith('[Croct] Failed to initialize plugin "foo": failure');
+        expect(logger.error).toBeCalledWith(
+            expect.stringContaining('Failed to initialize plugin "foo": failure'),
+        );
     });
 
-    test('should log an error if a plugin is not registered', async () => {
+    test('should log an error if a plugin is not registered', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -89,14 +91,62 @@ describe('The Croct plug', () => {
             logger: logger,
         });
 
-        await croct.plugged;
-
         expect(logger.error).toHaveBeenCalledWith(
             expect.stringContaining('Plugin "foo" is not registered.'),
         );
     });
 
-    test('should initialize the specified plugins', () => {
+    test('should log an error if a plugin options is invalid', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const factory: PluginFactory = jest.fn();
+
+        croct.extend('foo', factory);
+
+        croct.plug({
+            appId: appId,
+            plugins: {foo: null},
+            logger: logger,
+        });
+
+        expect(factory).not.toHaveBeenCalled();
+
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('Invalid options for plugin "foo", expected either boolean or object but got null'),
+        );
+    });
+
+    test('should not initialize disabled plugins', () => {
+        const factory: PluginFactory = jest.fn();
+
+        croct.extend('foo', factory);
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: appId,
+            logger: logger,
+            plugins: {foo: false},
+        });
+
+        expect(factory).not.toHaveBeenCalled();
+
+        expect(logger.warn).toBeCalledWith(
+            expect.stringContaining('Plugin "foo" is declared but not enabled'),
+        );
+    });
+
+    test('should initialize the declared plugins', () => {
         const fooFactory: PluginFactory = jest.fn().mockImplementation(({sdk}) => {
             sdk.getLogger('namespace');
             sdk.getTabStorage('namespace');
@@ -121,14 +171,14 @@ describe('The Croct plug', () => {
             appId: appId,
             plugins: {
                 foo: true,
-                bar: false,
+                bar: {flag: true},
             },
         });
 
         expect(initialize).toBeCalledWith(config);
 
-        expect(fooFactory).toBeCalledWith(expect.objectContaining({options: true}));
-        expect(barFactory).toBeCalledWith(expect.objectContaining({options: false}));
+        expect(fooFactory).toBeCalledWith(expect.objectContaining({options: {}}));
+        expect(barFactory).toBeCalledWith(expect.objectContaining({options: {flag: true}}));
 
         expect(getLogger).toBeCalledWith('Plugin', 'foo', 'namespace');
         expect(getTabStorage).toBeCalledWith('Plugin', 'foo', 'namespace');

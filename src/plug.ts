@@ -7,6 +7,7 @@ import Tracker from '@croct/sdk/facade/trackerFacade';
 import {EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
 import Sdk, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {formatCause} from '@croct/sdk/error';
+import {describe} from '@croct/sdk/validation';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 
 interface PluginConfigurations {
@@ -100,8 +101,23 @@ export class GlobalPlug implements Plug {
                 continue;
             }
 
+            if (typeof options !== 'boolean' && (options === null || typeof options !== 'object')) {
+                logger.error(
+                    `Invalid options for plugin "${name}", `
+                    + `expected either boolean or object but got ${describe(options)}`,
+                );
+
+                continue;
+            }
+
+            if (options === false) {
+                logger.warn(`Plugin "${name}" is declared but not enabled`);
+
+                continue;
+            }
+
             const args: PluginArguments = {
-                options: options,
+                options: options === true ? {} : options,
                 sdk: {
                     tracker: sdk.tracker,
                     evaluator: sdk.evaluator,

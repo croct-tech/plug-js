@@ -6,7 +6,8 @@ import UserFacade from '@croct/sdk/facade/userFacade';
 import Tracker from '@croct/sdk/facade/trackerFacade';
 import {EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
 import Sdk, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
-import {Plugin, PluginFactory} from './plugin';
+import {formatCause} from '@croct/sdk/error';
+import {Plugin, PluginArguments, PluginFactory} from './plugin';
 
 interface PluginConfigurations {
     [key: string]: any;
@@ -99,7 +100,7 @@ export class GlobalPlug implements Plug {
                 continue;
             }
 
-            const plugin = factory({
+            const args: PluginArguments = {
                 options: options,
                 sdk: {
                     tracker: sdk.tracker,
@@ -117,7 +118,17 @@ export class GlobalPlug implements Plug {
                         return sdk.getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace);
                     },
                 },
-            });
+            };
+
+            let plugin;
+
+            try {
+                plugin = factory(args);
+            } catch (error) {
+                logger.error(`Failed to initialize plugin "${name}": ${formatCause(error)}`);
+
+                continue;
+            }
 
             logger.debug(`Plugin "${name}" initialized`);
 

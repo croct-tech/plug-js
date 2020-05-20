@@ -33,7 +33,7 @@
     "bundle": "rollup -c rollup.config.js"
   },
   "dependencies": {
-    "@croct/sdk": "^0.2.0-alpha.4"
+    "@croct/sdk": "^0.2.0-alpha.5"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.1.0",

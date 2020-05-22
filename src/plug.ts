@@ -10,7 +10,7 @@ import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 
-interface PluginConfigurations {
+export interface PluginConfigurations {
     [key: string]: any;
 }
 

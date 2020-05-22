@@ -8,13 +8,15 @@ import {EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
 import Sdk, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
+import {Optional} from '@croct/sdk/utilityTypes';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
+import {CDN_PREFIX, CDN_SUFFIX} from './constants';
 
 interface PluginConfigurations {
     [key: string]: any;
 }
 
-export type Configuration = SdkFacadeConfiguration & {
+export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
     plugins?: PluginConfigurations,
 }
 
@@ -46,7 +48,20 @@ export interface Plug {
     unplug(): Promise<void>;
 }
 
+const UUID_PATTERN = /app\/([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})/i;
 const PLUGIN_NAMESPACE = 'Plugin';
+
+function detectAppId(): string | null {
+    const script = window.document.querySelector(`script[src^='${CDN_PREFIX}'][src$='${CDN_SUFFIX}']`);
+
+    if (!(script instanceof HTMLScriptElement)) {
+        return null;
+    }
+
+    const match = UUID_PATTERN.exec(script.src);
+
+    return match !== null ? match[1] : null;
+}
 
 export class GlobalPlug implements Plug {
     private pluginFactories: {[key: string]: PluginFactory} = {};
@@ -73,7 +88,7 @@ export class GlobalPlug implements Plug {
         this.pluginFactories[name] = plugin;
     }
 
-    public plug(configuration: Configuration): void {
+    public plug(configuration: Configuration = {}): void {
         if (this.instance !== undefined) {
             const logger = this.instance.getLogger();
 
@@ -82,12 +97,44 @@ export class GlobalPlug implements Plug {
             return;
         }
 
+        const detectedAppId = detectAppId();
+        const configuredAppId = configuration.appId ?? null;
+
+        if (detectedAppId !== null && configuredAppId !== null && detectedAppId !== configuredAppId) {
+            throw new Error(
+                'The specified app ID and the auto-detected app ID are conflicting. '
+                + 'There is no need to specify an app ID when using an application-specific tag. '
+                + 'Please try again omitting the "appId" option.',
+            );
+        }
+
+        const appId = detectedAppId ?? configuredAppId;
+
+        if (appId === null) {
+            throw new Error(
+                'The app ID must be specified when it cannot be auto-detected. '
+                + 'Please try again specifying the "appId" option.',
+            );
+        }
+
         const {plugins, ...sdkConfiguration} = configuration;
-        const sdk = Sdk.init(sdkConfiguration);
+
+        const sdk = Sdk.init({
+            ...sdkConfiguration,
+            appId: appId,
+        });
 
         this.instance = sdk;
 
         const logger = this.instance.getLogger();
+
+        if (detectedAppId === configuredAppId) {
+            logger.warn(
+                'It is strongly recommended omitting the "appId" option when using '
+                + 'the application-specific tag as it is detected automatically.',
+            );
+        }
+
         const pending: Promise<void>[] = [];
 
         for (const [name, options] of Object.entries(plugins ?? {})) {
@@ -184,7 +231,7 @@ export class GlobalPlug implements Plug {
         return this.tracker.flushed.then(() => this);
     }
 
-    public get sdk(): Sdk {
+    private get sdk(): Sdk {
         if (this.instance === undefined) {
             throw new Error('Croct is not plugged in.');
         }

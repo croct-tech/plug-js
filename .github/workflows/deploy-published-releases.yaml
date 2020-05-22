@@ -5,6 +5,10 @@ on:
     types:
       - published
 
+env:
+  CDN_PREFIX: https://cdn.croct.io/app/
+  CDN_SUFFIX: /js/v1/croct.js
+
 jobs:
   deploy:
     runs-on: ubuntu-18.04
@@ -35,6 +39,8 @@ jobs:
           cp package.json LICENSE README.md build/
           cd build
           sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
+          sed -i -e "s~<@cdn-prefix@>~${CDN_PREFIX}~" constants.js
+          sed -i -e "s~<@cdn-suffix@>~${CDN_SUFFIX}~" constants.js
 
       - name: Publish pre-release to NPM
         if: ${{ github.event.release.prerelease }}

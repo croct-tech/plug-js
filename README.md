@@ -37,13 +37,14 @@ The Plug JS provides the building blocks for crafting personalized experiences. 
 We currently offer two ways to install the library.
 
 ## CDN
-Add the following line to the `<head>` tag of your HTML document:
+Add the following line to the `<head>` tag of your HTML document, replacing the `<APP_ID>` with the public app ID:
 
 ```html
-<script src="https://cdn.croct.io/js/v1/lib/plug.js"></script>
+<script src="https://cdn.croct.io/app/<APP_ID>/js/v1/croct.js"></script>
 ```
 
 This guarantees the application will always use the latest version of the library.
+Rember  
 
 ## NPM
 [NPM](https://npmjs.com) is the recommended installation method when building large scale applications with Croct. It pairs nicely with module bundlers such as Webpack or Browserify and includes Typescript typings.
@@ -60,8 +61,8 @@ Displaying a welcome message for returning users only:
 
 ```js
 (async () => {
-    croct.plug({appId: '<APP_ID>'});
-    
+    croct.plug();
+
     if (await croct.evaluate('user is returning')) {
         alert('Welcome back!');
     }

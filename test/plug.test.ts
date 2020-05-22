@@ -1,10 +1,19 @@
 import SdkFacade, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
-import {GlobalPlug, Configuration} from '../src/plug';
+import {GlobalPlug} from '../src/plug';
+import {CDN_PREFIX, CDN_SUFFIX} from '../src/constants';
+
+jest.mock('../src/constants', () => {
+    return {
+        CDN_PREFIX: 'https://cdn.croct.io/app/',
+        CDN_SUFFIX: '/js/v1/croct.js',
+    };
+});
 
 describe('The Croct plug', () => {
-    const appId = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
+    const APP_ID = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
+    const CDN_URL = `${CDN_PREFIX}${APP_ID}${CDN_SUFFIX}`;
 
     let croct: GlobalPlug;
 
@@ -32,9 +41,65 @@ describe('The Croct plug', () => {
         expect(override).toThrow('Another plugin is already registered with name "foo"');
     });
 
+    test('should fail to initialize if the app ID is not specified and cannot be auto-detected', () => {
+        expect(() => croct.plug()).toThrow('The app ID must be specified when it cannot be auto-detected.');
+    });
+
+    test('should auto-detect app ID when loaded using an application-specific tag', () => {
+        const script: HTMLScriptElement = window.document.createElement('script');
+        script.src = CDN_URL;
+
+        window.document.head.appendChild(script);
+
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug();
+
+        expect(initialize).toBeCalledWith(config);
+    });
+
+    test('should fail if the auto-detect app ID and the specified app ID are conflicting', () => {
+        const script: HTMLScriptElement = window.document.createElement('script');
+        script.src = CDN_URL;
+
+        window.document.head.appendChild(script);
+
+        function plug(): void {
+            croct.plug({appId: '00000000-0000-0000-0000-000000000000'});
+        }
+
+        expect(plug).toThrow('The specified app ID and the auto-detected app ID are conflicting.');
+    });
+
+    test('should log a warning message when the app ID is specified unnecessarily', () => {
+        const script: HTMLScriptElement = window.document.createElement('script');
+        script.src = CDN_URL;
+
+        window.document.head.appendChild(script);
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
+            'It is strongly recommended omitting the "appId" option when using '
+            + 'the application-specific tag as it is detected automatically.',
+        ));
+    });
+
     test('should initialize the SDK using the specified configuration', () => {
         const config: SdkFacadeConfiguration = {
-            appId: appId,
+            appId: APP_ID,
             track: false,
             debug: false,
             tokenScope: 'isolated',
@@ -50,8 +115,6 @@ describe('The Croct plug', () => {
         croct.plug(config);
 
         expect(initialize).toBeCalledWith(config);
-
-        expect(croct.sdk).toBe(sdkFacade);
     });
 
     test('should log failures initializing plugins', () => {
@@ -67,7 +130,7 @@ describe('The Croct plug', () => {
         };
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             logger: logger,
             plugins: {foo: true},
         });
@@ -86,7 +149,7 @@ describe('The Croct plug', () => {
         };
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {foo: true},
             logger: logger,
         });
@@ -109,7 +172,7 @@ describe('The Croct plug', () => {
         croct.extend('foo', factory);
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {foo: null},
             logger: logger,
         });
@@ -134,7 +197,7 @@ describe('The Croct plug', () => {
         };
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             logger: logger,
             plugins: {foo: false},
         });
@@ -158,7 +221,7 @@ describe('The Croct plug', () => {
         croct.extend('foo', fooFactory);
         croct.extend('bar', barFactory);
 
-        const config: Configuration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -168,7 +231,7 @@ describe('The Croct plug', () => {
         const getBrowserStorage = jest.spyOn(sdkFacade, 'getBrowserStorage');
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {
                 foo: true,
                 bar: {flag: true},
@@ -193,7 +256,7 @@ describe('The Croct plug', () => {
         croct.extend('foo', () => plugin);
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {foo: true},
         });
 
@@ -220,7 +283,7 @@ describe('The Croct plug', () => {
         }));
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {
                 foo: true,
                 bar: true,
@@ -246,7 +309,7 @@ describe('The Croct plug', () => {
     });
 
     test('should not fail if plugged more than once', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
 
@@ -258,7 +321,7 @@ describe('The Croct plug', () => {
     });
 
     test('should provide a callback that is called when the plug is plugged in', async () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         // First time
         const firstCallback = jest.fn();
@@ -294,7 +357,7 @@ describe('The Croct plug', () => {
     });
 
     test('should provide a callback that is called when the current pending events are flushed', async () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
 
@@ -314,7 +377,7 @@ describe('The Croct plug', () => {
     });
 
     test('should provide a tracker facade', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -331,7 +394,7 @@ describe('The Croct plug', () => {
     });
 
     test('should provide a user facade', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -348,7 +411,7 @@ describe('The Croct plug', () => {
     });
 
     test('should provide a session facade', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -365,7 +428,7 @@ describe('The Croct plug', () => {
     });
 
     test('should determine whether the user is anonymous', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -383,7 +446,7 @@ describe('The Croct plug', () => {
 
     test('should provide the user ID', () => {
         const config: SdkFacadeConfiguration = {
-            appId: appId,
+            appId: APP_ID,
             userId: '3r1ck',
         };
 
@@ -403,7 +466,7 @@ describe('The Croct plug', () => {
     });
 
     test('should allow to identify the user', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
 
@@ -424,7 +487,7 @@ describe('The Croct plug', () => {
 
     test('should allow to anonymize the user', () => {
         const config: SdkFacadeConfiguration = {
-            appId: appId,
+            appId: APP_ID,
             userId: '3r1ck',
         };
 
@@ -448,7 +511,7 @@ describe('The Croct plug', () => {
     });
 
     test('should allow to set a user token', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -473,7 +536,7 @@ describe('The Croct plug', () => {
     });
 
     test('should allow to unset a user token', () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -494,7 +557,7 @@ describe('The Croct plug', () => {
     });
 
     test('should allow to track events', async () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -518,7 +581,7 @@ describe('The Croct plug', () => {
     });
 
     test('should allow to evaluate expressions', async () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -558,7 +621,7 @@ describe('The Croct plug', () => {
             disable: barDisable,
         }));
 
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -566,7 +629,7 @@ describe('The Croct plug', () => {
         const close = jest.spyOn(sdkFacade, 'close');
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {
                 foo: true,
                 bar: true,
@@ -592,7 +655,7 @@ describe('The Croct plug', () => {
     });
 
     test('should close the SDK', async () => {
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -616,7 +679,7 @@ describe('The Croct plug', () => {
 
         croct.extend('foo', () => plugin);
 
-        const config: SdkFacadeConfiguration = {appId: appId};
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
         jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -624,7 +687,7 @@ describe('The Croct plug', () => {
         const close = jest.spyOn(sdkFacade, 'close');
 
         croct.plug({
-            appId: appId,
+            appId: APP_ID,
             plugins: {foo: true},
         });
 

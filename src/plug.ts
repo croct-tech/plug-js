@@ -12,7 +12,7 @@ import {Optional} from '@croct/sdk/utilityTypes';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_PREFIX, CDN_SUFFIX} from './constants';
 
-interface PluginConfigurations {
+export interface PluginConfigurations {
     [key: string]: any;
 }
 

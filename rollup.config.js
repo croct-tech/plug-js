@@ -1,10 +1,19 @@
 import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
 import tempDir from 'temp-dir';
 import {uglify} from 'rollup-plugin-uglify';
 import commonjs from '@rollup/plugin-commonjs';
 
-export default () => {
+export default (args) => {
+    if (args['config-cdn-prefix'] === undefined) {
+        throw new Error('The argument "config-cdn-prefix" is missing.');
+    }
+
+    if (args['config-cdn-suffix'] === undefined) {
+        throw new Error('The argument "config-cdn-suffix" is missing.');
+    }
+
     return [
         {
             input: 'src/index.ts',
@@ -21,6 +30,12 @@ export default () => {
                 commonjs(),
                 typescript({
                     cacheRoot: `${tempDir}/.rpt2_cache`
+                }),
+                replace({
+                    delimiters: ['<@', '@>'],
+                    'cdn-prefix': args['config-cdn-prefix'],
+                    'cdn-suffix': args['config-cdn-suffix'],
+
                 }),
                 uglify({
                     compress: {

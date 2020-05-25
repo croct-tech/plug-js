@@ -64,7 +64,7 @@ jobs:
         if: ${{ !github.event.release.prerelease }}
         run: |-
           rm -rf build
-          npm run bundle
+          npm run bundle -- --config-cdn-prefix=${CDN_PREFIX} --config-cdn-suffix=${CDN_SUFFIX}
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}

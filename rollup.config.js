@@ -20,12 +20,7 @@ export default () => {
                 resolve(),
                 commonjs(),
                 typescript({
-                    cacheRoot: `${tempDir}/.rpt2_cache`,
-                    tsconfigOverride: {
-                        compilerOptions: {
-                            module: "ES2015"
-                        }
-                    },
+                    cacheRoot: `${tempDir}/.rpt2_cache`
                 }),
                 uglify({
                     compress: {

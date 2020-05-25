@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ES2015",
     "target": "es5",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,

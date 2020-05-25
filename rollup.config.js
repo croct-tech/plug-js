@@ -22,6 +22,7 @@ export default (args) => {
                 name: 'croct',
                 format: 'iife',
             },
+            context: "this",
             treeshake: {
                 propertyReadSideEffects: false,
             },

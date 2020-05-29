@@ -6,8 +6,7 @@ on:
       - published
 
 env:
-  CDN_PREFIX: https://cdn.croct.io/app/
-  CDN_SUFFIX: /js/v1/croct.js
+  CDN_URL: https://cdn.croct.io/js/v1/lib/plug.js
 
 jobs:
   deploy:
@@ -39,8 +38,8 @@ jobs:
           cp package.json LICENSE README.md build/
           cd build
           sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
-          sed -i -e "s~<@cdn-prefix@>~${CDN_PREFIX}~" constants.js
-          sed -i -e "s~<@cdn-suffix@>~${CDN_SUFFIX}~" constants.js
+          sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.js
+          sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.d.ts
 
       - name: Publish pre-release to NPM
         if: ${{ github.event.release.prerelease }}
@@ -64,7 +63,7 @@ jobs:
         if: ${{ !github.event.release.prerelease }}
         run: |-
           rm -rf build
-          npm run bundle -- --config-cdn-prefix=${CDN_PREFIX} --config-cdn-suffix=${CDN_SUFFIX}
+          npm run bundle -- --config-cdn-url=${CDN_URL}
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}

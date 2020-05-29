@@ -5,13 +5,9 @@ import tempDir from 'temp-dir';
 import {uglify} from 'rollup-plugin-uglify';
 import commonjs from '@rollup/plugin-commonjs';
 
-export default (args) => {
-    if (args['config-cdn-prefix'] === undefined) {
-        throw new Error('The argument "config-cdn-prefix" is missing.');
-    }
-
-    if (args['config-cdn-suffix'] === undefined) {
-        throw new Error('The argument "config-cdn-suffix" is missing.');
+export default args => {
+    if (args['config-cdn-url'] === undefined) {
+        throw new Error('The argument "config-cdn-url" is missing.');
     }
 
     return [
@@ -22,7 +18,7 @@ export default (args) => {
                 name: 'croct',
                 format: 'iife',
             },
-            context: "this",
+            context: 'this',
             treeshake: {
                 propertyReadSideEffects: false,
             },
@@ -30,12 +26,11 @@ export default (args) => {
                 resolve(),
                 commonjs(),
                 typescript({
-                    cacheRoot: `${tempDir}/.rpt2_cache`
+                    cacheRoot: `${tempDir}/.rpt2_cache`,
                 }),
                 replace({
                     delimiters: ['<@', '@>'],
-                    'cdn-prefix': args['config-cdn-prefix'],
-                    'cdn-suffix': args['config-cdn-suffix'],
+                    cdnUrl: args['config-cdn-url'],
 
                 }),
                 uglify({

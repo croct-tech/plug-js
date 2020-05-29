@@ -2,18 +2,17 @@ import SdkFacade, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/fac
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
-import {CDN_PREFIX, CDN_SUFFIX} from '../src/constants';
+import {CDN_URL} from '../src/constants';
 
 jest.mock('../src/constants', () => {
     return {
-        CDN_PREFIX: 'https://cdn.croct.io/app/',
-        CDN_SUFFIX: '/js/v1/croct.js',
+        CDN_URL: 'https://cdn.croct.io/js/v1/lib/plug.js',
     };
 });
 
 describe('The Croct plug', () => {
     const APP_ID = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
-    const CDN_URL = `${CDN_PREFIX}${APP_ID}${CDN_SUFFIX}`;
+    const APP_CDN_URL = `${CDN_URL}?appId=${APP_ID}`;
 
     let croct: GlobalPlug;
 
@@ -47,7 +46,7 @@ describe('The Croct plug', () => {
 
     test('should auto-detect app ID when loaded using an application-specific tag', () => {
         const script: HTMLScriptElement = window.document.createElement('script');
-        script.src = CDN_URL;
+        script.src = APP_CDN_URL;
 
         window.document.head.appendChild(script);
 
@@ -60,9 +59,9 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(config);
     });
 
-    test('should fail if the auto-detect app ID and the specified app ID are conflicting', () => {
+    test('should fail if the auto-detected app ID and the specified app ID are conflicting', () => {
         const script: HTMLScriptElement = window.document.createElement('script');
-        script.src = CDN_URL;
+        script.src = APP_CDN_URL;
 
         window.document.head.appendChild(script);
 
@@ -75,7 +74,7 @@ describe('The Croct plug', () => {
 
     test('should log a warning message when the app ID is specified unnecessarily', () => {
         const script: HTMLScriptElement = window.document.createElement('script');
-        script.src = CDN_URL;
+        script.src = APP_CDN_URL;
 
         window.document.head.appendChild(script);
 

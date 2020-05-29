@@ -10,7 +10,7 @@ import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
 import {Optional} from '@croct/sdk/utilityTypes';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
-import {CDN_PREFIX, CDN_SUFFIX} from './constants';
+import {CDN_URL} from './constants';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -48,19 +48,16 @@ export interface Plug {
     unplug(): Promise<void>;
 }
 
-const UUID_PATTERN = /app\/([a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8})/i;
 const PLUGIN_NAMESPACE = 'Plugin';
 
 function detectAppId(): string | null {
-    const script = window.document.querySelector(`script[src^='${CDN_PREFIX}'][src$='${CDN_SUFFIX}']`);
+    const script = window.document.querySelector(`script[src^='${CDN_URL}']`);
 
     if (!(script instanceof HTMLScriptElement)) {
         return null;
     }
 
-    const match = UUID_PATTERN.exec(script.src);
-
-    return match !== null ? match[1] : null;
+    return (new URL(script.src)).searchParams.get('appId');
 }
 
 export class GlobalPlug implements Plug {

@@ -209,7 +209,7 @@ export class GlobalPlug implements Plug {
             pending.push(
                 promise
                     .then(() => logger.debug(`Plugin "${name}" enabled`))
-                    .catch(() => logger.error(`Failed to enable plugin "${name}"`)),
+                    .catch(error => logger.error(`Failed to enable plugin "${name}": ${formatCause(error)}`)),
             );
         }
 
@@ -306,7 +306,7 @@ export class GlobalPlug implements Plug {
             pending.push(
                 promise
                     .then(() => logger.debug(`Plugin "${pluginName}" disabled`))
-                    .catch(() => logger.error(`Failed to disable "${pluginName}"`)),
+                    .catch(error => logger.error(`Failed to disable "${pluginName}": ${formatCause(error)}`)),
             );
         }
 

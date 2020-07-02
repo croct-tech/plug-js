@@ -280,6 +280,12 @@ export class GlobalPlug implements Plug {
         return this.sdk.evaluate(expression, options);
     }
 
+    public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {
+        return this.sdk.evaluate(expression, options)
+            .then(result => result === true)
+            .catch(() => false);
+    }
+
     public async unplug(): Promise<void> {
         if (this.instance === undefined) {
             return;

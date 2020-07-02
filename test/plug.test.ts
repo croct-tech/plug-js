@@ -602,6 +602,67 @@ describe('The Croct plug', () => {
         expect(() => croct.evaluate('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
     });
 
+    test('should allow to test expressions', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(config);
+
+        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockResolvedValue(true);
+
+        const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
+
+        await expect(promise).resolves.toBe(true);
+
+        expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+    });
+
+    test('should test expressions assuming non-boolean results as false', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(config);
+
+        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockResolvedValue('foo');
+
+        const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
+
+        await expect(promise).resolves.toBe(false);
+
+        expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+    });
+
+    test('should test expressions assuming errors as false', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(config);
+
+        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockRejectedValue(undefined);
+
+        const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
+
+        await expect(promise).resolves.toBe(false);
+
+        expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+    });
+
+    test('should not allow to test expressions if unplugged', () => {
+        expect(() => croct.test('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
+    });
+
     test('should wait for the plugins to disable before closing the SDK', async () => {
         let unloadFooPlugin: () => void = jest.fn();
         const fooDisable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {

@@ -640,7 +640,7 @@ describe('The Croct plug', () => {
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    test('should test expressions assuming errors as false', async () => {
+    test('should not test expressions assuming errors as false', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -654,7 +654,7 @@ describe('The Croct plug', () => {
 
         const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
 
-        await expect(promise).resolves.toBe(false);
+        await expect(promise).rejects.toBeUndefined();
 
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
     });

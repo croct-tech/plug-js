@@ -282,8 +282,7 @@ export class GlobalPlug implements Plug {
 
     public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {
         return this.sdk.evaluate(expression, options)
-            .then(result => result === true)
-            .catch(() => false);
+            .then(result => result === true);
     }
 
     public async unplug(): Promise<void> {

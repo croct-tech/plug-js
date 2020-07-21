@@ -659,10 +659,6 @@ describe('The Croct plug', () => {
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    test('should not allow to test expressions if unplugged', () => {
-        expect(() => croct.test('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
-    });
-
     test('should wait for the plugins to disable before closing the SDK', async () => {
         let unloadFooPlugin: () => void = jest.fn();
         const fooDisable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {

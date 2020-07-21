@@ -281,7 +281,7 @@ export class GlobalPlug implements Plug {
     }
 
     public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {
-        return this.sdk.evaluate(expression, options)
+        return this.evaluate(expression, options)
             .then(result => result === true);
     }
 

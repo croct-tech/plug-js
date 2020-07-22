@@ -1,4 +1,3 @@
-import {ExternalEvent, ExternalEventPayload, ExternalEventType} from '@croct/sdk/event';
 import {Logger} from '@croct/sdk/logging';
 import {JsonValue} from '@croct/sdk/json';
 import SessionFacade from '@croct/sdk/facade/sessionFacade';
@@ -9,6 +8,12 @@ import Sdk, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sd
 import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
 import {Optional} from '@croct/sdk/utilityTypes';
+import Token from '@croct/sdk/token';
+import {
+    ExternalTrackingEvent as ExternalEvent,
+    ExternalTrackingEventPayload as ExternalEventPayload,
+    ExternalTrackingEventType as ExternalEventType,
+} from '@croct/sdk/trackingEvents';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 
@@ -265,7 +270,7 @@ export class GlobalPlug implements Plug {
     }
 
     public setToken(token: string): void {
-        this.sdk.setToken(token);
+        this.sdk.setToken(Token.parse(token));
     }
 
     public unsetToken(): void {
@@ -273,11 +278,11 @@ export class GlobalPlug implements Plug {
     }
 
     public track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>> {
-        return this.sdk.track(type, payload);
+        return this.sdk.tracker.track(type, payload);
     }
 
     public evaluate(expression: string, options: EvaluationOptions = {}): Promise<JsonValue> {
-        return this.sdk.evaluate(expression, options);
+        return this.sdk.evaluator.evaluate(expression, options);
     }
 
     public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {

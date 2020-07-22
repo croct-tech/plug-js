@@ -1,4 +1,5 @@
 import SdkFacade, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import Token from '@croct/sdk/token';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
@@ -527,7 +528,7 @@ describe('The Croct plug', () => {
 
         croct.setToken(token);
 
-        expect(setToken).toBeCalledWith(token);
+        expect(setToken).toBeCalledWith(Token.parse(token));
     });
 
     test('should not allow to set a user token if unplugged', () => {
@@ -565,7 +566,7 @@ describe('The Croct plug', () => {
 
         expect(initialize).toBeCalledWith(config);
 
-        const track = jest.spyOn(sdkFacade, 'track').mockResolvedValue({
+        const track = jest.spyOn(sdkFacade.tracker, 'track').mockResolvedValue({
             type: 'userSignedUp',
             userId: 'c4r0l',
         });
@@ -589,7 +590,7 @@ describe('The Croct plug', () => {
 
         expect(initialize).toBeCalledWith(config);
 
-        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockResolvedValue('carol');
+        const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue('carol');
 
         const promise = croct.evaluate('user\'s name', {timeout: 5});
 
@@ -612,7 +613,7 @@ describe('The Croct plug', () => {
 
         expect(initialize).toBeCalledWith(config);
 
-        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockResolvedValue(true);
+        const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue(true);
 
         const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
 
@@ -631,7 +632,7 @@ describe('The Croct plug', () => {
 
         expect(initialize).toBeCalledWith(config);
 
-        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockResolvedValue('foo');
+        const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue('foo');
 
         const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
 
@@ -650,7 +651,7 @@ describe('The Croct plug', () => {
 
         expect(initialize).toBeCalledWith(config);
 
-        const evaluate = jest.spyOn(sdkFacade, 'evaluate').mockRejectedValue(undefined);
+        const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockRejectedValue(undefined);
 
         const promise = croct.test('user\'s name is "Carol"', {timeout: 5});
 

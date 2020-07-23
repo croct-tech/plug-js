@@ -43,6 +43,8 @@
     }],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/semi": ["error", "always"],
+    "semi": "off",
     "arrow-body-style": "off",
     "arrow-parens": ["error", "as-needed"],
     "class-methods-use-this": "off",
@@ -93,8 +95,7 @@
       "error",
       "consistent"
     ],
-    "require-await": "error",
-    "semi": "off"
+    "require-await": "error"
   },
   "overrides": [
     {

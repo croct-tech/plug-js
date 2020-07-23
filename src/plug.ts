@@ -23,7 +23,7 @@ export interface PluginConfigurations {
 
 export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
     plugins?: PluginConfigurations,
-}
+};
 
 export interface Plug {
     readonly tracker: Tracker;

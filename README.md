@@ -15,11 +15,11 @@
     <a href="https://bundlephobia.com/result?p=@croct/plug"><img alt="Gzipped Size" src="https://img.shields.io/bundlephobia/minzip/@croct/plug"/></a>
     <br />
     <br />
-    <a href="https://github.com/croct-tech/plug-js/releases">📦Releases</a>
+    <a href="https://github.com/croct-tech/plug-js/releases">📦 Releases</a>
     ·
-    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">🐞Report Bug</a>
+    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">🐞 Report Bug</a>
     ·
-    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨Request Feature</a>
+    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
 ## Introduction

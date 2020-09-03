@@ -2,7 +2,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
 import tempDir from 'temp-dir';
-import {uglify} from 'rollup-plugin-uglify';
+import {terser} from 'rollup-plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
 
 export default args => {
@@ -33,12 +33,7 @@ export default args => {
                     cdnUrl: args['config-cdn-url'],
 
                 }),
-                uglify({
-                    compress: {
-                        unused: true,
-                        dead_code: true,
-                    },
-                }),
+                terser(),
             ],
         },
     ];

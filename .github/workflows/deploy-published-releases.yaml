@@ -78,6 +78,4 @@ jobs:
           GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
         run: |-
           gsutil -m cp build/plug.min.js "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
-
-          # Allow for faster updates during beta, should be removed once its stable enough to distribute over global cdn
-          gsutil -m setmeta -h "Cache-Control: no-cache, no-store, no-transform" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
+          gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"

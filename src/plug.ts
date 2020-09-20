@@ -48,7 +48,7 @@ export interface Plug {
 
     track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>>;
 
-    evaluate(expression: string, options?: EvaluationOptions): Promise<JsonValue>;
+    evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
 
     unplug(): Promise<void>;
 }
@@ -281,8 +281,8 @@ export class GlobalPlug implements Plug {
         return this.sdk.tracker.track(type, payload);
     }
 
-    public evaluate(expression: string, options: EvaluationOptions = {}): Promise<JsonValue> {
-        return this.sdk.evaluator.evaluate(expression, options);
+    public evaluate<T extends JsonValue>(expression: string, options: EvaluationOptions = {}): Promise<T> {
+        return this.sdk.evaluator.evaluate(expression, options) as Promise<T>;
     }
 
     public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {

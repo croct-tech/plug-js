@@ -66,7 +66,7 @@ jobs:
         run: |-
           rm -rf build
           npm run bundle -- --config-cdn-url=${CDN_URL} \
-              --config-playground-origin=${PLAYGROUND_CONNECT_ORIGIN} \
+              --config-playground-origin=${PLAYGROUND_ORIGIN} \
               --config-playground-connect-url=${PLAYGROUND_CONNECT_URL}
 
       - name: Authenticate to GCP

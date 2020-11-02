@@ -7,6 +7,8 @@ on:
 
 env:
   CDN_URL: https://cdn.croct.io/js/v1/lib/plug.js
+  PLAYGROUND_ORIGIN: https://play.croct.com/
+  PLAYGROUND_CONNECT_URL: https://play.croct.com/connect.html
 
 jobs:
   deploy:
@@ -63,7 +65,7 @@ jobs:
         if: ${{ !github.event.release.prerelease }}
         run: |-
           rm -rf build
-          npm run bundle -- --config-cdn-url=${CDN_URL}
+          npm run bundle -- --config-cdn-url=${CDN_URL} --config-playground-origin=${PLAYGROUND_CONNECT_ORIGIN} --config-playground-connect-url=${PLAYGROUND_CONNECT_URL}
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}

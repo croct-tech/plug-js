@@ -1,9 +1,9 @@
 import SdkFacade, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
-import Token from '@croct/sdk/token';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
+import {Token} from '../src/sdk/token';
 
 jest.mock('../src/constants', () => {
     return {
@@ -406,6 +406,23 @@ describe('The Croct plug', () => {
         expect(croct.user).toBe(sdkFacade.user);
     });
 
+    test('should not provide an evaluator facade if unplugged', () => {
+        expect(() => croct.evaluator).toThrow('Croct is not plugged in.');
+    });
+
+    test('should provide an evaluator facade', () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(config);
+
+        expect(croct.evaluator).toBe(sdkFacade.evaluator);
+    });
+
     test('should not provide a user facade if unplugged', () => {
         expect(() => croct.user).toThrow('Croct is not plugged in.');
     });
@@ -658,6 +675,41 @@ describe('The Croct plug', () => {
         await expect(promise).rejects.toBeUndefined();
 
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+    });
+
+    test('should enable the playground plugin by default', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(logger.debug).toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
+    });
+
+    test('should not enable the playground plugin if explicitly disabled', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+            plugins: {
+                playground: false,
+            },
+        });
+
+        expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
     });
 
     test('should wait for the plugins to disable before closing the SDK', async () => {

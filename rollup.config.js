@@ -10,6 +10,14 @@ export default args => {
         throw new Error('The argument "config-cdn-url" is missing.');
     }
 
+    if (args['config-playground-origin'] === undefined) {
+        throw new Error('The argument "config-playground-origin" is missing.');
+    }
+
+    if (args['config-playground-connect-url'] === undefined) {
+        throw new Error('The argument "config-playground-connect-url" is missing.');
+    }
+
     return [
         {
             input: 'src/index.ts',
@@ -31,9 +39,15 @@ export default args => {
                 replace({
                     delimiters: ['<@', '@>'],
                     cdnUrl: args['config-cdn-url'],
+                    playgroundOrigin: args['config-playground-origin'],
+                    playgroundConnectUrl: args['config-playground-connect-url'],
 
                 }),
-                terser(),
+                terser({
+                    format: {
+                        comments: false,
+                    },
+                }),
             ],
         },
     ];

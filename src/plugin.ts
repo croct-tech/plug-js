@@ -1,16 +1,19 @@
-import TrackerFacade from '@croct/sdk/facade/trackerFacade';
-import EvaluatorFacade from '@croct/sdk/facade/evaluatorFacade';
-import UserFacade from '@croct/sdk/facade/userFacade';
-import SessionFacade from '@croct/sdk/facade/sessionFacade';
-import Tab from '@croct/sdk/tab';
-import {Logger} from '@croct/sdk/logging';
+import {TokenStore} from './sdk/token';
+import {Evaluator} from './sdk/evaluation';
+import {Tracker} from './sdk/tracking';
+import {Tab, Logger, SdkEventManager, SessionFacade, UserFacade, CidAssigner} from './sdk';
 
 export interface PluginSdk {
-    readonly tracker: TrackerFacade;
-    readonly evaluator: EvaluatorFacade;
+    readonly version: string;
+    readonly appId: string;
+    readonly tracker: Tracker;
+    readonly evaluator: Evaluator;
     readonly user: UserFacade;
     readonly session: SessionFacade;
     readonly tab: Tab;
+    readonly tokenStore: TokenStore;
+    readonly cidAssigner: CidAssigner;
+    readonly eventManager: SdkEventManager;
 
     getLogger(...namespace: string[]): Logger;
 

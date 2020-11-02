@@ -2,8 +2,8 @@ import {Logger} from '@croct/sdk/logging';
 import {JsonValue} from '@croct/sdk/json';
 import SessionFacade from '@croct/sdk/facade/sessionFacade';
 import UserFacade from '@croct/sdk/facade/userFacade';
-import Tracker from '@croct/sdk/facade/trackerFacade';
-import {EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
+import TrackerFacade from '@croct/sdk/facade/trackerFacade';
+import EvaluatorFacade, {EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
 import Sdk, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
@@ -14,8 +14,10 @@ import {
     ExternalTrackingEventPayload as ExternalEventPayload,
     ExternalTrackingEventType as ExternalEventType,
 } from '@croct/sdk/trackingEvents';
+import {VERSION} from '@croct/sdk';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
+import {factory as playgroundPluginFactory} from './playground';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -26,7 +28,7 @@ export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
 };
 
 export interface Plug {
-    readonly tracker: Tracker;
+    readonly tracker: TrackerFacade;
     readonly user: UserFacade;
     readonly session: SessionFacade;
     readonly flushed: Promise<this>;
@@ -66,7 +68,7 @@ function detectAppId(): string | null {
 }
 
 export class GlobalPlug implements Plug {
-    private pluginFactories: {[key: string]: PluginFactory} = {};
+    private pluginFactories: {[key: string]: PluginFactory} = {playground: playgroundPluginFactory};
 
     private instance?: Sdk;
 
@@ -139,7 +141,7 @@ export class GlobalPlug implements Plug {
 
         const pending: Promise<void>[] = [];
 
-        for (const [name, options] of Object.entries(plugins ?? {})) {
+        for (const [name, options] of Object.entries({playground: true, ...plugins})) {
             logger.debug(`Initializing plugin "${name}"...`);
 
             const factory = this.pluginFactories[name];
@@ -168,11 +170,19 @@ export class GlobalPlug implements Plug {
             const args: PluginArguments = {
                 options: options === true ? {} : options,
                 sdk: {
+                    version: VERSION,
+                    appId: appId,
                     tracker: sdk.tracker,
                     evaluator: sdk.evaluator,
                     user: sdk.user,
                     session: sdk.session,
                     tab: sdk.context.getTab(),
+                    tokenStore: {
+                        getToken: sdk.getToken.bind(sdk),
+                        setToken: sdk.setToken.bind(sdk),
+                    },
+                    cidAssigner: sdk.cidAssigner,
+                    eventManager: sdk.eventManager,
                     getLogger: (...namespace: string[]): Logger => {
                         return sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace);
                     },
@@ -241,8 +251,12 @@ export class GlobalPlug implements Plug {
         return this.instance;
     }
 
-    public get tracker(): Tracker {
+    public get tracker(): TrackerFacade {
         return this.sdk.tracker;
+    }
+
+    public get evaluator(): EvaluatorFacade {
+        return this.sdk.evaluator;
     }
 
     public get user(): UserFacade {

@@ -7,7 +7,7 @@ on:
 
 env:
   CDN_URL: https://cdn.croct.io/js/v1/lib/plug.js
-  PLAYGROUND_ORIGIN: https://play.croct.com/
+  PLAYGROUND_ORIGIN: https://play.croct.com
   PLAYGROUND_CONNECT_URL: https://play.croct.com/connect.html
 
 jobs:

@@ -1,7 +1,7 @@
 import {formatCause} from '@croct/sdk/error';
 import CidAssigner from '@croct/sdk/cid';
 import {ContextFactory, TabContextFactory} from '@croct/sdk/facade/evaluatorFacade';
-import {Campaign, Page} from '@croct/sdk/evaluator';
+import {Campaign, EvaluationContext, Page} from '@croct/sdk/evaluator';
 import {Plugin, PluginFactory} from './plugin';
 import {PLAYGROUND_CONNECT_URL, PLAYGROUND_ORIGIN} from './constants';
 import {Logger, SdkEventSubscriber, Tab} from './sdk';
@@ -165,7 +165,7 @@ export class PlaygroundPlugin implements Plugin {
         iframe.style.width = '0';
         iframe.style.height = '0';
 
-        const context = this.contextFactory.createContext();
+        const context = this.createContext();
 
         iframe.onload = (): void => {
             if (iframe.contentWindow === null) {
@@ -201,11 +201,7 @@ export class PlaygroundPlugin implements Plugin {
                 tabId: this.tab.id,
                 cid: cid,
                 token: this.tokenProvider.getToken()?.toString() ?? null,
-                context: {
-                    ...(context.page && {page: context.page}),
-                    ...(context.campaign && {campaign: context.campaign}),
-                    timezone: context.timezone,
-                },
+                context: context,
             };
 
             iframe.contentWindow.postMessage(payload, PLAYGROUND_ORIGIN);
@@ -224,5 +220,24 @@ export class PlaygroundPlugin implements Plugin {
         } else {
             connect();
         }
+    }
+
+    private createContext(): EvaluationContext {
+        const {page, campaign, timezone} = this.contextFactory.createContext();
+        const context: EvaluationContext = {};
+
+        if (page !== undefined) {
+            context.page = page;
+        }
+
+        if (campaign !== undefined) {
+            context.campaign = campaign;
+        }
+
+        if (timezone !== undefined) {
+            context.timezone = timezone;
+        }
+
+        return context;
     }
 }

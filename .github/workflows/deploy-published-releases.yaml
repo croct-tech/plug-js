@@ -65,7 +65,9 @@ jobs:
         if: ${{ !github.event.release.prerelease }}
         run: |-
           rm -rf build
-          npm run bundle -- --config-cdn-url=${CDN_URL} --config-playground-origin=${PLAYGROUND_CONNECT_ORIGIN} --config-playground-connect-url=${PLAYGROUND_CONNECT_URL}
+          npm run bundle -- --config-cdn-url=${CDN_URL} \
+              --config-playground-origin=${PLAYGROUND_CONNECT_ORIGIN} \
+              --config-playground-connect-url=${PLAYGROUND_CONNECT_URL}
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}

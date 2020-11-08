@@ -61,7 +61,7 @@ complete personalization toolkit for building applications that reacts to the us
 - **Fast queries.** Double-digit millisecond latency for real-time evaluations.
 - **Fully extensible API.** Easily add and share new features via plugins.
 - **Type-Safe.** Typescript typings included.
-- **Builtin playground integration** One-click to connect, no configuration needed.
+- **Playground integration** One-click to connect, no configuration needed.
 
 <br />
 

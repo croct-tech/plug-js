@@ -71,7 +71,7 @@ complete personalization toolkit for building applications that reacts to the us
 
 ## Installation
 
-We currently offer two ways to install the library.
+The following installation methods are available:
 
 ### NPM
 

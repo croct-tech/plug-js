@@ -63,8 +63,10 @@ complete personalization toolkit for building applications that reacts to the us
 - **Type-Safe.** Typescript typings included.
 - **Builtin playground integration** One-click to connect, no configuration needed.
 
+<br />
+
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/98485555-10a74080-21f6-11eb-92f9-7e67c369fcf1.gif" alt="Playground" title="Playground" />
+    <img src="https://user-images.githubusercontent.com/943036/98485862-49481980-21f8-11eb-92cd-3c57e124d7a1.gif" alt="Playground" title="Playground" width="600" />
 </p>
 
 ## Installation
@@ -353,7 +355,7 @@ Now let's show the visitor's age based on the birth date entered:
 </script>
 ```
 
-Now, click on "Ask my birth date", enter your birth date and then click on "Show my age", and you should see 
+Now, click on _"Ask my birth date"_, enter your birth date and then click on _"Show my age"_, and you should see 
 your age based on the entered birth date. 
 
 #### Enriching sessions

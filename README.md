@@ -61,6 +61,11 @@ complete personalization toolkit for building applications that reacts to the us
 - **Fast queries.** Double-digit millisecond latency for real-time evaluations.
 - **Fully extensible API.** Easily add and share new features via plugins.
 - **Type-Safe.** Typescript typings included.
+- **Builtin playground integration** One-click to connect, no configuration needed.
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/943036/98485555-10a74080-21f6-11eb-92f9-7e67c369fcf1.gif" alt="Playground" title="Playground" />
+</p>
 
 ## Installation
 
@@ -90,7 +95,7 @@ Add the following line to the `<head>` tag of your HTML document, replacing the 
 Welcome to the beginner's guide to Croct SDK for JavaScript.
 
 This guide aims to introduce the SDK's main features and explain how you can use the 
-[playground](http://play.croct.com/) to assist in developing new personalization features.
+[playground](https://play.croct.com) to assist in developing new personalization features.
 
 Although some JavaScript knowledge will make following along easier, this guide is well suited even for non-developers.
 
@@ -170,7 +175,7 @@ and paste the code below into the HTML panel:
 <!-- Initialize the SDK using the Sandbox API key -->
 <script>croct.plug({appId: '00000000-0000-0000-0000-000000000000'});</script>
 
-<!-- A button to help us get the Codepen link -->  
+<!-- A button to help us get the CodePen link -->  
 <button onclick="prompt('Link to CodePen:', window.location.href)">
     Get CodePen link
 </button>
@@ -499,8 +504,8 @@ The following example covers the steps to identify, retrieve identifiers, and an
 Identify
 </button>
 
-<button onclick="showId()">
-Show ID
+<button onclick="getUserId()">
+Get user ID
 </button>
 
 <button onclick="anonymize()">
@@ -512,7 +517,7 @@ Anonymize
     croct.identify(prompt('Please enter your ID:'));
   }
 
-  function showId() {
+  function getUserId() {
     alert(croct.getUserId());
   }
   

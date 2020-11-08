@@ -1,7 +1,7 @@
 {
   "name": "@croct/plug",
   "version": "0.0.0-dev",
-  "description": "The hassle-free way to integrate Croct into any web application.",
+  "description": "Croct client-side SDK for JavaScript.",
   "license": "MIT",
   "author": {
     "name": "Croct",

@@ -66,7 +66,7 @@ complete personalization toolkit for building applications that reacts to the us
 <br />
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/98485862-49481980-21f8-11eb-92cd-3c57e124d7a1.gif" alt="Playground" title="Playground" width="600" />
+    <img src="https://user-images.githubusercontent.com/943036/98485963-063a7600-21f9-11eb-8aa6-cbeb6ef362f4.gif" alt="Playground" title="Playground" width="600" />
 </p>
 
 ## Installation

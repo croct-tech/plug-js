@@ -1,7 +1,7 @@
 {
   "name": "@croct/plug",
   "version": "0.0.0-dev",
-  "description": "Croct client-side SDK for JavaScript.",
+  "description": "A personalization toolkit for client-side JavaScript.",
   "license": "MIT",
   "author": {
     "name": "Croct",

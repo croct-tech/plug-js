@@ -5,7 +5,7 @@
     <br />
     <strong>Plug JS</strong>
     <br />
-    The hassle-free way to integrate Croct into any web application.
+    A personalization toolkit for client-side JavaScript.
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
@@ -49,12 +49,12 @@
 - [Testing](#testing)
 - [License](#license)
 
-## Introduction
+## About
 
-The Plug JS provides the building blocks for crafting personalized experiences. A single line of code gives you a 
-complete personalization toolkit for building applications that reacts to the user's needs.
+Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
+A single line of code gives you a complete devkit for building natively personalized applications.
 
-### Features
+## Features
 
 - **Zero configuration.** No setup steps required.
 - **No backend necessary.** Deliver personalized experiences from static sites.
@@ -92,7 +92,7 @@ Add the following line to the `<head>` tag of your HTML document, replacing the 
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
 ```
 
-## Begginer's guide
+## Quick Start Guide
 
 Welcome to the beginner's guide to Croct SDK for JavaScript.
 
@@ -103,7 +103,7 @@ Although some JavaScript knowledge will make following along easier, this guide 
 
 Let's start!
 
-### A quick introduction to CQL
+### Introduction
 
 You may have already experienced a situation where someone with a marketing or product role wanted to provide a 
 personalized experience for a particular audience, but that never got off the ground because it turned out to be 

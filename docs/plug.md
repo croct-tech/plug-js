@@ -1,6 +1,6 @@
 # Plug API Reference
 
-This reference documents all methods available in the Plug API and explains in detail how these methods work.
+This reference documents all methods and properties available in the Plug API and explains in detail how they work.
 
 # Index
 

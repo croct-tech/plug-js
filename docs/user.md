@@ -96,6 +96,6 @@ Here's a minimal example showing how to edit a user profile:
 croct.user.edit()
   .set('company', 'Croct')
   .add('interests', 'JavaScript')
-  .set('custom.favoriteColor', 'green')
+  .add('custom.pets', 'crocodile')
   .save()
 ```

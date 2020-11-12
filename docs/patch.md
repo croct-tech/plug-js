@@ -190,7 +190,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to combine sets:
 
 ```js
-patch.combine('custom.pets', ['crocodile', 'Node']);
+patch.combine('custom.pets', ['crocodile', 'iguanas']);
 ```
 
 ### merge
@@ -226,7 +226,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to merge maps:
 
 ```js
-patch.merge('address', {street: '5th Ave'});
+patch.merge('preferences', {color: 'green'});
 ```
 
 ### increment

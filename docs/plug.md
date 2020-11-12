@@ -40,8 +40,8 @@ These are the currently supported options:
 | Option                | Required       | Default                 | Description
 |-----------------------|----------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | appId                 | depends        | none                    | The ID of the application you set up on Croct. This option is required unless you have loaded the SDK using a HTML snippet that already specifies the application ID.
-| debug                 | no             | false                   | If true, turns on debug mode, which logs helpful messages to the console.
-| track                 | no             | true                    | If true, enables the event tracker on initialization.
+| debug                 | no             | false                   | If `true`, turns on debug mode, which logs helpful messages to the console.
+| track                 | no             | true                    | If `true`, enables the automatic event tracking on initialization.
 | token                 | no             | none                    | The JWT token issued by Croct. If null, clears any token specified on previous calls.
 | userId                | no             | none                    | The ID of the user logged into the application. Internally, the SDK will issue a token using the specified ID as the subject claim of the token. The `token` and `userId` options are mutually exclusive.
 | tokenScope            | no             | global                  | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes).

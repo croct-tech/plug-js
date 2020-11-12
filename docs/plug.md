@@ -177,7 +177,7 @@ croct.unsetToken(): void
 
 This method gets the ID of the currently identified user.
  
-If you just want to check whether the user is anonymous, you can use the `isAnonymous` method instead.
+If you just want to check whether the user is anonymous, consider using the [`isAnonymous`](#isanonymous) method instead.
 
 ### Signature
 

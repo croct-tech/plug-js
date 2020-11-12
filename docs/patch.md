@@ -29,7 +29,9 @@ This reference documents all methods available in the Patch API and explains in 
 
 This method sets a value at a given path.
 
-The operation will override any value at the specified path.
+This operation will overwrite the value in the specified path. Note that this operation will fail if the 
+parent path does not exist or is not a list or map. For example, for a given path `foo.bar`, if the value at `foo` 
+does not exist or is not a map, the operation will fail.
 
 #### Signature
 

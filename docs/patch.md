@@ -204,7 +204,7 @@ Current Value     | Given Value     | Result
 The `combine` method has the following signature:
 
 ```ts
-patch.combine(path: string, value: JsonArray|JsonMap): Patch
+patch.combine(path: string, value: JsonArray | JsonMap): Patch
 ```
 
 The return is the path instance itself to allow operation chaining.

@@ -127,7 +127,8 @@ croct.identify(userId: string): void
 
 This method clears the ID of the currently identified user.
  
-The SDK will automatically emit `userSignedOut` and `userSignedIn` events when the user identity changes. Also, since the user identity changes, the current session will end, and a new one will start.
+The SDK will automatically emit an `userSignedOut` event. Also, changing the user in the course of a session 
+will cause the current session to end and a new one to start.
 
 Calling this method will not produce any effect or errors when the user is already anonymous.
 
@@ -159,10 +160,10 @@ croct.setToken(token: string|null): void
 
 This method clears any existing token.
  
-Calling this method will not produce any effect or errors when no token exists.
- 
 The SDK will automatically emit an `userSignedOut` event. Also, changing the user in the course of a session 
 will cause the current session to end and a new one to start.
+
+Calling this method will not produce any effect or errors when no token exists.
 
 ### Signature
 

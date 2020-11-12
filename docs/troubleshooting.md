@@ -4,10 +4,10 @@ Sometimes things go wrong. Here is a list of resolutions to some of the problems
 
 ## Index
 
-- [I cannot connect the playground with my application](#i-cannot-connect-the-playground-with-my-application)
+- [I'm not able to connect my application to the playground](#im-not-able-to-connect-my-application-to-the-playground)
 - [Some user attributes remain null even after applying a patch](#some-user-attributes-remain-null-even-after-applying-a-patch)
 
-## I cannot connect the playground with my application
+## I'm not able to connect my application to the playground
 
 These are the most common problems involving playground connectivity:
 

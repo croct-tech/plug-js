@@ -9,13 +9,13 @@ already used to access nested structures in JavaScript.
 For objects and maps, you should use the `object.property` notation:
 
 ```js
-patch.set('address.street', '5th ave');
+patch.set('custom.pet', 'crocodile');
 ```
 
 For lists, you should use the `list[index]` notation:
 
 ```js
-patch.set('custom.priorities[0]', 'personalization');
+patch.set('custom.pets[0]', 'crocodile');
 ```
 
 Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state. 
@@ -59,7 +59,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to set a value:
 
 ```js
-patch.set('company', 'Croct');
+patch.set('custom.pet', 'crocodile');
 ```
 
 ### unset
@@ -76,7 +76,7 @@ Note that the operation will not fail if the path does not exist.
 The `unset` method has the following signature:
 
 ```ts
-patch.unset(path: string): Patch
+patch.unset(path: string): this
 ```
 
 The return is the path instance itself to allow operation chaining.
@@ -86,7 +86,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to unset a value:
 
 ```js
-patch.unset('company');
+patch.unset('custom.pets');
 ```
 
 ### clear
@@ -109,7 +109,7 @@ Note that the operation will not fail if the path does not exist.
 The `clear` method has the following signature:
 
 ```ts
-patch.clear(): Patch
+patch.clear(): this
 ```
 
 The return is the path instance itself to allow operation chaining.
@@ -119,7 +119,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to clear a given path:
 
 ```js
-patch.clear('interests');
+patch.clear('custom.pets');
 ```
 
 ### add
@@ -130,18 +130,19 @@ The following table shows how the operation behaves in different scenarios:
 
 Current Value     | Given Value     | Result
 ------------------|-----------------|-------------------
-`[]`              | `'a'`           | `['a']`
 `null`            | `'a'`           | `['a']`
+`a`               | `null`          | `['a']`
+`['a']`           | `null`          | `['a']`
+`[]`              | `'a'`           | `['a']`
+`['a', 'b']`      | `'a'`           | `['a', 'b', 'a']`
 `'a'`             | `'b'`           | `['a', 'b']`
-`null`            | `['a']`         | `['a']`
-`['a']`           | `null`          | `['a', null]`
 
 #### Signature
 
 The `add` method has the following signature:
 
 ```ts
-patch.add(path: string, element: JsonValue): Patch
+patch.add(path: string, element: JsonValue): this
 ```
 
 The return is the path instance itself to allow operation chaining.
@@ -151,7 +152,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to add a value to a collection:
 
 ```js
-patch.add('interests', 'JavaScript');
+patch.add('custom.pets', 'crocodile');
 ```
 
 ### combine
@@ -179,7 +180,7 @@ Current Value     | Given Value     | Result
 The `combine` method has the following signature:
 
 ```ts
-patch.combine(path: string, value: JsonValue): Patch
+patch.combine(path: string, value: JsonValue): this
 ```
 
 The return is the path instance itself to allow operation chaining.
@@ -189,7 +190,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to combine sets:
 
 ```js
-patch.combine('interests', ['JavaScript', 'Node']);
+patch.combine('custom.pets', ['crocodile', 'Node']);
 ```
 
 ### merge
@@ -215,7 +216,7 @@ Current Value     | Given Value     | Result
 The `combine` method has the following signature:
 
 ```ts
-patch.combine(path: string, value: JsonArray | JsonMap): Patch
+patch.combine(path: string, value: JsonArray | JsonMap): this
 ```
 
 The return is the path instance itself to allow operation chaining.
@@ -245,7 +246,7 @@ Current Value     | Amount          | Result
 The `increment` method has the following signature:
 
 ```ts
-patch.increment(path: string, value: number = 1): Patch
+patch.increment(path: string, value: number = 1): this
 ```
 
 The return is the path instance itself to allow operation chaining.
@@ -275,7 +276,7 @@ Current Value     | Amount          | Result
 The `increment` method has the following signature:
 
 ```ts
-patch.decrement(path: string, value: number = 1): Patch
+patch.decrement(path: string, value: number = 1): this
 ```
 
 The return is the path instance itself to allow operation chaining.

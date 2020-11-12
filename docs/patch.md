@@ -131,11 +131,11 @@ The following table shows how the operation behaves in different scenarios:
 Current Value     | Given Value     | Result
 ------------------|-----------------|-------------------
 `null`            | `'a'`           | `['a']`
-`a`               | `null`          | `['a']`
+`'a'`             | `null`        | `['a']`
+`'a'`             | `'b'`           | `['a', 'b']`
 `['a']`           | `null`          | `['a']`
 `[]`              | `'a'`           | `['a']`
 `['a', 'b']`      | `'a'`           | `['a', 'b', 'a']`
-`'a'`             | `'b'`           | `['a', 'b']`
 
 #### Signature
 

@@ -100,7 +100,7 @@ If you are unable to find an open issue addressing the problem, then feel free t
 ### Slack Channel
 
 Many people from the Croct community hang out on the Croct Slack Group. 
-[Feel free to join us and start a conversation](https://launchpass.com/croct-community).
+Feel free to [join us and start a conversation](https://launchpass.com/croct-community).
 
 ## Contributing
 

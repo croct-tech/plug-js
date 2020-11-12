@@ -11,7 +11,7 @@ The processing performed by a patch is atomic to prevent the entity from ending 
 Most operations require specifying the path to the target attribute. The path format is similar to the way you are 
 already used to access nested structures in JavaScript.
 
-For objects and maps, you should use the `object.property` notation, for example:
+For objects and maps, you should use the `object.property` notation:
 
 ```js
 patch.set('address.street', '5th ave');
@@ -41,7 +41,7 @@ The return is the path instance itself to allow operation chaining.
 
 ### Code Sample
 
-Here's a minimal example showing set a value:
+Here's a minimal example showing how to set a value:
 
 ```js
 patch.set('company', 'Croct');

@@ -105,7 +105,7 @@ The return is the path instance itself to allow operation chaining.
 
 #### Code Sample
 
-Here's a minimal example showing how to clear a value at a given path:
+Here's a minimal example showing how to clear a given path:
 
 ```js
 patch.clear('interests');

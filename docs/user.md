@@ -2,6 +2,12 @@
 
 This reference documents all methods available in the User API and explains in detail how these methods work.
 
+## Index
+
+- [isAnonymous](#isanonymous)
+- [isIdentified](#isidentified)
+- [edit](#edit)
+
 ## isAnonymous
 
 This method checks whether the user is anonymous.

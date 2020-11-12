@@ -11,13 +11,13 @@ Sometimes things go wrong. Here is a list of resolutions to some of the problems
 
 These are the most common problems involving playground connectivity:
 
-## Application ID Mismatch
+### Application ID Mismatch
 
 Double-check if the API key you are using to access the playground applies to the application specified in the SDK initialization.
 
 If you are using a URL to access the playground, make sure you are using the sandbox application ID `00000000-0000-0000-0000-000000000000`.
 
-## URL Redirection
+### URL Redirection
 
 The playground uses a query-string parameter to initiate the connection to an application. Check if the 
 `__cplay` parameter is present in the URL of the application opened from the playground. If not, your server may be 

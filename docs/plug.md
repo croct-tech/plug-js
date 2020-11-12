@@ -223,10 +223,10 @@ croct.evaluate(expression: string, options?: EvaluationOptions): Promise<JsonRes
 
 These are the currently supported options:
 
-| Option       | Type   | Description                                                                                                                                                                                                                                           |
-|--------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.                                                                                                        |
-| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` you can reference them in expressions like `context's cities include location's city`.  |
+| Option       | Type   | Description
+|--------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.
+| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`.
 
 The return is a promise that resolves to the evaluation result.
 

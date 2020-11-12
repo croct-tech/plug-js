@@ -190,7 +190,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to combine sets:
 
 ```js
-patch.combine('custom.pets', ['crocodile', 'iguanas']);
+patch.combine('custom.pets', ['crocodile', 'iguana']);
 ```
 
 ### merge
@@ -256,7 +256,7 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to increment a value:
 
 ```js
-patch.increment('score', 10);
+patch.increment('custom.score', 10);
 ```
 
 ### decrement
@@ -286,5 +286,5 @@ The return is the path instance itself to allow operation chaining.
 Here's a minimal example showing how to decrement a value:
 
 ```js
-patch.decrement('score', 10);
+patch.decrement('custom.score', 10);
 ```

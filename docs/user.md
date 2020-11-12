@@ -44,6 +44,9 @@ This method returns `true` if the user is identified, `false` otherwise.
 
 This method creates a patch to apply changes to the user's profile.
 
+> **Notice**  
+> Patches are atomic, meaning either all operations are applied, or none are.
+
 These are the currently supported attributes:
 
 Variable            | Type     | Description
@@ -69,9 +72,6 @@ Variable            | Type     | Description
 `jobTitle`          | `string` | The job title
 `interests`         | `array`  | The set of unique interests
 `activities`        | `array`  | The set of unique activities
-
-> **Notice**  
-> Patches are atomic, meaning either all operations are applied, or none are.
 
 ### Signature
 

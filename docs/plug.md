@@ -2,7 +2,7 @@
 
 This reference documents all methods available in the Plug API and explains in detail how these methods work.
 
-# Table of Contents
+# Index
 
 - [plug](#plug)
 - [unplug](#unplug)
@@ -12,6 +12,10 @@ This reference documents all methods available in the Plug API and explains in d
 - [unsetToken](#unsettoken)
 - [getUserId](#getuserid)
 - [isAnonymous](#isanonymous)
+- [evaluate](#evaluate)
+- [track](#track)
+- [user](#user)
+- [session](#session)%
 
 ## plug
 

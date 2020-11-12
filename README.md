@@ -69,13 +69,25 @@ to use the SDK to personalize or track events. Next, replace the `<APP_ID>` plac
 application's public ID.
 
 ```html
- <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
+<script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
 ```
 
 ## Documentation
 
-This reference documents all methods available in our client-side JavaScript SDK, and explains in detail how 
-these methods work.
+If you are new to the Croct platform, the [quick start guide](docs/quick-start.md) is a good starting point for 
+application developers to begin learning the essential concepts.
+
+The following references provide guidance to help you get started, integrate, and troubleshoot problems:
+
+- [Quick Start Guide](docs/quick-start.md)
+- [Plug Reference](docs/plug.md)
+- [Tracker Reference](docs/tracker.md)
+- [Evaluator Reference](docs/evaluator.md)
+- [Event Reference](docs/events.md)
+- [Patch Reference](docs/patch.md)
+- [User Reference](docs/user.md)
+- [Session Reference](docs/session.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
 ## Getting Help
 

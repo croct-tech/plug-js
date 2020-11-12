@@ -47,9 +47,9 @@ These are the currently supported options:
 | `tokenScope`            | no           | global                | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes) for more details.
 | `eventMetadata`         | no           | none                  | Any additional information that may be useful to include as part of the event metadata. A common use case is to record the version of the application for future reference.
 | `logger`                | no           | none                  | A custom logger to handle log messages. By default, all logs are suppressed.
-| `trackerEndpointUrl`    | no           | none                  | The URL of the tracker service, used by Croct's development team to test the SDK.
-| `evaluationEndpointUrl` | no           | none                  | The URL of the evaluation service, used by Croct's development team to test the SDK.
-| `bootstrapEndpointUrl`  | no           | none                  | The URL of the bootstrap service, used by Croct's development team to test the SDK.
+| `trackerEndpointUrl`    | no           | none                  | The URL of the tracker service, used by Croct's development team for testing purposes.
+| `evaluationEndpointUrl` | no           | none                  | The URL of the evaluation service, used by Croct's development team for testing purposes.
+| `bootstrapEndpointUrl`  | no           | none                  | The URL of the bootstrap service, used by Croct's development team for testing purposes.
 
 ### Token scopes
 

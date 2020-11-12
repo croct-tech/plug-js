@@ -25,6 +25,17 @@ So either all operations are applied, or none of them are.
 
 This reference documents all methods available in the Patch API and explains in detail how these methods work.
 
+### Summary
+
+- [set](#set)
+- [unset](#unset)
+- [clear](#clear)
+- [add](#add)
+- [combine](#combine)
+- [merge](#merge)
+- [increment](#increment)
+- [decrement](#decrement)
+
 ### set
 
 This method sets a value at a given path.

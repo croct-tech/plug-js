@@ -55,10 +55,10 @@ patch.set('company', 'Croct');
 
 This method deletes a given path.
 
-Note that the operation will not fail if the path does not exist.
-
 The difference between `unset` and `clear` is that `unset` deletes the path, 
 while `clear` removes the value by setting it to null or removing all its elements.
+
+Note that the operation will not fail if the path does not exist.
 
 #### Signature
 
@@ -82,8 +82,6 @@ patch.unset('company');
 
 This method clears the value at given path.
 
-Note that the operation will not fail if the path does not exist.
-
 The following table shows how the operation behaves in different scenarios:
 
 Current Value     | Result
@@ -92,6 +90,8 @@ Current Value     | Result
 `[]`              | `[]`
 `['a']`           | `[]`
 `'foo'`           | `null`
+
+Note that the operation will not fail if the path does not exist.
 
 #### Signature
 

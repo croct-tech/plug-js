@@ -25,7 +25,7 @@ So either all operations are applied, or none of them are.
 
 This reference documents all methods available in the Patch API and explains in detail how these methods work.
 
-### Summary
+### Index
 
 - [set](#set)
 - [unset](#unset)

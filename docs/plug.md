@@ -187,7 +187,7 @@ The `getUserId` method has the following signature:
 croct.getUserId(): string|null
 ```
 
-This method returns the ID that identifies the user or null if the user is anonymous
+This method returns the ID that identifies the user or `null` if the user is anonymous
 
 ## isAnonymous
 

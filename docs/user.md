@@ -28,8 +28,7 @@ This method returns `true` if the user is anonymous, `false` otherwise.
 
 This method checks whether the user is identified.
 
-If you want to check if the user is anonymous, consider using the [`isAnonymous`](#isanonymous) method instead of 
-negating the result.
+If you want to check if the user is anonymous, consider using the [`isAnonymous`](#isanonymous) method instead.
 
 ### Signature
 

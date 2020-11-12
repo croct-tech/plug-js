@@ -125,7 +125,7 @@ croct.identify(userId: string): void
 
 ## anonymize
 
-This method resets the ID of the currently identified user.
+This method clears the ID of the currently identified user.
  
 Calling this method will not produce any effect or errors when the user is already anonymous.
  

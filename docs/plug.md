@@ -145,7 +145,7 @@ This method replaces any existing token with a new one.
  
 The token must be a valid JWT token issued by the Croct authentication service.
 
-Passing `null` as the token will have the same effect as calling the `unsetToken` method.
+Passing `null` as the token will have the same effect as calling the [`unsetToken`](#unsettoken) method.
 
 ### Signature
 

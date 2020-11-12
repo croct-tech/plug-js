@@ -79,8 +79,8 @@ these methods work.
 
 ## Getting Help
 
-If the troubleshooting section does not cover your problem, don't worry, there are alternative ways to get help from 
-the Croct community.
+If the [troubleshooting section](docs/troubleshooting.md) does not cover your problem, don't worry, there are 
+alternative ways to get help from the Croct community.
 
 ### Stack Overflow
 

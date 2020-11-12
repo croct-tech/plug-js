@@ -144,9 +144,6 @@ croct.anonymize(): void
 This method replaces any existing token with a new one.
  
 The token must be a valid JWT token issued by the Croct authentication service.
- 
-The SDK will automatically emit an `userSignedOut` event. Also, changing the user in the course of a session 
-will cause the current session to end and a new one to start.
 
 Note that passing `null` as the token will have the same effect as calling the `unsetToken` method.
 
@@ -164,8 +161,8 @@ This method clears any existing token.
  
 Calling this method will not produce any effect or errors when no token exists.
  
-The SDK will automatically emit `userSignedOut` and `userSignedIn` events when the user identity changes. Also, 
-since the user identity changes, the current session will end, and a new one will start.
+The SDK will automatically emit an `userSignedOut` event. Also, changing the user in the course of a session 
+will cause the current session to end and a new one to start.
 
 ### Signature
 

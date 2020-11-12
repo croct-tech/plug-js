@@ -86,7 +86,7 @@ The return is a patch for specifying the sequence of operations to apply to the 
 Calling save on the patch will return a promise that resolves to the `userProfileChanged` event 
 after successful transmission.
 
-Refer to [patch documentation](patch.md) for more details on how patching works.
+Refer to the [patch documentation](patch.md) for more details on how patching works.
 
 ### Code Sample
 

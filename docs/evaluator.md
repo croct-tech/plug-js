@@ -10,11 +10,12 @@ This reference documents all methods available in the Evaluator API and explains
 
 This method evaluates an expression written in CQL.
 
+Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
+
 > **Notice**  
+>  
 > Currently, we impose a hard limit of 300 character on the length of expression.  
 > We plan to remove this limitation in the near future.
-
-Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
 
 ### Signature
 

@@ -15,7 +15,8 @@ These are the most common problems involving playground connectivity:
 
 Double-check if the API key you are using to access the playground applies to the application specified in the SDK initialization.
 
-If you are using a URL to access the playground, make sure you are using the sandbox application ID `00000000-0000-0000-0000-000000000000`.
+If you are using a URL to access the playground, make sure you are initializing the SDK with sandbox application ID 
+`00000000-0000-0000-0000-000000000000`.
 
 ### URL Redirection
 

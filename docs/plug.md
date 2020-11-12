@@ -22,8 +22,10 @@ This reference documents all methods available in the Plug API and explains in d
 This method initializes the SDK according to the provided options.
  
 You should initialize the SDK only once in the application, usually on the application startup. 
-Subsequent calls to this method will silently fail. To reconfigure the SDK, you can call the "unplug" method to reset 
-the SDK to its initial state before initializing it with the new configuration.
+Subsequent calls to this method will fail without reporting errors. 
+
+To reconfigure the plug, you can call the [`unplug`](#unplug) method to reset the SDK to its initial state 
+before initializing it with the new configuration.
 
 ### Signature
 
@@ -42,7 +44,7 @@ These are the currently supported options:
 | track                 | no             | true                    | If true, enables the event tracker on initialization.
 | token                 | no             | none                    | The JWT token issued by Croct. If null, clears any token specified on previous calls.
 | userId                | no             | none                    | The ID of the user logged into the application. Internally, the SDK will issue a token using the specified ID as the subject claim of the token. The `token` and `userId` options are mutually exclusive.
-| tokenSope             | no             | global                  | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes).
+| tokenScope            | no             | global                  | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes).
 | eventMetadata         | no             | none                    | Any additional information that may be useful to include in the tracked events' metadata, such as the application version.
 | logger                | no             | none                    | A custom logger to handle log messages. By default, all logs are suppressed.
 | trackerEndpointUrl    | no             | none                    | The URL of the tracker service, used by Croct's development team to test the SDK.

@@ -2,6 +2,10 @@
 
 This reference documents all methods available in the Evaluator API and explains in detail how these methods work.
 
+## Index
+
+- [evaluate](#evaluate)
+
 ## evaluate
 
 This method evaluates a CQL expression.

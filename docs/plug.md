@@ -31,41 +31,47 @@ croct.plug(configuration?: Configuration): void
  
 These are the currently supported options:
 
-| Option                | Required       | Default                 | Description                                                                                                                                                                                                                                                                                                                                                                                                      |
-|-----------------------|----------------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| appId                 | maybe          | none                    | The application ID you set up on Croct. This option is required unless you have loaded the SDK using the HTML snippet that already specifies the application ID.                                                                                                                                                                                                                                                 |
-| debug                 | no             | false                   | If true, turns on debug mode, which logs helpful messages to the console.                                                                                                                                                                                                                                                                                                                                        |
-| track                 | no             | true                    | If true, enables the event tracker on initialization.                                                                                                                                                                                                                                                                                                                                                            |
-| token                 | no             | none                    | The JWT token issued by Croct. If null, clears any token specified on previous calls.                                                                                                                                                                                                                                                                                                                            |
-| userId                | no             | none                    | The ID of the user logged into the application. Internally, the SDK will issue a token using the specified ID as the subject claim of the token. The `token` and `userId` options are mutually exclusive.                                                                                                                                                                                                        |
+| Option                | Required       | Default                 | Description
+|-----------------------|----------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| appId                 | maybe          | none                    | The application ID you set up on Croct. This option is required unless you have loaded the SDK using the HTML snippet that already specifies the application ID.
+| debug                 | no             | false                   | If true, turns on debug mode, which logs helpful messages to the console.
+| track                 | no             | true                    | If true, enables the event tracker on initialization.
+| token                 | no             | none                    | The JWT token issued by Croct. If null, clears any token specified on previous calls.
+| userId                | no             | none                    | The ID of the user logged into the application. Internally, the SDK will issue a token using the specified ID as the subject claim of the token. The `token` and `userId` options are mutually exclusive.
 | tokenSope             | no             | global                  | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes).
-| eventMetadata         | no             | none                    | Any additional information that may be useful to include in the tracked events' metadata, such as the application version.                                                                                                                                                                                                                                                                                       |
-| logger                | no             | none                    | A custom logger to handle log messages. By default, all logs are suppressed.                                                                                                                                                                                                                                                                                                                                     |
-| trackerEndpointUrl    | no             | none                    | The URL of the tracker service, used by Croct's development team to test the SDK.                                                                                                                                                                                                                                                                                                                                |
-| evaluationEndpointUrl | no             | none                    | The URL of the evaluation service, used by Croct's development team to test the SDK.                                                                                                                                                                                                                                                                                                                             |
-| bootstrapEndpointUrl  | no             | none                    | The URL of the bootstrap service, used by Croct's development team to test the SDK.    
+| eventMetadata         | no             | none                    | Any additional information that may be useful to include in the tracked events' metadata, such as the application version.
+| logger                | no             | none                    | A custom logger to handle log messages. By default, all logs are suppressed.
+| trackerEndpointUrl    | no             | none                    | The URL of the tracker service, used by Croct's development team to test the SDK.
+| evaluationEndpointUrl | no             | none                    | The URL of the evaluation service, used by Croct's development team to test the SDK.
+| bootstrapEndpointUrl  | no             | none                    | The URL of the bootstrap service, used by Croct's development team to test the SDK.
 
 ### Token scopes
 
 The token scope determines how the SDK synchronize the token across multiple tabs to match your application's behaviour.
 
-#### Global scope
+Notice that, although the SDK supports multiple identified users in different tabs, such separation does not apply 
+to anonymous users. For the SDK, there is only one anonymous user per browser, regardless of the scope.
 
-The global scope is shared between all tabs so that the user is always the same. Any change in one tab reflects 
-immediately reflects in all other tabs. This is usually the way most applications work.
+#### Global scope 
+
+An application is said to have a global user scope if it supports only one user at a time, in contrast to applications 
+that allow you to switch between multiple accounts in the same session. This how most applications usually work.
+
+In practice, as all tabs share the same scope, it means that if you identify or anonymize a user on one tab, 
+all other tabs will be affected. 
 
 #### Isolated scope
 
-The isolated scope allows you to identify a different user on each tab.
-
-Every time you open a tab, the user will always be initially anonymous. The SDK will keep each tab in an isolated scope, 
-in such a way that you can have a different user identified per tab without interfering with each other.
+The isolated scope prevents the synchronization of tokens between tabs. You should use the isolated scope if your 
+application does not keep users signed in across multiple tabs.
 
 #### Contextual
 
-The contextual scope is similar to the isolated except that new tabs always keeps the user identification from the 
-last tab viewed. This behavior resembles how Gmail works: if you are logged in with an account and open a link, 
-the logged-in user remains the same as the origin page.
+The contextual scope is similar to the isolated except that new tabs keep the user identification from the last viewed tab.
+ 
+You should consider using this scope if your application allows users to access multiple accounts simultaneously 
+in different tabs. This behavior resembles how Gmail works: if you are logged in with an account and open a link, 
+the user remains the same as the origin page.
 
 ### Code Sample
 

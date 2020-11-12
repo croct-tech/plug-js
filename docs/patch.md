@@ -1,12 +1,7 @@
-## Patch API Reference
+# Patch
 
-This reference documents all methods available in the Patch API and explains in detail how these methods work.
-
-A patch allows you to modify a particular entity, such as user profiles or session attributes, without knowing 
+Patches allow you to modify a particular entity, such as user profiles or session attributes, without knowing 
 its current state.
-
-The processing performed by a patch is atomic to prevent the entity from ending up in an inconsistent state 
-— either all operations are applied or none.
 
 Most operations require specifying the path to the target attribute. The path format is similar to the way you are 
 already used to access nested structures in JavaScript.
@@ -23,13 +18,20 @@ For lists, you should use the `list[index]` notation:
 patch.set('custom.priorities[0]', 'personalization');
 ```
 
-## set
+Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state. 
+So either all operations are applied, or none of them are.
+
+## API Reference
+
+This reference documents all methods available in the Patch API and explains in detail how these methods work.
+
+### set
 
 This method sets a value at a given path.
 
 The operation will override any value at the specified path.
 
-### Signature
+#### Signature
 
 The `set` method has the following signature:
 
@@ -39,7 +41,7 @@ patch.set(path: string, value: JsonValue): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to set a value:
 
@@ -47,7 +49,7 @@ Here's a minimal example showing how to set a value:
 patch.set('company', 'Croct');
 ```
 
-## unset
+### unset
 
 This method removes a given path.
 
@@ -56,7 +58,7 @@ Note that the operation will not fail if the path does not exist.
 The difference between `unset` and `clear` is that `unset` deletes the path, 
 while `clear` removes the value by setting it to null or removing all its elements.
 
-### Signature
+#### Signature
 
 The `unset` method has the following signature:
 
@@ -66,7 +68,7 @@ patch.unset(path: string): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to unset a value:
 
@@ -74,7 +76,7 @@ Here's a minimal example showing how to unset a value:
 patch.unset('company');
 ```
 
-## clear
+### clear
 
 This method clears the value at given path.
 
@@ -89,7 +91,7 @@ Current Value     | Result
 `['a']`           | `[]`
 `'foo'`           | `null`
 
-### Signature
+#### Signature
 
 The `clear` method has the following signature:
 
@@ -99,7 +101,7 @@ patch.clear(): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to clear a value at a given path:
 
@@ -107,7 +109,7 @@ Here's a minimal example showing how to clear a value at a given path:
 patch.clear('interests');
 ```
 
-## add
+### add
 
 This method adds a value to a given path.
 
@@ -121,7 +123,7 @@ Current Value     | Given Value     | Result
 `null`            | `['a']`         | `['a']`
 `['a']`           | `null`          | `['a', null]`
 
-### Signature
+#### Signature
 
 The `add` method has the following signature:
 
@@ -131,7 +133,7 @@ patch.add(path: string, element: JsonValue): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to add a value to a collection:
 
@@ -139,7 +141,7 @@ Here's a minimal example showing how to add a value to a collection:
 patch.add('interests', 'JavaScript');
 ```
 
-## combine
+### combine
 
 This method combines two set of values.
 
@@ -159,7 +161,7 @@ Current Value     | Given Value     | Result
 `[null]`          | `['a']`         | `['a']`
 `['a']`          | `['b', null]`    | `['a', 'b']`
 
-### Signature
+#### Signature
 
 The `combine` method has the following signature:
 
@@ -169,7 +171,7 @@ patch.combine(path: string, value: JsonValue): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to combine sets:
 
@@ -177,7 +179,7 @@ Here's a minimal example showing how to combine sets:
 patch.combine('interests', ['JavaScript', 'Node']);
 ```
 
-## merge
+### merge
 
 This method merges two maps or lists.
 
@@ -195,7 +197,7 @@ Current Value     | Given Value     | Result
 `[]`              | `[1]`           | `[1]`
 `[1]`             | `[2]`           | `[1, 2]`
 
-### Signature
+#### Signature
 
 The `combine` method has the following signature:
 
@@ -205,7 +207,7 @@ patch.combine(path: string, value: JsonArray|JsonMap): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to merge maps:
 
@@ -213,7 +215,7 @@ Here's a minimal example showing how to merge maps:
 patch.merge('address', {street: '5th Ave'});
 ```
 
-## increment
+### increment
 
 This method increments a value by a given amount.
 
@@ -225,7 +227,7 @@ Current Value     | Amount          | Result
 `0`               | 10              | 10
 `-1`              | 10              | 9
 
-### Signature
+#### Signature
 
 The `increment` method has the following signature:
 
@@ -235,7 +237,7 @@ patch.increment(path: string, value: number = 1): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to increment a value:
 
@@ -243,7 +245,7 @@ Here's a minimal example showing how to increment a value:
 patch.increment('score', 10);
 ```
 
-## decrement
+### decrement
 
 This method decrements a value by a given amount.
 
@@ -255,7 +257,7 @@ Current Value     | Amount          | Result
 `0`               | 10              | -10
 `1`               | 10              | -9
 
-### Signature
+#### Signature
 
 The `increment` method has the following signature:
 
@@ -265,7 +267,7 @@ patch.decrement(path: string, value: number = 1): Patch
 
 The return is the path instance itself to allow operation chaining.
 
-### Code Sample
+#### Code Sample
 
 Here's a minimal example showing how to decrement a value:
 

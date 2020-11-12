@@ -12,8 +12,7 @@ This reference documents all methods available in the User API and explains in d
 
 This method checks whether the user is anonymous.
 
-If you want to check if the user is identified, consider using the [`isIdentified`](#isidentified) method instead of 
-negating the result.
+If you want to check if the user is identified, consider using the [`isIdentified`](#isidentified) instead.
 
 ### Signature
 

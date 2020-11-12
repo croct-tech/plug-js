@@ -75,7 +75,7 @@ application does not keep users signed in across multiple tabs.
 
 #### Contextual
 
-The contextual scope is similar to the isolated except that new tabs inherit the user identification from 
+The contextual scope is similar to the isolated except that new tabs keep the user identification from 
 the last viewed tab.
  
 You should consider using this scope if your application allows users to access multiple accounts simultaneously 

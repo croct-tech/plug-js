@@ -5,7 +5,7 @@ Sometimes things go wrong. Here is a list of resolutions to some of the problems
 ## Index
 
 - [I'm not able to connect my application to the playground](#im-not-able-to-connect-my-application-to-the-playground)
-- [Some user attributes remain null even after applying a patch](#some-user-attributes-remain-null-even-after-applying-a-patch)
+- [Some user attributes remain null even after applying a patch](#some-user-attributes-remain-null-after-applying-a-patch)
 
 ## I'm not able to connect my application to the playground
 
@@ -24,8 +24,7 @@ The playground uses a query-string parameter to initiate the connection to an ap
 `__cplay` parameter is present in the URL of the application opened from the playground. If not, your server may be 
 redirecting the request, which prevents establishing a connection with your application.
 
-
-## Some user attributes remain null even after applying a patch
+## Some user attributes remain null after applying a patch
 
 If you are applying a patch and the attributes are still null, you may be experiencing one of the following problems:
 

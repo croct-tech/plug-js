@@ -55,8 +55,9 @@ These are the currently supported options:
 
 The token scope determines how the SDK synchronize the token across multiple tabs to match your application's behaviour.
 
-Notice that, although the SDK supports multiple identified users in different tabs, such separation does not apply 
-to anonymous users. For the SDK, there is only one anonymous user per browser, regardless of the scope.
+> **Notice**  
+> Although the SDK supports multiple identified users in different tabs, such separation does not apply 
+> to anonymous users. For the SDK, there is only one anonymous user per browser, regardless of the scope.
 
 #### Global scope 
 

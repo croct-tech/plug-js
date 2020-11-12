@@ -72,6 +72,7 @@ Variable            | Type     | Description
 `jobTitle`          | `string` | The job title
 `interests`         | `array`  | The set of unique interests
 `activities`        | `array`  | The set of unique activities
+`custom.*`          | `object` | The custom attributes
 
 ### Signature
 

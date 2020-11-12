@@ -62,7 +62,7 @@ The token scope determines how the SDK synchronize the token across multiple tab
 #### Global scope 
 
 An application is said to have a global user scope if it supports only one user at a time, in contrast to applications 
-that allow you to switch between multiple accounts in the same session. This how most applications usually work.
+that allow you to switch between multiple accounts in the same session.
 
 In practice, as all tabs share the same scope, it means that if you identify or anonymize a user on one tab, 
 all other tabs will be affected. 

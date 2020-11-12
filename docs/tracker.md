@@ -50,7 +50,8 @@ croct.tracker.enable();
 
 This method disables automatic event tracking.
 
-You can still track events by calling the [`track`](#track) method even with automatic event tracking disabled.
+> **Notice**  
+> You can still track events by calling the [`track`](#track) method even with automatic event tracking disabled.
 
 ### Signature
 

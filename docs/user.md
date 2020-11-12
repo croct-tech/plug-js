@@ -71,7 +71,7 @@ Variable            | Type     | Description
 `activities`        | `array`  | The set of unique activities
 
 > **Notice**  
-> Patches are atomic, meaning that either all operations are applied, or none are.
+> Patches are atomic, meaning either all operations are applied, or none are.
 
 ### Signature
 

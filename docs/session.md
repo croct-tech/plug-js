@@ -8,9 +8,10 @@ This reference documents all methods available in the Session API and explains i
 
 ## edit
 
-This method creates a patch to apply changes to the session.
+This method creates a patch to apply changes to the session attributes.
 
-Notice that patches are atomic, meaning that either all operations are applied, or none are.
+> **Notice**  
+> Patches are atomic, meaning either all operations are applied, or none are.
 
 ### Signature
 
@@ -24,7 +25,7 @@ The return is a patch for specifying the sequence of operations to apply to the 
 Calling save on the patch will return a promise that resolves to the `sessionAttributesChanged` event 
 after successful transmission.
 
-See the [patch documentation](patch.md) for more details. 
+Refer to the [patch documentation](patch.md) for more details on how patching works.
 
 ### Code Sample
 

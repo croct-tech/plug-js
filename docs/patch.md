@@ -113,7 +113,7 @@ patch.clear('interests');
 
 ### add
 
-This method adds a value to a given path.
+This method adds a value to a collection.
 
 The following table shows how the operation behaves in different scenarios:
 

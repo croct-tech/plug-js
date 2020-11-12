@@ -6,9 +6,10 @@ A patch allows you to modify a particular entity, such as user profiles or sessi
 its current state.
 
 The processing performed by a patch is atomic to prevent the entity from ending up in an inconsistent state 
--- either all operations are applied or none.
+— either all operations are applied or none.
 
-Most operations require an attribute path. The path format is similar to how you access nested structures in JavaScript.
+Most operations require specifying the path to the target attribute. The path format is similar to how you access 
+nested structures in JavaScript.
 
 For objects and maps, you should use the `object.property` notation, for example:
 

@@ -44,7 +44,8 @@ This method returns `true` if the user is identified, `false` otherwise.
 
 This method creates a patch to apply changes to the user's profile.
 
-Notice that patches are atomic, meaning that either all operations are applied, or none are.
+> **Notice**
+> Patches are atomic, meaning that either all operations are applied, or none are.
 
 These are the currently supported attributes:
 

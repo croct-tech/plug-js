@@ -13,7 +13,7 @@ Most operations require an attribute path. The path format is similar to how you
 For objects and maps, you should use the `object.property` notation, for example:
 
 ```js
-patch.set ('address.street', '5th ave');
+patch.set('address.street', '5th ave');
 ```
 
 For lists, you should use the `list[index]` notation:

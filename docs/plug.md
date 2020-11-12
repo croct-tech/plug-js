@@ -39,7 +39,7 @@ These are the currently supported options:
 
 | Option                | Required       | Default                 | Description
 |-----------------------|----------------|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| appId                 | maybe          | none                    | The application ID you set up on Croct. This option is required unless you have loaded the SDK using the HTML snippet that already specifies the application ID.
+| appId                 | maybe          | none                    | The ID of the application you set up on Croct. This option is required unless you have loaded the SDK using the HTML snippet that already specifies the application ID.
 | debug                 | no             | false                   | If true, turns on debug mode, which logs helpful messages to the console.
 | track                 | no             | true                    | If true, enables the event tracker on initialization.
 | token                 | no             | none                    | The JWT token issued by Croct. If null, clears any token specified on previous calls.

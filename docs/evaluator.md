@@ -8,9 +8,12 @@ This reference documents all methods available in the Evaluator API and explains
 
 ## evaluate
 
-This method evaluates a CQL expression.
+This method evaluates an expression written in CQL.
 
-Currently, the expression has a hard limit of 300 characters.
+> Notice  
+> Currently, the expression has a hard limit of 300 characters.
+
+Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
 
 ### Signature
 

@@ -77,7 +77,7 @@ application's public ID.
 This reference documents all methods available in our client-side JavaScript SDK, and explains in detail how 
 these methods work.
 
-## Getting help
+## Getting Help
 
 If the troubleshooting section does not cover your problem, don't worry, there are alternative ways to get help from 
 the Croct community.
@@ -88,6 +88,19 @@ Someone else from the community may have already asked a similar question or may
 
 The Croct team will also monitor posts tagged Croct. If there aren not any existing questions that help,
 please [ask a new one](https://stackoverflow.com/questions/ask?tags=croct%20plugjs).
+
+### GitHub
+
+If you have what looks like a bug, or you would like to make a feature request, please 
+[open a new issue on GitHub](https://github.com/croct-tech/plug-js/issues/new/choose).
+
+Before you file an issue, a good practice is to search for issues to see whether others have the same or similar problems. 
+If you are unable to find an open issue addressing the problem, then feel free to open a new one. 
+
+### Slack Channel
+
+Many people from the Croct community hang out on the Croct Slack Group. 
+[Feel free to join us and start a conversation.](https://launchpass.com/croct-community).
 
 ## Contributing
 

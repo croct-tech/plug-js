@@ -2,6 +2,10 @@
 
 This reference documents all methods available in the Session API and explains in detail how these methods work.
 
+## Index
+
+- [edit](#edit)
+
 ## edit
 
 This method creates a patch to apply changes to the session.

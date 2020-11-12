@@ -153,7 +153,7 @@ Passing `null` as the token will have the same effect as calling the [`unsetToke
 This `setToken` method has the following signature:
 
 ```ts
-croct.setToken(token: string|null): void
+croct.setToken(token: string | null): void
 ```
 
 ## unsetToken
@@ -184,7 +184,7 @@ If you just want to check whether the user is anonymous, consider using the [`is
 The `getUserId` method has the following signature:
 
 ```ts
-croct.getUserId(): string|null
+croct.getUserId(): string | null
 ```
 
 This method returns the ID that identifies the user or `null` if the user is anonymous

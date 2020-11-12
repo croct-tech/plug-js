@@ -70,7 +70,7 @@ it will reflect on all other tabs.
 
 #### Isolated scope
 
-The isolated scope inhibits the synchronization of tokens between tabs. You should use the isolated scope if your 
+The isolated scope inhibits the synchronization of tokens between tabs. You should use an isolated scope if your 
 application does not keep users signed in across multiple tabs.
 
 #### Contextual

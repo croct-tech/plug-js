@@ -77,6 +77,18 @@ application's public ID.
 This reference documents all methods available in our client-side JavaScript SDK, and explains in detail how 
 these methods work.
 
+## Getting help
+
+If the troubleshooting section does not cover your problem, don't worry, there are alternative ways to get help from 
+the Croct community.
+
+### Stack Overflow
+
+Someone else from the community may have already asked a similar question or may be able to help with your problem. 
+
+The Croct team will also monitor posts tagged Croct. If there aren not any existing questions that help,
+please [ask a new one](https://stackoverflow.com/questions/ask?tags=croct%20plugjs).
+
 ## Contributing
 
 Contributions to the package are always welcome! 

@@ -113,7 +113,7 @@ This method identifiers the user through a unique identifier.
 The SDK will automatically emit `userSignedOut` and `userSignedIn` events when the user identity changes. Also, 
 changing the user in the course of a session will cause the current session to end and a new one to start.
  
-Notice that calling this method will issue a new token regardless of whether the specified ID is the same as the current one.
+Calling this method will issue a new token regardless of whether the specified ID is the same as the current one.
 
 ### Signature
 

@@ -15,7 +15,7 @@ This reference documents all methods available in the Plug API and explains in d
 - [evaluate](#evaluate)
 - [track](#track)
 - [user](#user)
-- [session](#session)%
+- [session](#session)
 
 ## plug
 

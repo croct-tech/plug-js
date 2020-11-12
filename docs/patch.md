@@ -2,7 +2,8 @@
 
 This reference documents all methods available in the Patch API and explains in detail how these methods work.
 
-A patch allows you to modify a particular entity, such as a user or session profile, without knowing its current state.
+A patch allows you to modify a particular entity, such as user profiles or session attributes, without knowing 
+its current state.
 
 The processing performed by a patch is atomic to prevent the entity from ending up in an inconsistent state 
 -- either all operations are applied or none.

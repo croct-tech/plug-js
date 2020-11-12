@@ -53,7 +53,7 @@ patch.set('company', 'Croct');
 
 ### unset
 
-This method removes a given path.
+This method deletes a given path.
 
 Note that the operation will not fail if the path does not exist.
 

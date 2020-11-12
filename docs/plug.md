@@ -65,7 +65,8 @@ An application is said to have a global user scope if it supports only one user 
 that allow you to switch between multiple accounts in the same session.
 
 In practice, as all tabs share the same scope, it means that if you identify or anonymize a user on one tab, 
-all other tabs will be affected. 
+it will reflect on all other tabs.
+
 
 #### Isolated scope
 

@@ -54,7 +54,7 @@ A single line of code gives you a complete devkit for building natively personal
 <br />
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/99121612-75d6a980-25db-11eb-96fa-7c96656692c2.gif" alt="Playground" title="Playground" />
+    <img src="https://user-images.githubusercontent.com/943036/99122301-d3b7c100-25dc-11eb-8e36-4abc16d85b8f.gif" alt="Playground" title="Playground" />
 </p>
 
 ### Browser support

@@ -53,7 +53,9 @@ A single line of code gives you a complete devkit for building natively personal
 
 <br />
 
-![Playground JS](https://user-images.githubusercontent.com/943036/99120927-791d6580-25da-11eb-98f0-aa739232b79f.gif)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/943036/99120927-791d6580-25da-11eb-98f0-aa739232b79f.gif" alt="Playground" title="Playground" />
+</p>
 
 ### Browser support
 

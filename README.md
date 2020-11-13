@@ -1,19 +1,15 @@
+![Plug JS](https://user-images.githubusercontent.com/943036/99105036-96ddd100-25c0-11eb-9ca4-df7b0e205376.png)
+
+<br/><br/>
+
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
     <a href="https://github.com/croct-tech/plug-js/actions?query=workflow%3AValidations"><img alt="Build" src="https://github.com/croct-tech/plug-js/workflows/Validations/badge.svg"/></a>
     <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability"/></a>
     <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
     <a href="https://bundlephobia.com/result?p=@croct/plug"><img alt="Gzipped Size" src="https://img.shields.io/bundlephobia/minzip/@croct/plug"/></a>
-    
-</p>
-
-<br/><br/>
-
-![Plug JS](https://user-images.githubusercontent.com/943036/99105036-96ddd100-25c0-11eb-9ca4-df7b0e205376.png)
-
-<br/><br/>
-
-<p align="center">
+    <br />
+    <br />
     <a href="https://github.com/croct-tech/plug-js/releases">📦 Releases</a>
     ·
     <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">🐞 Report Bug</a>

@@ -1,12 +1,5 @@
-<p align="center">
-    <a href="https://croct.com">
-        <img src="https://cdn.croct.io/brand/logo/repo-icon-green.svg" alt="Croct" height="80" />
-    </a>
-    <br />
-    <strong>Plug JS</strong>
-    <br />
-    A personalization toolkit for client-side JavaScript.
-</p>
+![Plug JS](https://user-images.githubusercontent.com/943036/99105036-96ddd100-25c0-11eb-9ca4-df7b0e205376.png)
+
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
     <a href="https://github.com/croct-tech/plug-js/actions?query=workflow%3AValidations"><img alt="Build" src="https://github.com/croct-tech/plug-js/workflows/Validations/badge.svg"/></a>
@@ -55,9 +48,7 @@ A single line of code gives you a complete devkit for building natively personal
 
 <br />
 
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/98486013-70ebb180-21f9-11eb-9678-3a1371414b54.gif" alt="Playground" title="Playground" width="600" />
-</p>
+![Playground JS](https://user-images.githubusercontent.com/943036/99104703-17e89880-25c0-11eb-9d9e-b4bec2fc7a41.gif)
 
 ### Browser support
 

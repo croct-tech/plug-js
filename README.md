@@ -22,6 +22,23 @@
     <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
+## Table of Content
+
+- [About](#about)
+- [Features](#features)
+  * [Browser support](#browser-support)
+- [Installation](#installation)
+  * [NPM](#npm)
+  * [Script Tag](#script-tag)
+- [Documentation](#documentation)
+- [Getting Help](#getting-help)
+  * [Stack Overflow](#stack-overflow)
+  * [GitHub](#github)
+  * [Slack Channel](#slack-channel)
+- [Contributing](#contributing)
+- [Testing](#testing)
+- [License](#license)    
+
 ## About
 
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 

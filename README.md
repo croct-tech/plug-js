@@ -53,7 +53,7 @@ A single line of code gives you a complete devkit for building natively personal
 
 <br />
 
-![Playground JS](https://user-images.githubusercontent.com/943036/99104703-17e89880-25c0-11eb-9d9e-b4bec2fc7a41.gif)
+![Playground JS](https://user-images.githubusercontent.com/943036/99120927-791d6580-25da-11eb-98f0-aa739232b79f.gif)
 
 ### Browser support
 

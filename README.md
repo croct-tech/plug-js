@@ -17,6 +17,12 @@
     <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
+<br/><br/>
+
+<hr/>
+
+<br/><br/>
+
 ## Table of Contents
 
 - [About](#about)

@@ -292,7 +292,7 @@ patch.decrement('custom.score', 10);
 
 ### save
 
-This method builds the patch and emits an event recording the specified changes.
+This method builds the patch and emits an event to record the specified changes.
 
 Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state. 
 So either all operations are applied, or none of them are.

@@ -75,45 +75,45 @@ Here are two examples of how to track this event:
 
 <details>
     <summary>Minimal example</summary>
-    ```js
-    croct.track('userSignedUp', {
-        userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
-    });
-    ```
+```js
+croct.track('userSignedUp', {
+    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
+});
+```
 </details>
 
 <details>
     <summary>Complete example</summary>
-    ```js
-        croct.track('userSignedUp', {
-            userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
-            profile: {
-                firstName: 'Carol',
-                lastName: 'Doe',
-                birthDate: '2000-08-31',
-                gender: 'female',
-                email: 'carol@croct.com',
-                alternateEmail: 'example@croct.com',
-                phone: '+15555983800',
-                alternatePhone: '+15555983800',
-                address: {
-                     street: '123 Some Street',
-                     district: 'Kings Oak',
-                     city: 'San Francisco',
-                     state: 'California',
-                     region: 'California',
-                     country: 'US',
-                     continent: 'NA''
-                },
-                avatar: 'http://croct.com/carol.png',
-                company: 'Croct',
-                companyUrl: 'http://croct.com',
-                jobTitle: 'Head of Marketing',
-                custom: {
-                    points: 1,
-                    favoriteEmoji: '🐊',
-                }
-            }
-        });
-    ```
+```js
+croct.track('userSignedUp', {
+    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
+    profile: {
+        firstName: 'Carol',
+        lastName: 'Doe',
+        birthDate: '2000-08-31',
+        gender: 'female',
+        email: 'carol@croct.com',
+        alternateEmail: 'example@croct.com',
+        phone: '+15555983800',
+        alternatePhone: '+15555983800',
+        address: {
+             street: '123 Some Street',
+             district: 'Kings Oak',
+             city: 'San Francisco',
+             state: 'California',
+             region: 'California',
+             country: 'US',
+             continent: 'NA''
+        },
+        avatar: 'http://croct.com/carol.png',
+        company: 'Croct',
+        companyUrl: 'http://croct.com',
+        jobTitle: 'Head of Marketing',
+        custom: {
+            points: 1,
+            favoriteEmoji: '🐊',
+        }
+    }
+});
+```
 </details>

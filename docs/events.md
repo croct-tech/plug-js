@@ -7,7 +7,7 @@ continuously improve user experience.
 The SDK tracks most of the general-purpose events automatically for you. All other events depend on your use case, so 
 it is up to you to decide which events make sense for your application.
 
-## Event Summary
+## Summary
 
 There are several event types that you can record within the customer journey:
 
@@ -17,11 +17,11 @@ There are several event types that you can record within the customer journey:
 | `userSignedIn`             | User          | Yes           | Records a user sign in.               |
 | `userSignedOut`            | User          | Yes           | Records a user sign out.              |
 | `userProfileChanged`       | User          | Yes           | Records user profile changes.         |
-| `pageLoaded`               | Web           | Yes           | Records a page load.                  |
-| `pageOpened`               | Web           | Yes           | Records a page open.                  |
 | `tabOpened`                | Web           | Yes           | Records a tab open.                   |
 | `tabUrlChanged`            | Web           | Yes           | Records a tab's URL change.           |
 | `tabVisibilityChanged`     | Web           | Yes           | Records a tab visibility change.      |
+| `pageOpened`               | Web           | Yes           | Records a page open.                  |
+| `pageLoaded`               | Web           | Yes           | Records a page load.                  |
 | `productViewed`            | E-commerce    | No            | Records a product view.               |
 | `cartViewed`               | E-commerce    | No            | Records a cart view.                  |
 | `checkoutStarted`          | E-commerce    | No            | Records a checkout start.             |
@@ -32,11 +32,11 @@ There are several event types that you can record within the customer journey:
 | `nothingChanged`           | Miscellaneous | Yes           | Records a period of inactivity.       |
 | `eventOccurred`            | Miscellaneous | No            | Records a custom event.               |
 
-## Use Events
+## User Events
 
 The User category has the following events:
 
-### User Signed Up
+### userSignedUp
 
 This event records that a user has signed up.
 
@@ -46,7 +46,7 @@ If the user profile does not exist, the engine will create a new one with the pr
 This event does not affect existing profiles.
 
 For the personalization engine, the semantics of this event does not encompass the 
-[`userSignedIn`](#user-signed-in) event. If your application automatically signs in users after registration, make sure 
+[`userSignedIn`](#usersignedin) event. If your application automatically signs in users after registration, make sure 
 to call the [`identify`](plug.md#identify) method after the sign-up.
 
 #### Properties
@@ -129,23 +129,58 @@ croct.track('userSignedUp', {
 ```
 </details>
 
-### User Signed In
+### userSignedIn
 
-This event records that a user has signed in.
+This event records that a user signed in.
 
 The SDK automatically tracks this event when you call either the [`identify`](plug.md#identify) or 
 [`setToken`](plug.md#settoken) method.
 
-### User Signed Out
+### userSignedOut
 
-This event records that a user has signed out
+This event records that a user signed out.
 
 The SDK automatically tracks this event when you call either the [`anonymize`](plug.md#identify) or 
 [`setToken`](plug.md#settoken) method.
 
-### User Profile Changed
+### userProfileChanged
 
-This event records that a user profile has changed.
+This event records that a user profile changed.
 
 The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
 [`user.edit`](user.md#edit) method.
+
+## Web Events
+
+The Web category has the following events:
+
+### tabOpened
+
+This event records that a user opened a new tab.
+
+The SDK automatically tracks this event when the user open the application in a new tab.
+
+### tabUrlChanged
+
+This event records that the tab URL changed.
+
+The SDK automatically tracks this event when the user navigates between pages.
+
+### tabVisibilityChanged
+
+This event records that the tab visibility changed.
+
+The SDK automatically tracks this event when user minimizes the window or switches to another tab.
+
+### pageOpened
+
+This event records that a user opened a page.
+
+The SDK automatically tracks this event once per page on the initialization.
+
+### pageLoaded
+
+This event records that a page finished loading.
+
+The SDK automatically tracks this event when the page has been completely loaded, without waiting for stylesheets or 
+images to finish loading.

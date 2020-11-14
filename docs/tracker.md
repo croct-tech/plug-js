@@ -16,7 +16,8 @@ The `track` method has the following signature:
 croct.tracker.track(event: string, payload: EventPayload): Promise<Event>
 ```
 
-The return is a promise that resolves to the tracked event after successful transmission.
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+resolves to the tracked event after successful transmission.
 
 ### Code Sample
 

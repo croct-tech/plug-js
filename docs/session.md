@@ -22,8 +22,8 @@ croct.session.edit(): Patch
 ```
 
 The return is a patch for specifying the sequence of operations to apply to the session.
-Calling save on the patch will return a promise that resolves to the `sessionAttributesChanged` event 
-after successful transmission.
+Calling save on the patch will return a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
+that resolves to the `sessionAttributesChanged` event after successful transmission.
 
 Refer to the [patch documentation](patch.md) for more details on how patching works.
 

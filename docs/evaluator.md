@@ -31,7 +31,8 @@ These are the currently supported options:
 | `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluator and reject the promise with a timeout error.                                                                                                        |
 | `attributes` | JSON   | This option represents a map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` you can reference them in expressions like `context's cities include location's city`.  |
 
-The return is a promise that resolves to the evaluation result.
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+resolves to the evaluation result.
 
 ### Code Sample
 

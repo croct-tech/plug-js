@@ -186,9 +186,9 @@ number of visits:
 </script>
 ```
 
-The `croct.evaluate` method returns a `Promise` that resolves to the evaluation result. The second argument, 
-omitted for the sake of simplicity in the example, allows passing evaluation options, like variables and timeout. 
-Please refer to the API reference for more details.
+The `croct.evaluate` method returns a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
+that resolves to the evaluation result. The second argument, omitted for the sake of simplicity in the example, 
+allows passing evaluation options, like variables and timeout. Please refer to the API reference for more details.
 
 ## Collecting Information
 

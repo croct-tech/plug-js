@@ -104,7 +104,8 @@ The `unplug` method has the following signature:
 croct.unplug(): Promise<void>
 ```
 
-The return is a promise to wait until all resources are released.
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) to 
+wait until all resources are released.
 
 ## identify
 
@@ -228,7 +229,8 @@ These are the currently supported options:
 | `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.
 | `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`.
 
-The return is a promise that resolves to the evaluation result.
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+resolves to the evaluation result.
 
 ### Code Sample
 
@@ -252,7 +254,8 @@ The `track` method has the following signature:
 croct.track(event: string, payload: EventPayload): Promise<Event>
 ```
 
-The return is a promise that resolves to the tracked event after successful transmission.
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+resolves to the tracked event after successful transmission.
 
 ### Code Sample
 

@@ -87,7 +87,7 @@ Here are two examples of how to track this event:
 
 ```js
 croct.track('userSignedUp', {
-    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
+  userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
 });
 ```
 </details>
@@ -97,34 +97,34 @@ croct.track('userSignedUp', {
 
 ```js
 croct.track('userSignedUp', {
-    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
-    profile: {
-        firstName: 'Carol',
-        lastName: 'Doe',
-        birthDate: '2000-08-31',
-        gender: 'female',
-        email: 'carol@croct.com',
-        alternateEmail: 'example@croct.com',
-        phone: '+15555983800',
-        alternatePhone: '+15555983800',
-        address: {
-             street: '123 Some Street',
-             district: 'Kings Oak',
-             city: 'San Francisco',
-             state: 'California',
-             region: 'California',
-             country: 'US',
-             continent: 'NA'
-        },
-        avatar: 'http://croct.com/carol.png',
-        company: 'Croct',
-        companyUrl: 'http://croct.com',
-        jobTitle: 'Head of Marketing',
-        custom: {
-            points: 1,
-            favoriteEmoji: '🐊',
-        }
+  userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
+  profile: {
+    firstName: 'Carol',
+    lastName: 'Doe',
+    birthDate: '2000-08-31',
+    gender: 'female',
+    email: 'carol@croct.com',
+    alternateEmail: 'example@croct.com',
+    phone: '+15555983800',
+    alternatePhone: '+15555983800',
+    address: {
+       street: '123 Some Street',
+       district: 'Kings Oak',
+       city: 'San Francisco',
+       state: 'California',
+       region: 'California',
+       country: 'US',
+       continent: 'NA'
+    },
+    avatar: 'http://croct.com/carol.png',
+    company: 'Croct',
+    companyUrl: 'http://croct.com',
+    jobTitle: 'Head of Marketing',
+    custom: {
+      points: 1,
+      favoriteEmoji: '🐊',
     }
+  }
 });
 ```
 </details>
@@ -222,11 +222,11 @@ Here are two examples of how to track this event:
 
 ```js
 croct.track('productViewed', {
-    product: {
-        productId: '12345',
-        name: 'Smartphone 9',
-        displayPrice: 599.00
-    }
+  product: {
+    productId: '12345',
+    name: 'Smartphone 9',
+    displayPrice: 599.00
+  }
 });
 ```
 </details>
@@ -236,18 +236,153 @@ croct.track('productViewed', {
 
 ```js
 croct.track('productViewed', {
-    product: {
-        productId: '12345',
-        sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
-        name: 'Smartphone 9',
-        category: 'Smartphone',
-        brand: 'Acme',
-        variant: '64GB Green',
-        displayPrice: 599.00,
-        originalPrice: 699.00,
-        url: 'https://www.acme.com/product/smartphone9',
-        imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
-    }
+  product: {
+    productId: '12345',
+    sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+    name: 'Smartphone 9',
+    category: 'Smartphone',
+    brand: 'Pear',
+    variant: '64GB Green',
+    displayPrice: 599.00,
+    originalPrice: 699.00,
+    url: 'https://www.acme.com/product/smartphone9',
+    imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+  }
+});
+```
+</details>
+
+## cartViewed
+
+This event records the user viewed the shopping cart.
+
+You should track this event when a user views the shopping cart page or summary.
+
+#### Properties
+
+This event supports the following properties:
+
+| Property                              | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                 
+|---------------------------------------|----------|----------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `cart`                                | `object` | Yes      |                                  | The cart information.
+| `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. The currency should be specified using the 3-letter currency codes defined by the ISO 4217 standard. For currencies having no official recognition in ISO 4217, as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially. |
+| `cart.items`                          | `array`  | Yes      |                                  | The list of items.
+| `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
+| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
+| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
+| `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
+| `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
+| `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
+| `cart.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
+| `cart.items[*].product.displayPrice`  | `number` | Yes      | Zero or positive                 | The displayed price.
+| `cart.items[*].product.originalPrice` | `number` | No       | Zero or positive                 | The original price.
+| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
+| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
+| `cart.items[*].index`                 | `number` | Yes      | Zero or positive                 | The index, starting from zero, representing the order in which the item was added to the shopping cart.
+| `cart.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
+| `cart.items[*].total`                 | `number` | Yes      | Zero or positive                 | The total for the item. It includes discounts and any other adjustment.
+| `cart.items[*].discount`              | `number` | No       | Zero or positive                 | The amount of the discount applied to the item.
+| `cart.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
+| `cart.subtotal`                       | `number` | No       | Zero or positive                 | The total of all items and quantities in the shopping cart including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `cart.shippingPrice`                  | `number` | No       | Zero or positive                 | The total shipping price for the items in the shopping cart, including any handling charges.
+| `cart.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
+| `cart.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `cart.discount`                       | `number` | No       | Zero or positive                 | The amount of the discount applied to the shopping cart.
+| `cart.total`                          | `number` | Yes      | Zero or positive                 | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `cart.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping cart.
+| `cart.lastUpdateTime`                 | `number` | No       |                                  | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
+
+#### Code Sample
+
+Here are two examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```js
+croct.track('cartViewed', {
+  cart: {
+    currency: 'USD',
+    total: 776.49,
+    items: [
+      {
+        index: 0,
+        total: 699.00,
+        quantity: 1,
+        product: {
+          productId: '12345',
+          name: "Smartphone 9",
+          displayPrice: 699.00
+        }
+      }
+    ]
+  }
+});
+```
+</details>
+
+<details>
+    <summary>Complete Example</summary>
+
+```js
+croct.track('cartViewed', {
+  cart: {
+    currency: 'BRL',
+    items: [
+      {
+        index: 0,
+        quantity: 1,
+        total: 699.00,
+        discount: 100.00,
+        coupon: 'PROMO',
+        product: {
+          productId: '12345',
+          sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+          name: 'Smartphone 9',
+          category: 'Smartphone',
+          brand: 'Acme',
+          variant: '64GB Green',
+          displayPrice: 699.00,
+          originalPrice: 799.00,
+          url: 'https://www.acme.com/product/smartphone9',
+          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+        }
+      },
+      {
+        index: 1,
+        quantity: 1,
+        total: 39.00,
+        discount: 10.00,
+        coupon: 'PROMO',
+        product: {
+          productId: '98765',
+          sku: '03132db8-2c37-4aef-9827-60d0206683d9',
+          name: 'Silicone Case',
+          category: 'Cases',
+          brand: 'Acme',
+          variant: 'Black',
+          displayPrice: 39.00,
+          originalPrice: 49.00,
+          url: 'https://www.acme.com/product/silicone-case',
+          imageUrl: 'https://www.acme.com/images/silicone-case-black'
+        }
+      }
+    ],
+    taxes: {
+      state: 53.51,
+      local: 23.98
+    },
+    costs: {
+      manufacturing: 275.81,
+      cos: 85.37
+    },
+    subtotal: 848.00,
+    shippingPrice: 59.99,
+    discount: 169.99,
+    total: 815.49,
+    coupon: 'FREE-SHIPPING',
+    lastUpdateTime: 123456789
+  }
 });
 ```
 </details>

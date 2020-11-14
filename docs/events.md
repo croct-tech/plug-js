@@ -47,7 +47,7 @@ This event supports the following properties:
 | Property                     | Type     | Constraints                              | Required | Description
 |------------------------------|----------|------------------------------------------|----------|----------------------------------
 | `userId`                     | `string` | 1 and 254 chars                          | Yes      | The user's ID
-| `profile`                    | `object` |                                          | No       | The user's profile
+| `profile`                    | `object` | JSON object                              | No       | The user's profile
 | `profile.firstName`          | `String` | 1 to 50 chars                            | No       | The first name
 | `profile.lastName`           | `String` | 1 to 50 chars                            | No       | The last name
 | `profile.birthDate`          | `String` | A valid date in the form `YYYY-MM-DD`    | No       | The birth date
@@ -56,7 +56,7 @@ This event supports the following properties:
 | `profile.alternateEmail`     | `String` | 1 to 254 chars                           | No       | The alternate email address
 | `profile.phone`              | `String` | 1 to 30 chars                            | No       | The phone number
 | `profile.alternatePhone`     | `String` | 1 to 30 chars                            | No       | The alternate phone number
-| `profile.address`            | `object` |                                          | No       | The user's address.
+| `profile.address`            | `object` | JSON object                              | No       | The user's address.
 | `profile.address.street`     | `String` | 1 to 100 chars                           | No       | The street
 | `profile.address.district`   | `String` | 1 to 100 chars                           | No       | The district
 | `profile.address.city`       | `String` | 1 to 100 chars                           | No       | The city
@@ -67,7 +67,7 @@ This event supports the following properties:
 | `profile.company`            | `String` | 1 to 200 chars                           | No       | The company's name
 | `profile.companyUrl`         | `String` | Well-formed URL                          | No       | The company's website URL
 | `profile.jobTitle`           | `String` | 1 to 50 chars                            | No       | The job title
-| `profile.custom`             | `object` | JSON                                     | No       | The map of custom attributes
+| `profile.custom`             | `object` | JSON object                              | No       | The map of custom attributes
 
 #### Code Sample
 

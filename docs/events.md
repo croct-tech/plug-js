@@ -46,11 +46,11 @@ This event supports the following properties:
 
 | Property                     | Type     | Constraints                              | Required | Description
 |------------------------------|----------|------------------------------------------|----------|----------------------------------
-| `userId`                     | `string` | 1 to 254 chars                           | Yes      | The user's ID
+| `userId`                     | `string` | 1 and 254 chars                          | Yes      | The user's ID
 | `profile`                    | `object` |                                          | No       | The user's profile
 | `profile.firstName`          | `String` | 1 to 50 chars                            | No       | The first name
 | `profile.lastName`           | `String` | 1 to 50 chars                            | No       | The last name
-| `profile.birthDate`          | `String` | Valid date in the `YYYY-MM-DD` format    | No       | The birth date
+| `profile.birthDate`          | `String` | A valid date in the form `YYYY-MM-DD`    | No       | The birth date
 | `profile.gender`             | `String` | `male`, `female`, `neutral` or `unknown` | No       | The gender
 | `profile.email`              | `String` | 1 to 254 chars                           | No       | The email address
 | `profile.alternateEmail`     | `String` | 1 to 254 chars                           | No       | The alternate email address
@@ -63,9 +63,9 @@ This event supports the following properties:
 | `profile.address.region`     | `String` | 1 to 100 chars                           | No       | The region
 | `profile.address.country`    | `String` | 1 to 100 chars                           | No       | The country
 | `profile.address.postalCode` | `String` | 1 to 20 chars                            | No       | The postal code
-| `profile.avatar`             | `String` | Valid URL                                | No       | The personal avatar URL
+| `profile.avatar`             | `String` | Well-formed URL                          | No       | The personal avatar URL
 | `profile.company`            | `String` | 1 to 200 chars                           | No       | The company's name
-| `profile.companyUrl`         | `String` | Valid URL                                | No       | The company's website URL
+| `profile.companyUrl`         | `String` | Well-formed URL                          | No       | The company's website URL
 | `profile.jobTitle`           | `String` | 1 to 50 chars                            | No       | The job title
 | `profile.custom`             | `object` | JSON                                     | No       | The map of custom attributes
 

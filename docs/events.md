@@ -76,11 +76,11 @@ Here are two examples of how to track this event:
 <details>
     <summary>Minimal example</summary>
     <p>
-        ```js
-        croct.track('userSignedUp', {
-            userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
-        });
-        ```
+```javascript
+croct.track('userSignedUp', {
+    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
+});
+```
     </p>
 </details>
 

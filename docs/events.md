@@ -4,7 +4,7 @@ Events tell the story of what happened during a user's journey. Besides helping 
 with your application, these events also provide data to enrich the evaluation context and refine the models that 
 continuously improve user experience.
 
-The SDK automatically tracks most general-purpose events for you. All other events depend on your use case, so it is up 
+The SDK tracks most general-purpose events for you automatically. All other events depend on your use case, so it is up 
 to you to decide which events make sense for your application.
 
 ## Event Summary

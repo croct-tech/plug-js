@@ -147,5 +147,5 @@ The SDK automatically tracks this event when you call either the [`anonymize`](p
 
 This event records that a user profile has changed.
 
-The SDK automatically tracks this event when you call [`save`](patch.md#) on the  
+The SDK automatically tracks this event when you call [`save`](patch.md#save) on the 
 [`setToken`](plug.md#settoken) method.

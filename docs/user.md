@@ -79,8 +79,8 @@ We recommend using descriptive names in camel case, like`pets`, `favoriteColor` 
 recommendations will make your custom attributes look like the standard ones, which results in queries with better 
 readability.
 
-Notice that the attribute names are case-insensitive, meaning both `loyaltyNumber` and `loyaltynumber` refer to 
-the same attribute and could ultimately override each other. 
+Notice that the attribute names are case-insensitive, meaning both `loyaltyNumber` and `loyaltynumber` refer to the same 
+attribute and could ultimately override each other. 
 
 ### Signature
 

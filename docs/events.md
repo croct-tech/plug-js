@@ -44,7 +44,7 @@ If the user profile does not exist, the engine will create a new one with the pr
 This event does not affect existing profiles.
 
 For the personalization engine, the semantics of this event does not encompass the `userSignedIn` event. 
-If your application automatically logs in the user after registration, make sure to call the 
+If your application automatically signs in users after registration, make sure to call the 
 [`identify`](plug.md#identify) method after the sign-up.
 
 #### Properties

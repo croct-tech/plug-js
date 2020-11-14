@@ -10,8 +10,12 @@ This reference documents all methods available in the Session API and explains i
 
 This method creates a patch to apply changes to the session attributes.
 
-> **Notice**  
-> Patches are atomic, meaning either all operations are applied, or none are.
+The attribute names should start with a letter or underscore, followed by more letters, digits, or underscores.  
+We recommend using descriptive names in camel case, like `plan`, `recommendPlan` and, `pickedPlan`.  Following these
+recommendations will make your attributes look like the standard ones, which results in queries with better readability.
+
+Notice that the attribute names are case-insensitive, meaning both `recommendPlan` and `recommendplan` refer to the same 
+attribute and could ultimately override each other. 
 
 ### Signature
 

@@ -75,7 +75,7 @@ Variable            | Type     | Description
 `custom.*`          | `object` | The custom attributes
 
 The name of custom attributes should start with a letter or underscore, followed by more letters, digits, or underscores.  
-We recommend using descriptive names in camel case, like`pets`, `favoriteColor` and, `loyaltyNumber`.  Following these 
+We recommend using descriptive names in camel case, like`pets`, `favoriteColor` and, `loyaltyNumber`.  Following these
 recommendations will make your custom attributes look like the standard ones, which results in queries with better 
 readability.
 

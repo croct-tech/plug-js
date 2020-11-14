@@ -44,9 +44,6 @@ This method returns `true` if the user is identified, `false` otherwise.
 
 This method creates a patch to apply changes to the user's profile.
 
-> **Notice**  
-> Patches are atomic, meaning either all operations are applied, or none are.
-
 These are the currently supported attributes:
 
 Variable            | Type     | Description

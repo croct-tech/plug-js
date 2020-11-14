@@ -312,6 +312,5 @@ The return is a promise that resolves to the tracked event after successful tran
 Here's a minimal example showing how save the specified changes:
 
 ```js
-patch.decrement('custom.score', 10)
-  .save();
+patch.save();
 ```

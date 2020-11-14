@@ -32,104 +32,15 @@ There are several event types that you can record within the customer journey:
 | `nothingChanged`           | Miscellaneous | Yes           | Records a period of inactivity.       |
 | `eventOccurred`            | Miscellaneous | No            | Records a custom event.               |
 
-## Application-triggered events
+## Use Events
 
-Below are listed all the events that your application can track, depending on your use case.
+The User category has the following events:
 
 ### User Signed Up
 
+This event records that a user has signed up.
+
 You should track this event when a user signs up for your application.
-
-If the user profile does not exist, the engine will create a new one with the provided information. 
-This event does not affect existing profiles.
-
-For the personalization engine, the semantics of this event does not encompass the [`userSignedIn`](#user-signed-in) 
-event. If your application automatically signs in users after registration, make sure to call the 
-[`identify`](plug.md#identify) method after the sign-up.
-
-#### Properties
-
-This event supports the following properties:
-
-| Property                     | Type     | Constraints                              | Required | Description
-|------------------------------|----------|------------------------------------------|----------|----------------------------------
-| `userId`                     | `string` | 1 and 254 chars                          | Yes      | The user ID.
-| `profile`                    | `object` | JSON object                              | No       | The user profile.
-| `profile.firstName`          | `String` | 1 to 50 chars                            | No       | The first name.
-| `profile.lastName`           | `String` | 1 to 50 chars                            | No       | The last name.
-| `profile.birthDate`          | `String` | A valid date in the form `YYYY-MM-DD`    | No       | The birth date.
-| `profile.gender`             | `String` | `male`, `female`, `neutral` or `unknown` | No       | The gender.
-| `profile.email`              | `String` | 1 to 254 chars                           | No       | The email address.
-| `profile.alternateEmail`     | `String` | 1 to 254 chars                           | No       | The alternate email address.
-| `profile.phone`              | `String` | 1 to 30 chars                            | No       | The phone number.
-| `profile.alternatePhone`     | `String` | 1 to 30 chars                            | No       | The alternate phone number.
-| `profile.address`            | `object` | JSON object                              | No       | The user address.
-| `profile.address.street`     | `String` | 1 to 100 chars                           | No       | The street.
-| `profile.address.district`   | `String` | 1 to 100 chars                           | No       | The district.
-| `profile.address.city`       | `String` | 1 to 100 chars                           | No       | The city.
-| `profile.address.region`     | `String` | 1 to 100 chars                           | No       | The region.
-| `profile.address.country`    | `String` | 1 to 100 chars                           | No       | The country.
-| `profile.address.postalCode` | `String` | 1 to 20 chars                            | No       | The postal code.
-| `profile.avatar`             | `String` | Well-formed URL                          | No       | The personal avatar URL.
-| `profile.company`            | `String` | 1 to 200 chars                           | No       | The company's name.
-| `profile.companyUrl`         | `String` | Well-formed URL                          | No       | The company's website URL.
-| `profile.jobTitle`           | `String` | 1 to 50 chars                            | No       | The job title.
-| `profile.custom`             | `object` | JSON object                              | No       | The map of custom attributes.
-
-#### Code Sample
-
-Here are two examples of how to track this event:
-
-<details>
-    <summary>Minimal Example</summary>
-
-```js
-croct.track('userSignedUp', {
-    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
-});
-```
-</details>
-
-<details>
-    <summary>Complete Example</summary>
-
-```js
-croct.track('userSignedUp', {
-    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
-    profile: {
-        firstName: 'Carol',
-        lastName: 'Doe',
-        birthDate: '2000-08-31',
-        gender: 'female',
-        email: 'carol@croct.com',
-        alternateEmail: 'example@croct.com',
-        phone: '+15555983800',
-        alternatePhone: '+15555983800',
-        address: {
-             street: '123 Some Street',
-             district: 'Kings Oak',
-             city: 'San Francisco',
-             state: 'California',
-             region: 'California',
-             country: 'US',
-             continent: 'NA'
-        },
-        avatar: 'http://croct.com/carol.png',
-        company: 'Croct',
-        companyUrl: 'http://croct.com',
-        jobTitle: 'Head of Marketing',
-        custom: {
-            points: 1,
-            favoriteEmoji: '🐊',
-        }
-    }
-});
-```
-</details>
-
-### User Signed In
-
-You should track this event when a user signs in to your application.
 
 If the user profile does not exist, the engine will create a new one with the provided information. 
 This event does not affect existing profiles.
@@ -217,3 +128,17 @@ croct.track('userSignedUp', {
 });
 ```
 </details>
+
+### User Signed In
+
+This event records that a user has signed in.
+
+The SDK automatically tracks this event when you call either the [`identify`](plug.md#identify) or 
+[`setToken`](plug.md#settoken) method.
+
+### User Signed Out
+
+This event records that a user has signed out
+
+The SDK automatically tracks this event when you call either the [`anonymize`](plug.md#identify) or 
+[`setToken`](plug.md#settoken) method.

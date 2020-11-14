@@ -74,6 +74,14 @@ Variable            | Type     | Description
 `activities`        | `array`  | The set of unique activities
 `custom.*`          | `object` | The custom attributes
 
+The name of custom attributes should begin with a letter or underscore, followed by more letters, digits, or underscores.  
+We recommend using descriptive names in camel case, like`pets`, `favoriteColor` and, `loyaltyNumber`.  Following these 
+recommendations will make your custom attributes look like the standard ones, which results in queries with better 
+readability.
+
+Notice that the attribute names are case-insensitive, meaning that both `loyaltyNumber` and `loyaltynumber` refer to 
+the same attribute and could ultimately override each other. 
+
 ### Signature
 
 The `edit` method has the following signature:

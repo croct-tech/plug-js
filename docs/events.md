@@ -56,7 +56,7 @@ This event supports the following properties:
 | Property                     | Type     | Constraints                              | Required | Description
 |------------------------------|----------|------------------------------------------|----------|----------------------------------
 | `userId`                     | `string` | 1 and 254 chars                          | Yes      | The user ID.
-| `profile`                    | `object` | JSON object                              | No       | The user profile.
+| `profile`                    | `object` |                                          | No       | The user profile.
 | `profile.firstName`          | `String` | 1 to 50 chars                            | No       | The first name.
 | `profile.lastName`           | `String` | 1 to 50 chars                            | No       | The last name.
 | `profile.birthDate`          | `String` | A valid date in the form `YYYY-MM-DD`    | No       | The birth date.
@@ -65,7 +65,7 @@ This event supports the following properties:
 | `profile.alternateEmail`     | `String` | 1 to 254 chars                           | No       | The alternate email address.
 | `profile.phone`              | `String` | 1 to 30 chars                            | No       | The phone number.
 | `profile.alternatePhone`     | `String` | 1 to 30 chars                            | No       | The alternate phone number.
-| `profile.address`            | `object` | JSON object                              | No       | The user address.
+| `profile.address`            | `object` |                                          | No       | The user address.
 | `profile.address.street`     | `String` | 1 to 100 chars                           | No       | The street.
 | `profile.address.district`   | `String` | 1 to 100 chars                           | No       | The district.
 | `profile.address.city`       | `String` | 1 to 100 chars                           | No       | The city.
@@ -201,7 +201,7 @@ This event supports the following properties:
 
 | Property                 | Type     | Required | Constraints      | Description
 |--------------------------|----------|----------|------------------|-------------------------------------------
-| `product`                | `object` | Yes      | JSON object      | The product information
+| `product`                | `object` | Yes      |                  | The product information
 | `product.productId`      | `string` | Yes      | 1 to 50 chars    | The product ID
 | `product.sku`            | `string` | No       | 1 to 50 chars    | The product SKU
 | `product.name`           | `string` | Yes      | 1 to 200 chars   | The product name
@@ -294,7 +294,7 @@ This event supports the following properties:
 
 **Note:**
 
-- The `sku` and `productId` do not have to be different. If they are different, usually the `product` is the internal identifier, like `12345` and the SKU is a public-facing identifier like `SM-124-GREEN`.
+- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, like `12345,` and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 
 #### Code Sample

@@ -32,11 +32,13 @@ There are several event types that you can record within the customer journey:
 | `nothingChanged`           | Miscellaneous | Yes           | Records a period of inactivity.       |
 | `eventOccurred`            | Miscellaneous | No            | Records a custom event.               |
 
-## User Events
+## Events
+
+### User Events
 
 The User category has the following events:
 
-### userSignedUp
+#### userSignedUp
 
 This event records that a user has signed up.
 
@@ -49,7 +51,7 @@ For the personalization engine, the semantics of this event does not encompass t
 [`userSignedIn`](#usersignedin) event. If your application automatically signs in users after registration, make sure 
 to call the [`identify`](plug.md#identify) method after the sign-up.
 
-#### Properties
+##### Properties
 
 This event supports the following properties:
 
@@ -78,7 +80,7 @@ This event supports the following properties:
 | `profile.jobTitle`           | `String` | 1 to 50 chars                            | No       | The job title.
 | `profile.custom`             | `object` | JSON object                              | No       | The map of custom attributes.
 
-#### Code Sample
+##### Code Sample
 
 Here are two examples of how to track this event:
 
@@ -129,58 +131,60 @@ croct.track('userSignedUp', {
 ```
 </details>
 
-### userSignedIn
+#### userSignedIn
 
 This event records that a user signed in.
 
 The SDK automatically tracks this event when you call either the [`identify`](plug.md#identify) or 
 [`setToken`](plug.md#settoken) method.
 
-### userSignedOut
+#### userSignedOut
 
 This event records that a user signed out.
 
 The SDK automatically tracks this event when you call either the [`anonymize`](plug.md#identify) or 
 [`setToken`](plug.md#settoken) method.
 
-### userProfileChanged
+#### userProfileChanged
 
 This event records that a user profile changed.
 
 The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
 [`user.edit`](user.md#edit) method.
 
-## Web Events
+### Web Events
 
 The Web category has the following events:
 
-### tabOpened
+#### tabOpened
 
 This event records that a user opened a new tab.
 
 The SDK automatically tracks this event when the user open the application in a new tab.
 
-### tabUrlChanged
+#### tabUrlChanged
 
 This event records that the tab URL changed.
 
 The SDK automatically tracks this event when the user navigates between pages.
 
-### tabVisibilityChanged
+#### tabVisibilityChanged
 
 This event records that the tab visibility changed.
 
 The SDK automatically tracks this event when user minimizes the window or switches to another tab.
 
-### pageOpened
+#### pageOpened
 
 This event records that a user opened a page.
 
 The SDK automatically tracks this event once per page on the initialization.
 
-### pageLoaded
+#### pageLoaded
 
 This event records that a page finished loading.
 
 The SDK automatically tracks this event when the page has been completely loaded, without waiting for stylesheets or 
 images to finish loading.
+
+### E-commerce Events

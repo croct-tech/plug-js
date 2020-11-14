@@ -50,7 +50,7 @@ This event supports the following properties:
 | `profile`                    | `object` |                                          | No       | The user's profile
 | `profile.firstName`          | `String` | 1 to 50 chars                            | No       | The first name
 | `profile.lastName`           | `String` | 1 to 50 chars                            | No       | The last name
-| `profile.birthDate`          | `String` | Date format                              | No       | The birth date in `YYYY-MM-DD` format
+| `profile.birthDate`          | `String` | Valid date in the `YYYY-MM-DD` format    | No       | The birth date
 | `profile.gender`             | `String` | `male`, `female`, `neutral` or `unknown` | No       | The gender
 | `profile.email`              | `String` | 1 to 254 chars                           | No       | The email address
 | `profile.alternateEmail`     | `String` | 1 to 254 chars                           | No       | The alternate email address

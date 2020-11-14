@@ -290,7 +290,12 @@ This event supports the following properties:
 | `cart.discount`                       | `number` | No       | Zero or positive                 | The amount of the discount applied to the shopping cart.
 | `cart.total`                          | `number` | Yes      | Zero or positive                 | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
 | `cart.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping cart.
-| `cart.lastUpdateTime`                 | `number` | No       |                                  | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
+| `cart.lastUpdateTime`                 | `number` | No       | Zero or positive                 | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
+
+**Note:**
+
+- The `sku` and `productId` do not have to be different. If they are different, usually the `product` is the internal identifier, like `12345` and the SKU is a public-facing identifier like `SM-124-GREEN`.
+- The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 
 #### Code Sample
 
@@ -311,7 +316,7 @@ croct.track('cartViewed', {
         quantity: 1,
         product: {
           productId: '12345',
-          name: "Smartphone 9",
+          name: 'Smartphone 9',
           displayPrice: 699.00
         }
       }
@@ -337,7 +342,7 @@ croct.track('cartViewed', {
         coupon: 'PROMO',
         product: {
           productId: '12345',
-          sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+          sku: 'SM-124-GREEN',
           name: 'Smartphone 9',
           category: 'Smartphone',
           brand: 'Acme',

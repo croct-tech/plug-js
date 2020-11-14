@@ -40,6 +40,13 @@ Below are listed all the events that your application can track, depending on yo
 
 You should track this event when a user creates an account on your application.
 
+If the user profile does not exist, the engine will create a new one with the provided information. 
+This event does not affect existing profiles.
+
+For the personalization engine, the semantics of this event does not encompass the `userSignedIn` event. 
+If your application automatically logs in the user after registration, make sure to call the 
+[`identify`](plug.md#identify) method after the sign-up.
+
 #### Properties
 
 This event supports the following properties:

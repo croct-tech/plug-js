@@ -38,7 +38,7 @@ Below are listed all the events that your application can track, depending on yo
 
 ### User Signed Up
 
-You should track this event when a user creates an account on your application.
+You should track this event when a user signs up for your application.
 
 If the user profile does not exist, the engine will create a new one with the provided information. 
 This event does not affect existing profiles.
@@ -129,7 +129,7 @@ croct.track('userSignedUp', {
 
 ### User Signed In
 
-You should track this event when a user creates an account on your application.
+You should track this event when a user signs in to your application.
 
 If the user profile does not exist, the engine will create a new one with the provided information. 
 This event does not affect existing profiles.

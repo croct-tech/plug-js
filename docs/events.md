@@ -45,9 +45,9 @@ You should track this event when a user signs up for your application.
 If the user profile does not exist, the engine will create a new one with the provided information. 
 This event does not affect existing profiles.
 
-For the personalization engine, the semantics of this event does not encompass the `userSignedIn` event. 
-If your application automatically signs in users after registration, make sure to call the 
-[`identify`](plug.md#identify) method after the sign-up.
+For the personalization engine, the semantics of this event does not encompass the 
+[`userSignedIn`](#user-signed-in) event. If your application automatically signs in users after registration, make sure 
+to call the [`identify`](plug.md#identify) method after the sign-up.
 
 #### Properties
 
@@ -141,4 +141,11 @@ The SDK automatically tracks this event when you call either the [`identify`](pl
 This event records that a user has signed out
 
 The SDK automatically tracks this event when you call either the [`anonymize`](plug.md#identify) or 
+[`setToken`](plug.md#settoken) method.
+
+### User Profile Changed
+
+This event records that a user profile has changed.
+
+The SDK automatically tracks this event when you call [`save`](patch.md#) on the  
 [`setToken`](plug.md#settoken) method.

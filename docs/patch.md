@@ -35,6 +35,7 @@ This reference documents all methods available in the Patch API and explains in 
 - [merge](#merge)
 - [increment](#increment)
 - [decrement](#decrement)
+- [save](#save
 
 ### set
 
@@ -287,4 +288,30 @@ Here's a minimal example showing how to decrement a value:
 
 ```js
 patch.decrement('custom.score', 10);
+```
+
+### save
+
+This method builds the patch and emits an event recording the specified changes.
+
+Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state. 
+So either all operations are applied, or none of them are.
+
+#### Signature
+
+The `save` method has the following signature:
+
+```ts
+patch.save(): Promise<Event>
+```
+
+The return is a promise that resolves to the tracked event after successful transmission.
+
+#### Code Sample
+
+Here's a minimal example showing how save the specified changes:
+
+```js
+patch.decrement('custom.score', 10)
+  .save();
 ```

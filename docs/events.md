@@ -23,7 +23,7 @@ There are several event types that you can record within the customer journey:
 | `pageOpened`               | Web           | Yes           | Records a page open.                  |
 | `pageLoaded`               | Web           | Yes           | Records a page load.                  |
 | `productViewed`            | E-commerce    | No            | Records a product view.               |
-| `cartViewed`               | E-commerce    | No            | Records a cart view.                  |
+| `orderViewed`               | E-commerce    | No            | Records a order view.                  |
 | `checkoutStarted`          | E-commerce    | No            | Records a checkout start.             |
 | `orderPlaced`              | E-commerce    | No            | Records a placed order.               |
 | `goalCompleted`            | Analytics     | No            | Records a goal completion.            |
@@ -208,8 +208,8 @@ This event supports the following properties:
 | `product.category`       | `string` | No       | 1 to 100 chars   | The product category
 | `product.brand`          | `string` | No       | 1 to 100 chars   | The brand associated with the product
 | `product.variant`        | `string` | No       | 1 to 50 chars    | The product variant, such as color, size, etc
-| `product.displayPrice`   | `number` | Yes      | Zero or positive | The final price, including discounts
-| `product.originalPrice`  | `number` | No       | Zero or positive | The original price, excluding discounts
+| `product.displayPrice`   | `number` | Yes      | Non-negative     | The final price, including discounts
+| `product.originalPrice`  | `number` | No       | Non-negative     | The original price, excluding discounts
 | `product.url`            | `string` | No       | Well-formed URL  | The URL of the product page
 | `product.imageUrl`       | `string` | No       | Well-formed URL  | The URL of the product image
 
@@ -252,11 +252,11 @@ croct.track('productViewed', {
 ```
 </details>
 
-## cartViewed
+## orderViewed
 
-This event records the user viewed the shopping cart.
+This event records the user viewed the shopping order.
 
-You should track this event when a user views the shopping cart page or summary.
+You should track this event when a user views the shopping order page or summary.
 
 #### Properties
 
@@ -264,33 +264,33 @@ This event supports the following properties:
 
 | Property                              | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                 
 |---------------------------------------|----------|----------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `cart`                                | `object` | Yes      |                                  | The cart information.
-| `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. The currency should be specified using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially. |
-| `cart.items`                          | `array`  | Yes      |                                  | The list of items.
-| `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
-| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
-| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
-| `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
-| `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
-| `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
-| `cart.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
-| `cart.items[*].product.displayPrice`  | `number` | Yes      | Zero or positive                 | The displayed price.
-| `cart.items[*].product.originalPrice` | `number` | No       | Zero or positive                 | The original price.
-| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
-| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Zero or positive                 | The index, starting from zero, representing the order in which the item was added to the shopping cart.
-| `cart.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
-| `cart.items[*].total`                 | `number` | Yes      | Zero or positive                 | The total for the item. It includes discounts and any other adjustment.
-| `cart.items[*].discount`              | `number` | No       | Zero or positive                 | The amount of the discount applied to the item.
-| `cart.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
-| `cart.subtotal`                       | `number` | No       | Zero or positive                 | The total of all items and quantities in the shopping cart including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
-| `cart.shippingPrice`                  | `number` | No       | Zero or positive                 | The total shipping price for the items in the shopping cart, including any handling charges.
-| `cart.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
-| `cart.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
-| `cart.discount`                       | `number` | No       | Zero or positive                 | The amount of the discount applied to the shopping cart.
-| `cart.total`                          | `number` | Yes      | Zero or positive                 | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
-| `cart.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping cart.
-| `cart.lastUpdateTime`                 | `number` | No       | Zero or positive                 | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
+| `order`                                | `object` | Yes      |                                  | The order information.
+| `order.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping order. The currency should be specified using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially. |
+| `order.items`                          | `array`  | Yes      |                                  | The list of items.
+| `order.items[*].product`               | `object` | Yes      |                                  | The product details.
+| `order.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
+| `order.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
+| `order.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
+| `order.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
+| `order.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
+| `order.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
+| `order.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                     | The displayed price.
+| `order.items[*].product.originalPrice` | `number` | No       | Non-negative                     | The original price.
+| `order.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
+| `order.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
+| `order.items[*].index`                 | `number` | Yes      | Non-negative                     | The index, starting from zero, representing the order in which the item was added to the shopping order.
+| `order.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
+| `order.items[*].total`                 | `number` | Yes      | Non-negative                     | The total for the item. It includes discounts and any other adjustment.
+| `order.items[*].discount`              | `number` | No       | Non-negative                     | The amount of the discount applied to the item.
+| `order.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
+| `order.subtotal`                       | `number` | No       | Non-negative                     | The total of all items and quantities in the shopping order including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `order.shippingPrice`                  | `number` | No       | Non-negative                     | The total shipping price for the items in the shopping order, including any handling charges.
+| `order.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
+| `order.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `order.discount`                       | `number` | No       | Non-negative                     | The amount of the discount applied to the shopping order.
+| `order.total`                          | `number` | Yes      | Non-negative                     | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `order.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping order.
+| `order.lastUpdateTime`                 | `number` | No       | Non-negative                     | The timestamp when the shopping order was last updated, in milliseconds since epoch.
 
 **Note:**
 
@@ -305,8 +305,8 @@ Here are two examples of how to track this event:
     <summary>Minimal Example</summary>
 
 ```js
-croct.track('cartViewed', {
-  cart: {
+croct.track('orderViewed', {
+  order: {
     currency: 'USD',
     total: 776.49,
     items: [
@@ -330,8 +330,8 @@ croct.track('cartViewed', {
     <summary>Complete Example</summary>
 
 ```js
-croct.track('cartViewed', {
-  cart: {
+croct.track('orderViewed', {
+  order: {
     currency: 'BRL',
     items: [
       {
@@ -405,33 +405,33 @@ This event supports the following properties:
 | Property                              | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                 
 |---------------------------------------|----------|----------|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `orderId`                             | `string` | No       |                                  | The ID that uniquely identifies the order across the store.
-| `cart`                                | `object` | Yes      |                                  | The cart information.
-| `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. The currency should be specified using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially.
-| `cart.items`                          | `array`  | Yes      |                                  | The list of items.
-| `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
-| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
-| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
-| `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
-| `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
-| `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
-| `cart.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
-| `cart.items[*].product.displayPrice`  | `number` | Yes      | Zero or positive                 | The displayed price.
-| `cart.items[*].product.originalPrice` | `number` | No       | Zero or positive                 | The original price.
-| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
-| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Zero or positive                 | The index, starting from zero, representing the order in which the item was added to the shopping cart.
-| `cart.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
-| `cart.items[*].total`                 | `number` | Yes      | Zero or positive                 | The total for the item. It includes discounts and any other adjustment.
-| `cart.items[*].discount`              | `number` | No       | Zero or positive                 | The amount of the discount applied to the item.
-| `cart.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
-| `cart.subtotal`                       | `number` | No       | Zero or positive                 | The total of all items and quantities in the shopping cart including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
-| `cart.shippingPrice`                  | `number` | No       | Zero or positive                 | The total shipping price for the items in the shopping cart, including any handling charges.
-| `cart.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
-| `cart.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
-| `cart.discount`                       | `number` | No       | Zero or positive                 | The amount of the discount applied to the shopping cart.
-| `cart.total`                          | `number` | Yes      | Zero or positive                 | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
-| `cart.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping cart.
-| `cart.lastUpdateTime`                 | `number` | No       | Zero or positive                 | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
+| `order`                                | `object` | Yes      |                                  | The order information.
+| `order.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping order. The currency should be specified using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially.
+| `order.items`                          | `array`  | Yes      |                                  | The list of items.
+| `order.items[*].product`               | `object` | Yes      |                                  | The product details.
+| `order.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
+| `order.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
+| `order.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
+| `order.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
+| `order.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
+| `order.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
+| `order.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                     | The displayed price.
+| `order.items[*].product.originalPrice` | `number` | No       | Non-negative                     | The original price.
+| `order.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
+| `order.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
+| `order.items[*].index`                 | `number` | Yes      | Non-negative                     | The index, starting from zero, representing the order in which the item was added to the shopping order.
+| `order.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
+| `order.items[*].total`                 | `number` | Yes      | Non-negative                     | The total for the item. It includes discounts and any other adjustment.
+| `order.items[*].discount`              | `number` | No       | Non-negative                     | The amount of the discount applied to the item.
+| `order.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
+| `order.subtotal`                       | `number` | No       | Non-negative                     | The total of all items and quantities in the shopping order including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `order.shippingPrice`                  | `number` | No       | Non-negative                     | The total shipping price for the items in the shopping order, including any handling charges.
+| `order.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
+| `order.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `order.discount`                       | `number` | No       | Non-negative                     | The amount of the discount applied to the shopping order.
+| `order.total`                          | `number` | Yes      | Non-negative                     | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `order.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping order.
+| `order.lastUpdateTime`                 | `number` | No       | Non-negative                     | The timestamp when the shopping order was last updated, in milliseconds since epoch.
 
 **Note:**
 
@@ -450,7 +450,7 @@ Here are two examples of how to track this event:
 
 ```js
 croct.track('checkoutStarted', {
-  cart: {
+  order: {
     currency: 'USD',
     total: 776.49,
     items: [
@@ -476,7 +476,7 @@ croct.track('checkoutStarted', {
 ```js
 croct.track('checkoutStarted', {
   orderId: '123',
-  cart: {
+  order: {
     currency: 'BRL',
     items: [
       {
@@ -532,6 +532,156 @@ croct.track('checkoutStarted', {
     total: 815.49,
     coupon: 'FREE-SHIPPING',
     lastUpdateTime: 123456789
+  }
+});
+```
+</details>
+
+## orderPlaced
+
+This event records a placed order.
+
+You should track this event when the user places an order. 
+
+#### Properties
+
+This event supports the following properties:
+
+| Property                               | Type     | Required | Constraints                            | Description                                                                                                                                                                                                                                                                                                                                                 
+|----------------------------------------|----------|----------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `order`                                | `object` | Yes      |                                        | The order details.
+| `order.orderId`                        | `string` | Yes      |                                        | The ID that uniquely identifies the order across the store.
+| `order.currency`                       | `string` | Yes      | 1 to 10 chars                          | The currency in which the monetary values are expressed in the order. The currency should be specified using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially.
+| `order.items`                          | `array`  | Yes      |                                        | The list of items.
+| `order.items[*].product`               | `object` | Yes      |                                        | The product details.
+| `order.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                          | The ID that uniquely identifies the product across the store.
+| `order.items[*].product.sku`           | `string` | No       | 1 to 50 chars                          | The code that uniquely identifies the product variant across the store.
+| `order.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                         | The product name.
+| `order.items[*].product.category`      | `string` | No       | 1 to 100 chars                         | The product category.
+| `order.items[*].product.brand`         | `string` | No       | 1 to 100 chars                         | The brand associated with the product.
+| `order.items[*].product.variant`       | `string` | No       | 1 to 50 chars                          | The variant of the product, such as size, color and style.
+| `order.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                           | The displayed price.
+| `order.items[*].product.originalPrice` | `number` | No       | Non-negative                           | The original price.
+| `order.items[*].product.url`           | `string` | No       | Well-formed URL                        | The URL of the product page.
+| `order.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                        | The URL of the main product image.
+| `order.items[*].index`                 | `number` | Yes      | Non-negative                           | The index, starting from zero, representing the order in which the item was added to the shopping cart.
+| `order.items[*].quantity`              | `number` | Yes      | Positive                               | The number of units of the item ordered.
+| `order.items[*].total`                 | `number` | Yes      | Non-negative                           | The total for the item. It includes discounts and any other adjustment.
+| `order.items[*].discount`              | `number` | No       | Non-negative                           | The amount of the discount applied to the item.
+| `order.items[*].coupon`                | `number` | No       | 1 to 50 chars                          | The coupon applied to the item.
+| `order.subtotal`                       | `number` | No       | Non-negative                           | The total of all items and quantities in the order including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `order.shippingPrice`                  | `number` | No       | Non-negative                           | The total shipping price for the items in the order, including any handling charges.
+| `order.taxes`                          | `object` | No       | Non-empty string keys and values       | The taxes associated with the transaction.
+| `order.costs`                          | `object` | No       | Non-empty string keys and values       | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `order.discount`                       | `number` | No       | Non-negative                           | The amount of the discount applied to the order.
+| `order.total`                          | `number` | Yes      | Non-negative                           | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `order.coupon`                         | `string` | No       | 1 to 50 chars                          | The coupon applied to the order.
+| `order.paymentMethod`                  | `string` | No       | 1 to 50 chars                          | The payment method used in the payment.
+| `order.installments`                   | `number` | No       | Non-negative                           | The number of installments of the transaction.
+| `order.status`                         | `string` | No       | Either `placed`, `paid` or `completed` | The current status of the order.
+
+**Note:**
+
+- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, 
+like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+- The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
+- There are no restrictions on the possible values for the `paymentMethod`  property. Examples include `credit-card`, 
+`Visa`, `PayPal` and `BitCoin`.
+
+#### Code Sample
+
+Here are two examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```js
+croct.track('orderPlaced', {
+  order: {
+    orderId: '123',
+    currency: 'BRL',
+    total: 776.49,
+    items: [
+      {
+        index: 0,
+        total: 699.00,
+        quantity: 1,
+        product: {
+          productId: '12345',
+          name: 'Smartphone 9',
+          displayPrice: 699.00
+        }
+      }
+    ]
+  }
+});
+```
+</details>
+
+<details>
+    <summary>Complete Example</summary>
+
+```js
+croct.track('orderPlaced', {
+  order: {
+    orderId: '123',
+    currency: 'BRL',
+    items: [
+      {
+        index: 0,
+        quantity: 1,
+        total: 699.00,
+        discount: 100.00,
+        coupon: 'PROMO',
+        product: {
+          productId: '12345',
+          sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+          name: 'Smartphone 9',
+          category: 'Smartphone',
+          brand: 'Acme',
+          variant: '64GB Green',
+          displayPrice: 699.00,
+          originalPrice: 799.00,
+          url: 'https://www.acme.com/product/smartphone9',
+          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green'
+        }
+      },
+      {
+        index: 1,
+        quantity: 1,
+        total: 39.00,
+        discount: 10.00,
+        coupon: 'PROMO',
+        product: {
+          productId: '98765',
+          sku: 'CS-987-BLACK',
+          name: 'Silicone Case',
+          category: 'Cases',
+          brand: 'Acme',
+          variant: 'Black',
+          displayPrice: 39.00,
+          originalPrice: 49.00,
+          url: 'https://www.acme.com/product/silicone-case',
+          imageUrl: 'https://www.acme.com/images/silicone-case-black.png'
+        }
+      }
+    ],
+    taxes: {
+      state: 53.51,
+      local: 23.98
+    },
+    costs: {
+      manufacturing: 275.81,
+      cos: 85.37
+    },
+    subtotal: 848.00,
+    shippingPrice: 59.99,
+    discount: 169.99,
+    total: 815.49,
+    coupon: 'FREE-SHIPPING',
+    paymentMethod: 'credit-card',
+    installments: 1,
+    status: 'paid'
   }
 });
 ```

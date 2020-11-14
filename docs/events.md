@@ -34,7 +34,7 @@ There are several event types that you can record within the customer journey:
 
 ## User Events
 
-The User category has the following events:
+The user category has the following events:
 
 ### userSignedUp
 
@@ -152,7 +152,7 @@ The SDK automatically tracks this event when you call [`save`](patch.md#save) on
 
 ## Web Events
 
-The Web category has the following events:
+The web category has the following events:
 
 ### tabOpened
 
@@ -185,5 +185,69 @@ This event records that a page finished loading.
 The SDK automatically tracks this event when the page has been completely loaded, without waiting for stylesheets or 
 images to finish loading.
 
-
 ## E-commerce Events
+
+The e-commerce category has the following events:
+
+## productViewed
+
+This event records the user viewed a product.
+
+You should track this event when a user opens a product page or view a preview modal.
+
+#### Properties
+
+This event supports the following properties:
+
+| Property                 | Type     | Required | Constraints      | Description
+|--------------------------|----------|----------|------------------|-------------------------------------------
+| `product`                | `object` | Yes      | JSON object      | The product information
+| `product.productId`      | `string` | Yes      | 1 to 50 chars    | The product ID
+| `product.sku`            | `string` | No       | 1 to 50 chars    | The product SKU
+| `product.name`           | `string` | Yes      | 1 to 200 chars   | The product name
+| `product.category`       | `string` | No       | 1 to 100 chars   | The product category
+| `product.brand`          | `string` | No       | 1 to 100 chars   | The brand associated with the product
+| `product.variant`        | `string` | No       | 1 to 50 chars    | The product variant, such as color, size, etc
+| `product.displayPrice`   | `number` | Yes      | Zero or positive | The final price, including discounts
+| `product.originalPrice`  | `number` | No       | Zero or positive | The original price, excluding discounts
+| `product.url`            | `string` | No       | Well-formed URL  | The URL of the product page
+| `product.imageUrl`       | `string` | No       | Well-formed URL  | The URL of the product image
+
+#### Code Sample
+
+Here are two examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```js
+croct.track('productViewed', {
+    product: {
+        productId: '12345',
+        name: 'Smartphone 9',
+        displayPrice: 599.00
+    }
+});
+```
+</details>
+
+<details>
+    <summary>Complete Example</summary>
+
+```js
+croct.track('productViewed', {
+    product: {
+        productId: '12345',
+        sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+        name: 'Smartphone 9',
+        category: 'Smartphone',
+        brand: 'Acme',
+        variant: '64GB Green',
+        displayPrice: 599.00,
+        originalPrice: 699.00,
+        url: 'https://www.acme.com/product/smartphone9',
+        imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+    }
+});
+```
+</details>

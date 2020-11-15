@@ -585,8 +585,7 @@ This event supports the following properties:
 - The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, 
 like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
-- There are no restrictions on the possible values for the `paymentMethod` property. Examples include `credit-card`, 
-`Visa`, `PayPal` and `BitCoin`.
+- The `paymentMethod` property accepts arbitrary values, such as `credit-card`, `credit-balance`,  `visa`, `paypal` or `bitcoin`.
 
 #### Code Sample
 
@@ -704,8 +703,8 @@ This event supports the following properties:
 | Property   | Type     | Required | Constraints      | Description
 |------------|----------|----------|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `goalId`   | `string` | Yes      | 1 to 50 chars    | The ID of the goal
-| `value`    | `number` | No       | Non-negative     | The monetary value associated to the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).
 | `currency` | `string` | No       | 1 to 10 chars    | The currency in which the monetary value is expressed. The currency should be specified using the 3-letter currency codes defined by the ISO 4217 standard. For currencies having no official recognition in ISO 4217, as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially.
+| `value`    | `number` | No       | Non-negative     | The monetary value associated to the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).
 
 #### Code Sample
 
@@ -727,8 +726,8 @@ croct.track('goalCompleted', {
 ```js
 croct.track('goalCompleted', {
     goalId: 'newsletter-sign-up',
-    value: 9.99,
     currency: 'USD',
+    value: 9.99
 });
 ```
 </details>

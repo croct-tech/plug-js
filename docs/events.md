@@ -83,27 +83,27 @@ This event supports the following properties:
 
 | Property                     | Type     | Constraints                                     | Required | Description
 |------------------------------|----------|-------------------------------------------------|----------|--------------------------------------------------------------
-| `userId`                     | `string` | 1 and 254 chars                                 | Yes      | The ID that uniquely identifies the user on your application.
+| `userId`                     | `string` | 1 and 254 characters                            | Yes      | The ID that uniquely identifies the user on your application.
 | `profile`                    | `object` |                                                 | No       | The user profile.
-| `profile.firstName`          | `String` | 1 to 50 chars                                   | No       | The first name.
-| `profile.lastName`           | `String` | 1 to 50 chars                                   | No       | The last name.
+| `profile.firstName`          | `String` | Between 1 and 50 characters long                | No       | The first name.
+| `profile.lastName`           | `String` | Between 1 and 50 characters long                | No       | The last name.
 | `profile.birthDate`          | `String` | Valid date in the form `YYYY-MM-DD`             | No       | The birth date.
 | `profile.gender`             | `String` | Either `male`, `female`, `neutral` or `unknown` | No       | The gender.
-| `profile.email`              | `String` | 1 to 254 chars                                  | No       | The email address.
-| `profile.alternateEmail`     | `String` | 1 to 254 chars                                  | No       | The alternate email address.
-| `profile.phone`              | `String` | 1 to 30 chars                                   | No       | The phone number.
-| `profile.alternatePhone`     | `String` | 1 to 30 chars                                   | No       | The alternate phone number.
+| `profile.email`              | `String` | Between 1 and 254 characters long               | No       | The email address.
+| `profile.alternateEmail`     | `String` | Between 1 and 254 characters long               | No       | The alternate email address.
+| `profile.phone`              | `String` | Between 1 and 30 characters long                | No       | The phone number.
+| `profile.alternatePhone`     | `String` | Between 1 and 30 characters long                | No       | The alternate phone number.
 | `profile.address`            | `object` |                                                 | No       | The user address.
-| `profile.address.street`     | `String` | 1 to 100 chars                                  | No       | The address' street.
-| `profile.address.district`   | `String` | 1 to 100 chars                                  | No       | The address' district.
-| `profile.address.city`       | `String` | 1 to 100 chars                                  | No       | The address' city.
-| `profile.address.region`     | `String` | 1 to 100 chars                                  | No       | The address' region.
-| `profile.address.country`    | `String` | 1 to 100 chars                                  | No       | The address' country.
-| `profile.address.postalCode` | `String` | 1 to 20 chars                                   | No       | The address' postal code.
+| `profile.address.street`     | `String` | Between 1 and 100 characters long               | No       | The address' street.
+| `profile.address.district`   | `String` | Between 1 and 100 characters long               | No       | The address' district.
+| `profile.address.city`       | `String` | Between 1 and 100 characters long               | No       | The address' city.
+| `profile.address.region`     | `String` | Between 1 and 100 characters long               | No       | The address' region.
+| `profile.address.country`    | `String` | Between 1 and 100 characters long               | No       | The address' country.
+| `profile.address.postalCode` | `String` | Between 1 and 20 characters long                | No       | The address' postal code.
 | `profile.avatar`             | `String` | Well-formed URL                                 | No       | The personal avatar URL.
-| `profile.company`            | `String` | 1 to 200 chars                                  | No       | The company's name.
+| `profile.company`            | `String` | Between 1 and 200 characters long               | No       | The company's name.
 | `profile.companyUrl`         | `String` | Well-formed URL                                 | No       | The company's website URL.
-| `profile.jobTitle`           | `String` | 1 to 50 chars                                   | No       | The job title.
+| `profile.jobTitle`           | `String` | Between 1 and 50 characters long                | No       | The job title.
 | `profile.custom`             | `object` | JSON object                                     | No       | The map of custom attributes.
 
 #### Code Sample
@@ -227,19 +227,19 @@ You should track this event when a user opens a product page.
 
 This event supports the following properties:
 
-| Property                 | Type     | Required | Constraints      | Description
-|--------------------------|----------|----------|------------------|----------------------------------------------------------------------
-| `product`                | `object` | Yes      |                  | The product details.
-| `product.productId`      | `string` | Yes      | 1 to 50 chars    | The ID that uniquely identifies the product on your store.
-| `product.sku`            | `string` | No       | 1 to 50 chars    | The code that uniquely identifies the product variant on your store.
-| `product.name`           | `string` | Yes      | 1 to 200 chars   | The name of the product.
-| `product.category`       | `string` | No       | 1 to 100 chars   | The category of the product.
-| `product.brand`          | `string` | No       | 1 to 100 chars   | The brand associated with the product.
-| `product.variant`        | `string` | No       | 1 to 50 chars    | The variant of the product, such as size, color and style.
-| `product.displayPrice`   | `number` | Yes      | Non-negative     | The price of the product displayed in the store.
-| `product.originalPrice`  | `number` | No       | Non-negative     | The original price of the product.
-| `product.url`            | `string` | No       | Well-formed URL  | The URL of the product page.
-| `product.imageUrl`       | `string` | No       | Well-formed URL  | The URL of the main product image.
+| Property                 | Type     | Required | Constraints                       | Description
+|--------------------------|----------|----------|-----------------------------------|----------------------------------------------------------------------
+| `product`                | `object` | Yes      |                                   | The product details.
+| `product.productId`      | `string` | Yes      | Between 1 and 50 characters long  | The ID that uniquely identifies the product on your store.
+| `product.sku`            | `string` | No       | Between 1 and 50 characters long  | The code that uniquely identifies the product variant on your store.
+| `product.name`           | `string` | Yes      | Between 1 and 200 characters long | The name of the product.
+| `product.category`       | `string` | No       | Between 1 and 100 characters long | The category of the product.
+| `product.brand`          | `string` | No       | Between 1 and 100 characters long | The brand associated with the product.
+| `product.variant`        | `string` | No       | Between 1 and 50 characters long  | The variant of the product, such as size, color and style.
+| `product.displayPrice`   | `number` | Yes      | Non-negative                      | The price of the product displayed in the store.
+| `product.originalPrice`  | `number` | No       | Non-negative                      | The original price of the product.
+| `product.url`            | `string` | No       | Well-formed URL                   | The URL of the product page.
+| `product.imageUrl`       | `string` | No       | Well-formed URL                   | The URL of the main product image.
 
 **Note:**
 
@@ -297,35 +297,35 @@ You should track this event when a user views the shopping cart page or summary.
 
 This event supports the following properties:
 
-| Property                              | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                 
-|---------------------------------------|----------|----------|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `cart`                                | `object` | Yes      |                                  | The cart information.
-| `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
-| `cart.items`                          | `array`  | Yes      |                                  | The list of items.
-| `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
-| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product on your store.
-| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant on your store.
-| `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The name of the product.
-| `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The category of the product.
-| `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
-| `cart.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
-| `cart.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                     | The price of the product displayed in the store.
-| `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                     | The original price of the product.
-| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
-| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Non-negative                     | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
-| `cart.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
-| `cart.items[*].total`                 | `number` | Yes      | Non-negative                     | The total for the item. It includes discounts and any other adjustment.
-| `cart.items[*].discount`              | `number` | No       | Non-negative                     | The amount of the discount applied to the item.
-| `cart.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
-| `cart.subtotal`                       | `number` | No       | Non-negative                     | The total of all items and quantities in the shopping cart including applied item promotions. Applied cart discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
-| `cart.shippingPrice`                  | `number` | No       | Non-negative                     | The total shipping price for the items in the shopping cart, including any handling charges.
-| `cart.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
-| `cart.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
-| `cart.discount`                       | `number` | No       | Non-negative                     | The amount of the discount applied to the shopping cart.
-| `cart.total`                          | `number` | Yes      | Non-negative                     | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
-| `cart.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping cart.
-| `cart.lastUpdateTime`                 | `number` | No       | Non-negative                     | The time when the shopping cart was last updated, in milliseconds since epoch.
+| Property                              | Type     | Required | Constraints                       | Description                                                                                                                                                                                                                                                                                                                                                 
+|---------------------------------------|----------|----------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `cart`                                | `object` | Yes      |                                   | The cart information.
+| `cart.currency`                       | `string` | Yes      | Between 1 and 10 characters long  | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
+| `cart.items`                          | `array`  | Yes      |                                   | The list of items.
+| `cart.items[*].product`               | `object` | Yes      |                                   | The product details.
+| `cart.items[*].product.productId`     | `string` | Yes      | Between 1 and 50 characters long  | The ID that uniquely identifies the product on your store.
+| `cart.items[*].product.sku`           | `string` | No       | Between 1 and 50 characters long  | The code that uniquely identifies the product variant on your store.
+| `cart.items[*].product.name`          | `string` | Yes      | Between 1 and 200 characters long | The name of the product.
+| `cart.items[*].product.category`      | `string` | No       | Between 1 and 100 characters long | The category of the product.
+| `cart.items[*].product.brand`         | `string` | No       | Between 1 and 100 characters long | The brand associated with the product.
+| `cart.items[*].product.variant`       | `string` | No       | Between 1 and 50 characters long  | The variant of the product, such as size, color and style.
+| `cart.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                      | The price of the product displayed in the store.
+| `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                      | The original price of the product.
+| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                   | The URL of the product page.
+| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                   | The URL of the main product image.
+| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
+| `cart.items[*].quantity`              | `number` | Yes      | Positive                          | The number of units of the item.
+| `cart.items[*].total`                 | `number` | Yes      | Non-negative                      | The total for the item. It includes discounts and any other adjustment.
+| `cart.items[*].discount`              | `number` | No       | Non-negative                      | The amount of the discount applied to the item.
+| `cart.items[*].coupon`                | `number` | No       | Between 1 and 50 characters long  | The coupon applied to the item.
+| `cart.subtotal`                       | `number` | No       | Non-negative                      | The total of all items and quantities in the shopping cart including applied item promotions. Applied cart discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `cart.shippingPrice`                  | `number` | No       | Non-negative                      | The total shipping price for the items in the shopping cart, including any handling charges.
+| `cart.taxes`                          | `object` | No       | Non-empty string keys and values  | The taxes associated with the transaction.
+| `cart.costs`                          | `object` | No       | Non-empty string keys and values  | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `cart.discount`                       | `number` | No       | Non-negative                      | The amount of the discount applied to the shopping cart.
+| `cart.total`                          | `number` | Yes      | Non-negative                      | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `cart.coupon`                         | `string` | No       | Between 1 and 50 characters long  | The coupon applied to the shopping cart.
+| `cart.lastUpdateTime`                 | `number` | No       | Non-negative                      | The time when the shopping cart was last updated, in milliseconds since epoch.
 
 **Note:**
 
@@ -439,36 +439,36 @@ You should track this event on the page that the user lands on after clicking on
 
 This event supports the following properties:
 
-| Property                              | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                 
-|---------------------------------------|----------|----------|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `orderId`                             | `string` | No       |                                  | The ID that uniquely identifies the order on your store.
-| `cart`                                | `object` | Yes      |                                  | The cart information.
-| `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
-| `cart.items`                          | `array`  | Yes      |                                  | The list of items in the shopping cart.
-| `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
-| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product on your store.
-| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant on your store.
-| `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The name of the product.
-| `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The category of the product.
-| `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
-| `cart.items[*].product.variant`       | `string` | No       | 1 to 50 chars                    | The variant of the product, such as size, color and style.
-| `cart.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                     | The price of the product displayed in the store.
-| `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                     | The original price of the product.
-| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                  | The URL of the product page.
-| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                  | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Non-negative                     | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
-| `cart.items[*].quantity`              | `number` | Yes      | Positive                         | The number of units of the item.
-| `cart.items[*].total`                 | `number` | Yes      | Non-negative                     | The total for the item. It includes discounts and any other adjustment.
-| `cart.items[*].discount`              | `number` | No       | Non-negative                     | The amount of the discount applied to the item.
-| `cart.items[*].coupon`                | `number` | No       | 1 to 50 chars                    | The coupon applied to the item.
-| `cart.subtotal`                       | `number` | No       | Non-negative                     | The total of all items and quantities in the shopping cart including applied item promotions. Applied cart discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
-| `cart.shippingPrice`                  | `number` | No       | Non-negative                     | The total shipping price for the items in the shopping cart, including any handling charges.
-| `cart.taxes`                          | `object` | No       | Non-empty string keys and values | The taxes associated with the transaction.
-| `cart.costs`                          | `object` | No       | Non-empty string keys and values | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
-| `cart.discount`                       | `number` | No       | Non-negative                     | The amount of the discount applied to the shopping cart.
-| `cart.total`                          | `number` | Yes      | Non-negative                     | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
-| `cart.coupon`                         | `string` | No       | 1 to 50 chars                    | The coupon applied to the shopping cart.
-| `cart.lastUpdateTime`                 | `number` | No       | Non-negative                     | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
+| Property                              | Type     | Required | Constraints                       | Description                                                                                                                                                                                                                                                                                                                                                 
+|---------------------------------------|----------|----------|-----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `orderId`                             | `string` | No       |                                   | The ID that uniquely identifies the order on your store.
+| `cart`                                | `object` | Yes      |                                   | The cart information.
+| `cart.currency`                       | `string` | Yes      | Between 1 and 10 characters long  | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
+| `cart.items`                          | `array`  | Yes      |                                   | The list of items in the shopping cart.
+| `cart.items[*].product`               | `object` | Yes      |                                   | The product details.
+| `cart.items[*].product.productId`     | `string` | Yes      | Between 1 and 50 characters long  | The ID that uniquely identifies the product on your store.
+| `cart.items[*].product.sku`           | `string` | No       | Between 1 and 50 characters long  | The code that uniquely identifies the product variant on your store.
+| `cart.items[*].product.name`          | `string` | Yes      | Between 1 and 200 characters long | The name of the product.
+| `cart.items[*].product.category`      | `string` | No       | Between 1 and 100 characters long | The category of the product.
+| `cart.items[*].product.brand`         | `string` | No       | Between 1 and 100 characters long | The brand associated with the product.
+| `cart.items[*].product.variant`       | `string` | No       | Between 1 and 50 characters long  | The variant of the product, such as size, color and style.
+| `cart.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                      | The price of the product displayed in the store.
+| `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                      | The original price of the product.
+| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                   | The URL of the product page.
+| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                   | The URL of the main product image.
+| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
+| `cart.items[*].quantity`              | `number` | Yes      | Positive                          | The number of units of the item.
+| `cart.items[*].total`                 | `number` | Yes      | Non-negative                      | The total for the item. It includes discounts and any other adjustment.
+| `cart.items[*].discount`              | `number` | No       | Non-negative                      | The amount of the discount applied to the item.
+| `cart.items[*].coupon`                | `number` | No       | Between 1 and 50 characters long  | The coupon applied to the item.
+| `cart.subtotal`                       | `number` | No       | Non-negative                      | The total of all items and quantities in the shopping cart including applied item promotions. Applied cart discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `cart.shippingPrice`                  | `number` | No       | Non-negative                      | The total shipping price for the items in the shopping cart, including any handling charges.
+| `cart.taxes`                          | `object` | No       | Non-empty string keys and values  | The taxes associated with the transaction.
+| `cart.costs`                          | `object` | No       | Non-empty string keys and values  | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `cart.discount`                       | `number` | No       | Non-negative                      | The amount of the discount applied to the shopping cart.
+| `cart.total`                          | `number` | Yes      | Non-negative                      | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `cart.coupon`                         | `string` | No       | Between 1 and 50 characters long  | The coupon applied to the shopping cart.
+| `cart.lastUpdateTime`                 | `number` | No       | Non-negative                      | The timestamp when the shopping cart was last updated, in milliseconds since epoch.
 
 **Note:**
 
@@ -588,15 +588,15 @@ This event supports the following properties:
 |----------------------------------------|----------|----------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `order`                                | `object` | Yes      |                                        | The order details.
 | `order.orderId`                        | `string` | Yes      |                                        | The ID that uniquely identifies the order on your store.
-| `order.currency`                       | `string` | Yes      | 1 to 10 chars                          | The currency in which the monetary values are expressed in the order. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
+| `order.currency`                       | `string` | Yes      | Between 1 and 10 characters long       | The currency in which the monetary values are expressed in the order. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
 | `order.items`                          | `array`  | Yes      |                                        | The list of items.
 | `order.items[*].product`               | `object` | Yes      |                                        | The product details.
-| `order.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                          | The ID that uniquely identifies the product on your store.
-| `order.items[*].product.sku`           | `string` | No       | 1 to 50 chars                          | The code that uniquely identifies the product variant on your store.
-| `order.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                         | The name of the product.
-| `order.items[*].product.category`      | `string` | No       | 1 to 100 chars                         | The category of the product.
-| `order.items[*].product.brand`         | `string` | No       | 1 to 100 chars                         | The brand associated with the product.
-| `order.items[*].product.variant`       | `string` | No       | 1 to 50 chars                          | The variant of the product, such as size, color and style.
+| `order.items[*].product.productId`     | `string` | Yes      | Between 1 and 50 characters long       | The ID that uniquely identifies the product on your store.
+| `order.items[*].product.sku`           | `string` | No       | Between 1 and 50 characters long       | The code that uniquely identifies the product variant on your store.
+| `order.items[*].product.name`          | `string` | Yes      | Between 1 and 200 characters long      | The name of the product.
+| `order.items[*].product.category`      | `string` | No       | Between 1 and 100 characters long      | The category of the product.
+| `order.items[*].product.brand`         | `string` | No       | Between 1 and 100 characters long      | The brand associated with the product.
+| `order.items[*].product.variant`       | `string` | No       | Between 1 and 50 characters long       | The variant of the product, such as size, color and style.
 | `order.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                           | The price of the product displayed in the store.
 | `order.items[*].product.originalPrice` | `number` | No       | Non-negative                           | The original price of the product.
 | `order.items[*].product.url`           | `string` | No       | Well-formed URL                        | The URL of the product page.
@@ -605,15 +605,15 @@ This event supports the following properties:
 | `order.items[*].quantity`              | `number` | Yes      | Positive                               | The number of units of the item ordered.
 | `order.items[*].total`                 | `number` | Yes      | Non-negative                           | The total for the item. It includes discounts and any other adjustment.
 | `order.items[*].discount`              | `number` | No       | Non-negative                           | The amount of the discount applied to the item.
-| `order.items[*].coupon`                | `number` | No       | 1 to 50 chars                          | The coupon applied to the item.
+| `order.items[*].coupon`                | `number` | No       | Between 1 and 50 characters long       | The coupon applied to the item.
 | `order.subtotal`                       | `number` | No       | Non-negative                           | The total of all items and quantities in the order including applied item promotions. Applied order discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
 | `order.shippingPrice`                  | `number` | No       | Non-negative                           | The total shipping price for the items in the order, including any handling charges.
 | `order.taxes`                          | `object` | No       | Non-empty string keys and values       | The taxes associated with the transaction.
 | `order.costs`                          | `object` | No       | Non-empty string keys and values       | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
 | `order.discount`                       | `number` | No       | Non-negative                           | The amount of the discount applied to the order.
 | `order.total`                          | `number` | Yes      | Non-negative                           | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
-| `order.coupon`                         | `string` | No       | 1 to 50 chars                          | The coupon applied to the order.
-| `order.paymentMethod`                  | `string` | No       | 1 to 50 chars                          | The payment method used in the payment.
+| `order.coupon`                         | `string` | No       | Between 1 and 50 characters long       | The coupon applied to the order.
+| `order.paymentMethod`                  | `string` | No       | Between 1 and 50 characters long       | The payment method used in the payment.
 | `order.installments`                   | `number` | No       | Non-negative                           | The number of installments of the transaction.
 | `order.status`                         | `string` | No       | Either `placed`, `paid` or `completed` | The current status of the order.
 
@@ -737,11 +737,11 @@ You should track this event when a user completes a desired goal, such as fillin
 
 This event supports the following properties:
 
-| Property   | Type     | Required | Constraints      | Description
-|------------|----------|----------|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `goalId`   | `string` | Yes      | 1 to 50 chars    | The ID of the goal.
-| `currency` | `string` | No       | 1 to 10 chars    | The currency in which the monetary value is expressed. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
-| `value`    | `number` | No       | Non-negative     | The monetary value associated with the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).
+| Property   | Type     | Required | Constraints                      | Description
+|------------|----------|----------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `goalId`   | `string` | Yes      | Between 1 and 50 characters long | The ID of the goal.
+| `currency` | `string` | No       | Between 1 and 10 characters long | The currency in which the monetary value is expressed. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
+| `value`    | `number` | No       | Non-negative                     | The monetary value associated with the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).
 
 #### Code Sample
 
@@ -780,10 +780,10 @@ You should track this event once, at the start of an experiment, such as an A/B 
 
 This event supports the following properties:
 
-| Property    | Type     | Required | Constraints   | Description
-|-------------|----------|----------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `testId`    | `string` | Yes      | 1 to 50 chars | The ID of the experiment.
-| `groupId`   | `string` | Yes      | 1 to 50 chars | The ID of the group assigned to the user. For A/B tests, it is commonly the test variant, like `green-button`. For multivariate tests, we recommend joining the variants using the vertical bar character, for example, `crocodile-image\|button-green`. 
+| Property    | Type     | Required | Constraints                      | Description
+|-------------|----------|----------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `testId`    | `string` | Yes      | Between 1 and 50 characters long | The ID of the experiment.
+| `groupId`   | `string` | Yes      | Between 1 and 50 characters long | The ID of the group assigned to the user. For A/B tests, it is commonly the test variant, like `green-button`. For multivariate tests, we recommend joining the variants using the vertical bar character, for example, `crocodile-image\|button-green`. 
 
 #### Code Sample
 
@@ -839,14 +839,14 @@ You must track this event whenever you want to record that something happened fo
 
 This event supports the following properties:
 
-| Property            | Type     | Required  | Constraints       | Description
-|---------------------|----------|-----------|-------------------|----------------------------------------------------------
-| `name`              | `string` | Yes       | 1 to 50 chars     | The name of the event.
-| `personalizationId` | `string` | No        | 1 to 50 chars     | The name of the audience associated with the event.
-| `audience`          | `string` | No        | 1 to 50 chars     | The audience associated with the event. For example, "loyal-shoppers" or "mothers".
-| `testId`            | `string` | No        | 1 to 50 chars     | The ID of the test associated with the event.
-| `groupId`           | `string` | No        | 1 to 50 chars     | The ID of the test group associated with the event. 
-| `details`           | `object` | No        | Map of primitives | The details about the event.
+| Property            | Type     | Required  | Constraints                      | Description
+|---------------------|----------|-----------|----------------------------------|----------------------------------------------------------
+| `name`              | `string` | Yes       | Between 1 and 50 characters long | The name of the event.
+| `personalizationId` | `string` | No        | Between 1 and 50 characters long | The name of the audience associated with the event.
+| `audience`          | `string` | No        | Between 1 and 50 characters long | The audience associated with the event. For example, "loyal-shoppers" or "mothers".
+| `testId`            | `string` | No        | Between 1 and 50 characters long | The ID of the test associated with the event.
+| `groupId`           | `string` | No        | Between 1 and 50 characters long | The ID of the test group associated with the event. 
+| `details`           | `object` | No        | Map of primitives                | The details about the event.
 
 The following additional restrictions apply to the `details` property:
 

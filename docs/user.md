@@ -48,25 +48,25 @@ These are the currently supported attributes:
 
 | Attribute            | Type     | Constraints                                     | Description
 |----------------------|----------|-------------------------------------------------|-----------------------------------
-| `firstName`          | `String` | 1 to 50 chars                                   | The first name.
-| `lastName`           | `String` | 1 to 50 chars                                   | The last name.
+| `firstName`          | `String` | Between 1 and 50 characters long                | The first name.
+| `lastName`           | `String` | Between 1 and 50 characters long                | The last name.
 | `birthDate`          | `String` | Valid date in the form `YYYY-MM-DD`             | The birth date.
 | `gender`             | `String` | Either `male`, `female`, `neutral` or `unknown` | The gender.
-| `email`              | `String` | 1 to 254 chars                                  | The email address.
-| `alternateEmail`     | `String` | 1 to 254 chars                                  | The alternate email address.
-| `phone`              | `String` | 1 to 30 chars                                   | The phone number.
-| `alternatePhone`     | `String` | 1 to 30 chars                                   | The alternate phone number.
+| `email`              | `String` | Between 1 and 254 characters long               | The email address.
+| `alternateEmail`     | `String` | Between 1 and 254 characters long               | The alternate email address.
+| `phone`              | `String` | Between 1 and 30 characters long                | The phone number.
+| `alternatePhone`     | `String` | Between 1 and 30 characters long                | The alternate phone number.
 | `address`            | `object` |                                                 | The user address.
-| `address.street`     | `String` | 1 to 100 chars                                  | The address' street.
-| `address.district`   | `String` | 1 to 100 chars                                  | The address' district.
-| `address.city`       | `String` | 1 to 100 chars                                  | The address' city.
-| `address.region`     | `String` | 1 to 100 chars                                  | The address' region.
-| `address.country`    | `String` | 1 to 100 chars                                  | The address' country.
-| `address.postalCode` | `String` | 1 to 20 chars                                   | The address' postal code.
+| `address.street`     | `String` | Between 1 and 100 characters long               | The address' street.
+| `address.district`   | `String` | Between 1 and 100 characters long               | The address' district.
+| `address.city`       | `String` | Between 1 and 100 characters long               | The address' city.
+| `address.region`     | `String` | Between 1 and 100 characters long               | The address' region.
+| `address.country`    | `String` | Between 1 and 100 characters long               | The address' country.
+| `address.postalCode` | `String` | Between 1 and 20 characters long                | The address' postal code.
 | `avatar`             | `String` | Well-formed URL                                 | The personal avatar URL.
-| `company`            | `String` | 1 to 200 chars                                  | The company's name.
+| `company`            | `String` | Between 1 and 200 characters long               | The company's name.
 | `companyUrl`         | `String` | Well-formed URL                                 | The company's website URL.
-| `jobTitle`           | `String` | 1 to 50 chars                                   | The job title.
+| `jobTitle`           | `String` | Between 1 and 50 characters long                | The job title.
 | `custom.*`           | `object` | Up to 10 attributes                             | The map of custom attributes.
 
 The following restrictions apply to custom attributes:

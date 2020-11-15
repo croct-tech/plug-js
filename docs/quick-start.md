@@ -86,7 +86,7 @@ Follow the steps below to connect the playground with CodePen:
 2. Click on the _"Don't have an API Key?"_ link to proceed in sandbox mode
 3. Enter the URL `https://codepen.io/pen`
 4. Click on _"Let's play!"_
-5. Click on the button labeled _"codepen.io/pen"_, located at the top right of the page
+5. Finally, click on the button labeled _"codepen.io/pen"_ at the top right of the page
 
 After the page loads, you should see a blue dot on the playground tab signaling you have an unseen notification.
 Switching back to the playground tab, you should see a notification saying _"Connection established"_, indicating the 

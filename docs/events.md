@@ -221,7 +221,7 @@ The e-commerce category has the following events:
 
 This event records the user viewed a product.
 
-You should track this event when a user opens a product page or view a preview modal.
+You should track this event when a user opens a product page.
 
 #### Properties
 

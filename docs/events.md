@@ -210,7 +210,7 @@ The SDK automatically tracks this event when the user opens a page on your appli
 
 This event records that a page finished loading.
 
-The SDK automatically tracks this event when the page has been completely loaded, without waiting for stylesheets or 
+The SDK automatically tracks this event when a page has been completely loaded, without waiting for stylesheets or 
 images to finish loading.
 
 ## E-commerce Events

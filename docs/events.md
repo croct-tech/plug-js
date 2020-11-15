@@ -851,9 +851,9 @@ This event supports the following properties:
 The following additional restrictions apply to the `details` property:
 
 - It allows up to 10 attributes
-- Attribute names should be strings of up to 300 characters, starting with a letter or underscore and
-optionally followed by more letters or underscores
-- Attribute values can be strings of up to 300 characters, numbers, booleans, and null.  
+- Attribute names should be strings up to 300 characters long, starting with a letter or underscore and
+optionally followed by more letters, digits or underscores
+- Attribute values can be strings up to 300 characters long, numbers, booleans, and null.  
 
 #### Code Sample
 

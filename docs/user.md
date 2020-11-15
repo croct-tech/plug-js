@@ -71,7 +71,17 @@ Variable            | Type     | Description
 `activities`        | `array`  | The set of unique activities
 `custom.*`          | `object` | The custom attributes
 
-The name of custom attributes should start with a letter or underscore, followed by more letters, digits, or underscores.  
+The following restrictions apply to custom attributes:
+
+- Each profile allows up to 10 custom attributes
+- Attribute names should be strings up to 20 characters long, starting with a letter or underscore and optionally 
+followed by letters, digits, or underscores
+- Attributes can be primitives (strings, numbers, booleans, and null) or composites (lists and maps).
+- Strings should be up to 100 characters long
+- Lists can contain up to 30 elements, including primitives, lists of primitives, or maps of primitives
+- Maps can contain up to 30 elements, including primitives, lists of primitives, or maps of primitives
+- Map keys should be strings up to 50 characters long
+ 
 We recommend using descriptive names in camel case, like `pets`, `favoriteColor` and, `loyaltyNumber`.  Following these
 recommendations will make your custom attributes look like the standard ones, which results in queries with better 
 readability.

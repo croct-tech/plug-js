@@ -10,7 +10,17 @@ This reference documents all methods available in the Session API and explains i
 
 This method creates a patch to apply changes to the session attributes.
 
-The attribute names should start with a letter or underscore, followed by more letters, digits, or underscores.  
+The following restrictions apply to session attributes:
+
+- Each session allows up to 10 custom attributes
+- Attribute names should be strings up to 20 characters long, starting with a letter or underscore and optionally 
+followed by letters, digits, or underscores
+- Attributes can be primitives (strings, numbers, booleans, and null) or composites (lists and maps).
+- Strings should be up to 100 characters long
+- Lists can contain up to 30 elements, including primitives, lists of primitives, or maps of primitives
+- Maps can contain up to 30 elements, including primitives, lists of primitives, or maps of primitives
+- Map keys should be strings up to 50 characters long
+
 We recommend using descriptive names in camel case, like `plan`, `recommendPlan` and, `pickedPlan`.  Following these
 recommendations will make your attributes look like the standard ones, which results in queries with better readability.
 

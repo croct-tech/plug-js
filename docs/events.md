@@ -54,8 +54,8 @@ to call the [`identify`](plug.md#identify) method after the sign-up.
 This event supports the following properties:
 
 | Property                     | Type     | Constraints                                     | Required | Description
-|------------------------------|----------|-------------------------------------------------|----------|----------------------------------
-| `userId`                     | `string` | 1 and 254 chars                                 | Yes      | The user ID.
+|------------------------------|----------|-------------------------------------------------|----------|--------------------------------------------------------------
+| `userId`                     | `string` | 1 and 254 chars                                 | Yes      | The ID that uniquely identifies the user on your application.
 | `profile`                    | `object` |                                                 | No       | The user profile.
 | `profile.firstName`          | `String` | 1 to 50 chars                                   | No       | The first name.
 | `profile.lastName`           | `String` | 1 to 50 chars                                   | No       | The last name.
@@ -66,12 +66,12 @@ This event supports the following properties:
 | `profile.phone`              | `String` | 1 to 30 chars                                   | No       | The phone number.
 | `profile.alternatePhone`     | `String` | 1 to 30 chars                                   | No       | The alternate phone number.
 | `profile.address`            | `object` |                                                 | No       | The user address.
-| `profile.address.street`     | `String` | 1 to 100 chars                                  | No       | The street.
-| `profile.address.district`   | `String` | 1 to 100 chars                                  | No       | The district.
-| `profile.address.city`       | `String` | 1 to 100 chars                                  | No       | The city.
-| `profile.address.region`     | `String` | 1 to 100 chars                                  | No       | The region.
-| `profile.address.country`    | `String` | 1 to 100 chars                                  | No       | The country.
-| `profile.address.postalCode` | `String` | 1 to 20 chars                                   | No       | The postal code.
+| `profile.address.street`     | `String` | 1 to 100 chars                                  | No       | The address' street.
+| `profile.address.district`   | `String` | 1 to 100 chars                                  | No       | The address' district.
+| `profile.address.city`       | `String` | 1 to 100 chars                                  | No       | The address' city.
+| `profile.address.region`     | `String` | 1 to 100 chars                                  | No       | The address' region.
+| `profile.address.country`    | `String` | 1 to 100 chars                                  | No       | The address' country.
+| `profile.address.postalCode` | `String` | 1 to 20 chars                                   | No       | The address' postal code.
 | `profile.avatar`             | `String` | Well-formed URL                                 | No       | The personal avatar URL.
 | `profile.company`            | `String` | 1 to 200 chars                                  | No       | The company's name.
 | `profile.companyUrl`         | `String` | Well-formed URL                                 | No       | The company's website URL.
@@ -200,18 +200,24 @@ You should track this event when a user opens a product page or view a preview m
 This event supports the following properties:
 
 | Property                 | Type     | Required | Constraints      | Description
-|--------------------------|----------|----------|------------------|-------------------------------------------
-| `product`                | `object` | Yes      |                  | The product information
-| `product.productId`      | `string` | Yes      | 1 to 50 chars    | The product ID
-| `product.sku`            | `string` | No       | 1 to 50 chars    | The product SKU
-| `product.name`           | `string` | Yes      | 1 to 200 chars   | The product name
-| `product.category`       | `string` | No       | 1 to 100 chars   | The product category
-| `product.brand`          | `string` | No       | 1 to 100 chars   | The brand associated with the product
-| `product.variant`        | `string` | No       | 1 to 50 chars    | The product variant, such as color, size, etc
-| `product.displayPrice`   | `number` | Yes      | Non-negative     | The final price, including discounts
-| `product.originalPrice`  | `number` | No       | Non-negative     | The original price, excluding discounts
-| `product.url`            | `string` | No       | Well-formed URL  | The URL of the product page
-| `product.imageUrl`       | `string` | No       | Well-formed URL  | The URL of the product image
+|--------------------------|----------|----------|------------------|----------------------------------------------------------------------
+| `product`                | `object` | Yes      |                  | The product details.
+| `product.productId`      | `string` | Yes      | 1 to 50 chars    | The ID that uniquely identifies the product on your store.
+| `product.sku`            | `string` | No       | 1 to 50 chars    | The code that uniquely identifies the product variant on your store.
+| `product.name`           | `string` | Yes      | 1 to 200 chars   | The product name.
+| `product.category`       | `string` | No       | 1 to 100 chars   | The product category.
+| `product.brand`          | `string` | No       | 1 to 100 chars   | The brand associated with the product.
+| `product.variant`        | `string` | No       | 1 to 50 chars    | The variant of the product, such as size, color and style.
+| `product.displayPrice`   | `number` | Yes      | Non-negative     | The price of the product displayed in the store.
+| `product.originalPrice`  | `number` | No       | Non-negative     | The original price of the product.
+| `product.url`            | `string` | No       | Well-formed URL  | The URL of the product page.
+| `product.imageUrl`       | `string` | No       | Well-formed URL  | The URL of the main product image.
+
+**Note:**
+
+- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, like `12345,` and the SKU is a public-facing identifier like `SM-124-GREEN`.
+- The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
+
 
 #### Code Sample
 
@@ -268,8 +274,8 @@ This event supports the following properties:
 | `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
 | `cart.items`                          | `array`  | Yes      |                                  | The list of items.
 | `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
-| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
-| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
+| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product on your store.
+| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant on your store.
 | `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
 | `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
 | `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
@@ -404,13 +410,13 @@ This event supports the following properties:
 
 | Property                              | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                 
 |---------------------------------------|----------|----------|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `orderId`                             | `string` | No       |                                  | The ID that uniquely identifies the order across the store.
+| `orderId`                             | `string` | No       |                                  | The ID that uniquely identifies the order on your store.
 | `cart`                                | `object` | Yes      |                                  | The cart information.
 | `cart.currency`                       | `string` | Yes      | 1 to 10 chars                    | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
 | `cart.items`                          | `array`  | Yes      |                                  | The list of items.
 | `cart.items[*].product`               | `object` | Yes      |                                  | The product details.
-| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product across the store.
-| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant across the store.
+| `cart.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                    | The ID that uniquely identifies the product on your store.
+| `cart.items[*].product.sku`           | `string` | No       | 1 to 50 chars                    | The code that uniquely identifies the product variant on your store.
 | `cart.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                   | The product name.
 | `cart.items[*].product.category`      | `string` | No       | 1 to 100 chars                   | The product category.
 | `cart.items[*].product.brand`         | `string` | No       | 1 to 100 chars                   | The brand associated with the product.
@@ -550,12 +556,12 @@ This event supports the following properties:
 | Property                               | Type     | Required | Constraints                            | Description                                                                                                                                                                                                                                                                                                                                                 
 |----------------------------------------|----------|----------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `order`                                | `object` | Yes      |                                        | The order details.
-| `order.orderId`                        | `string` | Yes      |                                        | The ID that uniquely identifies the order across the store.
+| `order.orderId`                        | `string` | Yes      |                                        | The ID that uniquely identifies the order on your store.
 | `order.currency`                       | `string` | Yes      | 1 to 10 chars                          | The currency in which the monetary values are expressed in the order. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
 | `order.items`                          | `array`  | Yes      |                                        | The list of items.
 | `order.items[*].product`               | `object` | Yes      |                                        | The product details.
-| `order.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                          | The ID that uniquely identifies the product across the store.
-| `order.items[*].product.sku`           | `string` | No       | 1 to 50 chars                          | The code that uniquely identifies the product variant across the store.
+| `order.items[*].product.productId`     | `string` | Yes      | 1 to 50 chars                          | The ID that uniquely identifies the product on your store.
+| `order.items[*].product.sku`           | `string` | No       | 1 to 50 chars                          | The code that uniquely identifies the product variant on your store.
 | `order.items[*].product.name`          | `string` | Yes      | 1 to 200 chars                         | The product name.
 | `order.items[*].product.category`      | `string` | No       | 1 to 100 chars                         | The product category.
 | `order.items[*].product.brand`         | `string` | No       | 1 to 100 chars                         | The brand associated with the product.

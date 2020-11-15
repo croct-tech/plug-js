@@ -47,7 +47,7 @@ This method creates a patch to apply changes to the user's profile.
 These are the currently supported attributes:
 
 | Attribute            | Type     | Constraints                                     | Description
-|----------------------|----------|-------------------------------------------------|--------------------------------------------------------------
+|----------------------|----------|-------------------------------------------------|-----------------------------------
 | `firstName`          | `String` | 1 to 50 chars                                   | The first name.
 | `lastName`           | `String` | 1 to 50 chars                                   | The last name.
 | `birthDate`          | `String` | Valid date in the form `YYYY-MM-DD`             | The birth date.

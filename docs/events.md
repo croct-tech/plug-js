@@ -1,8 +1,9 @@
 # Events
 
-Events tell the story of what happened during a user's journey. They represent facts of information about something 
-that has happened in the past. Besides helping understand how a user interacts with your application, events also 
-provide data to enrich the evaluation context and refine the models that continuously improve user experience.
+Events represent something that happened on your application that helps understand how a user interacts with your 
+application. Besides telling the story of what happened during a user’s journey, these events provide data to enrich 
+the evaluation context and refine the models that continuously improve user experience.
+
 
 The SDK tracks most of the general-purpose events automatically for you. All other events depend on your use case, so 
 it is up to you to decide which events make sense for your application.

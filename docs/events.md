@@ -5,33 +5,33 @@ application. But besides telling the story of what happened during a user’s jo
 enrich the evaluation context and refine the models that continuously improve user experience.
 
 The SDK tracks most of the general-purpose events automatically for you. All other events depend on your use case, so 
-it is up to you to decide which events make sense for your application.
+it is up to you to decide which events make sense for your application. In the following section, you will find a 
+summary of all events available to help you decide which events can benefit your application.
 
 ## Summary
 
-Below you will find the summary of all events available to help you decide which events can benefit your application.
+There are several event types that you can record within the customer journey:
 
-
-| Event                      | Category      | Auto tracking | Description                           |
-|----------------------------|---------------|---------------|---------------------------------------|
-| `userSignedUp`             | User          | No            | Records a user sign up.               |
-| `userSignedIn`             | User          | Yes           | Records a user sign in.               |
-| `userSignedOut`            | User          | Yes           | Records a user sign out.              |
-| `userProfileChanged`       | User          | Yes           | Records user profile changes.         |
-| `tabOpened`                | Web           | Yes           | Records a tab open.                   |
-| `tabUrlChanged`            | Web           | Yes           | Records a tab's URL change.           |
-| `tabVisibilityChanged`     | Web           | Yes           | Records a tab visibility change.      |
-| `pageOpened`               | Web           | Yes           | Records a page open.                  |
-| `pageLoaded`               | Web           | Yes           | Records a page load.                  |
-| `productViewed`            | E-commerce    | No            | Records a product view.               |
-| `cartViewed`               | E-commerce    | No            | Records a cart view.                  |
-| `checkoutStarted`          | E-commerce    | No            | Records a checkout start.             |
-| `orderPlaced`              | E-commerce    | No            | Records a placed order.               |
-| `goalCompleted`            | Analytics     | No            | Records a goal completion.            |
-| `testGroupAssigned`        | Analytics     | No            | Records a test group assignment.      |
-| `sessionAttributesChanged` | Miscellaneous | Yes           | Records session's attributes changes. |
-| `nothingChanged`           | Miscellaneous | Yes           | Records a period of inactivity.       |
-| `eventOccurred`            | Miscellaneous | No            | Records a custom event.               |
+| Event                                                   | Category      | Auto tracking | Description
+|---------------------------------------------------------|---------------|---------------|---------------------------------------
+| [`userSignedUp`](#usersignedup)                         | User          | No            | Records a user sign-up.
+| [`userSignedIn`](#usersignedin)                         | User          | Yes           | Records a user sign-in.
+| [`userSignedOut`](#usersignedout)                       | User          | Yes           | Records a user sign-out.
+| [`userProfileChanged`](#userprofilechanged)             | User          | Yes           | Records user profile changes.
+| [`tabOpened`](#tabopened)                               | Web           | Yes           | Records a tab open.
+| [`tabUrlChanged`](#taburlchanged)                       | Web           | Yes           | Records a tab's URL change.
+| [`tabVisibilityChanged`](#tabvisibilitychanged)         | Web           | Yes           | Records a tab visibility change.
+| [`pageOpened`](#pageopened)                             | Web           | Yes           | Records a page open.
+| [`pageLoaded`](#pageloaded)                             | Web           | Yes           | Records a page load.
+| [`productViewed`](#productviewed)                       | E-commerce    | No            | Records a product view.
+| [`cartViewed`](#cartviewed)                             | E-commerce    | No            | Records a cart view.
+| [`checkoutStarted`](#checkoutstarted)                   | E-commerce    | No            | Records a checkout start.
+| [`orderPlaced`](#orderplaced)                           | E-commerce    | No            | Records a placed order.
+| [`goalCompleted`](#goalcompleted)                       | Analytics     | No            | Records a goal completion.
+| [`testGroupAssigned`](#testgroupassigned)               | Analytics     | No            | Records a test group assignment.
+| [`sessionAttributesChanged`](#sessionattributeschanged) | Miscellaneous | Yes           | Records session's attributes changes.
+| [`nothingChanged`](#nothingchanged)                     | Miscellaneous | Yes           | Records a period of inactivity.
+| [`eventOccurred`](#eventOccurred)                       | Miscellaneous | No            | Records a custom event.
 
 ## User Events
 

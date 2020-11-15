@@ -780,3 +780,57 @@ croct.track('testGroupAssigned', {
 });
 ```
 </details>
+
+### eventOccurred
+
+This event records the occurrence of a domain-specific event.
+
+You must track this event whenever you want to record that something happened for later analysis.
+
+#### Properties
+
+This event supports the following properties:
+
+| Property            | Type     | Required  | Constraints       | Description
+|---------------------|----------|-----------|-------------------|----------------------------------------------------------
+| `name`              | `string` | Yes       | 1 to 50 chars     | The name of the event.
+| `personalizationId` | `string` | No        | 1 to 50 chars     | The name of the audience associated with the event.
+| `audience`          | `string` | No        | 1 to 50 chars     | The audience associated with the event. For example, "loyal-shoppers" or "mothers".
+| `testId`            | `string` | No        | 1 to 50 chars     | The ID of the test associated with the event.
+| `groupId`           | `string` | No        | 1 to 50 chars     | The ID of the test group associated with the event. 
+| `details`           | `object` | No        | Map of primitives | The details about the event.
+
+The following restrictions apply to the `details` property:
+
+- Allows up to 10 key-value pairs
+- Attribute names should be strings of up to 300 characters, starting with a letter or underscore and
+optionally followed by more letters or underscores
+- Values can be strings of up to 300 characters, numbers, booleans, and null.  
+
+#### Code Sample
+
+Here are a few examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```js
+croct.track('eventOccurred', {
+    name: 'userLiked',
+});
+```
+</details>
+
+<details>
+    <summary>Complete Example</summary>
+
+```js
+croct.track('eventOccurred', {
+        "name": "personalizationApplied",
+        "personalizationId": "banner-home",
+        "audience": "loyal-users",
+        "testId": "test-banner-home",
+        "groupId": "A",
+    });
+```
+</details>

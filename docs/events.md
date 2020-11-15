@@ -24,7 +24,7 @@ summary of all events available to help you decide which events can benefit your
   * [pageLoaded](#pageloaded)
 - [E-commerce Events](#e-commerce-events)
   * [productViewed](#productviewed)
-- [cartViewed](#cartviewed)
+  * [cartViewed](#cartviewed)
   * [checkoutStarted](#checkoutstarted)
   * [orderPlaced](#orderplaced)
 - [Analytics Events](#analytics-events)
@@ -286,7 +286,7 @@ croct.track('productViewed', {
 ```
 </details>
 
-## cartViewed
+### cartViewed
 
 This event records the user viewed the shopping cart.
 

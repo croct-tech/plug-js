@@ -243,7 +243,8 @@ This event supports the following properties:
 
 **Note:**
 
-- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, like `12345,` and the SKU is a public-facing identifier like `SM-124-GREEN`.
+- The `sku` and `productId` do not have to be different. Usually, the `productId` is the internal identifier,
+like `12345,` and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 
 

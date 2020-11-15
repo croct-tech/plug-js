@@ -46,30 +46,28 @@ This method creates a patch to apply changes to the user's profile.
 
 These are the currently supported attributes:
 
-Variable            | Type     | Description
---------------------|----------|-------------------------------------------------------------
-`firstName`         | `string` | The first name
-`lastName`          | `string` | The last name
-`birthDate`         | `string` | The birth date in the form of `YYYY-MM-DD`
-`gender`            | `string` | The gender, must be either `male`, `female` or `neutral`
-`email`             | `string` | The email address
-`alternateEmail`    | `string` | The alternate email address
-`phone`             | `string` | The phone number
-`alternatePhone`    | `string` | The alternate phone number
-`address`           | `object` | The personal address
-`address.street`    | `string` | The street name
-`address.district`  | `object` | The district name
-`address.city`      | `object` | The city name
-`address.region`    | `object` | The region or state name
-`address.country`   | `object` | The country name
-`address.country`   | `object` | The postal code
-`avatar`            | `string` | The personal avatar URL
-`company`           | `string` | The company name
-`companyUrl`        | `string` | The company website URL
-`jobTitle`          | `string` | The job title
-`interests`         | `array`  | The set of unique interests
-`activities`        | `array`  | The set of unique activities
-`custom.*`          | `object` | The custom attributes
+| Attribute            | Type     | Constraints                                     | Description
+|----------------------|----------|-------------------------------------------------|--------------------------------------------------------------
+| `firstName`          | `String` | 1 to 50 chars                                   | The first name.
+| `lastName`           | `String` | 1 to 50 chars                                   | The last name.
+| `birthDate`          | `String` | Valid date in the form `YYYY-MM-DD`             | The birth date.
+| `gender`             | `String` | Either `male`, `female`, `neutral` or `unknown` | The gender.
+| `email`              | `String` | 1 to 254 chars                                  | The email address.
+| `alternateEmail`     | `String` | 1 to 254 chars                                  | The alternate email address.
+| `phone`              | `String` | 1 to 30 chars                                   | The phone number.
+| `alternatePhone`     | `String` | 1 to 30 chars                                   | The alternate phone number.
+| `address`            | `object` |                                                 | The user address.
+| `address.street`     | `String` | 1 to 100 chars                                  | The address' street.
+| `address.district`   | `String` | 1 to 100 chars                                  | The address' district.
+| `address.city`       | `String` | 1 to 100 chars                                  | The address' city.
+| `address.region`     | `String` | 1 to 100 chars                                  | The address' region.
+| `address.country`    | `String` | 1 to 100 chars                                  | The address' country.
+| `address.postalCode` | `String` | 1 to 20 chars                                   | The address' postal code.
+| `avatar`             | `String` | Well-formed URL                                 | The personal avatar URL.
+| `company`            | `String` | 1 to 200 chars                                  | The company's name.
+| `companyUrl`         | `String` | Well-formed URL                                 | The company's website URL.
+| `jobTitle`           | `String` | 1 to 50 chars                                   | The job title.
+| `custom.*`           | `object` | Up to 10 attributes                             | The map of custom attributes.
 
 The following restrictions apply to custom attributes:
 

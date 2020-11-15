@@ -186,13 +186,13 @@ The web category has the following events:
 
 This event records that a user opened a new tab.
 
-The SDK automatically tracks this event when the user opens the application in a new tab.
+The SDK automatically tracks this event when the user opens your application in a new tab.
 
 ### tabUrlChanged
 
 This event records that the tab URL changed.
 
-The SDK automatically tracks this event when the user navigates between pages.
+The SDK automatically tracks this event when the user navigates between pages on your application.
 
 ### tabVisibilityChanged
 
@@ -204,7 +204,7 @@ The SDK automatically tracks this event when user minimizes the window or switch
 
 This event records that a user opened a page.
 
-The SDK automatically tracks this event once per page opened.
+The SDK automatically tracks this event when the user opens a page on your application.
 
 ### pageLoaded
 

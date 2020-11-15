@@ -204,7 +204,7 @@ The SDK automatically tracks this event when user minimizes the window or switch
 
 This event records that a user opened a page.
 
-The SDK automatically tracks this event once per page on the initialization.
+The SDK automatically tracks this event once per page opened.
 
 ### pageLoaded
 

@@ -332,7 +332,7 @@ croct.track('cartViewed', {
 ```js
 croct.track('cartViewed', {
   cart: {
-    currency: 'BRL',
+    currency: 'USD',
     items: [
       {
         index: 0,
@@ -477,7 +477,7 @@ croct.track('checkoutStarted', {
 croct.track('checkoutStarted', {
   orderId: '123',
   cart: {
-    currency: 'BRL',
+    currency: 'USD',
     items: [
       {
         index: 0,
@@ -599,7 +599,7 @@ Here are two examples of how to track this event:
 croct.track('orderPlaced', {
   order: {
     orderId: '123',
-    currency: 'BRL',
+    currency: 'USD',
     total: 776.49,
     items: [
       {
@@ -625,7 +625,7 @@ croct.track('orderPlaced', {
 croct.track('orderPlaced', {
   order: {
     orderId: '123',
-    currency: 'BRL',
+    currency: 'USD',
     items: [
       {
         index: 0,
@@ -683,6 +683,52 @@ croct.track('orderPlaced', {
     installments: 1,
     status: 'paid'
   }
+});
+```
+</details>
+
+## Analytics Events
+
+The analytics category has the following events:
+
+### goalCompleted
+
+This event records a completed activity, called a conversion.
+
+You should track this event when a user completes a desired goal, such as filling out a form or downloading a resource.
+
+#### Properties
+
+This event supports the following properties:
+
+| Property   | Type     | Required | Constraints      | Description
+|------------|----------|----------|------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `goalId`   | `string` | Yes      | 1 to 50 chars    | The ID of the goal
+| `value`    | `number` | No       | Non-negative     | The monetary value associated to the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).
+| `currency` | `string` | No       | 1 to 10 chars    | The currency in which the monetary value is expressed. The currency should be specified using the 3-letter currency codes defined by the ISO 4217 standard. For currencies having no official recognition in ISO 4217, as is the case with cryptocurrencies, it is allowed the use of non-ISO codes adopted locally or commercially.
+
+#### Code Sample
+
+Here are two examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```javascript
+croct.track('goalCompleted', {
+    goalId: 'newsletter-sign-up',
+});
+```
+</details>
+
+<details>
+    <summary>Complete Example</summary>
+
+```js
+croct.track('goalCompleted', {
+    goalId: 'newsletter-sign-up',
+    value: 9.99,
+    currency: 'USD',
 });
 ```
 </details>

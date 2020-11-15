@@ -63,54 +63,18 @@ or any other platform integrated with Croct.
 In the next sections, we will explore how we can use CQL to craft personalized user journeys that inspire long-term, 
 value-driven customer relationships.
 
-## Setting up
+## Connecting to the Playground
 
-You can use the SDK for building natively personalized applications or even for personalizing static HTML pages, 
-such as a marketing landing page. Either way, to use the playground, we will need a URL to access our example. 
-To make it simple, we will use the CodePen since it provides an easy way to expose a URL for playing with the examples 
-provided throughout this guide.
+For convenience, we will use the CodePen for playing with the examples provided throughout this guide.
 
-### Starting a CodePen
-
-Let's start with a minimal base for our examples. For this, [create a new CodePen](https://codepen.io/pen) 
-and paste the code below into the HTML panel:
-
-```html
-
-<!-- Load the SDK from CDN -->
-<script src="https://cdn.croct.io/js/v1/lib/plug.js"></script>
-
-<!-- Initialize the SDK using the Sandbox API key -->
-<script>croct.plug({appId: '00000000-0000-0000-0000-000000000000'});</script>
-
-<!-- A button to help us get the CodePen link -->  
-<button onclick="prompt('Link to CodePen:', window.location.href)">
-    Get CodePen link
-</button>
-
-<hr/>
-
-<!-- The code used in the rest of the examples goes here -->
-```
-
-Throughout the guide, you will come across several interactive examples that you can try replacing the line 
-`<!-- The code used in the rest of the examples goes here -->` with the example code.
-
-### Getting the CodePen URL
-
-After you paste the HTML code, you should see a blank page with a button labeled _"Show CodePen URL"_. 
-Click that button and copy the link.
-
-### Connecting to the Playground
-
-Now it's time to connect our CodePen page to the playground:
+Follow the steps below to connect the playground with CodePen:
 
 1. [Open the playground](http://play.croct.com/)
 2. Click on the _"Don't have an API Key?"_ link to proceed in sandbox mode
-3. Paste the CodePen link you copied
+3. Enter `https://codepen.io/pen`
 4. Click on _"Let's play!"_
-5. Right-click on the button labeled _"cdpn.io/boomboom/v2/index.html"_, located at the top right of the page, 
-and select _"Open link in new tab"_
+5. Right-click on the button labeled _"codepen.io/pen"_, located at the top right of the page, and select
+ _"Open link in new tab"_
 
 After the page loads, you should see a notification saying _"Connection established"_, indicating the playground 
 is now connected to the CodePen. 

@@ -80,7 +80,7 @@ This event supports the following properties:
 
 #### Code Sample
 
-Here are two examples of how to track this event:
+Here are some examples of how to track this event:
 
 <details>
     <summary>Minimal Example</summary>
@@ -221,7 +221,7 @@ This event supports the following properties:
 
 #### Code Sample
 
-Here are two examples of how to track this event:
+Here are some examples of how to track this event:
 
 <details>
     <summary>Minimal Example</summary>
@@ -306,7 +306,7 @@ This event supports the following properties:
 
 #### Code Sample
 
-Here are two examples of how to track this event:
+Here are some examples of how to track this event:
 
 <details>
     <summary>Minimal Example</summary>
@@ -450,7 +450,7 @@ generate the order ID at the start or even before the process begins.
 
 #### Code Sample
 
-Here are two examples of how to track this event:
+Here are some examples of how to track this event:
 
 <details>
     <summary>Minimal Example</summary>
@@ -596,7 +596,7 @@ like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 
 #### Code Sample
 
-Here are two examples of how to track this event:
+Here are some examples of how to track this event:
 
 <details>
     <summary>Minimal Example</summary>
@@ -709,18 +709,18 @@ This event supports the following properties:
 
 | Property   | Type     | Required | Constraints      | Description
 |------------|----------|----------|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `goalId`   | `string` | Yes      | 1 to 50 chars    | The ID of the goal
+| `goalId`   | `string` | Yes      | 1 to 50 chars    | The ID of the goal.
 | `currency` | `string` | No       | 1 to 10 chars    | The currency in which the monetary value is expressed. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
 | `value`    | `number` | No       | Non-negative     | The monetary value associated with the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).
 
 #### Code Sample
 
-Here are two examples of how to track this event:
+Here are some examples of how to track this event:
 
 <details>
     <summary>Minimal Example</summary>
 
-```javascript
+```js
 croct.track('goalCompleted', {
     goalId: 'newsletter-sign-up',
 });
@@ -735,6 +735,48 @@ croct.track('goalCompleted', {
     goalId: 'newsletter-sign-up',
     currency: 'USD',
     value: 9.99
+});
+```
+</details>
+
+### testGroupAssigned
+
+This event records the test group assigned to a user.
+
+You should track this event once, at the start of an experiment, such as an A/B or multivariate test.
+
+
+#### Properties
+
+This event supports the following properties:
+
+| Property    | Type     | Required | Constraints   | Description
+|-------------|----------|----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `testId`    | `String` | Yes      | 1 to 50 chars | The ID of the experiment.
+| `groupId`   | `String` | Yes      | 1 to 50 chars | The ID of the group assigned to the user. For A/B tests, it is commonly the test variant, like `green-button`. For multivariate tests, we recommend joining the variants using the vertical bar character, for example, `callout-big|button-green`. 
+
+#### Code Sample
+
+Here are a few examples of how to track this event:
+
+<details>
+    <summary>A/B Test Example</summary>
+
+```js
+croct.track('testGroupAssigned', {
+    testId: 'home-banner-test',
+    groupId: 'green-button',
+});
+```
+</details>
+
+<details>
+    <summary>Multivariate Test Example</summary>
+
+```js
+croct.track('testGroupAssigned', {
+    testId: 'home-banner-test',
+    groupId: 'crocodile-image|green-button',
 });
 ```
 </details>

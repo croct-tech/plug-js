@@ -9,7 +9,8 @@ it is up to you to decide which events make sense for your application.
 
 ## Summary
 
-There are several event types that you can record within the customer journey:
+Below you will find the summary of all events available to help you decide which events can benefit your application.
+
 
 | Event                      | Category      | Auto tracking | Description                           |
 |----------------------------|---------------|---------------|---------------------------------------|

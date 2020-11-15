@@ -145,7 +145,7 @@ The SDK automatically tracks this event when you call either the [`anonymize`](p
 
 ### userProfileChanged
 
-This event records that a user profile changed.
+This event records that a user profile has changed.
 
 The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
 [`user.edit`](user.md#edit) method.
@@ -780,6 +780,24 @@ croct.track('testGroupAssigned', {
 });
 ```
 </details>
+
+## Miscellaneous Events
+
+The miscellaneous category has the following events:
+
+### sessionAttributesChanged
+
+This event records that session attributes have changed.
+
+The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
+[`session.edit`](session.md#edit) method.
+
+### nothingChanged
+
+This event records that the user has been inactive for a while.
+
+The SDK automatically tracks this event after a period of inactivity. The event's frequency decreases as the 
+idle period increases until reaching a maximum of four events per hour.
 
 ### eventOccurred
 

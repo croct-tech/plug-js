@@ -66,7 +66,7 @@ The user category has the following events:
 
 ### userSignedUp
 
-This event records that a user has signed up.
+This event records that a user signed up.
 
 You should track this event when a user signs up for your application.
 
@@ -186,7 +186,7 @@ The web category has the following events:
 
 This event records that a user opened a new tab.
 
-The SDK automatically tracks this event when the user open the application in a new tab.
+The SDK automatically tracks this event when the user opens the application in a new tab.
 
 ### tabUrlChanged
 

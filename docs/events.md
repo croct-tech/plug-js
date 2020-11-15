@@ -800,7 +800,7 @@ This event supports the following properties:
 | `groupId`           | `string` | No        | 1 to 50 chars     | The ID of the test group associated with the event. 
 | `details`           | `object` | No        | Map of primitives | The details about the event.
 
-The following additional restrictions apply to the "details" property:
+These additional restrictions apply to the "details" property:
 
 - Allows up to 10 key-value pairs
 - Attribute names should be strings of up to 300 characters, starting with a letter or underscore and

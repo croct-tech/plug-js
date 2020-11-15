@@ -751,9 +751,9 @@ You should track this event once, at the start of an experiment, such as an A/B 
 This event supports the following properties:
 
 | Property    | Type     | Required | Constraints   | Description
-|-------------|----------|----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `testId`    | `String` | Yes      | 1 to 50 chars | The ID of the experiment.
-| `groupId`   | `String` | Yes      | 1 to 50 chars | The ID of the group assigned to the user. For A/B tests, it is commonly the test variant, like `green-button`. For multivariate tests, we recommend joining the variants using the vertical bar character, for example, `callout-big|button-green`. 
+|-------------|----------|----------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `testId`    | `string` | Yes      | 1 to 50 chars | The ID of the experiment.
+| `groupId`   | `string` | Yes      | 1 to 50 chars | The ID of the group assigned to the user. For A/B tests, it is commonly the test variant, like `green-button`. For multivariate tests, we recommend joining the variants using the vertical bar character, for example, `crocodile-image\|button-green`. 
 
 #### Code Sample
 

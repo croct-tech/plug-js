@@ -175,7 +175,7 @@ The SDK automatically tracks this event when you call either the [`anonymize`](p
 
 This event records that a user profile has changed.
 
-The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
+The SDK automatically tracks this event when you call [`save()`](patch.md#save) on the patch returned by the 
 [`user.edit()`](user.md#edit) method.
 
 ## Web Events
@@ -819,7 +819,7 @@ The miscellaneous category has the following events:
 
 This event records that session attributes have changed.
 
-The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
+The SDK automatically tracks this event when you call [`save()`](patch.md#save) on the patch returned by the 
 [`session.edit()`](session.md#edit) method.
 
 ### nothingChanged

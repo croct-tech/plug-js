@@ -9,6 +9,19 @@ Although some JavaScript knowledge will make following along easier, this guide 
 
 Let's start!
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Setting up](#setting-up)
+- [Evaluating Expressions](#evaluating-expressions)
+  * [Evaluating Expressions on the Playground](#evaluating-expressions-on-the-playground)
+  * [Evaluating Expressions Programmatically](#evaluating-expressions-programmatically)
+- [Collecting Information](#collecting-information)
+  * [Enriching Profiles](#enriching-profiles)
+  * [Enriching Sessions](#enriching-sessions)
+- [Tracking Events](#tracking-events)
+- [Identifying Users](#identifying-users)
+
 ## Introduction
 
 You may have already experienced a situation where someone with a marketing or product role wanted to provide a 
@@ -63,7 +76,7 @@ or any other platform integrated with Croct.
 In the next sections, we will explore how we can use CQL to craft personalized user journeys that inspire long-term, 
 value-driven customer relationships.
 
-## Connecting to the Playground
+## Setting Up
 
 For convenience, we will use the CodePen for playing with the examples provided throughout this guide.
 
@@ -122,7 +135,7 @@ user's interests include "rental" and location's city is "New York"
 
 To see the list of expressions and variables available, click on the _"Cheat Sheet"_ link at the top of the page.
 
-## Evaluating Expressions Programmatically
+### Evaluating Expressions Programmatically
 
 One of the coolest things about CQL is that you can programmatically evaluate expressions using the same expressions 
 written in plain English.

@@ -5,10 +5,37 @@ application. But besides telling the story of what happened during a user’s jo
 enrich the evaluation context and refine the models that continuously improve user experience.
 
 The SDK tracks most of the general-purpose events automatically for you. All other events depend on your use case, so 
-it is up to you to decide which events make sense for your application. In the following section, you will find a 
+it is up to you to decide which events make sense for your application. In the following sections, you will find a 
 summary of all events available to help you decide which events can benefit your application.
 
-## Summary
+## Table of Contents
+
+- [Event Summary](#event-summary)
+- [User Events](#user-events)
+  * [userSignedUp](#usersignedup)
+  * [userSignedIn](#usersignedin)
+  * [userSignedOut](#usersignedout)
+  * [userProfileChanged](#userprofilechanged)
+- [Web Events](#web-events)
+  * [tabOpened](#tabopened)
+  * [tabUrlChanged](#taburlchanged)
+  * [tabVisibilityChanged](#tabvisibilitychanged)
+  * [pageOpened](#pageopened)
+  * [pageLoaded](#pageloaded)
+- [E-commerce Events](#e-commerce-events)
+  * [productViewed](#productviewed)
+- [cartViewed](#cartviewed)
+  * [checkoutStarted](#checkoutstarted)
+  * [orderPlaced](#orderplaced)
+- [Analytics Events](#analytics-events)
+  * [goalCompleted](#goalcompleted)
+  * [testGroupAssigned](#testgroupassigned)
+- [Miscellaneous Events](#miscellaneous-events)
+  * [sessionAttributesChanged](#sessionattributeschanged)
+  * [nothingChanged](#nothingchanged)
+  * [eventOccurred](#eventoccurred)
+
+## Event Summary
 
 There are several event types that you can record within the customer journey:
 
@@ -190,7 +217,7 @@ images to finish loading.
 
 The e-commerce category has the following events:
 
-## productViewed
+### productViewed
 
 This event records the user viewed a product.
 
@@ -400,7 +427,7 @@ croct.track('cartViewed', {
 ```
 </details>
 
-## checkoutStarted
+### checkoutStarted
 
 This event records the checkout process started.
 
@@ -545,7 +572,7 @@ croct.track('checkoutStarted', {
 ```
 </details>
 
-## orderPlaced
+### orderPlaced
 
 This event records a placed order.
 

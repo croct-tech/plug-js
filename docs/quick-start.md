@@ -84,13 +84,13 @@ Follow the steps below to connect the playground with CodePen:
 
 1. [Open the playground](http://play.croct.com/)
 2. Click on the _"Don't have an API Key?"_ link to proceed in sandbox mode
-3. Enter `https://codepen.io/pen`
+3. Enter the URL `https://codepen.io/pen`
 4. Click on _"Let's play!"_
-5. Right-click on the button labeled _"codepen.io/pen"_, located at the top right of the page, and select
- _"Open link in new tab"_
+5. Click on the button labeled _"codepen.io/pen"_, located at the top right of the page
 
-After the page loads, you should see a notification saying _"Connection established"_, indicating the playground 
-is now connected to the CodePen. 
+After the page loads, you should see a blue dot on the playground tab signaling you have an unseen notification.
+Switching back to the playground tab, you should see a notification saying _"Connection established"_, indicating the 
+playground is now connected to the CodePen. 
 
 > In real cases, you will use an API key to connect to your production application. You can also use a development URL, 
 > such as `https://testing.myapp.com` or `https://localhost/myapp`.

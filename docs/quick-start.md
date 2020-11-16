@@ -62,7 +62,7 @@ user's score
 user is a fraud
 ```
 
-Things get even more interesting when you realize that you can use the user context to apply machine learning models 
+Things get even more interesting when you realize that you can use the user context to run machine learning models 
 in real-time. We are working to support AI-powered evaluations like the following:
 
 ```

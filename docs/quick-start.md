@@ -78,7 +78,7 @@ value-driven customer relationships.
 
 ## Setting Up
 
-> For convenience, we will use the CodePen for playing with the examples provided throughout this guide.
+> For convenience, we will use CodePen for playing with the examples provided throughout this guide.
 
 Follow the steps below to connect the playground with CodePen:
 
@@ -90,7 +90,7 @@ Follow the steps below to connect the playground with CodePen:
 
 After the page loads, you should notice an indication on the playground tab that you have an unseen notification.
 Switching back to the playground tab, you should see a notification saying _"Connection established"_ that indicates 
-the playground is now connected to the CodePen. 
+the playground is now connected to the CodePen editor. 
 
 > In real cases, you will use an API key to connect to your production application. You can also use a development URL, 
 > such as `https://testing.myapp.com` or `https://localhost/myapp`.
@@ -294,11 +294,13 @@ have expanded. We could use a similar approach to personalize elements of the ap
 
 ## Tracking Events
 
-Events are the fuel of personalization engines. It serves two primary purposes: recording facts for path analysis and feeding the evaluation data layer.
-As already mentioned, the SDK automatically collects general-purpose events for you, such as viewed pages and idle periods, to name a few. For non-generic events, it is up to your application to decide which events to track. 
-
-Let's take an example that shows how the personalization engine uses events to enrich the evaluation context
-Go back to CodePen and update the code with our next example:
+Events are the fuel of personalization engines. It serves two primary purposes: recording facts for path analysis and 
+feeding the evaluation data layer. As already mentioned, the SDK automatically collects general-purpose events for you, 
+such as viewed pages and idle periods, to name a few. For non-generic events, it is up to decide which events can 
+benefit your application.
+ 
+The following example demonstrates how the personalization engine uses events to enrich the evaluation context.
+Back on CodePen, update the code with our next example:
 
 ```html
 <button onclick="updateCart([{id: 'coffee', product: 'Coffee', price: 5}])">

@@ -250,7 +250,7 @@ While working with personalization, it is common to collect session-specific inf
 analysis purposes. For such cases, the SDK provides a way to store data that remains available for evaluation only for 
 the session's duration.
 
-In the following example, we will implement a way to understand the user's questions. We could then use 
+In the following example, we are going to implement a way to understand the user's questions. We could then use 
 this information to display content that could help answer these questions along the journey.
 
 ```html

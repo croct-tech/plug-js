@@ -211,14 +211,14 @@ Let's update our example and see how we can enrich user profiles to expand your 
 </script> 
 ```
 
-Let's break this example down into parts. First, we introduced a button that calls the function `askBirthDate`. 
-Then, we store the date of birth that the visitor informed in the variable "birthDate" and finally save the birth date 
-to the visitor's profile.
+Now, let's break this example down a little and understand what's going on. First, we introduce a button to call the 
+function `askBirthDate`. We then store the birth date answered in the variable `birthDate` and finally enrich the 
+visitor's profile with that information.
 
 Note that you did not have to provide an ID to persist information about the anonymous user because the SDK took care 
 of that for you.
 
-Now let's show the visitor's age based on the birth date entered:
+We can now show the visitor's age based on the entered birth date:
 
 ```html
 <button onclick="askBirthDate()">Ask my birth date</button>

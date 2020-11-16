@@ -50,7 +50,7 @@ or GPS coordinates. Although GPS coordinates provide more accurate information t
 user granting permission to the application to use the location service.
 
 That's where CQL shines. You define the business rules, and the personalization engine takes care of the tedious work 
-for you, such as selecting the best location source in the previous example.
+for you, such as managing permissions and selecting the best location source in the previous example.
 
 Plus, it opens up new horizons for connecting 3rd party data providers to your personalization data layer:
 

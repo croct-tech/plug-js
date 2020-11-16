@@ -378,7 +378,7 @@ use custom events to track likes:
 ```
 
 You can also include additional information that may be useful for your analysis, such as which content the user liked in the previous example.
-Check out the API reference for a full list of all currently supported events.
+Check out the [documentation](docs/events.md#eventoccurred) for more details.
 
 ## Identifying Users
 

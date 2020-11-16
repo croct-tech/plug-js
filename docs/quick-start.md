@@ -78,7 +78,7 @@ value-driven customer relationships.
 
 ## Setting Up
 
-For convenience, we will use the CodePen for playing with the examples provided throughout this guide.
+> For convenience, we will use the CodePen for playing with the examples provided throughout this guide.
 
 Follow the steps below to connect the playground with CodePen:
 

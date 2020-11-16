@@ -250,11 +250,12 @@ While working with personalization, it is common to collect session-specific inf
 analysis purposes. For such cases, the SDK provides a way to store data that remains available for evaluation only for 
 the session's duration.
 
-In the following example, we are going to implement a way to understand the user's questions. We could then use 
-this information to display content that could help answer these questions along the journey.
+In the following example, we will implement a way to understand the user's doubts. We can then use this information to 
+display content that helps answer those questions along the journey.
+
+After updating the code on CodePen with the code below, you will see something that resembles an FAQ. 
 
 ```html
-
 <details onclick="addQuestion('pricing')">
     <summary>How much does Croct cost?</summary>
     <p>Try Croct free for 14 days, no credit card required.</p>
@@ -288,9 +289,8 @@ this information to display content that could help answer these questions along
 </script> 
 ```
 
-After updating the code on CodePen, you will see something that resembles an FAQ. Try clicking on the buttons and 
-questions, and you will see that the answer will change according to the questions you have expanded. We could use 
-a similar approach to personalize elements of the application to clarify those questions.
+Try clicking on the buttons and questions, and you will see that the answer will change according to the questions you 
+have expanded. We could use a similar approach to personalize elements of the application to clarify those questions.
 
 ## Tracking Events
 

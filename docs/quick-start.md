@@ -165,9 +165,9 @@ how many sessions you have had:
 </script>
 ```
 
-The `croct.evaluate` method returns a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
-that resolves to the evaluation result. The second argument, omitted for the sake of simplicity in the example, 
-allows passing evaluation options, like variables and timeout. Please refer to the API reference for more details.
+The [`croct.evaluate`](docs/plug.md#evaluate) method returns a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
+that resolves to the evaluation result. The second argument, omitted for the sake of simplicity, allows passing 
+evaluation options, like variables and timeout. For all options, refer to the [Evaluation API reference](docs/evaluator.md#evaluate).
 
 ## Collecting Information
 

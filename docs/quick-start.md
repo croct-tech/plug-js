@@ -155,8 +155,8 @@ Simply copy the code below and paste into the HTML panel to see it in action:
 After CodePen updates the preview, you should see an alert saying _"Welcome!"_ or _"Welcome back!"_ depending on whether 
 it is your first time playing around with CQL on CodePen.
 
-Note that you are not limited to boolean expressions only. For example, let's edit the example again to show the 
-number of visits:
+Note that you are not limited to boolean expressions only. For example, let's update the example again to show 
+how many sessions you have had:
 
 ```html
 <script>  

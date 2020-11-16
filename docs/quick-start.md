@@ -186,7 +186,8 @@ interesting questions like:
 These are just a few of the many questions you can ask based on anonymous information automatically collected by the SDK.
 
 > Croct does not automatically collect sensitive information that can identify the user, such as GPS coordinates or 
-> values entered in fields. We open-sourced the SDK as an effort to bring more transparency about the data collected.
+> values entered in fields. We have [open-sourced the SDK](https://github.com/croct-tech/sdk-js) as an effort to bring 
+> more transparency about data collection.
 
 In addition to the information collected automatically, you can also enrich profiles and sessions with relevant 
 information to personalize your product or offer progressively, as we will see on the next sections.

@@ -103,7 +103,7 @@ The next sections show how you can evaluate CQL expressions using the playground
 
 ### Evaluating Expressions on the Playground
 
-To evaluate an expression in the playground, just type the expression in the editor and click the "Evaluate" button.
+To evaluate an expression on the playground, just type the expression in the editor and click the "Evaluate" button.
  
 Try evaluating the expression below:
 

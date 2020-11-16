@@ -314,7 +314,7 @@ Back on CodePen, update the code with the next example:
 
 <script>  
   function showOffers() {
-    // @todo Fix grammar to allow the quantifier at the end of the expression (greedily)
+    // @todo allow quantifiers at the end of the expression (greedily)
     croct.evaluate("cart is not empty and (no item in cart satisfies item's name matches 'Combo')")
       .then(eligible => {
         if (!eligible) {
@@ -350,7 +350,7 @@ Back on CodePen, update the code with the next example:
 </script> 
 ```
 
-Go through the following steps to see the tracking and evaluation mechanisms working together:
+Once the example loads, follow the steps below to see how the tracking and evaluation mechanisms work together:
 
 1. Click on the button labeled _"Show offer"_. Since you have no items in your cart, you should see an alert saying _"No eligible offers"_.
 2. Now add an item to the cart by clicking on _"☕ Buy a coffee"_.

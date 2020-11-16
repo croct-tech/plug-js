@@ -88,7 +88,7 @@ Follow the steps below to connect the playground with CodePen:
 4. Click on _"Let's play!"_
 5. Finally, click on the button labeled _"codepen.io/pen"_ at the top right of the page
 
-After the page loads, you should see an indication on the playground tab signaling you have an unseen notification.
+After the page loads, you should notice an indication on the playground tab that you have an unseen notification.
 Switching back to the playground tab, you should see a notification saying _"Connection established"_ that indicates 
 the playground is now connected to the CodePen. 
 

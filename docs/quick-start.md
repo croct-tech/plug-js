@@ -194,10 +194,10 @@ information to personalize your product or offer progressively, as we will see o
 
 ### Enriching Profiles
 
-Let's go back to our example and see how we can enrich user profiles to expand your personalization capabilities:
+Let's update our example and see how we can enrich user profiles to expand your personalization capabilities:
 
 ```html
-<button onclick="askBirthDate()">1. Ask my birth date</button>
+<button onclick="askBirthDate()">Ask my birth date</button>
 
 <script>  
   function askBirthDate() { 

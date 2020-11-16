@@ -382,9 +382,9 @@ Check out the [documentation](events.md#eventoccurred) for more details.
 
 ## Identifying Users
 
-So far, all the examples we have seen involve anonymous users only. Suppose your application allows users to 
-create accounts. In that case, the SDK provides a way to identify users using the same identifier as you use internally 
-to assemble cross-channel data into a unified customer view.
+So far, all the examples we have seen involve anonymous users only. However, for applications that allow users to 
+register for an account, the SDK provides a way to identify users using the same identifier as you use internally to 
+assemble cross-channel data into a unified customer view.
 
 The following example covers the steps to identify, retrieve identifiers, and anonymize users:
 
@@ -417,8 +417,8 @@ Anonymize
 </script> 
 ```
 
-When you identify a user, the personalization engine automatically takes care of unifying the sessions and 
-migrating the information from the anonymous profile to the identified profile.
+When identifying a user, the personalization engine automatically takes care of unifying sessions and profiles for you 
+in the background — no need to add a single extra line of code.
 
 > Never use guessable attributes as an identifier, such as email, phone, or incremental IDs. Instead, 
 > we strongly recommend using a cryptographically-secure UUID v4 generator.

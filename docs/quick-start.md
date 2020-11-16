@@ -241,8 +241,8 @@ We can now show the visitor's age based on the entered birth date:
 </script>
 ```
 
-Now, click on _"Ask my birth date"_, enter your birth date and then click on _"Show my age"_, and you should see 
-your age based on the entered birth date. 
+Now, click on _"Ask my birth date"_, enter your birth date and then click on _"Show my age"_, and you should see
+your age.
 
 ### Enriching Sessions
 

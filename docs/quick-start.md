@@ -29,7 +29,7 @@ personalized experience for a particular audience, but that never got off the gr
 much more complicated than expected.
 
 That was the spark for creating the Contextual Query Language (CQL), an English-based language designed to abstract 
-away from marketing, product, and development teams the complexities behind delivering personalized online experiences.
+away from marketing, product, and development teams the complexities behind delivering personalized experiences online.
 
 CQL makes it easy for everyone to write simple or sophisticated conditions in plain English in such a way that developers 
 can use it directly in the code without any additional step.

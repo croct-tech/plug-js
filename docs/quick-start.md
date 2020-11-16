@@ -99,7 +99,7 @@ Now, let's get our hands dirty and play around with CQL!
 
 ## Evaluating Expressions
 
-Now the playground is connected, we can start evaluating CQL expressions.
+The next sections show how you can evaluate CQL expressions using the playground or directly in the code.
 
 ### Evaluating Expressions on the Playground
 

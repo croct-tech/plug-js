@@ -3,7 +3,7 @@
 Welcome to the beginner's guide to Croct SDK for JavaScript.
 
 This guide aims to introduce the SDK's main features and explain how you can use the 
-[playground](https://play.croct.com) to assist in developing new personalization features.
+[playground](https://play.croct.com) to assist you in developing new personalization features.
 
 Although some JavaScript knowledge will make following along easier, this guide is well suited even for non-developers.
 
@@ -24,7 +24,7 @@ Let's start!
 
 ## Introduction
 
-You may have already experienced a situation where someone with a marketing or product role wanted to provide a 
+You may have already experienced a situation where someone from the marketing or product team wanted to provide a 
 personalized experience for a particular audience, but that never got off the ground because it turned out to be 
 much more complicated than expected.
 

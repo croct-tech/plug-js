@@ -140,8 +140,10 @@ To see the list of expressions and variables available, click on the _"Cheat She
 One of the coolest things about CQL is that you can programmatically evaluate expressions using the same expressions 
 written in plain English.
 
-Let's go back to CodePen to evaluate our first expression programmatically. Edit the code to include a personalization 
-that will greet a visitor depending on whether it is the first time they access your application or not:
+Let's go back to the CodePen editor to evaluate our first expression programmatically. In our first example, 
+we are going to greet a visitor depending on whether it is the first time accessing your application or not.
+
+Simply copy the code below and paste into the HTML panel to see it in action:
 
 ```html
 <script>  

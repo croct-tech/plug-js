@@ -300,7 +300,7 @@ such as viewed pages and idle periods, to name a few. For non-generic events, it
 benefit your application.
  
 The following example demonstrates how the personalization engine uses events to enrich the evaluation context.
-Back on CodePen, update the code with our next example:
+Back on CodePen, update the code with the next example:
 
 ```html
 <button onclick="updateCart([{id: 'coffee', product: 'Coffee', price: 5}])">

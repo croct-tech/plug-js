@@ -253,7 +253,7 @@ the session's duration.
 In the following example, we will implement a way to understand the user's doubts. We can then use this information to 
 display content that helps answer those questions along the journey.
 
-After updating the code on CodePen with the code below, you will see something that resembles an FAQ. 
+After updating the code on CodePen with the code below, you should see something that resembles an FAQ: 
 
 ```html
 <details onclick="addQuestion('pricing')">

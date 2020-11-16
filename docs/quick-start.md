@@ -165,9 +165,9 @@ how many sessions you have had:
 </script>
 ```
 
-The [`croct.evaluate`](docs/plug.md#evaluate) method returns a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
+The [`croct.evaluate`](plug.md#evaluate) method returns a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) 
 that resolves to the evaluation result. The second argument, omitted for the sake of simplicity, allows passing 
-evaluation options, like variables and timeout. For all options, refer to the [Evaluation API reference](docs/evaluator.md#evaluate).
+evaluation options, like variables and timeout. For all options, refer to the [Evaluation API reference](evaluator.md#evaluate).
 
 ## Collecting Information
 
@@ -378,7 +378,7 @@ use custom events to track likes:
 ```
 
 You can also include additional information that may be useful for your analysis, such as which content the user liked in the previous example.
-Check out the [documentation](docs/events.md#eventoccurred) for more details.
+Check out the [documentation](events.md#eventoccurred) for more details.
 
 ## Identifying Users
 

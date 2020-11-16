@@ -215,7 +215,7 @@ Now, let's break this example down a little and understand what's going on. Firs
 function `askBirthDate`. We then store the birth date answered in the variable `birthDate` and finally enrich the 
 visitor's profile with that information.
 
-Note that you did not have to provide an ID to persist information about the anonymous user because the SDK took care 
+> Note that you did not have to provide an ID to persist information about the anonymous user because the SDK took care 
 of that for you.
 
 We can now show the visitor's age based on the entered birth date:

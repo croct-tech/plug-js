@@ -21,6 +21,7 @@ Let's start!
   * [Enriching Sessions](#enriching-sessions)
 - [Tracking Events](#tracking-events)
 - [Identifying Users](#identifying-users)
+- [Next steps](#next-steps)
 
 ## Introduction
 

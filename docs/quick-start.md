@@ -306,7 +306,7 @@ have expanded. We could use a similar approach to personalize elements of the ap
 
 Events are the fuel of personalization engines. It serves two primary purposes: recording facts for path analysis and 
 feeding the evaluation data layer. As already mentioned, the SDK automatically collects general-purpose events for you, 
-such as viewed pages and idle periods, to name a few. For non-generic events, it is up to decide which events can 
+such as viewed pages and idle periods, to name a few. For non-generic events, it is up to you decide which events can 
 benefit your application.
  
 The following example demonstrates how the personalization engine uses events to enrich the evaluation context.
@@ -432,3 +432,11 @@ in the background — without a single extra line of code.
 
 > Never use guessable attributes as an identifier, such as email, phone, or incremental IDs. Instead, 
 > we strongly recommend using a cryptographically-secure UUID v4 generator.
+
+## Next steps
+
+That's it! You have now the basics of how to use the Croct SDK.
+
+If you want to learn more about Croct SDK, check out the other sections in the [documentation](../README.md#documentation). 
+And if you faced any problems experimenting with the SDK, you can look for answers at the 
+[troubleshooting]troubleshooting.md) section.

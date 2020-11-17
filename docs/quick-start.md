@@ -438,5 +438,5 @@ in the background — without a single extra line of code.
 That's it! You have now the basics of how to use the Croct SDK.
 
 If you want to learn more about Croct SDK, check out the other sections in the [documentation](../README.md#documentation). 
-And if you faced any problems experimenting with the SDK, you can look for answers at the 
-[troubleshooting]troubleshooting.md) section.
+And if you faced any problems experimenting with the SDK, you can look for answers in the 
+[troubleshooting](troubleshooting.md) section or [ask the Croct community](../README.md#getting-help).

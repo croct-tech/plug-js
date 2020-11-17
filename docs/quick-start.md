@@ -42,6 +42,7 @@ user's age is greater than 18
 The example above shows a boolean expression, meaning that the result will be either `true` or `false` depending on 
 whether the user is older than 18 or not.
 
+
 For developers, CQL serves as an abstraction layer between the application and the underlying personalization infrastructure:
 
 ```
@@ -92,7 +93,7 @@ Follow the steps below to connect the playground with CodePen:
 5. Finally, click on the button labeled _"codepen.io/pen"_ at the top right of the page
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/99387222-62b12b80-28b2-11eb-8db8-c190a4657baa.gif" alt="Connecting" title="Connecting" />
+    <img src="https://user-images.githubusercontent.com/943036/99387222-62b12b80-28b2-11eb-8db8-c190a4657baa.gif" alt="Connecting" title="Connecting" width="600" />
 </p>
 
 After the page loads, you should notice an indication on the playground tab that you have an unseen notification.

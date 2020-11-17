@@ -35,7 +35,7 @@ This reference documents all methods available in the Patch API and explains in 
 - [merge](#merge)
 - [increment](#increment)
 - [decrement](#decrement)
-- [save](#save
+- [save](#save)
 
 ### set
 

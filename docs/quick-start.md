@@ -92,8 +92,10 @@ Follow the steps below to connect the playground with CodePen:
 4. Click on _"Let's play!"_
 5. Finally, click on the button labeled _"codepen.io/pen"_ at the top right of the page
 
+<br />
+
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/99390303-28965880-28b7-11eb-8f8f-b54ccd0b4d29.gif" alt="Connecting" title="Connecting" width="600" />
+    <img src="https://user-images.githubusercontent.com/943036/99390593-a8242780-28b7-11eb-8966-761aea2b3b3d.gif" alt="Connecting" title="Connecting" width="600" />
 </p>
 
 After the page loads, you should notice an indication on the playground tab that you have an unseen notification.

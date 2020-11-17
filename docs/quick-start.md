@@ -39,6 +39,9 @@ can use it directly in the code without any additional step.
 user's age is greater than 18
 ```
 
+The example above shows a boolean expression, meaning that the result will be either `true` or `false` depending on 
+whether the user is older than 18 or not.
+
 For developers, CQL serves as an abstraction layer between the application and the underlying personalization infrastructure:
 
 ```
@@ -87,6 +90,10 @@ Follow the steps below to connect the playground with CodePen:
 3. Enter the URL `https://codepen.io/pen`
 4. Click on _"Let's play!"_
 5. Finally, click on the button labeled _"codepen.io/pen"_ at the top right of the page
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/943036/99387222-62b12b80-28b2-11eb-8db8-c190a4657baa.gif" alt="Connecting" title="Connecting" />
+</p>
 
 After the page loads, you should notice an indication on the playground tab that you have an unseen notification.
 Switching back to the playground tab, you should see a notification saying _"Connection established"_ that indicates 
@@ -417,8 +424,8 @@ Anonymize
 </script> 
 ```
 
-When identifying a user, the personalization engine automatically takes care of unifying sessions and profiles for you 
-in the background — no need to add a single extra line of code.
+When identifying a user, the personalization engine automatically takes care of unifying sessions and profiles
+in the background — without a single extra line of code.
 
 > Never use guessable attributes as an identifier, such as email, phone, or incremental IDs. Instead, 
 > we strongly recommend using a cryptographically-secure UUID v4 generator.

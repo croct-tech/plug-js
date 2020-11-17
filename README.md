@@ -82,9 +82,7 @@ Webpack or Browserify and includes Typescript typings.
 
 In most cases, it should be as simple as running the following in your project:
 
-```sh
-npm install @croct/plug
-```
+## Getting Help
 
 ### Script Tag
 

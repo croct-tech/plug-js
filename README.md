@@ -1,6 +1,6 @@
-<br/>
-
-![Plug JS](https://user-images.githubusercontent.com/943036/99105036-96ddd100-25c0-11eb-9ca4-df7b0e205376.png)
+<p align="center">
+   <img width="100%" alt="Plug JS" title="Plug JS" src="https://user-images.githubusercontent.com/943036/99672355-0c7aee80-2a52-11eb-9e89-012567237af9.png">
+</p>
 
 <br/><br/>
 

@@ -49,7 +49,7 @@
 ## About
 
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
-A single line of code gives you a complete devkit for building natively personalized applications.
+A single line of code gives you a fully-featured devkit for building natively personalized applications.
 
 ## Features
 

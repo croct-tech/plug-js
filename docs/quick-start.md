@@ -325,7 +325,6 @@ Back on CodePen, update the code with the next example:
 
 <script>  
   function showOffers() {
-    // @todo allow quantifiers at the end of the expression (greedily)
     croct.evaluate("cart is not empty and (no item in cart satisfies item's name matches 'Combo')")
       .then(eligible => {
         if (!eligible) {

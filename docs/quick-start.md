@@ -264,7 +264,7 @@ the session's duration.
 In the following example, we will implement a way to understand the user's doubts. We can then use this information to 
 display content that helps answer those questions along the journey.
 
-After updating the code on CodePen with the code below, you should see something that resembles an FAQ: 
+After updating the example on CodePen with the code below, you should see something that resembles an FAQ: 
 
 ```html
 <details onclick="addQuestion('pricing')">
@@ -333,8 +333,8 @@ Back on CodePen, update the code with the next example:
           return;
         }
       
-       if (confirm('How about adding a delicious Croissant for $3 more?')) {
-         updateCart([{id: 'combo', product: 'Coffee + Croissant Combo', price: 8}]);
+       if (confirm('How about adding a delicious cookie for $3 more?')) {
+         updateCart([{id: 'combo', product: 'Coffee + Cookie Combo', price: 8}]);
        }
     });
   } 
@@ -364,10 +364,10 @@ Once the example loads, follow the steps below to see how the tracking and evalu
 
 1. Click on the button labeled _"Show offer"_. Since you have no items in your cart, you should see an alert saying _"No eligible offers"_.
 2. Now add an item to the cart by clicking on _"☕ Buy a coffee"_.
-3. Click _"Show offers"_ again, and this time you should see a message that says _"How about adding a delicious Croissant for $3 more?"_. Click _"Ok"_ to confirm.
+3. Click _"Show offers"_ again, and this time you should see a message that says _"How about adding a delicious cookie for $3 more?"_. Click _"Ok"_ to confirm.
 4. Try clicking on _"Show offers"_  again. You should now see the message _"No eligible offers"_ as you have already upgraded to the combo.
 
-Besides the standard events, you can track custom events for analytical purposes. The example below shows how you can 
+Besides standard events, you can track custom events for analytical purposes. The example below shows how you can 
 use custom events to track likes:
 
 ```html
@@ -428,7 +428,7 @@ Anonymize
 ```
 
 When identifying a user, the personalization engine automatically takes care of unifying sessions and profiles
-in the background — without a single extra line of code.
+in the background without a single extra line of code.
 
 > Never use guessable attributes as an identifier, such as email, phone, or incremental IDs. Instead, 
 > we strongly recommend using a cryptographically-secure UUID v4 generator.

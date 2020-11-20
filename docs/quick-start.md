@@ -67,8 +67,8 @@ user's score
 user is a fraud
 ```
 
-Things get even more interesting when you realize that you can use the same context to run machine learning models 
-in real-time. We are working to support AI-powered evaluations like the following:
+Things get even more powerful when you realize that you can use the same context to run machine learning models in 
+real-time. You will soon be able to perform AI-powered evaluations like the following:
 
 ```
 # It doesn't seem as complex as designing, training, and running ML models, does it?
@@ -103,8 +103,8 @@ After the page loads, you should notice an indication on the playground tab that
 Switching back to the playground tab, you should see a notification saying _"Connection established"_ that indicates 
 the playground is now connected to the CodePen editor. 
 
-> In real cases, you will use an API key to connect to your production application. You can also use a development URL, 
-> such as `https://testing.myapp.com` or `https://localhost/myapp`.
+> You will typically use an API key to connect to your development, staging, or production environments in real cases, 
+> but you can also use a local URL,  such as `https://localhost/myapp`.
 
 Now, let's get our hands dirty and play around with CQL!
 

@@ -41,7 +41,7 @@ A single line of code gives you a fully-featured devkit for building natively pe
 
 ## Getting Started
 
-> For convenience, we will use CodePen for playing with the following example.
+> In this example, we will use CodePen to avoid installing a web server locally.
 
 Follow the steps below to connect the playground with CodePen:
 
@@ -65,7 +65,7 @@ Now, try evaluating the expression below:
 user is returning
 ```
 
-After clicking on _Evaluate_ you will see the result of the evaluation, which in this case is either true or false 
+After clicking on _Evaluate_ you will see the result of the evaluation, which in this case is either `true` or `false` 
 depending on whether it is the first time playing with this example.
 
 Let's implement our first personalization feature. Click on the three-dots icon on the editor's top right corner and 

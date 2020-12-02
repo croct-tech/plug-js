@@ -82,13 +82,13 @@ and select _"Open in CodePen"_. Then, copy the code below and paste into the HTM
 <script>  
   function welcome() {
     if (confirm('Welcome! Do you want to take a look at our quick start guide?')) {
-      window.open('https://github.com/croct-tech/plug-js/blob/docs-restructuring/docs/quick-start.md', '_blank');
+      window.open('https://github.com/croct-tech/plug-js/blob/master/docs/quick-start.md');
     }
   }
   
   function welcomeBack() {
     if (confirm('Glad you came back! How about joining us on Slack?')) {
-      window.open('https://launchpass.com/croct-community', '_blank');
+      window.open('https://launchpass.com/croct-community');
     }
   }
   

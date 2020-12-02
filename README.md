@@ -18,7 +18,8 @@
     <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
-<hr />
+
+## Overview
 
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
 A single line of code gives you a fully-featured devkit for building natively personalized applications.
@@ -38,6 +39,66 @@ A single line of code gives you a fully-featured devkit for building natively pe
     <img src="https://user-images.githubusercontent.com/943036/99122301-d3b7c100-25dc-11eb-8e36-4abc16d85b8f.gif" alt="Playground" title="Playground" />
 </p>
 
+## Getting Started
+
+> For convenience, we will use CodePen for playing with the following example.
+
+Follow the steps below to connect the playground with CodePen:
+
+1. [Open the playground](http://play.croct.com/)
+2. Click on the _"Don't have an API Key?"_ link to proceed in sandbox mode
+3. Enter the URL `https://codepen.io/pen`
+4. Click on _"Let's play!"_
+
+<br />
+
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/943036/99390593-a8242780-28b7-11eb-8966-761aea2b3b3d.gif" alt="Connecting" title="Connecting" width="600" />
+</p>
+
+> You will typically use an API key to connect to your development, staging, or production environments in real cases, 
+> but you can also use a local URL,  such as `https://localhost/myapp`.
+
+Now, try evaluating the expression below:
+
+```
+user is returning
+```
+
+After clicking on _Evaluate_ you will see the result of the evaluation, which in this case is either true or false 
+depending on whether it is the first time playing with this example.
+
+Let's implement our first personalization feature. Click on the three-dots icon on the editor's top right corner and 
+select "Open in CodePen". Then, copy the code below and paste into the HTML panel:
+
+```html
+<button onclick="hey()">👋 Say hey</button>
+
+<script>  
+  function welcome() {
+    if (confirm('Welcome! Do you want to take a look at our quick start guide?')) {
+      window.open('https://github.com/croct-tech/plug-js/blob/docs-restructuring/docs/quick-start.md', '_blank');
+    }
+  }
+  
+  function welcomeBack() {
+    if (confirm('Glad you came back! How about joining us on Slack?')) {
+      window.open('https://launchpass.com/croct-community', '_blank');
+    }
+  }
+  
+  function hey() {
+    croct.evaluate('user is returning')
+       .then(returning => returning ? welcomeBack() : welcome()); 
+  }
+</script>
+```
+
+Clicking _"👋 Say Hey"_, you should be greeted with a personalized message.
+
+✨ Congratulations! You have successfully implemented your first personalization feature. 
+Check out our [quick start guide](docs/quick-start.md) for a more in-depth walk-through.
+ 
 ## Installation
 
 There are two ways to install the Croct SDK: 

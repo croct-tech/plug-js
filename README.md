@@ -1,5 +1,5 @@
 <p align="center">
-   <img height="300" alt="Plug JS" title="Plug JS" src="https://user-images.githubusercontent.com/943036/99672355-0c7aee80-2a52-11eb-9e89-012567237af9.png">
+   <img height="400" alt="Plug JS" title="Plug JS" src="https://user-images.githubusercontent.com/943036/99672355-0c7aee80-2a52-11eb-9e89-012567237af9.png">
 </p>
 
 <br/><br/>

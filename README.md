@@ -20,34 +20,6 @@
 
 <br/>
 
-## Table of Contents
-
-- [About](#about)
-- [Features](#features)
-  * [Browser support](#browser-support)
-- [Installation](#installation)
-  * [NPM](#npm)
-  * [Script Tag](#script-tag)
-- [Documentation](#documentation)
-  * [Quick Start Guide](docs/quick-start.md)
-  * [Plug Reference](docs/plug.md)
-  * [Tracker Reference](docs/tracker.md)
-  * [Evaluator Reference](docs/evaluator.md)
-  * [Event Reference](docs/events.md)
-  * [Patch Reference](docs/patch.md)
-  * [User Reference](docs/user.md)
-  * [Session Reference](docs/session.md)
-  * [Troubleshooting](docs/troubleshooting.md)
-- [Getting Help](#getting-help)
-  * [Stack Overflow](#stack-overflow)
-  * [GitHub](#github)
-  * [Slack Channel](#slack-channel)
-- [Contributing](#contributing)
-- [Testing](#testing)
-- [License](#license)    
-
-## About
-
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
 A single line of code gives you a fully-featured devkit for building natively personalized applications.
 
@@ -66,11 +38,6 @@ A single line of code gives you a fully-featured devkit for building natively pe
     <img src="https://user-images.githubusercontent.com/943036/99122301-d3b7c100-25dc-11eb-8e36-4abc16d85b8f.gif" alt="Playground" title="Playground" />
 </p>
 
-### Browser support
-
-The client-side SDK is supported by all modern browsers that support the standardized WebSocket and Promise APIs. 
-These browsers together represent more than 95% of global usage.
-
 ## Installation
 
 There are two ways to install the Croct SDK: 
@@ -82,7 +49,9 @@ Webpack or Browserify and includes Typescript typings.
 
 In most cases, it should be as simple as running the following in your project:
 
-## Getting Help
+```sh
+npm install @croct/plug
+```
 
 ### Script Tag
 
@@ -93,6 +62,11 @@ application's public ID.
 ```html
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
 ```
+
+## Browser support
+
+The client-side SDK is supported by all modern browsers that support the standardized WebSocket and Promise APIs. 
+These browsers together represent more than 95% of global usage.
 
 ## Documentation
 

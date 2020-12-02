@@ -19,6 +19,18 @@
 </p>
 
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Documentation](#documentation)
+- [Getting Help](#getting-help)
+- [Contributing](#contributing)
+- [Testing](#testing)
+- [License](#license)    
+
 ## Overview
 
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
@@ -33,13 +45,7 @@ A single line of code gives you a fully-featured devkit for building natively pe
 - **Type-Safe.** Typescript typings included.
 - **Playground integration** One-click to connect, no configuration needed.
 
-<br />
-
-<p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/99122301-d3b7c100-25dc-11eb-8e36-4abc16d85b8f.gif" alt="Playground" title="Playground" />
-</p>
-
-## Getting Started
+## Quick Start
 
 > In this example, we will use CodePen to avoid installing a web server locally.
 
@@ -97,7 +103,7 @@ and select _"Open in CodePen"_. Then, copy the code below and paste into the HTM
 Clicking _"👋 Say Hey"_, you should be greeted with a personalized message.
 
 🎉 **Congratulations!** You have successfully implemented your first personalization feature using Croct. For a more 
-in-depth walk-through, check out our [quick start guide](docs/quick-start.md). 
+in-depth walk-through, check out the [full tutorial](docs/quick-start.md). 
 
 ## Installation
 
@@ -123,11 +129,6 @@ application's public ID.
 ```html
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
 ```
-
-## Browser support
-
-The client-side SDK is supported by all modern browsers that support the standardized WebSocket and Promise APIs. 
-These browsers together represent more than 95% of global usage.
 
 ## Documentation
 

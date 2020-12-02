@@ -65,11 +65,11 @@ Now, try evaluating the expression below:
 user is returning
 ```
 
-After clicking on _Evaluate_ you will see the result of the evaluation, which in this case is either `true` or `false` 
-depending on whether it is the first time playing with this example.
+After clicking on the _Evaluate_ button, you will see the result at the bottom of the page, which is either `true` or 
+`false` depending on whether it is the first time playing with this example.
 
-Let's implement our first personalization feature. Click on the three-dots icon on the editor's top right corner and 
-select "Open in CodePen". Then, copy the code below and paste into the HTML panel:
+Let's now implement our first personalization feature. Click on the three-dots icon on the editor's top right corner 
+and select _"Open in CodePen"_. Then, copy the code below and paste into the HTML panel:
 
 ```html
 <button onclick="hey()">👋 Say hey</button>

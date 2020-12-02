@@ -23,10 +23,10 @@
 
 - [Overview](#overview)
 - [Features](#features)
-- [Quick Start](#quick-start)
+- [Getting Started](#getting-started)
 - [Installation](#installation)
 - [Documentation](#documentation)
-- [Getting Help](#getting-help)
+- [Support](#support)
 - [Contributing](#contributing)
 - [Testing](#testing)
 - [License](#license)    
@@ -45,7 +45,7 @@ A single line of code gives you a fully-featured devkit for building natively pe
 - **Type-Safe.** Typescript typings included.
 - **Playground integration** One-click to connect, no configuration needed.
 
-## Quick Start
+## Getting Started
 
 > In this example, we will use CodePen to avoid installing a web server locally.
 
@@ -103,7 +103,7 @@ and select _"Open in CodePen"_. Then, copy the code below and paste into the HTM
 Clicking _"👋 Say Hey"_, you should be greeted with a personalized message.
 
 🎉 **Congratulations!** You have successfully implemented your first personalization feature using Croct. For a more 
-in-depth walk-through, check out the [full tutorial](docs/quick-start.md). 
+in-depth walk-through, check out our [quick start guide](docs/quick-start.md). 
 
 ## Installation
 
@@ -147,7 +147,7 @@ The following references provide guidance to help you get started, integrate, an
 If you are new to the Croct platform, the [quick start guide](docs/quick-start.md) is a good starting point for 
 application developers to begin learning the essential concepts.
 
-## Getting Help
+## Support
 
 If the [troubleshooting section](docs/troubleshooting.md) does not cover your problem, don't worry, there are 
 alternative ways to get help from the Croct community.

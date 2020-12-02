@@ -18,35 +18,20 @@
     <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
-<br/>
 
 ## Table of Contents
 
-- [About](#about)
+- [Overview](#overview)
 - [Features](#features)
-  * [Browser support](#browser-support)
+- [Getting Started](#getting-started)
 - [Installation](#installation)
-  * [NPM](#npm)
-  * [Script Tag](#script-tag)
 - [Documentation](#documentation)
-  * [Quick Start Guide](docs/quick-start.md)
-  * [Plug Reference](docs/plug.md)
-  * [Tracker Reference](docs/tracker.md)
-  * [Evaluator Reference](docs/evaluator.md)
-  * [Event Reference](docs/events.md)
-  * [Patch Reference](docs/patch.md)
-  * [User Reference](docs/user.md)
-  * [Session Reference](docs/session.md)
-  * [Troubleshooting](docs/troubleshooting.md)
-- [Getting Help](#getting-help)
-  * [Stack Overflow](#stack-overflow)
-  * [GitHub](#github)
-  * [Slack Channel](#slack-channel)
+- [Support](#support)
 - [Contributing](#contributing)
 - [Testing](#testing)
 - [License](#license)    
 
-## About
+## Overview
 
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
 A single line of code gives you a fully-featured devkit for building natively personalized applications.
@@ -60,16 +45,65 @@ A single line of code gives you a fully-featured devkit for building natively pe
 - **Type-Safe.** Typescript typings included.
 - **Playground integration** One-click to connect, no configuration needed.
 
+## Getting Started
+
+> In this example, we will use CodePen to avoid installing a web server locally.
+
+Follow the steps below to connect the playground with CodePen:
+
+1. [Open the playground](http://play.croct.com/)
+2. Click on the _"Don't have an API Key?"_ link to proceed in sandbox mode
+3. Enter the URL `https://codepen.io/pen`
+4. Click on _"Let's play!"_
+
 <br />
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/943036/99122301-d3b7c100-25dc-11eb-8e36-4abc16d85b8f.gif" alt="Playground" title="Playground" />
+    <img src="https://user-images.githubusercontent.com/943036/99390593-a8242780-28b7-11eb-8966-761aea2b3b3d.gif" alt="Connecting" title="Connecting" width="600" />
 </p>
 
-### Browser support
+> You will typically use an API key to connect to your development, staging, or production environments in real cases, 
+> but you can also use a local URL,  such as `https://localhost/myapp`.
 
-The client-side SDK is supported by all modern browsers that support the standardized WebSocket and Promise APIs. 
-These browsers together represent more than 95% of global usage.
+Now, try evaluating the expression below:
+
+```
+user is returning
+```
+
+After clicking on the _Evaluate_ button, you will see the result at the bottom of the page, which is either `true` or 
+`false` depending on whether it is the first time playing with this example.
+
+Let's now implement our first personalization feature. Click on the three-dots icon on the editor's top right corner 
+and select _"Open in CodePen"_. Then, copy the code below and paste into the HTML panel:
+
+```html
+<button onclick="hey()">👋 Say hey</button>
+
+<script>  
+  function welcome() {
+    if (confirm('Welcome! Do you want to take a look at our quick start guide?')) {
+      window.open('https://github.com/croct-tech/plug-js/blob/docs-restructuring/docs/quick-start.md', '_blank');
+    }
+  }
+  
+  function welcomeBack() {
+    if (confirm('Glad you came back! How about joining us on Slack?')) {
+      window.open('https://launchpass.com/croct-community', '_blank');
+    }
+  }
+  
+  function hey() {
+    croct.evaluate('user is returning')
+       .then(returning => returning ? welcomeBack() : welcome()); 
+  }
+</script>
+```
+
+Try clicking _"👋 Say Hey"_, and you should see a personalized greeting.
+
+🎉 **Congratulations!** You have successfully implemented your first personalization feature using Croct. For a more 
+in-depth walk-through, check out our [quick start guide](docs/quick-start.md). 
 
 ## Installation
 
@@ -82,7 +116,9 @@ Webpack or Browserify and includes Typescript typings.
 
 In most cases, it should be as simple as running the following in your project:
 
-## Getting Help
+```sh
+npm install @croct/plug
+```
 
 ### Script Tag
 
@@ -111,7 +147,7 @@ The following references provide guidance to help you get started, integrate, an
 If you are new to the Croct platform, the [quick start guide](docs/quick-start.md) is a good starting point for 
 application developers to begin learning the essential concepts.
 
-## Getting Help
+## Support
 
 If the [troubleshooting section](docs/troubleshooting.md) does not cover your problem, don't worry, there are 
 alternative ways to get help from the Croct community.

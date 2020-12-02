@@ -100,7 +100,7 @@ and select _"Open in CodePen"_. Then, copy the code below and paste into the HTM
 </script>
 ```
 
-Clicking _"👋 Say Hey"_, you should be greeted with a personalized message.
+Try clicking _"👋 Say Hey"_, and you should see a personalized greeting.
 
 🎉 **Congratulations!** You have successfully implemented your first personalization feature using Croct. For a more 
 in-depth walk-through, check out our [quick start guide](docs/quick-start.md). 

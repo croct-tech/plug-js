@@ -96,7 +96,8 @@ and select _"Open in CodePen"_. Then, copy the code below and paste into the HTM
 
 Clicking _"👋 Say Hey"_, you should be greeted with a personalized message.
 
-✨ Congratulations! You have successfully implemented your first personalization feature. 
+✨ **Congratulations!** You have successfully implemented your first personalization feature. 
+
 Check out our [quick start guide](docs/quick-start.md) for a more in-depth walk-through.
  
 ## Installation

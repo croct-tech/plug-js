@@ -46,7 +46,8 @@ A single line of code gives you a fully-featured devkit for building natively pe
 
 ## Getting Started
 
-> In this example, we will use CodePen to avoid installing a web server locally.
+> 🏖️ **Just for your convenience**  
+> We will be using CodePen for all of the examples in this tutorial because it lets you play with them right in the browser.
 
 Follow the steps below to connect the playground with CodePen:
 
@@ -61,8 +62,9 @@ Follow the steps below to connect the playground with CodePen:
     <img src="https://user-images.githubusercontent.com/943036/99390593-a8242780-28b7-11eb-8966-761aea2b3b3d.gif" alt="Connecting" title="Connecting" width="600" />
 </p>
 
-> You will typically use an API key to connect to your development, staging, or production environments in real cases, 
-> but you can also use a local URL,  such as `https://localhost/myapp`.
+> 💡️ **Hint**  
+> You will typically use an API key to connect to your development, staging, or production environments in real cases,
+> but you can also use a local URL, such as `https://localhost/myapp`.
 
 Now, try evaluating the expression below:
 

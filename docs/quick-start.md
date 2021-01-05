@@ -168,7 +168,7 @@ Simply copy the code below and paste into the HTML panel to see it in action:
 After CodePen updates the preview, you should see an alert saying _"Welcome!"_ or _"Welcome back!"_ depending on whether 
 it is your first time playing around with CQL on CodePen.
 
-> 🐞 **It's not a bug; it's a feature, we swear!**     
+> 🐞 **It's not a bug. It's a feature, we swear!**     
 > Sessions expire after 30 minutes of inactivity in the sandbox environment, and we erase all data every hour. 
 > So the _returning user_ expression will only evaluate to true in that half an hour window after the session expires.
 

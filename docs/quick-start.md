@@ -83,7 +83,7 @@ value-driven customer relationships.
 
 ## Setting Up
 
-> 📌 In case you wonder...
+> 🏖️ **Just for your convenience**  
 > We will be using CodePen for all of the examples in this tutorial because it lets you play with them right in the browser.
 
 Follow the steps below to connect the playground with CodePen:

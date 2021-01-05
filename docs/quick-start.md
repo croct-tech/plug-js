@@ -83,7 +83,8 @@ value-driven customer relationships.
 
 ## Setting Up
 
-> For convenience, we will use CodePen for playing with the examples provided throughout this guide.
+> 📌 In case you wonder...
+> We will be using CodePen for all of the examples in this tutorial because it lets you play with them right in the browser.
 
 Follow the steps below to connect the playground with CodePen:
 
@@ -103,8 +104,9 @@ After the page loads, you should notice an indication on the playground tab that
 Switching back to the playground tab, you should see a notification saying _"Connection established"_ that indicates 
 the playground is now connected to the CodePen editor. 
 
+> 💡️️ **Hint**  
 > You will typically use an API key to connect to your development, staging, or production environments in real cases, 
-> but you can also use a local URL,  such as `https://localhost/myapp`.
+> but you can also use a local URL, such as `https://localhost/myapp`.
 
 Now, let's get our hands dirty and play around with CQL!
 
@@ -166,6 +168,10 @@ Simply copy the code below and paste into the HTML panel to see it in action:
 After CodePen updates the preview, you should see an alert saying _"Welcome!"_ or _"Welcome back!"_ depending on whether 
 it is your first time playing around with CQL on CodePen.
 
+> 🐞 That's not a bug, that's a feature! 
+> Sessions expire after 30 minutes of inactivity in the sandbox environment, and we erase all data every hour. 
+> So the _returning user_ expression will only evaluate to true in that half an hour window after the session expires.
+
 Note that you are not limited to boolean expressions only. For example, let's update the example again to show 
 how many sessions you have had:
 
@@ -196,7 +202,8 @@ interesting questions like:
 
 These are just a few of the many questions you can ask based on anonymous information automatically collected by the SDK.
 
-> Croct does not automatically collect sensitive information that can identify the user, such as GPS coordinates or 
+> 🛡️ We embrace privacy by design
+> We do not automatically collect sensitive information that can identify the user, such as GPS coordinates or 
 > values entered in fields. We have [open-sourced the SDK](https://github.com/croct-tech/sdk-js) as an effort to bring 
 > more transparency about data collection.
 
@@ -430,6 +437,7 @@ Anonymize
 When identifying a user, the personalization engine automatically takes care of unifying sessions and profiles
 in the background without a single extra line of code.
 
+> ⚠️ **Important**  
 > Never use guessable attributes as an identifier, such as email, phone, or incremental IDs. Instead, 
 > we strongly recommend using a cryptographically-secure UUID v4 generator.
 

@@ -55,7 +55,7 @@ These are the currently supported options:
 
 The token scope determines how the SDK synchronize the token across multiple tabs to match your application's behaviour.
 
-> **Notice**  
+> ℹ️️ **Note**  
 > Although the SDK supports multiple identified users in different tabs, such separation does not apply 
 > to anonymous users. For the SDK, there is only one anonymous user per browser, regardless of the scope.
 
@@ -210,8 +210,8 @@ This method evaluates an expression written in CQL.
 
 Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
 
-> **Notice**  
-> Currently, we impose a hard limit of 300 character on the length of expression.  
+> ℹ️️ **Note**  
+> We currently impose a hard limit of 300 characters on the length of expression.
 > We plan to remove this limitation in the near future.
 
 ### Signature

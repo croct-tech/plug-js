@@ -202,7 +202,7 @@ interesting questions like:
 
 These are just a few of the many questions you can ask based on anonymous information automatically collected by the SDK.
 
-> 🛡️ We embrace privacy by design
+> 🛡️ **We embrace privacy by design**  
 > We do not automatically collect sensitive information that can identify the user, such as GPS coordinates or 
 > values entered in fields. We have [open-sourced the SDK](https://github.com/croct-tech/sdk-js) as an effort to bring 
 > more transparency about data collection.

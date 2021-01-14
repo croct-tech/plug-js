@@ -131,14 +131,14 @@ croct.plug({appId: '<APP_ID>'});
 
 ### Script Tag
 
-To install the SDK as a script tag, add the following line to the <head> tag of your site on any pages you plan to use the SDK to personalize or track events:
+To install the SDK as a script tag, add the following line to the `<head>` tag of your site on any pages you plan to use the SDK to personalize or track events:
 
 ```html
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
 <script>croct.plug();</script>
 ```
 
-You should replace the <APP_ID> placeholder with the respective App ID. For more information about the available options, see croct.plug.
+You should replace the `<APP_ID>` placeholder with the respective App ID. For more information about the available options, see [croct.plug](https://github.com/croct-tech/plug-js/pull/docs/plug.md#plug).
 
 ## Documentation
 

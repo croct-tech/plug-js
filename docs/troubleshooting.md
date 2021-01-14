@@ -78,10 +78,10 @@ croct.plug({
     }
 });
 ```
-2.  Open your browser and check if there is an error like “Plugin ‘pluginName’ is not registered” in the console  
+2.  Open your browser and check if there is an error like “Plugin ‘pluginName’ is not registered” in the console
 
-  2.1. If so, go over the previous points to double-check if you didn’t skip any step.
+   1. If so, go over the previous points to double-check if you didn’t skip any step.
 
-  2.2. Otherwise, use one of our [support channels](https://github.com/croct-tech/plug-js#support) to get further assistance. We will be happy to help you.
+   2. Otherwise, use one of our [support channels](https://github.com/croct-tech/plug-js#support) to get further assistance. We will be happy to help you.
 
 

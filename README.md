@@ -138,7 +138,7 @@ To install the SDK as a script tag, add the following line to the `<head>` tag o
 <script>croct.plug();</script>
 ```
 
-You should replace the `<APP_ID>` placeholder with the respective App ID. For more information about the available options, see [croct.plug](docs/plug.md#plug).
+You should replace the `<APP_ID>` placeholder with the respective App ID. For more information about the available options, see `[croct.plug](docs/plug.md#plug)`.
 
 ## Documentation
 

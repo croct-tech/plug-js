@@ -69,7 +69,6 @@ croct.plug({
 If the problem persists, check if the plugin has been found and loaded. To do this, follow the steps below:
 
 1. Enable the debug mode
-
 ```js
 croct.plug({
     debug: true,
@@ -78,7 +77,6 @@ croct.plug({
     }
 });
 ```
-
 2. Open your browser and check if there is an error like "Plugin ‘pluginName’ is not registered" in the console
    1. If so, go over the previous points to double-check if you didn’t skip any step.
    2. Otherwise, use one of our [support channels](https://github.com/croct-tech/plug-js#support) to get further assistance. We will be happy to help you.

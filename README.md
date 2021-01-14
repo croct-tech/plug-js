@@ -121,7 +121,7 @@ In most cases, it should be as simple as running the following in your project:
 npm install @croct/plug
 ```
 
-Then, call `croct.plug` passing the App ID to initialize the SDK:
+Then, call [`croct.plug`](docs/plug.md#plug) passing the App ID to initialize the SDK:
 
 ```js
 import croct from '@croct/plug';

@@ -52,8 +52,8 @@ There are several event types that you can record within the customer journey:
 | [`pageOpened`](#pageopened)                             | Web           | Yes           | Records a page open.
 | [`pageLoaded`](#pageloaded)                             | Web           | Yes           | Records a page load.
 | [`productViewed`](#productviewed)                       | E-commerce    | No            | Records a product view.
-| [`cartViewed`](#cartviewed)                             | E-commerce    | No            | Records a cart view.
-| [`cartModified`](#cartmodified)                         | E-commerce    | No            | Records a cart modify.
+| [`cartViewed`](#cartviewed)                             | E-commerce    | No            | Records a shopping cart view.
+| [`cartModified`](#cartmodified)                         | E-commerce    | No            | Records a shopping cart change.
 | [`checkoutStarted`](#checkoutstarted)                   | E-commerce    | No            | Records a checkout start.
 | [`orderPlaced`](#orderplaced)                           | E-commerce    | No            | Records a placed order.
 | [`goalCompleted`](#goalcompleted)                       | Analytics     | No            | Records a goal completion.
@@ -435,7 +435,7 @@ croct.track('cartViewed', {
 
 This event records the user modified the shopping cart.
 
-You should track this event when a user modifies the shopping cart page or summary.
+You should track this event when a user modifies the shopping cart page, either by adding, removing, or updating items.
 
 #### Properties
 

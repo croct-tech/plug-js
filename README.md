@@ -121,23 +121,24 @@ In most cases, it should be as simple as running the following in your project:
 npm install @croct/plug
 ```
 
+Then, call `croct.plug` passing the App ID to initialize the SDK:
+
+```js
+import croct from '@croct/plug';
+
+croct.plug({appId: '<APP_ID>'});
+```
+
 ### Script Tag
 
-To install the SDK as a script tag, add the following line to the `<head>` tag of your site on any pages you plan 
-to use the SDK to personalize or track events. Next, replace the `<APP_ID>` placeholder with the respective 
-application's public ID.
+To install the SDK as a script tag, add the following line to the <head> tag of your site on any pages you plan to use the SDK to personalize or track events:
 
 ```html
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
+<script>croct.plug();</script>
 ```
 
-### Function call
-
-Finally, to activate Croct you will need to add a single line of code with the plug function:
-
-```js
-croct.plug()
-```
+You should replace the <APP_ID> placeholder with the respective App ID. For more information about the available options, see croct.plug.
 
 ## Documentation
 

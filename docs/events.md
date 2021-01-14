@@ -25,6 +25,7 @@ summary of all events available to help you decide which events can benefit your
 - [E-commerce Events](#e-commerce-events)
   * [productViewed](#productviewed)
   * [cartViewed](#cartviewed)
+  * [cartModified](#cartmodified)
   * [checkoutStarted](#checkoutstarted)
   * [orderPlaced](#orderplaced)
 - [Analytics Events](#analytics-events)
@@ -51,7 +52,8 @@ There are several event types that you can record within the customer journey:
 | [`pageOpened`](#pageopened)                             | Web           | Yes           | Records a page open.
 | [`pageLoaded`](#pageloaded)                             | Web           | Yes           | Records a page load.
 | [`productViewed`](#productviewed)                       | E-commerce    | No            | Records a product view.
-| [`cartViewed`](#cartviewed)                             | E-commerce    | No            | Records a cart view.
+| [`cartViewed`](#cartviewed)                             | E-commerce    | No            | Records a shopping cart view.
+| [`cartModified`](#cartmodified)                         | E-commerce    | No            | Records a shopping cart change.
 | [`checkoutStarted`](#checkoutstarted)                   | E-commerce    | No            | Records a checkout start.
 | [`orderPlaced`](#orderplaced)                           | E-commerce    | No            | Records a placed order.
 | [`goalCompleted`](#goalcompleted)                       | Analytics     | No            | Records a goal completion.
@@ -368,6 +370,148 @@ croct.track('cartViewed', {
 
 ```js
 croct.track('cartViewed', {
+  cart: {
+    currency: 'USD',
+    items: [
+      {
+        index: 0,
+        quantity: 1,
+        total: 699.00,
+        discount: 100.00,
+        coupon: 'PROMO',
+        product: {
+          productId: '12345',
+          sku: 'SM-124-GREEN',
+          name: 'Smartphone 9',
+          category: 'Smartphone',
+          brand: 'Acme',
+          variant: '64GB Green',
+          displayPrice: 699.00,
+          originalPrice: 799.00,
+          url: 'https://www.acme.com/product/smartphone9',
+          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+        }
+      },
+      {
+        index: 1,
+        quantity: 1,
+        total: 39.00,
+        discount: 10.00,
+        coupon: 'PROMO',
+        product: {
+          productId: '98765',
+          sku: '03132db8-2c37-4aef-9827-60d0206683d9',
+          name: 'Silicone Case',
+          category: 'Cases',
+          brand: 'Acme',
+          variant: 'Black',
+          displayPrice: 39.00,
+          originalPrice: 49.00,
+          url: 'https://www.acme.com/product/silicone-case',
+          imageUrl: 'https://www.acme.com/images/silicone-case-black'
+        }
+      }
+    ],
+    taxes: {
+      state: 53.51,
+      local: 23.98
+    },
+    costs: {
+      manufacturing: 275.81,
+      cos: 85.37
+    },
+    subtotal: 848.00,
+    shippingPrice: 59.99,
+    discount: 169.99,
+    total: 815.49,
+    coupon: 'FREE-SHIPPING',
+    lastUpdateTime: 123456789
+  }
+});
+```
+</details>
+
+### cartModified
+
+This event records the user modified the shopping cart.
+
+You should track this event when a user modifies the shopping cart page, either by adding, removing, or updating items.
+
+#### Properties
+
+This event supports the following properties: 
+
+| Property                              | Type     | Required | Constraints                       | Description                                                                                                                                                                                                                                                                                                                                                 
+|---------------------------------------|----------|----------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| `cart`                                | `object` | Yes      |                                   | The cart information.
+| `cart.currency`                       | `string` | Yes      | Between 1 and 10 characters long  | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
+| `cart.items`                          | `array`  | Yes      |                                   | The list of items.
+| `cart.items[*].product`               | `object` | Yes      |                                   | The product details.
+| `cart.items[*].product.productId`     | `string` | Yes      | Between 1 and 50 characters long  | The ID that uniquely identifies the product on your store.
+| `cart.items[*].product.sku`           | `string` | No       | Between 1 and 50 characters long  | The code that uniquely identifies the product variant on your store.
+| `cart.items[*].product.name`          | `string` | Yes      | Between 1 and 200 characters long | The name of the product.
+| `cart.items[*].product.category`      | `string` | No       | Between 1 and 100 characters long | The category of the product.
+| `cart.items[*].product.brand`         | `string` | No       | Between 1 and 100 characters long | The brand associated with the product.
+| `cart.items[*].product.variant`       | `string` | No       | Between 1 and 50 characters long  | The variant of the product, such as size, color and style.
+| `cart.items[*].product.displayPrice`  | `number` | Yes      | Non-negative                      | The price of the product displayed in the store.
+| `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                      | The original price of the product.
+| `cart.items[*].product.url`           | `string` | No       | Well-formed URL                   | The URL of the product page.
+| `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                   | The URL of the main product image.
+| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
+| `cart.items[*].quantity`              | `number` | Yes      | Positive                          | The number of units of the item.
+| `cart.items[*].total`                 | `number` | Yes      | Non-negative                      | The total for the item. It includes discounts and any other adjustment.
+| `cart.items[*].discount`              | `number` | No       | Non-negative                      | The amount of the discount applied to the item.
+| `cart.items[*].coupon`                | `number` | No       | Between 1 and 50 characters long  | The coupon applied to the item.
+| `cart.subtotal`                       | `number` | No       | Non-negative                      | The total of all items and quantities in the shopping cart including applied item promotions. Applied cart discounts, estimated shipping, and applied shipping discounts should be excluded from the subtotal amount.
+| `cart.shippingPrice`                  | `number` | No       | Non-negative                      | The total shipping price for the items in the shopping cart, including any handling charges.
+| `cart.taxes`                          | `object` | No       | Non-empty string keys and values  | The taxes associated with the transaction.
+| `cart.costs`                          | `object` | No       | Non-empty string keys and values  | The costs associated with the transaction, such as manufacturing costs, shipping expenses not borne by the customer, or any other costs.
+| `cart.discount`                       | `number` | No       | Non-negative                      | The amount of the discount applied to the shopping cart.
+| `cart.total`                          | `number` | Yes      | Non-negative                      | The total revenue or grand total associated with the transaction. It includes shipping, tax, and any other adjustment.
+| `cart.coupon`                         | `string` | No       | Between 1 and 50 characters long  | The coupon applied to the shopping cart.
+| `cart.lastUpdateTime`                 | `number` | No       | Non-negative                      | The time when the shopping cart was last updated, in milliseconds since epoch.
+
+**Note:**
+
+- The `sku` and `productId` do not have to be different. Usually, the `productId` is the internal identifier,
+like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+- The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
+- When you don't specify a value for the `lastUpdateTime` property, the SDK considers the time at which you tracked the event as the last update time.
+
+#### Code Sample
+
+Here are some examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```js
+croct.track('cartModified', {
+  cart: {
+    currency: 'USD',
+    total: 776.49,
+    items: [
+      {
+        index: 0,
+        total: 699.00,
+        quantity: 1,
+        product: {
+          productId: '12345',
+          name: 'Smartphone 9',
+          displayPrice: 699.00
+        }
+      }
+    ]
+  }
+});
+```
+</details>
+
+<details>
+    <summary>Complete Example</summary>
+
+```js
+croct.track('cartModified', {
   cart: {
     currency: 'USD',
     items: [

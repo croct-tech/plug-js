@@ -53,7 +53,7 @@ There are several event types that you can record within the customer journey:
 | [`pageLoaded`](#pageloaded)                             | Web           | Yes           | Records a page load.
 | [`productViewed`](#productviewed)                       | E-commerce    | No            | Records a product view.
 | [`cartViewed`](#cartviewed)                             | E-commerce    | No            | Records a cart view.
-| [`cartModified`](#cartmodified                          | E-commerce    | No            | Records a cart modify.
+| [`cartModified`](#cartmodified)                         | E-commerce    | No            | Records a cart modify.
 | [`checkoutStarted`](#checkoutstarted)                   | E-commerce    | No            | Records a checkout start.
 | [`orderPlaced`](#orderplaced)                           | E-commerce    | No            | Records a placed order.
 | [`goalCompleted`](#goalcompleted)                       | Analytics     | No            | Records a goal completion.

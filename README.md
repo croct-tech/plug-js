@@ -131,6 +131,14 @@ application's public ID.
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
 ```
 
+### Function call
+
+Finally, to activate Croct you will need to add a single line of code with the plug function:
+
+```js
+croct.plug()
+```
+
 ## Documentation
 
 The following references provide guidance to help you get started, integrate, and troubleshoot problems:

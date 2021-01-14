@@ -46,28 +46,30 @@ This method creates a patch to apply changes to the user's profile.
 
 These are the currently supported attributes:
 
-| Attribute            | Type     | Constraints                                     | Description
-|----------------------|----------|-------------------------------------------------|-----------------------------------
-| `firstName`          | `String` | Between 1 and 50 characters long                | The first name.
-| `lastName`           | `String` | Between 1 and 50 characters long                | The last name.
-| `birthDate`          | `String` | Valid date in the form `YYYY-MM-DD`             | The birth date.
-| `gender`             | `String` | Either `male`, `female`, `neutral` or `unknown` | The gender.
-| `email`              | `String` | Between 1 and 254 characters long               | The email address.
-| `alternateEmail`     | `String` | Between 1 and 254 characters long               | The alternate email address.
-| `phone`              | `String` | Between 1 and 30 characters long                | The phone number.
-| `alternatePhone`     | `String` | Between 1 and 30 characters long                | The alternate phone number.
-| `address`            | `object` |                                                 | The user address.
-| `address.street`     | `String` | Between 1 and 100 characters long               | The address' street.
-| `address.district`   | `String` | Between 1 and 100 characters long               | The address' district.
-| `address.city`       | `String` | Between 1 and 100 characters long               | The address' city.
-| `address.region`     | `String` | Between 1 and 100 characters long               | The address' region.
-| `address.country`    | `String` | Between 1 and 100 characters long               | The address' country.
-| `address.postalCode` | `String` | Between 1 and 20 characters long                | The address' postal code.
-| `avatar`             | `String` | Well-formed URL                                 | The personal avatar URL.
-| `company`            | `String` | Between 1 and 200 characters long               | The company's name.
-| `companyUrl`         | `String` | Well-formed URL                                 | The company's website URL.
-| `jobTitle`           | `String` | Between 1 and 50 characters long                | The job title.
-| `custom.*`           | `object` | Up to 10 attributes                             | The map of custom attributes.
+| Attribute            | Type     | Constraints                                       | Description
+|----------------------|----------|---------------------------------------------------|-----------------------------------
+| `firstName`          | `String` | Between 1 and 50 characters long                  | The first name.
+| `lastName`           | `String` | Between 1 and 50 characters long                  | The last name.
+| `birthDate`          | `String` | Valid date in the form `YYYY-MM-DD`               | The birth date.
+| `gender`             | `String` | Either `male`, `female`, `neutral` or `unknown`   | The gender.
+| `email`              | `String` | Between 1 and 254 characters long                 | The email address.
+| `alternateEmail`     | `String` | Between 1 and 254 characters long                 | The alternate email address.
+| `phone`              | `String` | Between 1 and 30 characters long                  | The phone number.
+| `alternatePhone`     | `String` | Between 1 and 30 characters long                  | The alternate phone number.
+| `address`            | `object` |                                                   | The user address.
+| `address.street`     | `String` | Between 1 and 100 characters long                 | The address' street.
+| `address.district`   | `String` | Between 1 and 100 characters long                 | The address' district.
+| `address.city`       | `String` | Between 1 and 100 characters long                 | The address' city.
+| `address.region`     | `String` | Between 1 and 100 characters long                 | The address' region.
+| `address.country`    | `String` | Between 1 and 100 characters long                 | The address' country.
+| `address.postalCode` | `String` | Between 1 and 20 characters long                  | The address' postal code.
+| `avatar`             | `String` | Well-formed URL                                   | The personal avatar URL.
+| `company`            | `String` | Between 1 and 200 characters long                 | The company's name.
+| `companyUrl`         | `String` | Well-formed URL                                   | The company's website URL.
+| `jobTitle`           | `String` | Between 1 and 50 characters long                  | The job title.
+| `interests`          | `array`  | Up to 30 strings between 1 and 30 characters long | The user's interests
+| `activities`         | `array`  | Up to 30 strings between 1 and 30 characters long | The user's activities
+| `custom.*`           | `object` | Up to 10 attributes                               | The map of custom attributes.
 
 The following restrictions apply to custom attributes:
 

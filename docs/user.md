@@ -67,8 +67,8 @@ These are the currently supported attributes:
 | `company`            | `String` | Between 1 and 200 characters long                 | The company's name.
 | `companyUrl`         | `String` | Well-formed URL                                   | The company's website URL.
 | `jobTitle`           | `String` | Between 1 and 50 characters long                  | The job title.
-| `interests`          | `array`  | Up to 30 strings between 1 and 30 characters long | The user's interests
-| `activities`         | `array`  | Up to 30 strings between 1 and 30 characters long | The user's activities
+| `interests`          | `array`  | Up to 30 strings between 1 and 30 characters long | The demonstrated interests.
+| `activities`         | `array`  | Up to 30 strings between 1 and 30 characters long | The performed activities.
 | `custom.*`           | `object` | Up to 10 attributes                               | The map of custom attributes.
 
 The following restrictions apply to custom attributes:

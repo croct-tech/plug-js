@@ -49,7 +49,8 @@ the profile after the session has expired.
 
 ## I installed a plugin, but it didn’t work
 
-Forgetting to import the plugin into the same file where we initialized the SDK is the most common cause for a plugin not work. The import is essential for the SDK to discover and load all the plugins you want to use. You also need to enable the plugin explicitly.
+First, make sure you imported and enabled the plugin in the same file where you initialized the SDK – the import is 
+essential for the SDK to discover and load all the plugins you want to use.
 
 The following example shows how to enable the Google Analytics Plugin using the default settings:
 
@@ -66,7 +67,7 @@ croct.plug({
 });
 ```
 
-If the problem persists, check if the plugin has been found and loaded. To do this, follow the steps below:
+If the problem persists, check if the plugin has been found and loaded by going through the following steps:
 
 1. Enable the debug mode
 ```js
@@ -77,8 +78,8 @@ croct.plug({
     }
 });
 ```
-2. Open your browser and check if there is an error like "Plugin 'pluginName' is not registered" in the console
-   1. If so, go over the previous points to double-check if you didn’t skip any step.
+2. Open your browser and check if there is an error like _"Plugin 'pluginName' is not registered"_ in the console
+   1. If so, go over the previous points to double-check if you didn't skip any step.
    2. Otherwise, use one of our [support channels](https://github.com/croct-tech/plug-js#support) to get further assistance. We will be happy to help you.
 
 

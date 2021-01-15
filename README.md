@@ -47,7 +47,7 @@ A single line of code gives you a fully-featured devkit for building natively pe
 ## Getting Started
 
 > 🏖️ **Just for your convenience**  
-> We will be using CodePen for all of the examples in this tutorial because it lets you play with them right in the browser.
+> We will use CodePen throughout the tutorial to let you play with the examples right in your browser.
 
 Follow the steps below to connect the playground with CodePen:
 

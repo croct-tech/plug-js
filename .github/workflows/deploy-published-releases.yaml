@@ -42,6 +42,10 @@ jobs:
           sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
           sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.js
           sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.d.ts
+          sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.js
+          sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.d.ts
+          sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.js
+          sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.d.ts
 
       - name: Publish pre-release to NPM
         if: ${{ github.event.release.prerelease }}

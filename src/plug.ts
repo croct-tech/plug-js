@@ -1,5 +1,5 @@
 import {Logger} from '@croct/sdk/logging';
-import {JsonValue} from '@croct/sdk/json';
+import {JsonObject, JsonValue} from '@croct/sdk/json';
 import SessionFacade from '@croct/sdk/facade/sessionFacade';
 import UserFacade from '@croct/sdk/facade/userFacade';
 import TrackerFacade from '@croct/sdk/facade/trackerFacade';
@@ -18,6 +18,8 @@ import {VERSION} from '@croct/sdk';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
+import {EapFeatures} from './eap';
+import {ContentId, FetchResponse} from './fetch';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -304,6 +306,13 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
+    /**
+     * This API is unstable and subject to change in future releases.
+     */
+    public fetch<P extends JsonObject, I extends ContentId = ContentId>(contentId: I): Promise<FetchResponse<I, P>> {
+        return this.eap('fetch')(contentId);
+    }
+
     public async unplug(): Promise<void> {
         if (this.instance === undefined) {
             return;
@@ -348,5 +357,24 @@ export class GlobalPlug implements Plug {
 
             logger.info('🔌 Croct has been unplugged.');
         }
+    }
+
+    private eap<T extends keyof EapFeatures>(feature: T): NonNullable<EapFeatures[T]> {
+        const eap = window.croctEap;
+        const method = typeof eap === 'object' ? eap[feature] : undefined;
+
+        if (typeof method !== 'function') {
+            throw new Error(
+                `The ${feature} feature is currently available only to accounts participating in our `
+                + 'Early-Access Program (EAP). Please contact your Customer Success Manager or email eap@croct.com '
+                + 'to check your account eligibility.',
+            );
+        }
+
+        const logger = this.sdk.getLogger();
+
+        logger.warn(`The ${feature} API is still unstable and subject to change in future releases.`);
+
+        return method.bind(eap);
     }
 }

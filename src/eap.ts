@@ -1,8 +1,8 @@
-import {JsonObject} from '@croct/sdk/json';
-import {ContentId, FetchResponse} from './fetch';
+import {SlotId, FetchResponse} from './fetch';
+import {NullableJsonObject} from './sdk/json';
 
 export interface EapFeatures {
-    fetch<P extends JsonObject, I extends ContentId = ContentId>(contentId: I): Promise<FetchResponse<I, P>>;
+    fetch<P extends NullableJsonObject, I extends SlotId = SlotId>(slotId: I): Promise<FetchResponse<I, P>>;
 }
 
 declare global {

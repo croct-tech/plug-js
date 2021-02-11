@@ -1,5 +1,4 @@
 import {Logger} from '@croct/sdk/logging';
-import {JsonObject, JsonValue} from '@croct/sdk/json';
 import SessionFacade from '@croct/sdk/facade/sessionFacade';
 import UserFacade from '@croct/sdk/facade/userFacade';
 import TrackerFacade from '@croct/sdk/facade/trackerFacade';
@@ -19,7 +18,8 @@ import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
 import {EapFeatures} from './eap';
-import {ContentId, FetchResponse} from './fetch';
+import {SlotId, FetchResponse} from './fetch';
+import {NullableJsonObject, JsonValue} from './sdk/json';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -309,8 +309,8 @@ export class GlobalPlug implements Plug {
     /**
      * This API is unstable and subject to change in future releases.
      */
-    public fetch<P extends JsonObject, I extends ContentId = ContentId>(contentId: I): Promise<FetchResponse<I, P>> {
-        return this.eap('fetch')(contentId);
+    public fetch<P extends NullableJsonObject, I extends SlotId = SlotId>(slotId: I): Promise<FetchResponse<I, P>> {
+        return this.eap('fetch')(slotId);
     }
 
     public async unplug(): Promise<void> {

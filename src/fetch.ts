@@ -1,12 +1,12 @@
-import {JsonObject} from './sdk/json';
+import {NullableJsonObject} from './sdk/json';
 
-export interface ContentMap {
+export interface SlotMap {
 }
 
-export type ContentId = keyof ContentMap extends never ? string : keyof ContentMap;
+export type SlotId = keyof SlotMap extends never ? string : keyof SlotMap;
 
-export type ContentPayload<I extends ContentId> = I extends keyof ContentMap ? ContentMap[I] : JsonObject;
+export type SlotContent<I extends SlotId> = I extends keyof SlotMap ? SlotMap[I] : NullableJsonObject;
 
-export type FetchResponse<I extends ContentId, P extends JsonObject = JsonObject> = {
-    payload: ContentPayload<I> & P,
+export type FetchResponse<I extends SlotId, P extends NullableJsonObject = NullableJsonObject> = {
+    payload: SlotContent<I> & P,
 };

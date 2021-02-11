@@ -360,6 +360,8 @@ export class GlobalPlug implements Plug {
     }
 
     private eap<T extends keyof EapFeatures>(feature: T): NonNullable<EapFeatures[T]> {
+        const logger = this.sdk.getLogger();
+
         const eap = window.croctEap;
         const method = typeof eap === 'object' ? eap[feature] : undefined;
 
@@ -370,8 +372,6 @@ export class GlobalPlug implements Plug {
                 + 'to check your account eligibility.',
             );
         }
-
-        const logger = this.sdk.getLogger();
 
         logger.warn(`The ${feature} API is still unstable and subject to change in future releases.`);
 

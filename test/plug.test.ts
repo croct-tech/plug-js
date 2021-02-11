@@ -806,4 +806,55 @@ describe('The Croct plug', () => {
 
         expect(close).toHaveBeenCalled();
     });
+
+    test('should fail to fetch a content if unplugged', () => {
+        expect(() => croct.fetch('foo')).toThrow('Croct is not plugged in.');
+    });
+
+    test('should log a warning message when using an EAP feature', () => {
+        croct.plug({appId: APP_ID});
+
+        expect(() => croct.fetch('foo')).toThrow(
+            'The fetch feature is currently available only to accounts participating '
+            + 'in our Early-Access Program (EAP).',
+        );
+    });
+
+    test('should fail to fetch a content if the fetch method is undefined', () => {
+        window.croctEap = {
+            fetch: undefined,
+        };
+
+        croct.plug({appId: APP_ID});
+
+        expect(() => croct.fetch('foo')).toThrow(
+            'The fetch feature is currently available only to accounts participating '
+            + 'in our Early-Access Program (EAP).',
+        );
+    });
+
+    test('should log a warning message when an EAP feature is called', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        window.croctEap = {
+            fetch: jest.fn(),
+        };
+
+        croct.fetch('foo');
+
+        expect(window.croctEap.fetch).toHaveBeenCalledWith('foo');
+        expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
+            'The fetch API is still unstable and subject to change in future releases.',
+        ));
+    });
 });

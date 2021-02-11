@@ -811,7 +811,7 @@ describe('The Croct plug', () => {
         expect(() => croct.fetch('foo')).toThrow('Croct is not plugged in.');
     });
 
-    test('should log a warning message when using an EAP feature', () => {
+    test('should log a warning message when using EAP features', () => {
         croct.plug({appId: APP_ID});
 
         expect(() => croct.fetch('foo')).toThrow(
@@ -833,7 +833,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    test('should log a warning message when an EAP feature is called', () => {
+    test('should delegate the fetch call to the external EAP method', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -846,13 +846,16 @@ describe('The Croct plug', () => {
             logger: logger,
         });
 
+        const response = Promise.resolve({payload: {title: 'Hello'}});
+
         window.croctEap = {
-            fetch: jest.fn(),
+            fetch: jest.fn().mockReturnValue(response),
         };
 
-        croct.fetch('foo');
+        const actualResponse = croct.fetch('foo');
 
         expect(window.croctEap.fetch).toHaveBeenCalledWith('foo');
+        expect(actualResponse).toBe(response);
         expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
             'The fetch API is still unstable and subject to change in future releases.',
         ));

@@ -29,7 +29,7 @@ export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
     plugins?: PluginConfigurations,
 };
 
-export interface Plug extends Required<EapFeatures> {
+export interface Plug extends EapFeatures {
     readonly tracker: TrackerFacade;
     readonly user: UserFacade;
     readonly session: SessionFacade;
@@ -359,7 +359,7 @@ export class GlobalPlug implements Plug {
         }
     }
 
-    private eap<T extends keyof EapFeatures>(feature: T): NonNullable<EapFeatures[T]> {
+    private eap<T extends keyof EapFeatures>(feature: T): EapFeatures[T] {
         const logger = this.sdk.getLogger();
         const eap = window.croctEap;
         const method = typeof eap === 'object' ? eap[feature] : undefined;

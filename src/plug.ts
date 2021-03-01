@@ -278,6 +278,10 @@ export class GlobalPlug implements Plug {
     }
 
     public identify(userId: string): void {
+        if (typeof userId !== 'string') {
+            throw new Error('The user ID must be a string. Read more on https://croct.help/plug-js/id-conversion');
+        }
+
         this.sdk.identify(userId);
     }
 

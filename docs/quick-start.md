@@ -439,7 +439,7 @@ in the background without a single extra line of code.
 
 > ⚠️ **Important**  
 > Never use guessable attributes as an identifier, such as email, phone, or incremental IDs. Instead, 
-> we strongly recommend using a cryptographically-secure UUID v4 generator.
+> we strongly recommend using a cryptographically-secure UUIDs.
 
 ## Next steps
 

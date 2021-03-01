@@ -6,7 +6,8 @@ Sometimes things go wrong. Here is a list of resolutions to some of the problems
 
 - [I'm not able to connect my application to the playground](#im-not-able-to-connect-my-application-to-the-playground)
 - [Some user attributes remain null even after applying a patch](#some-user-attributes-remain-null-after-applying-a-patch)
-- [I installed a plugin, but it didn’t work](#i-installed-a-plugin-but-it-didnt-work)
+- [I installed a plugin, but it didn't work](#i-installed-a-plugin-but-it-didnt-work)
+- [How to handle numeric user identifiers](#how-to-handle-numeric-user-identifiers)
 
 ## I'm not able to connect my application to the playground
 
@@ -31,7 +32,7 @@ If you are applying a patch and the attributes are still null, you may be experi
 
 ### Invalid Patch
 
-If any operations included in your patch fail, the whole patch fails, and you will not see the changes you are expecting.
+If any operations included in your patch fail, the whole patch fails, and you'll not see the changes you are expecting.
 
 Check out the User API and Session API documentation to ensure your patch conforms with the respective attributes' constraints.
 
@@ -80,6 +81,34 @@ croct.plug({
 ```
 2. Open your browser and check if there is an error like _"Plugin 'pluginName' is not registered"_ in the console
    1. If so, go over the previous points to double-check if you didn't skip any step.
-   2. Otherwise, use one of our [support channels](https://github.com/croct-tech/plug-js#support) to get further assistance. We will be happy to help you.
+   2. Otherwise, use one of our [support channels](https://github.com/croct-tech/plug-js#support) to get further assistance. We'll be happy to help you.
 
+## How to handle numeric user identifiers
 
+If your application uses a numeric data type to identify users, you'll need to convert it to a string before calling 
+methods that identify the user, such as [`croct.identify`](plug.md#identify). Otherwise, you'll receive the error 
+_"The user ID must be a string"_.
+
+> ⚠️ **Important**  
+> Never use guessable values as an identifier, such as email, phone, or incremental IDs. Instead,
+> we strongly recommend using a cryptographically-secure UUIDs or signed tokens.
+> For the latter, please contact your customer success manager for more information.
+
+For random numeric IDs, our recommendation is to convert the number to a string on the server-side, taking the 
+necessary precautions to ensure that the number will be represented as an integer (digits only) and not as a decimal or 
+in scientific notation.
+
+If the recommended solution isn't practical for your application, you can alternatively convert the number to string 
+on the client-side as the following example shows:
+
+```js
+function convertId(id) {
+    if (!Number.isSafeInteger(id)) {
+        throw new Error(`The ID "${id}" cannot be safely converted to a string.`)
+    }
+
+    return id.toFixed(0);
+}
+
+croct.identify(convertId(randomUserId))
+```

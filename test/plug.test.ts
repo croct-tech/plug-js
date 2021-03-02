@@ -484,6 +484,20 @@ describe('The Croct plug', () => {
         expect(() => croct.getUserId()).toThrow('Croct is not plugged in.');
     });
 
+    test('should reject non-string user IDs', () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(config);
+
+        expect(() => croct.identify(1235 as unknown as string)).toThrow('The user ID must be a string.');
+    });
+
     test('should allow to identify the user', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
 

@@ -261,7 +261,7 @@ croct.fetch(id: string): Promise<JsonObject>
 A slot represents a personalizable element of the interface. Each slot has a predefined structure whose content may vary 
 according to a personalization strategy. 
 
-The return is [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
 resolves to the slot content in the format as follows:
 
 ```ts

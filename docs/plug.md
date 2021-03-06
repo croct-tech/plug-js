@@ -13,6 +13,7 @@ This reference documents all methods and properties available in the Plug API an
 - [getUserId](#getuserid)
 - [isAnonymous](#isanonymous)
 - [evaluate](#evaluate)
+- [fetch](#fetch)
 - [track](#track)
 - [user](#user)
 - [session](#session)
@@ -239,6 +240,100 @@ Here's a minimal example showing how evaluate an expression:
 ```js
 croct.evaluate('session is starting').then(console.log);
 ```
+
+## fetch
+
+This method fetches the content for a slot.
+
+> ⚠️️️ **Note**  
+> This API is unstable and subject to change in future releases. It is currently available only to accounts 
+> participating in our Early-Access Program (EAP). Please contact your Customer Success Manager or email eap@croct.com 
+> to check your account eligibility.
+
+### Signature
+
+The `fetch` method has the following signature:
+
+```ts
+croct.fetch(id: string): Promise<JsonObject>
+```
+
+A slot represents a personalizable element of the interface. Each slot has a predefined structure whose content may vary 
+according to a personalization strategy. 
+
+The return is [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+resolves to the slot content in the format as follows:
+
+```ts
+{
+    payload: {[key: string]: JsonValue},
+}
+```
+
+### Code Sample
+
+The following example assumes that a slot with ID `home-banner` and the following schema exists:
+
+```ts
+type HomeBanner = {
+    title: string,
+    subtitle: string,
+    image: string,
+    cta: {
+        text: string,
+        href: string,
+    }
+}
+```
+
+Here's a minimal example showing how to fetch the content for the slot `home-banner`:
+
+```js
+croct.fetch('home-banner').then(console.log);
+```
+
+In this example, you should see the following output:
+
+```json
+{
+    "payload": {
+        "title": "Unlock the Power of Personalization",
+        "subtitle": "Dive into the world of one-to-one engagement.",
+        "image": "https://croct.com/signup.png",
+        "cta": {
+            "text": "Try Croct now",
+            "href": "/signup"
+        }
+    }
+}
+```
+
+#### 💡 ProTip
+
+You can specify the type of slot content in the method call to strongly type the promise's result:
+
+```ts
+croct.fetch<HomeBanner>('home-hero').then(console.log);
+```
+
+You can also declare the type of all available slots in a declaration file using module augmentation for an even more 
+robust solution:
+
+```ts
+// slots.d.ts
+import {JsonObject} from '@croct/plug/sdk/json';
+
+declare module '@croct/plug/fetch' {
+    interface SlotMap extends Record<string, JsonObject> {
+        'home-banner': HomeBanner;
+    }
+}
+```
+
+If you use an IDE with Typescript code completion support, you will get autocomplete suggestions for 
+slot IDs and content properties as a bonus:
+
+![Autocomplete](https://user-images.githubusercontent.com/943036/110214204-54e3de00-7e82-11eb-82d1-f25264c3865b.gif)
 
 ## track
 

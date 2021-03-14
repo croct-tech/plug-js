@@ -35,8 +35,6 @@
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
 A single line of code gives you a fully-featured devkit for building natively personalized applications.
 
-### Features
-
 - **Zero configuration.** No setup steps required.
 - **No backend necessary.** Deliver personalized experiences from static sites.
 - **Fast queries.** Double-digit millisecond latency for real-time evaluations.
@@ -84,13 +82,13 @@ and select _"Open in CodePen"_. Then, copy the code below and paste into the HTM
 <script>  
   function welcome() {
     if (confirm('Welcome! Do you want to take a look at our quick start guide?')) {
-      window.open('https://github.com/croct-tech/plug-js/blob/docs-restructuring/docs/quick-start.md');
+      window.open('https://croct.link/plug-js/quick-start');
     }
   }
   
   function welcomeBack() {
     if (confirm('Welcome back! How about joining us on Slack this time?')) {
-      window.open('https://launchpass.com/croct-community');
+      window.open('https://croct.link/community');
     }
   }
   
@@ -180,7 +178,7 @@ If you are unable to find an open issue addressing the problem, then feel free t
 ### Slack Channel
 
 Many people from the Croct community hang out on the Croct Slack Group. 
-Feel free to [join us and start a conversation](https://launchpass.com/croct-community).
+Feel free to [join us and start a conversation](https://croct.link/community).
 
 ## Contributing
 

@@ -26,6 +26,13 @@ The playground uses a query-string parameter to initiate the connection to an ap
 `__cplay` parameter is present in the URL of the application opened from the playground. If not, your server may be 
 redirecting the request, which prevents establishing a connection with your application.
 
+### CORS Issues
+If you are receiving this error, it might be a CORS issue:
+
+`failed: HTTP Authentication failed; no valid credentials available`
+
+Our CORS policy will block any origin by default. In order to allow PlugJS to connect using App ID, it's necessary to inform the access URLs for the Croct team and we will include them in our access base.
+
 ## Some user attributes remain null after applying a patch
 
 If you are applying a patch and the attributes are still null, you may be experiencing one of the following problems:

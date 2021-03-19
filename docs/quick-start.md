@@ -332,7 +332,7 @@ Back on CodePen, update the code with the next example:
 
 <script>  
   function showOffers() {
-    croct.evaluate("cart is not empty and (no item in cart satisfies item's name matches 'Combo')")
+    croct.evaluate("cart is not empty and no item in cart satisfies item's name matches 'Combo'")
       .then(eligible => {
         if (!eligible) {
           alert('No eligible offers.');

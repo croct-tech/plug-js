@@ -33,7 +33,7 @@
     "bundle": "rollup -c rollup.config.js"
   },
   "dependencies": {
-    "@croct/sdk": "^0.5",
+    "@croct/sdk": "^0.5.1",
     "tslib": "^2.0.3"
   },
   "devDependencies": {

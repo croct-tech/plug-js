@@ -18,18 +18,6 @@
     <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Getting Started](#getting-started)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Support](#support)
-- [Contributing](#contributing)
-- [Testing](#testing)
-- [License](#license)    
-
 ## Overview
 
 Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
@@ -41,6 +29,40 @@ A single line of code gives you a fully-featured devkit for building natively pe
 - **Fully extensible API.** Easily add and share new features via plugins.
 - **Type-Safe.** Typescript typings included.
 - **Playground integration** One-click to connect, no configuration needed.
+
+## Installation
+
+There are two ways to install the Croct SDK: 
+
+### NPM
+
+The recommended way to install the SDK is via [NPM](https://npmjs.com). It pairs nicely with module bundlers such as 
+Webpack or Browserify and includes Typescript typings.
+
+In most cases, it should be as simple as running the following in your project:
+
+```sh
+npm install @croct/plug
+```
+
+Then, call [`croct.plug`](docs/plug.md#plug) passing the App ID to initialize the SDK:
+
+```js
+import croct from '@croct/plug';
+
+croct.plug({appId: '<APP_ID>'});
+```
+
+### Script Tag
+
+To install the SDK as a script tag, add the following line to the `<head>` tag of your site on any pages you plan to use the SDK to personalize or track events:
+
+```html
+<script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
+<script>croct.plug();</script>
+```
+
+You should replace the `<APP_ID>` placeholder with the respective App ID. For more information about the available options, see [`croct.plug`](docs/plug.md#plug).
 
 ## Getting Started
 
@@ -103,40 +125,6 @@ Try clicking _"👋 Say Hey"_, and you should see a personalized greeting.
 
 🎉 **Congratulations!** You have successfully implemented your first personalization feature using Croct. For a more 
 in-depth walk-through, check out our [quick start guide](docs/quick-start.md). 
-
-## Installation
-
-There are two ways to install the Croct SDK: 
-
-### NPM
-
-The recommended way to install the SDK is via [NPM](https://npmjs.com). It pairs nicely with module bundlers such as 
-Webpack or Browserify and includes Typescript typings.
-
-In most cases, it should be as simple as running the following in your project:
-
-```sh
-npm install @croct/plug
-```
-
-Then, call [`croct.plug`](docs/plug.md#plug) passing the App ID to initialize the SDK:
-
-```js
-import croct from '@croct/plug';
-
-croct.plug({appId: '<APP_ID>'});
-```
-
-### Script Tag
-
-To install the SDK as a script tag, add the following line to the `<head>` tag of your site on any pages you plan to use the SDK to personalize or track events:
-
-```html
-<script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
-<script>croct.plug();</script>
-```
-
-You should replace the `<APP_ID>` placeholder with the respective App ID. For more information about the available options, see [`croct.plug`](docs/plug.md#plug).
 
 ## Documentation
 

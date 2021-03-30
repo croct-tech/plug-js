@@ -230,6 +230,12 @@ export class GlobalPlug implements Plug {
             );
         }
 
+        const initializeEap = window.croctEap?.initialize;
+
+        if (typeof initializeEap === 'function') {
+            initializeEap.call(this);
+        }
+
         Promise.all(pending).then(() => {
             this.initialize();
 
@@ -314,7 +320,7 @@ export class GlobalPlug implements Plug {
      * This API is unstable and subject to change in future releases.
      */
     public fetch<P extends NullableJsonObject, I extends SlotId = SlotId>(slotId: I): Promise<FetchResponse<I, P>> {
-        return this.eap('fetch')(slotId);
+        return this.eap('fetch').call(this, slotId);
     }
 
     public async unplug(): Promise<void> {
@@ -366,7 +372,7 @@ export class GlobalPlug implements Plug {
     private eap<T extends keyof EapFeatures>(feature: T): EapFeatures[T] {
         const logger = this.sdk.getLogger();
         const eap = window.croctEap;
-        const method = typeof eap === 'object' ? eap[feature] : undefined;
+        const method: EapFeatures[T] | undefined = typeof eap === 'object' ? eap[feature] : undefined;
 
         if (typeof method !== 'function') {
             throw new Error(
@@ -378,6 +384,6 @@ export class GlobalPlug implements Plug {
 
         logger.warn(`The ${feature} API is still unstable and subject to change in future releases.`);
 
-        return method.bind(eap);
+        return method;
     }
 }

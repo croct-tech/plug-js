@@ -4,6 +4,7 @@ import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
+import {Plug} from '../build';
 
 jest.mock('../src/constants', () => {
     return {
@@ -117,6 +118,18 @@ describe('The Croct plug', () => {
         croct.plug(config);
 
         expect(initialize).toBeCalledWith(config);
+    });
+
+    test('should call the EAP initialization hook', () => {
+        window.croctEap = {
+            initialize: jest.fn().mockImplementation(function initialize(this: Plug) {
+                expect(this).toBe(croct);
+            }),
+        };
+
+        croct.plug({appId: APP_ID});
+
+        expect(window.croctEap.initialize).toBeCalled();
     });
 
     test('should log failures initializing plugins', () => {
@@ -856,7 +869,11 @@ describe('The Croct plug', () => {
         const response = Promise.resolve({payload: {title: 'Hello'}});
 
         window.croctEap = {
-            fetch: jest.fn().mockReturnValue(response),
+            fetch: jest.fn().mockImplementation(function fetch(this: Plug) {
+                expect(this).toBe(croct);
+
+                return response;
+            }),
         };
 
         const actualResponse = croct.fetch('foo');

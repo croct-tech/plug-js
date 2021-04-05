@@ -38,22 +38,20 @@ croct.plug(configuration?: Configuration): void
  
 These are the currently supported options:
 
-| Option                | Required       | Default Value         | Description
-|-----------------------|----------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `appId`                 | depends      | none                  | The ID of the application you set up on Croct. This option is required unless you have loaded the SDK using a HTML snippet that already specifies the application ID.
-| `debug`                 | no           | false                 | If `true`, turns on debug mode, which logs helpful messages to the console.
-| `track`                 | no           | true                  | If `true`, enables the automatic event tracking on initialization.
-| `token`                 | no           | none                  | The JWT token issued by Croct. If `null`, clears any token specified on previous calls.
-| `userId`                | no           | none                  | The ID of the user logged into the application. Internally, the SDK will issue a token using the specified ID as the subject claim of the token. The `token` and `userId` options are mutually exclusive.
-| `tokenScope`            | no           | global                | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes) for more details.
-| `eventMetadata`         | no           | none                  | Any additional information that may be useful to include as part of the event metadata. A common use case is to record the version of the application for future reference.
-| `logger`                | no           | none                  | A custom logger to handle log messages. By default, all logs are suppressed.
-| `urlSanitizer`          | no           | none                  | A function to sanitize URLs that allows removing sensitive information from URLs, such as tokens, that should not be sent to the platform.
-| `trackerEndpointUrl`    | no           | none                  | The URL of the tracker service, used by Croct's development team for testing purposes.
-| `evaluationEndpointUrl` | no           | none                  | The URL of the evaluation service, used by Croct's development team for testing purposes.
-| `bootstrapEndpointUrl`  | no           | none                  | The URL of the bootstrap service, used by Croct's development team for testing purposes.
-
-### Token scopes
+| Option                  | Type         | Required | Default Value | Description                                                                                                                                                                                               |
+|-------------------------|--------------|----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `appId`                 | string       | Depends  | None          | The ID of the application you set up on Croct. This option is required unless you have loaded the SDK using a HTML snippet that already specifies the application ID.                                     |
+| `debug`                 | boolean      | No       | `false`       | If `true`, turns on debug mode, which logs helpful messages to the console.                                                                                                                               |
+| `track`                 | boolean      | No       | `true`        | If `true`, enables the automatic event tracking on initialization.                                                                                                                                        |
+| `token`                 | string\|null | No       | None          | The JWT token issued by Croct. If `null`, clears any token specified on previous calls.                                                                                                                   |
+| `userId`                | string       | No       | None          | The ID of the user logged into the application. Internally, the SDK will issue a token using the specified ID as the subject claim of the token. The `token` and `userId` options are mutually exclusive. |
+| `tokenScope`            | string       | No       | `global`      | Defines how the SDK should synchronize the token across multiple tabs, see [token scopes](#token-scopes) for more details.                                                                                |
+| `eventMetadata`         | JSON         | No       | None          | Any additional information that may be useful to include as part of the event metadata. A common use case is to record the version of the application for future reference.                               |
+| `logger`                | object       | No       | None          | A custom logger to handle log messages. By default, all logs are suppressed.                                                                                                                              |
+| `urlSanitizer`          | function     | No       | None          | A function to sanitize URLs that allows removing sensitive information from URLs, such as tokens, that should not be sent to the platform.                                                                |
+| `trackerEndpointUrl`    | string       | No       | None          | The URL of the tracker service, used by Croct's development team for testing purposes.                                                                                                                    |
+| `evaluationEndpointUrl` | string       | No       | None          | The URL of the evaluation service, used by Croct's development team for testing purposes.                                                                                                                 |
+| `bootstrapEndpointUrl`  | string       | No       | None          | The URL of the bootstrap service, used by Croct's development team for testing purposes.                                                                                                                  |
 
 The token scope determines how the SDK synchronize the token across multiple tabs to match your application's behaviour.
 

@@ -53,6 +53,8 @@ These are the currently supported options:
 | `evaluationEndpointUrl` | string       | No       | None          | The URL of the evaluation service, used by Croct's development team for testing purposes.                                                                                                                 |
 | `bootstrapEndpointUrl`  | string       | No       | None          | The URL of the bootstrap service, used by Croct's development team for testing purposes.                                                                                                                  |
 
+### Token scopes
+
 The token scope determines how the SDK synchronize the token across multiple tabs to match your application's behaviour.
 
 > ℹ️️ **Note**  

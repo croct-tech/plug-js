@@ -1,5 +1,5 @@
 import {formatCause} from '@croct/sdk/error';
-import CidAssigner from '@croct/sdk/cid';
+import {CidAssigner} from '@croct/sdk/cid';
 import {ContextFactory, TabContextFactory} from '@croct/sdk/facade/evaluatorFacade';
 import {Campaign, EvaluationContext, Page} from '@croct/sdk/evaluator';
 import {Plugin, PluginFactory} from './plugin';
@@ -76,7 +76,7 @@ export class PlaygroundPlugin implements Plugin {
 
     private readonly logger: Logger;
 
-    private syncListener: {(): void};
+    private syncListener?: {(): void};
 
     public constructor(configuration: Configuration) {
         this.sdkVersion = configuration.sdkVersion;
@@ -147,7 +147,7 @@ export class PlaygroundPlugin implements Plugin {
     }
 
     public disable(): Promise<void> | void {
-        if (this.syncListener !== null) {
+        if (this.syncListener !== undefined) {
             this.eventSubscriber.removeListener('tokenChanged', this.syncListener);
             this.tab.removeListener('urlChange', this.syncListener);
 

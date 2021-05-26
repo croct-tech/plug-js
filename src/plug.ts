@@ -1,13 +1,13 @@
 import {Logger} from '@croct/sdk/logging';
-import SessionFacade from '@croct/sdk/facade/sessionFacade';
-import UserFacade from '@croct/sdk/facade/userFacade';
-import TrackerFacade from '@croct/sdk/facade/trackerFacade';
-import EvaluatorFacade, {EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
-import Sdk, {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import {SessionFacade} from '@croct/sdk/facade/sessionFacade';
+import {UserFacade} from '@croct/sdk/facade/userFacade';
+import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
+import {EvaluatorFacade, EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
+import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
 import {Optional} from '@croct/sdk/utilityTypes';
-import Token from '@croct/sdk/token';
+import {Token} from '@croct/sdk/token';
 import {
     ExternalTrackingEvent as ExternalEvent,
     ExternalTrackingEventPayload as ExternalEventPayload,
@@ -72,7 +72,7 @@ function detectAppId(): string | null {
 export class GlobalPlug implements Plug {
     private pluginFactories: {[key: string]: PluginFactory} = {playground: playgroundPluginFactory};
 
-    private instance?: Sdk;
+    private instance?: SdkFacade;
 
     private plugins: {[key: string]: Plugin} = {};
 
@@ -125,7 +125,7 @@ export class GlobalPlug implements Plug {
 
         const {plugins, ...sdkConfiguration} = configuration;
 
-        const sdk = Sdk.init({
+        const sdk = SdkFacade.init({
             ...sdkConfiguration,
             appId: appId,
         });
@@ -251,7 +251,7 @@ export class GlobalPlug implements Plug {
         return this.tracker.flushed.then(() => this);
     }
 
-    private get sdk(): Sdk {
+    private get sdk(): SdkFacade {
         if (this.instance === undefined) {
             throw new Error('Croct is not plugged in.');
         }

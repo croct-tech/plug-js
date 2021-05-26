@@ -1,5 +1,5 @@
 import {EvaluationContext} from '@croct/sdk/evaluator';
-import Token from '@croct/sdk/token';
+import {Token} from '@croct/sdk/token';
 import {PlaygroundPlugin, Configuration, factory} from '../src/playground';
 import {Tab} from '../src/sdk';
 import {PLAYGROUND_ORIGIN} from '../src/constants';

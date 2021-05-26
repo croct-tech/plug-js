@@ -1,2 +1,2 @@
-export {default as Evaluator, EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
+export {EvaluatorFacade, EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
 export {EvaluationError, EvaluationErrorType, ExpressionError} from '@croct/sdk/evaluator';

@@ -1,7 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import typescript from 'rollup-plugin-typescript2';
-import tempDir from 'temp-dir';
+import typescript from '@rollup/plugin-typescript';
 import {terser} from 'rollup-plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
 
@@ -33,10 +32,9 @@ export default args => {
             plugins: [
                 resolve(),
                 commonjs(),
-                typescript({
-                    cacheRoot: `${tempDir}/.rpt2_cache`,
-                }),
+                typescript({module: 'esnext'}),
                 replace({
+                    preventAssignment: true,
                     delimiters: ['<@', '@>'],
                     cdnUrl: args['config-cdn-url'],
                     playgroundOrigin: args['config-playground-origin'],

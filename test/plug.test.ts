@@ -1,10 +1,9 @@
 import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
-import {GlobalPlug} from '../src/plug';
+import {GlobalPlug, Plug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
-import {Plug} from '../build';
 
 jest.mock('../src/constants', () => {
     return {
@@ -333,6 +332,20 @@ describe('The Croct plug', () => {
 
         expect(initialize).toBeCalledWith(config);
         expect(initialize).toBeCalledTimes(1);
+    });
+
+    test('should determine whether it is initialized', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+
+        expect(croct.initialized).toBe(false);
+
+        croct.plug(config);
+
+        expect(croct.initialized).toBe(true);
+
+        await croct.unplug();
+
+        expect(croct.initialized).toBe(false);
     });
 
     test('should provide a callback that is called when the plug is plugged in', async () => {

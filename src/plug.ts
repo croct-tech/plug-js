@@ -33,6 +33,7 @@ export interface Plug extends EapFeatures {
     readonly tracker: TrackerFacade;
     readonly user: UserFacade;
     readonly session: SessionFacade;
+    readonly initialized: boolean;
     readonly flushed: Promise<this>;
     readonly plugged: Promise<this>;
 
@@ -78,10 +79,10 @@ export class GlobalPlug implements Plug {
 
     private initialize: {(): void};
 
-    private initialized: Promise<void>;
+    private ready: Promise<void>;
 
     public constructor() {
-        this.initialized = new Promise(resolve => {
+        this.ready = new Promise(resolve => {
             this.initialize = resolve;
         });
     }
@@ -243,8 +244,12 @@ export class GlobalPlug implements Plug {
         });
     }
 
+    public get initialized(): boolean {
+        return this.instance !== undefined;
+    }
+
     public get plugged(): Promise<this> {
-        return this.initialized.then(() => this);
+        return this.ready.then(() => this);
     }
 
     public get flushed(): Promise<this> {
@@ -361,7 +366,7 @@ export class GlobalPlug implements Plug {
             delete this.instance;
 
             this.plugins = {};
-            this.initialized = new Promise(resolve => {
+            this.ready = new Promise(resolve => {
                 this.initialize = resolve;
             });
 

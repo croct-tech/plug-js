@@ -333,10 +333,12 @@ export class GlobalPlug implements Plug {
             return;
         }
 
+        const {instance, plugins} = this;
+
         const logger = this.sdk.getLogger();
         const pending: Promise<void>[] = [];
 
-        for (const [pluginName, controller] of Object.entries(this.plugins)) {
+        for (const [pluginName, controller] of Object.entries(plugins)) {
             if (typeof controller.disable !== 'function') {
                 continue;
             }
@@ -358,18 +360,19 @@ export class GlobalPlug implements Plug {
             );
         }
 
+        // Reset
+        delete this.instance;
+
+        this.plugins = {};
+        this.ready = new Promise(resolve => {
+            this.initialize = resolve;
+        });
+
         await Promise.all(pending);
 
         try {
-            await this.instance.close();
+            await instance.close();
         } finally {
-            delete this.instance;
-
-            this.plugins = {};
-            this.ready = new Promise(resolve => {
-                this.initialize = resolve;
-            });
-
             logger.info('🔌 Croct has been unplugged.');
         }
     }

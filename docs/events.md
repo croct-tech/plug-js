@@ -30,8 +30,9 @@ summary of all events available to help you decide which events can benefit your
   * [orderPlaced](#orderplaced)
 - [Analytics Events](#analytics-events)
   * [goalCompleted](#goalcompleted)
-  * [testGroupAssigned](#testgroupassigned)
 - [Miscellaneous Events](#miscellaneous-events)
+  * [interestShown](#interestShown)
+  * [postViewed](#postViewed)
   * [sessionAttributesChanged](#sessionattributeschanged)
   * [nothingChanged](#nothingchanged)
   * [eventOccurred](#eventoccurred)
@@ -57,7 +58,8 @@ There are several event types that you can record within the customer journey:
 | [`checkoutStarted`](#checkoutstarted)                   | E-commerce    | No            | Records a checkout start.
 | [`orderPlaced`](#orderplaced)                           | E-commerce    | No            | Records a placed order.
 | [`goalCompleted`](#goalcompleted)                       | Analytics     | No            | Records a goal completion.
-| [`testGroupAssigned`](#testgroupassigned)               | Analytics     | No            | Records a test group assignment.
+| [`interestShown`](#interestShown)                       | Miscellaneous | No            | Records a user has shown interest in something.
+| [`postViewed`](#postViewed)                             | Miscellaneous | No            | Records a post view.
 | [`sessionAttributesChanged`](#sessionattributeschanged) | Miscellaneous | Yes           | Records session's attributes changes.
 | [`nothingChanged`](#nothingchanged)                     | Miscellaneous | Yes           | Records a period of inactivity.
 | [`eventOccurred`](#eventOccurred)                       | Miscellaneous | No            | Records a custom event.
@@ -913,51 +915,96 @@ croct.track('goalCompleted', {
 ```
 </details>
 
-### testGroupAssigned
+## Miscellaneous Events
 
-This event records the test group assigned to a user.
+The miscellaneous category has the following events:
 
-You should track this event once, at the start of an experiment, such as an A/B or multivariate test.
+### interestShown
 
+This event records that a user has shown interest in something.
+
+You should track this event when a user sees some content or perform some action that represents interest.
 
 #### Properties
 
 This event supports the following properties:
 
-| Property    | Type     | Required | Constraints                      | Description
-|-------------|----------|----------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| `testId`    | `string` | Yes      | Between 1 and 50 characters long | The ID of the experiment.
-| `groupId`   | `string` | Yes      | Between 1 and 50 characters long | The ID of the group assigned to the user. For A/B tests, it is commonly the test variant, like `green-button`. For multivariate tests, we recommend joining the variants using the vertical bar character, for example, `crocodile-image\|button-green`. 
+| Property    | Type    | Required | Constraints                                       | Description
+|-------------|---------|----------|---------------------------------------------------|-------------------------------------
+| `interests` | `array` | Yes      | Up to 10 strings between 1 and 50 characters long | The list of demonstrated interests.
 
 #### Code Sample
 
 Here are a few examples of how to track this event:
 
 <details>
-    <summary>A/B Test Example</summary>
+    <summary>Example</summary>
 
 ```js
-croct.track('testGroupAssigned', {
-    testId: 'home-banner-test',
-    groupId: 'green-button',
+croct.track('interestShown', {
+    interests: ['music', 'movies'],
+});
+```
+</details>
+
+### postViewed
+
+This event records that a user has viewed a post.
+
+You should track this event when a user sees some post.
+
+#### Properties
+
+This event supports the following properties:
+
+| Property           | Type     | Required | Constraints                                       | Description
+|--------------------|----------|----------|---------------------------------------------------|-----------------------------------------------------------------------
+| `post`             | `object` | Yes      |                                                   | The post details.
+| `post.postId`      | `string` | Yes      | Between 1 and 100 characters long                 | The ID that uniquely identifies the post across the website.
+| `post.url`         | `string` | No       | Well-formed URL                                   | The URL of the post page.
+| `post.title`       | `string` | Yes      | Between 1 and 100 characters long                 | The title of the post.
+| `post.tags`        | `array`  | No       | Up to 10 strings between 1 and 50 characters long | The set of post tags.
+| `post.categories`  | `array`  | No       | Up to 10 strings between 1 and 50 characters long | The categories the post belongs to.
+| `post.authors`     | `array`  | No       | Up to 10 strings between 1 and 50 characters long | The authors of the post.
+| `post.publishTime` | `number` | Yes      | Non-negative                                      | The timestamp of the post publication, in milliseconds since epoch.
+| `post.updateTime`  | `number` | No       | Non-negative                                      | The timestamp of the post's last update, in milliseconds since epoch.
+
+#### Code Sample
+
+Here are a few examples of how to track this event:
+
+<details>
+    <summary>Minimal Example</summary>
+
+```js
+croct.track('postViewed', {
+    post: {
+        postId: 'announcing-our-seed-round',
+        title: 'Announcing our $1.3M seed round',
+        publishTime: 123456789,
+    }
 });
 ```
 </details>
 
 <details>
-    <summary>Multivariate Test Example</summary>
+    <summary>Complete Example</summary>
 
 ```js
-croct.track('testGroupAssigned', {
-    testId: 'home-banner-test',
-    groupId: 'crocodile-image|green-button',
+croct.track('postViewed', {
+    post: {
+        postId: 'announcing-our-seed-round',
+        url: 'https://croct.com/blog/announcing-our-seed-round',
+        title: 'Announcing our $1.3M seed round',
+        tags: ['seed-round'],
+        categories: ['croct-news'],
+        authors: ['John Doe'],
+        publishTime: 123456789,
+        updateTime: 123456790,
+    }
 });
 ```
 </details>
-
-## Miscellaneous Events
-
-The miscellaneous category has the following events:
 
 ### sessionAttributesChanged
 

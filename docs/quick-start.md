@@ -71,7 +71,7 @@ Things get even more powerful when you realize that you can use the same context
 real-time. You will soon be able to perform AI-powered evaluations like the following:
 
 ```
-# It doesn't seem as complex as designing, training, and running ML models, does it?
+# This doesn't seem as complex as designing, training, and running ML models, does it?
 user is churning
 ```
 

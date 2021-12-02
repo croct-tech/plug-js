@@ -75,7 +75,7 @@ jobs:
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@master
         with:
           version: 290.0.0
           service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}

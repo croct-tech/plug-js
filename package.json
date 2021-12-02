@@ -33,7 +33,7 @@
     "bundle": "rollup -c"
   },
   "dependencies": {
-    "@croct/sdk": "^0.6.1",
+    "@croct/sdk": "^0.7.0",
     "tslib": "^2.2.0"
   },
   "devDependencies": {

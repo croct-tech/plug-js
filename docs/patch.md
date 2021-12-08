@@ -207,17 +207,19 @@ Current Value     | Given Value     | Result
 `{}`              | `{a: 1}`        | `{a: 1}`
 `{a: 1}`          | `{b: 2}`        | `{a: 1, b: 2}`
 `{} `             | `{}`            | `{}`
+`{a: 1}`          | `{a: 2}`        | `{a: 2}`
 `null`            | `[1]`           | `[1]`
 `1`               | `[2]`           | `[1, 2]`
 `[]`              | `[1]`           | `[1]`
 `[1]`             | `[2]`           | `[1, 2]`
+`['a', 'b']`      | `['b', 'c']`    | `['a', 'b', 'b', 'c']`
 
 #### Signature
 
-The `combine` method has the following signature:
+The `merge` method has the following signature:
 
 ```ts
-patch.combine(path: string, value: JsonArray | JsonMap): this
+patch.merge(path: string, value: JsonArray | JsonMap): this
 ```
 
 The return is the path instance itself to allow operation chaining.

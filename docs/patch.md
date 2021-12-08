@@ -214,10 +214,10 @@ Current Value     | Given Value     | Result
 
 #### Signature
 
-The `combine` method has the following signature:
+The `merge` method has the following signature:
 
 ```ts
-patch.combine(path: string, value: JsonArray | JsonMap): this
+patch.merge(path: string, value: JsonArray | JsonMap): this
 ```
 
 The return is the path instance itself to allow operation chaining.

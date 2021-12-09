@@ -274,7 +274,7 @@ Current Value     | Amount          | Result
 
 #### Signature
 
-The `increment` method has the following signature:
+The `decrement` method has the following signature:
 
 ```ts
 patch.decrement(path: string, value: number = 1): this

@@ -192,7 +192,7 @@ So far, we haven't collected any information explicitly. Even so, it is already 
 interesting questions like:
 
 - Has this visitor been seen before?  
-`user's is returning`
+`user is returning`
 - What is the approximate location of the visitor?  
 `location's city`
 - How long has it been since the session started?  

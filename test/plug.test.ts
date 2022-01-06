@@ -4,6 +4,7 @@ import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug, Plug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
+import {FetchOptions} from '../src/fetch';
 
 jest.mock('../src/constants', () => {
     return {
@@ -889,9 +890,11 @@ describe('The Croct plug', () => {
             }),
         };
 
-        const actualResponse = croct.fetch('foo');
+        const options: FetchOptions = {timeout: 5, attributes: {bar: 'baz'}};
 
-        expect(window.croctEap.fetch).toHaveBeenCalledWith('foo');
+        const actualResponse = croct.fetch('foo', options);
+
+        expect(window.croctEap.fetch).toHaveBeenCalledWith('foo', options);
         expect(actualResponse).toBe(response);
         expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
             'The fetch API is still unstable and subject to change in future releases.',

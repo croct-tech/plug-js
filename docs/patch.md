@@ -123,6 +123,39 @@ Here's a minimal example showing how to clear a given path:
 patch.clear('custom.pets');
 ```
 
+### remove
+
+This method removes all values that match in a collection.
+
+The following table shows how the operation behaves in different scenarios:
+
+Current Value                     | Given Value       | Result
+----------------------------------|-------------------|-------------------
+`['a', 'b', 'c']`                 | `'a'`             | `['b', 'c']`
+`['a', 'b', 'c', 'c']`            | `'c'`             | `['a', 'b']`
+`['a', 'b', 'c']`                 | `'d'`               | `['a', 'b', 'c']`
+`[]`                              | `'foo'`           | `[]`
+`['foo', {'qux': 'quux'}, 'bar']` | `{'qux': 'quux'}` | `['foo', 'bar']`
+
+
+#### Signature
+
+The `remove` method has the following signature:
+
+```ts
+patch.remove(path: string, value: JsonValue)
+```
+
+The return is the path instance itself to allow operation chaining.
+
+#### Code Sample
+
+Here's a minimal example showing how to remove a value from a collection
+
+```js
+patch.remove('custom.code', 'bugs')
+```
+
 ### add
 
 This method adds a value to a collection.

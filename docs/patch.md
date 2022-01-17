@@ -1,9 +1,9 @@
 # Patch
 
-Patches allow you to modify a particular entity, such as user profiles or session attributes, without knowing 
+Patches allow you to modify a particular entity, such as user profiles or session attributes, without knowing
 its current state.
 
-Most operations require specifying the path to the target attribute. The path format is similar to the way you are 
+Most operations require specifying the path to the target attribute. The path format is similar to the way you are
 already used to access nested structures in JavaScript.
 
 For objects and maps, you should use the `object.property` notation:
@@ -18,7 +18,7 @@ For lists, you should use the `list[index]` notation:
 patch.set('custom.pets[0]', 'crocodile');
 ```
 
-Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state. 
+Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state.
 So either all operations are applied, or none of them are.
 
 ## API Reference
@@ -28,21 +28,22 @@ This reference documents all methods available in the Patch API and explains in 
 ### Index
 
 - [set](#set)
-- [unset](#unset)
-- [clear](#clear)
 - [add](#add)
 - [combine](#combine)
 - [merge](#merge)
 - [increment](#increment)
 - [decrement](#decrement)
+- [remove](#remove)
+- [clear](#clear)
+- [unset](#unset)
 - [save](#save)
 
 ### set
 
 This method sets a value at a given path.
 
-This operation will overwrite the value in the specified path. Note that this operation will fail if the 
-parent path does not exist or is not a list or map. For example, given the path `foo.bar`, if the value at `foo` 
+This operation will overwrite the value in the specified path. Note that this operation will fail if the
+parent path does not exist or is not a list or map. For example, given the path `foo.bar`, if the value at `foo`
 does not exist or is not a map, the operation will fail.
 
 #### Signature
@@ -53,7 +54,7 @@ The `set` method has the following signature:
 patch.set(path: string, value: JsonValue): Patch
 ```
 
-The return is the path instance itself to allow operation chaining.
+The return is the `Patch` instance itself to allow operation chaining.
 
 #### Code Sample
 
@@ -61,99 +62,6 @@ Here's a minimal example showing how to set a value:
 
 ```js
 patch.set('custom.pet', 'crocodile');
-```
-
-### unset
-
-This method deletes a given path.
-
-The difference between `unset` and `clear` is that `unset` deletes the path, 
-while `clear` removes the value by setting it to null or removing all its elements.
-
-Note that the operation will not fail if the path does not exist.
-
-#### Signature
-
-The `unset` method has the following signature:
-
-```ts
-patch.unset(path: string): this
-```
-
-The return is the path instance itself to allow operation chaining.
-
-#### Code Sample
-
-Here's a minimal example showing how to unset a value:
-
-```js
-patch.unset('custom.pets');
-```
-
-### clear
-
-This method clears the value at given path.
-
-The following table shows how the operation behaves in different scenarios:
-
-Current Value     | Result
-------------------|-------------
-`null`            | `null`
-`[]`              | `[]`
-`['a']`           | `[]`
-`'foo'`           | `null`
-
-Note that the operation will not fail if the path does not exist.
-
-#### Signature
-
-The `clear` method has the following signature:
-
-```ts
-patch.clear(): this
-```
-
-The return is the path instance itself to allow operation chaining.
-
-#### Code Sample
-
-Here's a minimal example showing how to clear a given path:
-
-```js
-patch.clear('custom.pets');
-```
-
-### remove
-
-This method removes all values that match in a collection.
-
-The following table shows how the operation behaves in different scenarios:
-
-Current Value                     | Given Value       | Result
-----------------------------------|-------------------|-------------------
-`['a', 'b', 'c']`                 | `'a'`             | `['b', 'c']`
-`['a', 'b', 'c', 'c']`            | `'c'`             | `['a', 'b']`
-`['a', 'b', 'c']`                 | `'d'`               | `['a', 'b', 'c']`
-`[]`                              | `'foo'`           | `[]`
-`['foo', {'qux': 'quux'}, 'bar']` | `{'qux': 'quux'}` | `['foo', 'bar']`
-
-
-#### Signature
-
-The `remove` method has the following signature:
-
-```ts
-patch.remove(path: string, value: JsonValue)
-```
-
-The return is the path instance itself to allow operation chaining.
-
-#### Code Sample
-
-Here's a minimal example showing how to remove a value from a collection
-
-```js
-patch.remove('custom.code', 'bugs')
 ```
 
 ### add
@@ -179,7 +87,7 @@ The `add` method has the following signature:
 patch.add(path: string, element: JsonValue): this
 ```
 
-The return is the path instance itself to allow operation chaining.
+The return is the `Patch` instance itself to allow operation chaining.
 
 #### Code Sample
 
@@ -217,7 +125,7 @@ The `combine` method has the following signature:
 patch.combine(path: string, value: JsonValue): this
 ```
 
-The return is the path instance itself to allow operation chaining.
+The return is the `Patch` instance itself to allow operation chaining.
 
 #### Code Sample
 
@@ -239,7 +147,7 @@ Current Value     | Given Value     | Result
 `null`            | `{a: 1}`        | `{a: 1}`
 `{}`              | `{a: 1}`        | `{a: 1}`
 `{a: 1}`          | `{b: 2}`        | `{a: 1, b: 2}`
-`{} `             | `{}`            | `{}`
+`{}`              | `{}`            | `{}`
 `null`            | `[1]`           | `[1]`
 `1`               | `[2]`           | `[1, 2]`
 `[]`              | `[1]`           | `[1]`
@@ -253,7 +161,7 @@ The `combine` method has the following signature:
 patch.combine(path: string, value: JsonArray | JsonMap): this
 ```
 
-The return is the path instance itself to allow operation chaining.
+The return is the `Patch` instance itself to allow operation chaining.
 
 #### Code Sample
 
@@ -283,7 +191,7 @@ The `increment` method has the following signature:
 patch.increment(path: string, value: number = 1): this
 ```
 
-The return is the path instance itself to allow operation chaining.
+The return is the `Patch` instance itself to allow operation chaining.
 
 #### Code Sample
 
@@ -313,7 +221,7 @@ The `increment` method has the following signature:
 patch.decrement(path: string, value: number = 1): this
 ```
 
-The return is the path instance itself to allow operation chaining.
+The return is the `Patch` instance itself to allow operation chaining.
 
 #### Code Sample
 
@@ -323,11 +231,103 @@ Here's a minimal example showing how to decrement a value:
 patch.decrement('custom.score', 10);
 ```
 
+### remove
+
+This method removes values from a collection.
+
+The following table shows how the operation behaves in different scenarios:
+
+Current Value          | Given Value | Result
+-----------------------|------------ |-------------------
+`['a', 'b', 'c']`      | `'a'`       | `['b', 'c']`
+`['a', 'b', 'c', 'c']` | `'c'`       | `['a', 'b']`
+`['a', 'b', 'c']`      | `'d'`       | `['a', 'b', 'c']`
+`[]`                   | `'foo'`     | `[]`
+`['a', {'b': 1}, 'c']` | `{'b': 1}`  | `['a', 'c']`
+
+#### Signature
+
+The `remove` method has the following signature:
+
+```ts
+patch.remove(path: string, value: JsonValue): this
+```
+
+The return is the `Patch` instance itself to allow operation chaining.
+
+#### Code Sample
+
+Here's a minimal example showing how to remove a value from a collection:
+
+```js
+patch.remove('custom.pets', 'crocodile');
+```
+
+### clear
+
+This method clears the value at given path.
+
+The following table shows how the operation behaves in different scenarios:
+
+Current Value     | Result
+------------------|-------------
+`null`            | `null`
+`[]`              | `[]`
+`['a']`           | `[]`
+`'foo'`           | `null`
+
+Note that the operation will not fail if the path does not exist.
+
+#### Signature
+
+The `clear` method has the following signature:
+
+```ts
+patch.clear(path: string): this
+```
+
+The return is the `Patch` instance itself to allow operation chaining.
+
+#### Code Sample
+
+Here's a minimal example showing how to clear a given path:
+
+```js
+patch.clear('custom.pets');
+```
+
+### unset
+
+This method deletes a given path.
+
+The difference between `unset` and `clear` is that `unset` deletes the path,
+while `clear` removes the value by setting it to null or removing all its elements.
+
+Note that the operation will not fail if the path does not exist.
+
+#### Signature
+
+The `unset` method has the following signature:
+
+```ts
+patch.unset(path: string): this
+```
+
+The return is the `Patch` instance itself to allow operation chaining.
+
+#### Code Sample
+
+Here's a minimal example showing how to unset a value:
+
+```js
+patch.unset('custom.pets');
+```
+
 ### save
 
 This method builds the patch and emits an event to record the specified changes.
 
-Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state. 
+Notice that the processing performed by a patch is atomic to prevent entities from ending up in an inconsistent state.
 So either all operations are applied, or none of them are.
 
 #### Signature
@@ -338,7 +338,7 @@ The `save` method has the following signature:
 patch.save(): Promise<Event>
 ```
 
-The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
+The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that
 resolves to the tracked event after successful transmission.
 
 #### Code Sample

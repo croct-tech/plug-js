@@ -1,11 +1,11 @@
 # Events
 
-Events represent something that happened and help understanding how a user interacts with your application. Besides 
-telling the story of what happened during a user’s journey, these events also provide data to enrich the 
+Events represent something that happened and help understanding how a user interacts with your application. Besides
+telling the story of what happened during a user’s journey, these events also provide data to enrich the
 evaluation context and refine the models that continuously improve user experience.
 
-The SDK tracks most of the general-purpose events automatically for you. All other events depend on your use case, so 
-it is up to you to decide which events make sense for your application. In the following sections, you will find a 
+The SDK tracks most of the general-purpose events automatically for you. All other events depend on your use case, so
+it is up to you to decide which events make sense for your application. In the following sections, you will find a
 summary of all events available to help you decide which events can benefit your application.
 
 ## Table of Contents
@@ -36,6 +36,7 @@ summary of all events available to help you decide which events can benefit your
   * [sessionAttributesChanged](#sessionattributeschanged)
   * [nothingChanged](#nothingchanged)
   * [eventOccurred](#eventoccurred)
+  * [linkOpened](#linkOpened)
 
 ## Event Summary
 
@@ -63,6 +64,7 @@ There are several event types that you can record within the customer journey:
 | [`sessionAttributesChanged`](#sessionattributeschanged) | Miscellaneous | Yes           | Records session's attributes changes.
 | [`nothingChanged`](#nothingchanged)                     | Miscellaneous | Yes           | Records a period of inactivity.
 | [`eventOccurred`](#eventOccurred)                       | Miscellaneous | No            | Records a custom event.
+| ['linkOpened'](#linkOpened)                             | Miscellaneous | No            | Records a opened link.
 
 ## User Events
 
@@ -74,11 +76,11 @@ This event records that a user signed up.
 
 You should track this event when a user signs up for your application.
 
-If the user profile does not exist, the engine will create a new one with the provided information. 
+If the user profile does not exist, the engine will create a new one with the provided information.
 This event does not affect existing profiles.
 
-For the personalization engine, the semantics of this event does not encompass the 
-[`userSignedIn`](#usersignedin) event. If your application automatically signs in users after registration, make sure 
+For the personalization engine, the semantics of this event does not encompass the
+[`userSignedIn`](#usersignedin) event. If your application automatically signs in users after registration, make sure
 to call the [`identify`](plug.md#identify) method after the sign-up.
 
 #### Properties
@@ -159,27 +161,28 @@ croct.track('userSignedUp', {
   }
 });
 ```
+
 </details>
 
 ### userSignedIn
 
 This event records that a user signed in.
 
-The SDK automatically tracks this event when you call either the [`identify`](plug.md#identify) or 
+The SDK automatically tracks this event when you call either the [`identify`](plug.md#identify) or
 [`setToken`](plug.md#settoken) method.
 
 ### userSignedOut
 
 This event records that a user signed out.
 
-The SDK automatically tracks this event when you call either the [`anonymize`](plug.md#identify) or 
+The SDK automatically tracks this event when you call either the [`anonymize`](plug.md#identify) or
 [`setToken`](plug.md#settoken) method.
 
 ### userProfileChanged
 
 This event records that a user profile has changed.
 
-The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
+The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the
 [`user.edit()`](user.md#edit) method.
 
 ## Web Events
@@ -214,7 +217,7 @@ The SDK automatically tracks this event when the user opens a page on your appli
 
 This event records that a page finished loading.
 
-The SDK automatically tracks this event when a page has been completely loaded, without waiting for stylesheets or 
+The SDK automatically tracks this event when a page has been completely loaded, without waiting for stylesheets or
 images to finish loading.
 
 ## E-commerce Events
@@ -251,7 +254,6 @@ This event supports the following properties:
 like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 
-
 #### Code Sample
 
 Here are some examples of how to track this event:
@@ -268,6 +270,7 @@ croct.track('productViewed', {
   }
 });
 ```
+
 </details>
 
 <details>
@@ -289,6 +292,7 @@ croct.track('productViewed', {
   }
 });
 ```
+
 </details>
 
 ### cartViewed
@@ -301,7 +305,7 @@ You should track this event when a user views the shopping cart page or summary.
 
 This event supports the following properties:
 
-| Property                              | Type     | Required | Constraints                       | Description                                                                                                                                                                                                                                                                                                                                                 
+| Property                              | Type     | Required | Constraints                       | Description
 |---------------------------------------|----------|----------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `cart`                                | `object` | Yes      |                                   | The cart information.
 | `cart.currency`                       | `string` | Yes      | Between 1 and 10 characters long  | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
@@ -365,6 +369,7 @@ croct.track('cartViewed', {
   }
 });
 ```
+
 </details>
 
 <details>
@@ -431,6 +436,7 @@ croct.track('cartViewed', {
   }
 });
 ```
+
 </details>
 
 ### cartModified
@@ -441,9 +447,9 @@ You should track this event when a user modifies the shopping cart page, either 
 
 #### Properties
 
-This event supports the following properties: 
+This event supports the following properties:
 
-| Property                              | Type     | Required | Constraints                       | Description                                                                                                                                                                                                                                                                                                                                                 
+| Property                              | Type     | Required | Constraints                       | Description
 |---------------------------------------|----------|----------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `cart`                                | `object` | Yes      |                                   | The cart information.
 | `cart.currency`                       | `string` | Yes      | Between 1 and 10 characters long  | The currency in which the monetary values are expressed in the shopping cart. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin.
@@ -507,6 +513,7 @@ croct.track('cartModified', {
   }
 });
 ```
+
 </details>
 
 <details>
@@ -573,6 +580,7 @@ croct.track('cartModified', {
   }
 });
 ```
+
 </details>
 
 ### checkoutStarted
@@ -585,7 +593,7 @@ You should track this event on the page that the user lands on after clicking on
 
 This event supports the following properties:
 
-| Property                              | Type     | Required | Constraints                       | Description                                                                                                                                                                                                                                                                                                                                                 
+| Property                              | Type     | Required | Constraints                       | Description
 |---------------------------------------|----------|----------|-----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `orderId`                             | `string` | No       |                                   | The ID that uniquely identifies the order on your store.
 | `cart`                                | `object` | Yes      |                                   | The cart information.
@@ -618,10 +626,10 @@ This event supports the following properties:
 
 **Note:**
 
-- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, 
+- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier,
 like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
-- It may seem unusual to specify the order ID at the start of the checkout process, but some e-commerce platforms 
+- It may seem unusual to specify the order ID at the start of the checkout process, but some e-commerce platforms
 generate the order ID at the start or even before the process begins.
 
 #### Code Sample
@@ -718,6 +726,7 @@ croct.track('checkoutStarted', {
   }
 });
 ```
+
 </details>
 
 ### orderPlaced
@@ -730,7 +739,7 @@ You should track this event when the user places an order.
 
 This event supports the following properties:
 
-| Property                               | Type     | Required | Constraints                            | Description                                                                                                                                                                                                                                                                                                                                                 
+| Property                               | Type     | Required | Constraints                            | Description
 |----------------------------------------|----------|----------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `order`                                | `object` | Yes      |                                        | The order details.
 | `order.orderId`                        | `string` | Yes      |                                        | The ID that uniquely identifies the order on your store.
@@ -765,7 +774,7 @@ This event supports the following properties:
 
 **Note:**
 
-- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier, 
+- The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier,
 like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 - The `paymentMethod` property accepts arbitrary values, such as `credit-card`, `credit-balance`,  `visa`, `paypal` or `bitcoin`.
@@ -798,6 +807,7 @@ croct.track('orderPlaced', {
   }
 });
 ```
+
 </details>
 
 <details>
@@ -867,6 +877,7 @@ croct.track('orderPlaced', {
   }
 });
 ```
+
 </details>
 
 ## Analytics Events
@@ -901,6 +912,7 @@ croct.track('goalCompleted', {
     goalId: 'newsletter-sign-up',
 });
 ```
+
 </details>
 
 <details>
@@ -913,6 +925,7 @@ croct.track('goalCompleted', {
     value: 9.99
 });
 ```
+
 </details>
 
 ## Miscellaneous Events
@@ -945,6 +958,7 @@ croct.track('interestShown', {
     interests: ['music', 'movies'],
 });
 ```
+
 </details>
 
 ### postViewed
@@ -985,6 +999,7 @@ croct.track('postViewed', {
     }
 });
 ```
+
 </details>
 
 <details>
@@ -1010,14 +1025,14 @@ croct.track('postViewed', {
 
 This event records that session attributes have changed.
 
-The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the 
+The SDK automatically tracks this event when you call [`save`](patch.md#save) on the patch returned by the
 [`session.edit()`](session.md#edit) method.
 
 ### nothingChanged
 
 This event records that the user has been inactive for a while.
 
-The SDK automatically tracks this event after a period of inactivity. The event's frequency decreases as the 
+The SDK automatically tracks this event after a period of inactivity. The event's frequency decreases as the
 idle period increases until reaching a maximum of four events per hour.
 
 ### eventOccurred
@@ -1036,7 +1051,7 @@ This event supports the following properties:
 | `personalizationId` | `string` | No        | Between 1 and 50 characters long | The name of the audience associated with the event.
 | `audience`          | `string` | No        | Between 1 and 50 characters long | The audience associated with the event. For example, "loyal-shoppers" or "mothers".
 | `testId`            | `string` | No        | Between 1 and 50 characters long | The ID of the test associated with the event.
-| `groupId`           | `string` | No        | Between 1 and 50 characters long | The ID of the test group associated with the event. 
+| `groupId`           | `string` | No        | Between 1 and 50 characters long | The ID of the test group associated with the event.
 | `details`           | `object` | No        | Map of primitives                | The details about the event.
 
 The following additional restrictions apply to the `details` property:
@@ -1058,6 +1073,7 @@ croct.track('eventOccurred', {
     name: 'userLiked',
 });
 ```
+
 </details>
 
 <details>
@@ -1072,4 +1088,34 @@ croct.track('eventOccurred', {
         "groupId": "A",
     });
 ```
+
+</details>
+
+### linkOpened
+
+This event records that the user opened a link.
+
+You should track this event when a user click in a link.
+
+#### Properties
+
+This event supports the following properties:
+
+| Property | Type     | Required | Constraints | Description
+|----------|----------|----------|-------------|-------------------------------
+| `link`   | `string` | Yes      | A valid URL | The link that the user opened
+
+#### Code Sample
+
+Here is an example of how to track this event:
+
+<details>
+    <summary>Example</summary>
+
+```js
+croct.track('linkOpened', {
+    link: 'https://croct.com/',
+});
+```
+
 </details>

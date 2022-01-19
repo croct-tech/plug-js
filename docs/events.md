@@ -1095,7 +1095,7 @@ croct.track('eventOccurred', {
 
 This event records that the user opened a link.
 
-You should track this event when a user click in a link.
+You should track this event when a user opens in a link.
 
 #### Properties
 

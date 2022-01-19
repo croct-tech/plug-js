@@ -948,7 +948,7 @@ This event supports the following properties:
 
 #### Code Sample
 
-Here are a few examples of how to track this event:
+Here is an example of how to track this event:
 
 <details>
     <summary>Example</summary>

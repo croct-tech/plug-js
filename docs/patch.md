@@ -147,10 +147,12 @@ Current Value     | Given Value     | Result
 `null`            | `{a: 1}`        | `{a: 1}`
 `{}`              | `{a: 1}`        | `{a: 1}`
 `{a: 1}`          | `{b: 2}`        | `{a: 1, b: 2}`
+`{a: 1}`          | `{a: 2}`        | `{a: 2}`
 `null`            | `[1]`           | `[1]`
 `1`               | `[2]`           | `[1, 2]`
 `[]`              | `[1]`           | `[1]`
 `[1]`             | `[2]`           | `[1, 2]`
+`['a', 'b']`      | `['b', 'c']`    | `['a', 'b', 'b', 'c']`
 
 #### Signature
 
@@ -214,7 +216,7 @@ Current Value     | Amount          | Result
 
 #### Signature
 
-The `increment` method has the following signature:
+The `decrement` method has the following signature:
 
 ```ts
 patch.decrement(path: string, value: number = 1): this

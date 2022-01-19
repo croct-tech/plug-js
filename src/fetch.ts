@@ -1,7 +1,13 @@
+import {JsonObject} from '@croct/sdk/json';
 import {NullableJsonObject} from './sdk/json';
 
 export interface SlotMap {
 }
+
+export type FetchOptions = {
+    timeout?: number,
+    attributes?: JsonObject,
+};
 
 export type SlotId = keyof SlotMap extends never ? string : keyof SlotMap;
 

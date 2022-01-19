@@ -147,7 +147,6 @@ Current Value     | Given Value     | Result
 `null`            | `{a: 1}`        | `{a: 1}`
 `{}`              | `{a: 1}`        | `{a: 1}`
 `{a: 1}`          | `{b: 2}`        | `{a: 1, b: 2}`
-`{}`              | `{}`            | `{}`
 `null`            | `[1]`           | `[1]`
 `1`               | `[2]`           | `[1, 2]`
 `[]`              | `[1]`           | `[1]`
@@ -155,10 +154,10 @@ Current Value     | Given Value     | Result
 
 #### Signature
 
-The `combine` method has the following signature:
+The `merge` method has the following signature:
 
 ```ts
-patch.combine(path: string, value: JsonArray | JsonMap): this
+patch.merge(path: string, value: JsonArray | JsonMap): this
 ```
 
 The return is the `Patch` instance itself to allow operation chaining.
@@ -242,8 +241,7 @@ Current Value          | Given Value | Result
 `['a', 'b', 'c']`      | `'a'`       | `['b', 'c']`
 `['a', 'b', 'c', 'c']` | `'c'`       | `['a', 'b']`
 `['a', 'b', 'c']`      | `'d'`       | `['a', 'b', 'c']`
-`[]`                   | `'foo'`     | `[]`
-`['a', {'b': 1}, 'c']` | `{'b': 1}`  | `['a', 'c']`
+`['a', {b: 1}, 'c']`   | `{b: 1}`    | `['a', 'c']`
 
 #### Signature
 

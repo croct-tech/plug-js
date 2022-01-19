@@ -1103,7 +1103,7 @@ This event supports the following properties:
 
 | Property | Type     | Required | Constraints | Description
 |----------|----------|----------|-------------|-------------------------------
-| `link`   | `string` | Yes      | A valid URL | The link that the user opened
+| `link`   | `string` | Yes      | A valid URI | The link that the user opened
 
 #### Code Sample
 

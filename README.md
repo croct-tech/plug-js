@@ -59,6 +59,7 @@ To install the SDK as a script tag, add the following line to the `<head>` tag o
 
 ```html
 <script src="https://cdn.croct.io/js/v1/lib/plug.js?appId=<APP_ID>"></script>
+<script src="https://cdn.croct.io/js/v1/app/<APP_ID>/custom.js"></script>
 <script>croct.plug();</script>
 ```
 

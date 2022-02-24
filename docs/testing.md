@@ -21,7 +21,7 @@ The severity levels and their respective meanings are:
 
 ### Enabling debug mode
 
-To enable the debug mode, you need to set `debug` to true when initializing the SDK:
+To enable the debug mode, you need to set `debug` to true when [initializing the SDK](plug.md#plug):
 
 ```ts
 croct.plug({debug: true});
@@ -42,7 +42,7 @@ as expected. It works by replacing the actual transport layer with a fake one to
 By default, the SDK automatically detects test environments based on the `NODE_ENV`. To explicitly enable or disable 
 the test mode, you can either:
 
-- Pass `test` as `true` when initializing the SDK
+- Pass `test` as `true` when [initializing the SDK](plug.md#plug)
 - Set the `CROCT_TEST_MODE` environment variable to `true`
 
 The order of precedence is as follows:
@@ -57,7 +57,7 @@ the `NODE_ENV`
 
 The SDK tracks an event for every operation executed on the server side.
 
-For example, executing the code below will trigger the `userProfileChanged` event with changes to the user profile:
+For example, executing the code below will trigger the [`userProfileChanged`](events.md#userprofilechanged) event with changes to the user profile:
 
 ```ts
 croct.user.edit()
@@ -67,7 +67,7 @@ croct.user.edit()
 
 This flexible design allows you to listen to events and test your integration without the tedious work of mocking the API, which is particularly cumbersome for chained or nested operations like in the previous example. 
 
-A better solution consists of listening to the event with a test spy. Taking the previous code as an example, you can check if your integration is working as expected by listening to the `userProfileChanged` event as follows:
+A better solution consists of listening to the event with a test spy. Taking the previous code as an example, you can check if your integration is working as expected by listening to the target event:
 
 ```ts
 import {EventListener, EventInfo} from '@croct/plug/sdk/tracking';

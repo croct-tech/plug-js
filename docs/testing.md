@@ -45,7 +45,7 @@ The order of precedence is as follows:
 2. If the `CROCT_TEST_MODE` environment variable is set, that takes precedence over the automatic detection of the test environment
 3. If neither `test` nor `CROCT_TEST_MODE` is set, the SDK detects the test environment automatically based on the `NODE_ENV`
 
-## Testing events
+### Testing events
 
 This flexible design allows you to listen to events and test your integration easily.
 

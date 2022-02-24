@@ -15,7 +15,7 @@ The severity levels and their respective meanings are:
 - 🤓 **Info**  
   Informational messages that highlight the SDK's state and progress.
 - 🤔 **Warning**  
-  Warnings about potential issues that might be problems or might not.
+  Potential issues that might be problems or might not.
 - 😱 **Error**  
   Abnormal or unexpected behaviors that need attention.
 

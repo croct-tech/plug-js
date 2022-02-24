@@ -4,8 +4,8 @@ For an enhanced developer experience, the SDK provides both debug and test modes
 
 ## Debug mode
 
-The debug mode enables fine-grained logging so developers can detect and diagnose errors and issues with the 
-integration. Each log receives a severity level, so you can filter the log output only to see the log messages you 
+The debug mode enables fine-grained logging to help developers detect and diagnose issues with the integration.
+Each log receives a severity level, so you can filter the log output only to see the log messages you 
 care about.
 
 The severity levels and their respective meanings are:

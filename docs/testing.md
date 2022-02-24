@@ -47,6 +47,16 @@ The order of precedence is as follows:
 
 ### Testing events
 
+The SDK tracks an event for every operation executed on the server side.
+
+For example, executing the code below will trigger the `userProfileChanged` event with changes to the user profile:
+
+```ts
+croct.user.edit()
+   .add('interest', 'tests')
+   .save()
+```
+
 This flexible design allows you to listen to events and test your integration easily.
 
 Let's take the previous code as an example. You can check if your integration is working as expected by listening to 

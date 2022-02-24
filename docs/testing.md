@@ -65,10 +65,9 @@ croct.user.edit()
    .save()
 ```
 
-This flexible design allows you to listen to events and test your integration easily.
+This flexible design allows you to listen to events and test your integration without the tedious work of mocking the API, which is particularly cumbersome for chained or nested operations like in the previous example. 
 
-Let's take the previous code as an example. You can check if your integration is working as expected by listening to 
-the `userProfileChanged` event as follows:
+A better solution consists of listening to the event with a test spy. Taking the previous code as an example, you can check if your integration is working as expected by listening to the `userProfileChanged` event as follows:
 
 ```ts
 import {EventListener, EventInfo} from '@croct/plug/sdk/tracking';
@@ -106,4 +105,4 @@ test('should add an interest to the user profile', async () => {
 })
 ```
 
-See the [Event reference](events.md) for the list of events triggered by the SDK. 
+You can find more details about the available SDK events in the [Event reference](events.md).

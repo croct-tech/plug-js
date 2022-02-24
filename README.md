@@ -138,6 +138,7 @@ The following references provide guidance to help you get started, integrate, an
 - [Patch Reference](docs/patch.md)
 - [User Reference](docs/user.md)
 - [Session Reference](docs/session.md)
+- [Testing](docs/testing.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 If you are new to the Croct platform, the [quick start guide](docs/quick-start.md) is a good starting point for 

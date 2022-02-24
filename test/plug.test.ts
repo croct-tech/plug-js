@@ -317,10 +317,7 @@ describe('The Croct plug', () => {
         croct.extend('foo', fooFactory);
         croct.extend('bar', barFactory);
 
-        const config: SdkFacadeConfiguration = {
-            appId: APP_ID,
-            test: false,
-        };
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -337,7 +334,7 @@ describe('The Croct plug', () => {
             },
         });
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(fooFactory).toBeCalledWith(expect.objectContaining({options: {}}));
         expect(barFactory).toBeCalledWith(expect.objectContaining({options: {flag: true}}));

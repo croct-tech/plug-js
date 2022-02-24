@@ -63,12 +63,14 @@ Let's take the previous code as an example. You can check if your integration is
 the `userProfileChanged` event as follows:
 
 ```ts
+import {EventListener, EventInfo} from '@croct/plug/sdk/tracking';
+
 test('should add an interest to the user profile', async () => {
     await croct.plug({
         appId: '00000000-0000-0000-0000-000000000000',
     });
 
-    const listener = jest.fn();
+    const listener: EventListener = jest.fn();
 
     croct.tracker.addListener(listener);
 
@@ -77,7 +79,7 @@ test('should add an interest to the user profile', async () => {
         .save();
 
     expect(listener).toHaveBeenCalledWith(
-        expect.objectContaining({
+        expect.objectContaining<Partial<EventInfo<'userProfileChanged'>>>({
             status: 'confirmed',
             event: {
                 type: 'userProfileChanged',
@@ -93,7 +95,7 @@ test('should add an interest to the user profile', async () => {
             },
         }),
     );
-});
+})
 ```
 
 See the [Event reference](events.md) for the list of events triggered by the SDK. 

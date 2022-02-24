@@ -1,6 +1,6 @@
 # Testing
 
-For an enhanced developer experience, the SDK provides both debug and test modes to assist with testing.
+For an enhanced developer experience, the SDK provides both debug and test modes to assist you with testing.
 
 ## Debug mode
 

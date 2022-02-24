@@ -124,11 +124,16 @@ export class GlobalPlug implements Plug {
             );
         }
 
-        const {plugins, ...sdkConfiguration} = configuration;
+        const {plugins, test, ...sdkConfiguration} = configuration;
 
         const sdk = SdkFacade.init({
             ...sdkConfiguration,
             appId: appId,
+            test: test ?? (typeof process === 'object' && (
+                process.env?.CROCT_TEST_MODE !== undefined
+                    ? process.env.CROCT_TEST_MODE === 'true'
+                    : process.env?.NODE_ENV === 'test'
+            )),
         });
 
         this.instance = sdk;

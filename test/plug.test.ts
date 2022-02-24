@@ -15,10 +15,15 @@ jest.mock('../src/constants', () => {
 describe('The Croct plug', () => {
     const APP_ID = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
     const APP_CDN_URL = `${CDN_URL}?appId=${APP_ID}`;
+    const ENV_VARS = process.env;
 
     let croct: GlobalPlug;
 
     beforeEach(() => {
+        process.env = {...ENV_VARS};
+
+        delete process.env.NODE_ENV;
+
         croct = new GlobalPlug();
 
         delete window.croctEap;
@@ -26,6 +31,7 @@ describe('The Croct plug', () => {
 
     afterEach(async () => {
         jest.restoreAllMocks();
+        process.env = ENV_VARS;
 
         await croct.unplug();
     });
@@ -54,7 +60,11 @@ describe('The Croct plug', () => {
 
         window.document.head.appendChild(script);
 
-        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            test: false,
+        };
+
         const sdkFacade = SdkFacade.init(config);
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
 
@@ -105,6 +115,7 @@ describe('The Croct plug', () => {
             appId: APP_ID,
             track: false,
             debug: false,
+            test: true,
             tokenScope: 'isolated',
             userId: 'c4r0l',
             eventMetadata: {
@@ -118,6 +129,76 @@ describe('The Croct plug', () => {
         croct.plug(config);
 
         expect(initialize).toBeCalledWith(config);
+    });
+
+    test.each([
+        'test',
+        'development',
+        'production',
+    ])('should enable the test mode on test environments', environment => {
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+        };
+
+        process.env.NODE_ENV = environment;
+
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(expect.objectContaining({test: environment === 'test'}));
+    });
+
+    test.each([
+        true,
+        false,
+    ])('should enable the test mode based on CROCT_TEST_MODE environment variable', value => {
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+        };
+
+        process.env.CROCT_TEST_MODE = `${value}`;
+
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(expect.objectContaining({test: value}));
+    });
+
+    test('should prioritize the specified test mode over environment variables', () => {
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            test: false,
+        };
+
+        process.env.NODE_ENV = 'test';
+        process.env.CROCT_TEST_MODE = 'true';
+
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(expect.objectContaining({test: false}));
+    });
+
+    test('should prioritize the test mode specified via CROCT_TEST_MODE over NODE_ENV', () => {
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+        };
+
+        process.env.NODE_ENV = 'test';
+        process.env.CROCT_TEST_MODE = 'false';
+
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toBeCalledWith(expect.objectContaining({test: false}));
     });
 
     test('should call the EAP initialization hook', () => {
@@ -236,7 +317,10 @@ describe('The Croct plug', () => {
         croct.extend('foo', fooFactory);
         croct.extend('bar', barFactory);
 
-        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            test: false,
+        };
 
         const sdkFacade = SdkFacade.init(config);
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -331,7 +415,7 @@ describe('The Croct plug', () => {
         croct.plug(config);
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
         expect(initialize).toBeCalledTimes(1);
     });
 
@@ -413,7 +497,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.tracker).toBe(sdkFacade.tracker);
     });
@@ -430,7 +514,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.user).toBe(sdkFacade.user);
     });
@@ -447,7 +531,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.evaluator).toBe(sdkFacade.evaluator);
     });
@@ -464,7 +548,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.session).toBe(sdkFacade.session);
     });
@@ -481,7 +565,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.isAnonymous()).toBe(sdkFacade.user.isAnonymous());
     });
@@ -502,7 +586,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.getUserId()).toBe(config.userId);
     });
@@ -520,7 +604,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(() => croct.identify(1235 as unknown as string)).toThrow('The user ID must be a string.');
     });
@@ -534,7 +618,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         croct.identify('3r1ck');
 
@@ -557,7 +641,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         expect(croct.isAnonymous()).toBeFalsy();
 
@@ -578,7 +662,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const setToken = jest.spyOn(sdkFacade, 'setToken');
 
@@ -603,7 +687,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const unsetToken = jest.spyOn(sdkFacade, 'unsetToken');
 
@@ -624,7 +708,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const track = jest.spyOn(sdkFacade.tracker, 'track').mockResolvedValue({
             type: 'userSignedUp',
@@ -648,7 +732,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue('carol');
 
@@ -671,7 +755,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue(true);
 
@@ -690,7 +774,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue('foo');
 
@@ -709,7 +793,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockRejectedValue(undefined);
 
@@ -814,7 +898,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toBeCalledWith(expect.objectContaining(config));
 
         const close = jest.spyOn(sdkFacade, 'close');
 

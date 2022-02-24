@@ -5,27 +5,33 @@ For an enhanced developer experience, the SDK provides both debug and test modes
 ## Debug mode
 
 The debug mode enables fine-grained logging to help developers detect and diagnose issues with the integration.
-Each log receives a severity level, so you can filter the log output only to see the log messages you 
+Each log receives a severity level, so you can filter the log output to only see the log messages you 
 care about.
 
 The severity levels and their respective meanings are:
 
-- **Debug**  
+- 🧐 **Debug**  
   Fine-grained messages that provide context to understand the steps leading to errors and warnings.
-- **Info**  
+- 🤓 **Info**  
   Informational messages that highlight the SDK's state and progress.
-- **Warning**  
+- 🤔 **Warning**  
   Warnings about potential issues that might be problems or might not.
-- **Error**  
+- 😱 **Error**  
   Abnormal or unexpected behaviors that need attention.
 
 ### Enabling debug mode
 
 To enable the debug mode, you need to set `debug` to true when initializing the SDK:
 
+```ts
+croct.plug({debug: true});
+```
+
+You can now check the console output at runtime for the debug logs.
+
 ## Test mode
 
-The test mode enables the SDK to track events in a test environment to ensure that the integration is working 
+The test mode enables the SDK to track events in test environments to ensure that the integration is working 
 as expected. It works by replacing the actual transport layer with a fake one to simulate successful calls.
 
 ### Enabling test mode
@@ -33,8 +39,8 @@ as expected. It works by replacing the actual transport layer with a fake one to
 > ✨ If you use Jest or any other testing framework that sets the `NODE_ENV=test`, it should just work out of the box 
 > without any additional configuration.
 
-By default, the SDK automatically detects test environments based on the `NODE_ENV`. In any case, you can 
-explicitly enable or disable you can either:
+By default, the SDK automatically detects test environments based on the `NODE_ENV`. To explicitly enable or disable 
+the test mode, you can either:
 
 - Pass `test` as `true` when initializing the SDK
 - Set the `CROCT_TEST_MODE` environment variable to `true`
@@ -42,8 +48,10 @@ explicitly enable or disable you can either:
 The order of precedence is as follows:
 
 1. If the `test` option is passed, that overrides any other environment settings
-2. If the `CROCT_TEST_MODE` environment variable is set, that takes precedence over the automatic detection of the test environment
-3. If neither `test` nor `CROCT_TEST_MODE` is set, the SDK detects the test environment automatically based on the `NODE_ENV`
+2. If the `CROCT_TEST_MODE` environment variable is set, that takes precedence over the automatic detection of 
+test environments
+3. If neither `test` nor `CROCT_TEST_MODE` is set, the SDK detects the test environment automatically based on
+the `NODE_ENV`
 
 ### Testing events
 

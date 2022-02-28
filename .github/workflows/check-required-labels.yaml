@@ -1,4 +1,4 @@
-name: PR Label Checker
+name: Label requirements
 on:
   pull_request:
     types:
@@ -9,8 +9,7 @@ on:
       - unlabeled
 
 jobs:
-
-  check_labels:
+  check-labels:
     name: Check labels
     runs-on: ubuntu-latest
     steps:

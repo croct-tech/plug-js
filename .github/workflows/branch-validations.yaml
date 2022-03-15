@@ -12,27 +12,27 @@ on:
       - opened
 
 jobs:
-  security-checks:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
+  # security-checks:
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
 
-      - name: Cache dependencies
-        id: cache-dependencies
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+  #     - name: Cache dependencies
+  #       id: cache-dependencies
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: node_modules
+  #         key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: npm ci
+  #     - name: Install dependencies
+  #       if: steps.cache-dependencies.outputs.cache-hit != 'true'
+  #       run: npm ci
 
-      - name: Check dependency vulnerabilities
-        run: npm audit
+  #     - name: Check dependency vulnerabilities
+  #       run: npm audit
 
   validate:
     runs-on: ubuntu-18.04

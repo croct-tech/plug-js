@@ -61,7 +61,7 @@ There are several event types that you can record within the customer journey:
 | [`goalCompleted`](#goalcompleted)                       | Analytics     | No            | Records a goal completion.
 | [`interestShown`](#interestShown)                       | Miscellaneous | No            | Records a user has shown interest in something.
 | [`postViewed`](#postViewed)                             | Miscellaneous | No            | Records a post view.
-| ['linkOpened'](#linkOpened)                             | Miscellaneous | No            | This event records a link opening.
+| [`linkOpened`](#linkOpened)                             | Miscellaneous | No            | This event records a link opening.
 | [`sessionAttributesChanged`](#sessionattributeschanged) | Miscellaneous | Yes           | Records session's attributes changes.
 | [`nothingChanged`](#nothingchanged)                     | Miscellaneous | Yes           | Records a period of inactivity.
 | [`eventOccurred`](#eventOccurred)                       | Miscellaneous | No            | Records a custom event.

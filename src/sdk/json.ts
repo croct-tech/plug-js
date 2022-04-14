@@ -1,4 +1,4 @@
-import {JsonObject} from '@croct/sdk/json';
+import {JsonObject} from '@croct/json';
 
-export * from '@croct/sdk/json';
+export * from '@croct/json/mutable';
 export type NullableJsonObject = JsonObject | null;

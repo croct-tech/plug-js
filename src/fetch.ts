@@ -1,5 +1,4 @@
-import {JsonObject} from '@croct/sdk/json';
-import {NullableJsonObject} from './sdk/json';
+import {NullableJsonObject, JsonObject} from './sdk/json';
 
 export interface SlotMap {
 }

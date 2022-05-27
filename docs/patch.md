@@ -70,14 +70,14 @@ This method adds a value to a collection.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value     | Given Value     | Result
-------------------|-----------------|-------------------
-`null`            | `'a'`           | `['a']`
-`'a'`             | `null`        | `['a']`
-`'a'`             | `'b'`           | `['a', 'b']`
-`['a']`           | `null`          | `['a']`
-`[]`              | `'a'`           | `['a']`
-`['a', 'b']`      | `'a'`           | `['a', 'b', 'a']`
+| Current Value | Given Value | Result            |
+|---------------|-------------|-------------------|
+| `null`        | `'a'`       | `['a']`           |
+| `'a'`         | `null`      | `['a']`           |
+| `'a'`         | `'b'`       | `['a', 'b']`      |
+| `['a']`       | `null`      | `['a']`           |
+| `[]`          | `'a'`       | `['a']`           |
+| `['a', 'b']`  | `'a'`       | `['a', 'b', 'a']` |
 
 #### Signature
 
@@ -103,20 +103,20 @@ This method combines two set of values.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value     | Given Value     | Result
-------------------|-----------------|-------------------
-`[]`              | `[]`            | `[]`
-`[]`              | `['a', 'a']`    | `['a']`
-`['a']`           | `null`          | `['a']`
-`['a']`           | `'b'`           | `['a', 'b']`
-`['a']`           | `['b', null]`   | `['a', 'b']`
-`[null]`          | `['a']`         | `['a']`
-`null`            | `null`          | `[]`
-`null`            | `['a']`         | `['a']`
-`null`            | `'a'`           | `['a']`
-`'a'`             | `'b'`           | `['a', 'b']`
-`'a'`             | `['b']`         | `['a', 'b']`
-`'a'`             | `['a']`         | `['a']`
+| Current Value | Given Value   | Result       |
+|---------------|---------------|--------------|
+| `[]`          | `[]`          | `[]`         |
+| `[]`          | `['a', 'a']`  | `['a']`      |
+| `['a']`       | `null`        | `['a']`      |
+| `['a']`       | `'b'`         | `['a', 'b']` |
+| `['a']`       | `['b', null]` | `['a', 'b']` |
+| `[null]`      | `['a']`       | `['a']`      |
+| `null`        | `null`        | `[]`         |
+| `null`        | `['a']`       | `['a']`      |
+| `null`        | `'a'`         | `['a']`      |
+| `'a'`         | `'b'`         | `['a', 'b']` |
+| `'a'`         | `['b']`       | `['a', 'b']` |
+| `'a'`         | `['a']`       | `['a']`      |
 
 #### Signature
 
@@ -142,18 +142,18 @@ This method merges two maps or lists.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value     | Given Value     | Result
-------------------|-----------------|-------------------
-`{}`              | `{}`            | `{}`
-`{}`              | `{a: 1}`        | `{a: 1}`
-`{a: 1}`          | `{b: 2}`        | `{a: 1, b: 2}`
-`{a: 1}`          | `{a: 2}`        | `{a: 2}`
-`null`            | `{a: 1}`        | `{a: 1}`
-`null`            | `[1]`           | `[1]`
-`1`               | `[2]`           | `[1, 2]`
-`[]`              | `[1]`           | `[1]`
-`[1]`             | `[2]`           | `[1, 2]`
-`['a', 'b']`      | `['b', 'c']`    | `['a', 'b', 'b', 'c']`
+| Current Value | Given Value  | Result                 |
+|---------------|--------------|------------------------|
+| `{}`          | `{}`         | `{}`                   |
+| `{}`          | `{a: 1}`     | `{a: 1}`               |
+| `{a: 1}`      | `{b: 2}`     | `{a: 1, b: 2}`         |
+| `{a: 1}`      | `{a: 2}`     | `{a: 2}`               |
+| `null`        | `{a: 1}`     | `{a: 1}`               |
+| `null`        | `[1]`        | `[1]`                  |
+| `1`           | `[2]`        | `[1, 2]`               |
+| `[]`          | `[1]`        | `[1]`                  |
+| `[1]`         | `[2]`        | `[1, 2]`               |
+| `['a', 'b']`  | `['b', 'c']` | `['a', 'b', 'b', 'c']` |
 
 #### Signature
 
@@ -179,11 +179,11 @@ This method increments a value by a given amount.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value     | Amount          | Result
-------------------|-----------------|-------------------
-`null`            | 10              | 10
-`0`               | 10              | 10
-`-1`              | 10              | 9
+| Current Value | Amount | Result |
+|---------------|--------|--------|
+| `null`        | 10     | 10     |
+| `0`           | 10     | 10     |
+| `-1`          | 10     | 9      |
 
 #### Signature
 
@@ -209,11 +209,11 @@ This method decrements a value by a given amount.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value     | Amount          | Result
-------------------|-----------------|-------------------
-`null`            | 10              | -10
-`0`               | 10              | -10
-`1`               | 10              | -9
+| Current Value | Amount | Result |
+|---------------|--------|--------|
+| `null`        | 10     | -10    |
+| `0`           | 10     | -10    |
+| `1`           | 10     | -9     |
 
 #### Signature
 
@@ -239,12 +239,12 @@ This method removes values from a collection.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value          | Given Value | Result
------------------------|------------ |-------------------
-`['a', 'b', 'c']`      | `'a'`       | `['b', 'c']`
-`['a', 'b', 'c', 'c']` | `'c'`       | `['a', 'b']`
-`['a', 'b', 'c']`      | `'d'`       | `['a', 'b', 'c']`
-`['a', {b: 1}, 'c']`   | `{b: 1}`    | `['a', 'c']`
+| Current Value          | Given Value | Result            |
+|------------------------|-------------|-------------------|
+| `['a', 'b', 'c']`      | `'a'`       | `['b', 'c']`      |
+| `['a', 'b', 'c', 'c']` | `'c'`       | `['a', 'b']`      |
+| `['a', 'b', 'c']`      | `'d'`       | `['a', 'b', 'c']` |
+| `['a', {b: 1}, 'c']`   | `{b: 1}`    | `['a', 'c']`      |
 
 #### Signature
 
@@ -270,12 +270,12 @@ This method clears the value at given path.
 
 The following table shows how the operation behaves in different scenarios:
 
-Current Value     | Result
-------------------|-------------
-`null`            | `null`
-`[]`              | `[]`
-`['a']`           | `[]`
-`'foo'`           | `null`
+| Current Value | Result |
+|---------------|--------|
+| `null`        | `null` |
+| `[]`          | `[]`   |
+| `['a']`       | `[]`   |
+| `'foo'`       | `null` |
 
 Note that the operation will not fail if the path does not exist.
 

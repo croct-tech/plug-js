@@ -115,7 +115,8 @@ Current Value     | Given Value     | Result
 `'a'`             | `['a']`         | `['a']`
 `[]`              | `['a', 'a']`    | `['a']`
 `[null]`          | `['a']`         | `['a']`
-`['a']`          | `['b', null]`    | `['a', 'b']`
+`['a']`           | `['b', null]`   | `['a', 'b']`
+`null`            | `'a'`           | `['a']`
 
 #### Signature
 

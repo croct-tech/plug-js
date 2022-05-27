@@ -106,17 +106,17 @@ The following table shows how the operation behaves in different scenarios:
 Current Value     | Given Value     | Result
 ------------------|-----------------|-------------------
 `[]`              | `[]`            | `[]`
+`[]`              | `['a', 'a']`    | `['a']`
+`['a']`           | `null`          | `['a']`
+`['a']`           | `'b'`           | `['a', 'b']`
+`['a']`           | `['b', null]`   | `['a', 'b']`
+`[null]`          | `['a']`         | `['a']`
 `null`            | `null`          | `[]`
 `null`            | `['a']`         | `['a']`
-`['a']`           | `null`          | `['a']`
+`null`            | `'a'`           | `['a']`
 `'a'`             | `'b'`           | `['a', 'b']`
-`['a']`           | `'b'`           | `['a', 'b']`
 `'a'`             | `['b']`         | `['a', 'b']`
 `'a'`             | `['a']`         | `['a']`
-`[]`              | `['a', 'a']`    | `['a']`
-`[null]`          | `['a']`         | `['a']`
-`['a']`           | `['b', null]`   | `['a', 'b']`
-`null`            | `'a'`           | `['a']`
 
 #### Signature
 
@@ -145,10 +145,10 @@ The following table shows how the operation behaves in different scenarios:
 Current Value     | Given Value     | Result
 ------------------|-----------------|-------------------
 `{}`              | `{}`            | `{}`
-`null`            | `{a: 1}`        | `{a: 1}`
 `{}`              | `{a: 1}`        | `{a: 1}`
 `{a: 1}`          | `{b: 2}`        | `{a: 1, b: 2}`
 `{a: 1}`          | `{a: 2}`        | `{a: 2}`
+`null`            | `{a: 1}`        | `{a: 1}`
 `null`            | `[1]`           | `[1]`
 `1`               | `[2]`           | `[1, 2]`
 `[]`              | `[1]`           | `[1]`

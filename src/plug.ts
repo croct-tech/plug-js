@@ -147,7 +147,7 @@ export class GlobalPlug implements Plug {
             );
         }
 
-        const pending: Promise<void>[] = [];
+        const pending: Array<Promise<void>> = [];
 
         for (const [name, options] of Object.entries({playground: true, ...plugins})) {
             logger.debug(`Initializing plugin "${name}"...`);
@@ -191,15 +191,11 @@ export class GlobalPlug implements Plug {
                     },
                     cidAssigner: sdk.cidAssigner,
                     eventManager: sdk.eventManager,
-                    getLogger: (...namespace: string[]): Logger => {
-                        return sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace);
-                    },
-                    getTabStorage: (...namespace: string[]): Storage => {
-                        return sdk.getTabStorage(PLUGIN_NAMESPACE, name, ...namespace);
-                    },
-                    getBrowserStorage: (...namespace: string[]): Storage => {
-                        return sdk.getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace);
-                    },
+                    getLogger: (...namespace: string[]): Logger => sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace),
+                    getTabStorage: (...namespace: string[]): Storage => sdk
+                        .getTabStorage(PLUGIN_NAMESPACE, name, ...namespace),
+                    getBrowserStorage: (...namespace: string[]): Storage => sdk
+                        .getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace),
                 },
             };
 
@@ -230,8 +226,7 @@ export class GlobalPlug implements Plug {
             }
 
             pending.push(
-                promise
-                    .then(() => logger.debug(`Plugin "${name}" enabled`))
+                promise.then(() => logger.debug(`Plugin "${name}" enabled`))
                     .catch(error => logger.error(`Failed to enable plugin "${name}": ${formatCause(error)}`)),
             );
         }
@@ -258,7 +253,9 @@ export class GlobalPlug implements Plug {
     }
 
     public get flushed(): Promise<this> {
-        return this.tracker.flushed.then(() => this);
+        return this.tracker
+            .flushed
+            .then(() => this);
     }
 
     private get sdk(): SdkFacade {
@@ -286,11 +283,15 @@ export class GlobalPlug implements Plug {
     }
 
     public isAnonymous(): boolean {
-        return this.sdk.context.isAnonymous();
+        return this.sdk
+            .context
+            .isAnonymous();
     }
 
     public getUserId(): string | null {
-        return this.sdk.context.getUser();
+        return this.sdk
+            .context
+            .getUser();
     }
 
     public identify(userId: string): void {
@@ -314,11 +315,15 @@ export class GlobalPlug implements Plug {
     }
 
     public track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>> {
-        return this.sdk.tracker.track(type, payload);
+        return this.sdk
+            .tracker
+            .track(type, payload);
     }
 
     public evaluate<T extends JsonValue>(expression: string, options: EvaluationOptions = {}): Promise<T> {
-        return this.sdk.evaluator.evaluate(expression, options) as Promise<T>;
+        return this.sdk
+            .evaluator
+            .evaluate(expression, options) as Promise<T>;
     }
 
     public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {
@@ -344,7 +349,7 @@ export class GlobalPlug implements Plug {
         const {instance, plugins} = this;
 
         const logger = this.sdk.getLogger();
-        const pending: Promise<void>[] = [];
+        const pending: Array<Promise<void>> = [];
 
         for (const [pluginName, controller] of Object.entries(plugins)) {
             if (typeof controller.disable !== 'function') {
@@ -362,8 +367,7 @@ export class GlobalPlug implements Plug {
             }
 
             pending.push(
-                promise
-                    .then(() => logger.debug(`Plugin "${pluginName}" disabled`))
+                promise.then(() => logger.debug(`Plugin "${pluginName}" disabled`))
                     .catch(error => logger.error(`Failed to disable "${pluginName}": ${formatCause(error)}`)),
             );
         }

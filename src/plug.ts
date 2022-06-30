@@ -192,10 +192,12 @@ export class GlobalPlug implements Plug {
                     cidAssigner: sdk.cidAssigner,
                     eventManager: sdk.eventManager,
                     getLogger: (...namespace: string[]): Logger => sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace),
-                    getTabStorage: (...namespace: string[]): Storage => sdk
-                        .getTabStorage(PLUGIN_NAMESPACE, name, ...namespace),
-                    getBrowserStorage: (...namespace: string[]): Storage => sdk
-                        .getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace),
+                    getTabStorage: (...namespace: string[]): Storage => (
+                        sdk.getTabStorage(PLUGIN_NAMESPACE, name, ...namespace)
+                    ),
+                    getBrowserStorage: (...namespace: string[]): Storage => (
+                        sdk.getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace)
+                    ),
                 },
             };
 

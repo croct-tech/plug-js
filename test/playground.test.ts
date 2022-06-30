@@ -13,17 +13,6 @@ jest.mock(
     }),
 );
 
-// eslint-disable-next-line jest/require-top-level-describe -- Don't repeat this hook in each describe
-beforeEach(() => {
-    sessionStorage.clear();
-    window.history.replaceState({}, 'Home page', 'http://localhost');
-});
-
-// eslint-disable-next-line jest/require-top-level-describe -- Don't repeat this hook in each describe
-afterEach(() => {
-    jest.restoreAllMocks();
-});
-
 const cid = '7b0e7b3f-72d7-4045-8402-e712e6b89c20';
 const appId = '96ce0758-d4c4-4aae-bac6-efb17de66488';
 const tabId = 'ffe5d9df-af36-4d58-8178-51f3cf1a7504';
@@ -109,6 +98,15 @@ function mockIframe(): HTMLIFrameElement {
 }
 
 describe('A Playground plugin factory', () => {
+    beforeEach(() => {
+        sessionStorage.clear();
+        window.history.replaceState({}, 'Home page', 'http://localhost');
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it('should instantiate the Playground plugin', () => {
         const sdk: Partial<PluginSdk> = {
             version: sdkVersion,
@@ -148,6 +146,15 @@ describe('A Playground plugin factory', () => {
 });
 
 describe('A Playground plugin', () => {
+    beforeEach(() => {
+        sessionStorage.clear();
+        window.history.replaceState({}, 'Home page', 'http://localhost');
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it('should not synchronize with the playground if the connection ID is not specified', async () => {
         const configuration = getConfiguration();
 

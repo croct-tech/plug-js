@@ -7,25 +7,6 @@ import {PLAYGROUND_CONNECT_URL, PLAYGROUND_ORIGIN} from './constants';
 import {Logger, SdkEventSubscriber, Tab} from './sdk';
 import {TokenProvider} from './sdk/token';
 
-export type Options = {
-    connectionId?: string,
-};
-
-export const factory: PluginFactory<Options> = ({sdk, options}): PlaygroundPlugin => {
-    return new PlaygroundPlugin({
-        sdkVersion: sdk.version,
-        appId: sdk.appId,
-        connectionId: options.connectionId,
-        tab: sdk.tab,
-        storage: sdk.getTabStorage(),
-        tokenProvider: sdk.tokenStore,
-        cidAssigner: sdk.cidAssigner,
-        contextFactory: new TabContextFactory(sdk.tab),
-        eventSubscriber: sdk.eventManager,
-        logger: sdk.getLogger(),
-    });
-};
-
 const CONNECTION_PARAMETER = '__cplay';
 
 export type Configuration = {
@@ -98,15 +79,14 @@ export class PlaygroundPlugin implements Plugin {
             return;
         }
 
-        this.syncListener = (): Promise<void> => {
-            return this.cidAssigner.assignCid()
-                .then(cid => {
-                    this.syncToken(connectionId, cid);
-                })
-                .catch(error => {
-                    this.logger.warn(`Sync failed: ${formatCause(error)}`);
-                });
-        };
+        this.syncListener = (): Promise<void> => this.cidAssigner
+            .assignCid()
+            .then(cid => {
+                this.syncToken(connectionId, cid);
+            })
+            .catch(error => {
+                this.logger.warn(`Sync failed: ${formatCause(error)}`);
+            });
 
         this.eventSubscriber.addListener('tokenChanged', this.syncListener);
         this.tab.addListener('urlChange', this.syncListener);
@@ -157,6 +137,7 @@ export class PlaygroundPlugin implements Plugin {
 
     private syncToken(connectionId: string, cid: string): void {
         const iframe = document.createElement('iframe');
+
         iframe.setAttribute('src', PLAYGROUND_CONNECT_URL);
         iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
         iframe.style.visibility = 'hidden';
@@ -200,7 +181,9 @@ export class PlaygroundPlugin implements Plugin {
                 sdkVersion: this.sdkVersion,
                 tabId: this.tab.id,
                 cid: cid,
-                token: this.tokenProvider.getToken()?.toString() ?? null,
+                token: this.tokenProvider
+                    .getToken()
+                    ?.toString() ?? null,
                 context: context,
             };
 
@@ -241,3 +224,24 @@ export class PlaygroundPlugin implements Plugin {
         return context;
     }
 }
+
+export type Options = {
+    connectionId?: string,
+};
+
+export const factory: PluginFactory<Options> = (props): PlaygroundPlugin => {
+    const {sdk, options} = props;
+
+    return new PlaygroundPlugin({
+        sdkVersion: sdk.version,
+        appId: sdk.appId,
+        connectionId: options.connectionId,
+        tab: sdk.tab,
+        storage: sdk.getTabStorage(),
+        tokenProvider: sdk.tokenStore,
+        cidAssigner: sdk.cidAssigner,
+        contextFactory: new TabContextFactory(sdk.tab),
+        eventSubscriber: sdk.eventManager,
+        logger: sdk.getLogger(),
+    });
+};

@@ -5,19 +5,13 @@ import {Tab} from '../src/sdk';
 import {PLAYGROUND_ORIGIN} from '../src/constants';
 import {PluginSdk} from '../src/plugin';
 
-jest.mock('../src/constants', () => ({
-    PLAYGROUND_CONNECT_URL: 'https://play.croct.com/connect.html',
-    PLAYGROUND_ORIGIN: 'https://play.croct.com',
-}));
-
-beforeEach(() => {
-    sessionStorage.clear();
-    window.history.replaceState({}, 'Home page', 'http://localhost');
-});
-
-afterEach(() => {
-    jest.restoreAllMocks();
-});
+jest.mock(
+    '../src/constants',
+    () => ({
+        PLAYGROUND_CONNECT_URL: 'https://play.croct.com/connect.html',
+        PLAYGROUND_ORIGIN: 'https://play.croct.com',
+    }),
+);
 
 const cid = '7b0e7b3f-72d7-4045-8402-e712e6b89c20';
 const appId = '96ce0758-d4c4-4aae-bac6-efb17de66488';
@@ -78,7 +72,9 @@ function mockIframe(): HTMLIFrameElement {
     }
 
     const createElement = document.createElement.bind(document);
-    const appendChild = document.body.appendChild.bind(document.body);
+    const appendChild = document.body
+        .appendChild
+        .bind(document.body);
 
     jest.spyOn(document.body, 'appendChild').mockImplementation(element => {
         const result = appendChild(element);
@@ -102,7 +98,16 @@ function mockIframe(): HTMLIFrameElement {
 }
 
 describe('A Playground plugin factory', () => {
-    test('should instantiate the Playground plugin', () => {
+    beforeEach(() => {
+        sessionStorage.clear();
+        window.history.replaceState({}, 'Home page', 'http://localhost');
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it('should instantiate the Playground plugin', () => {
         const sdk: Partial<PluginSdk> = {
             version: sdkVersion,
             appId: appId,
@@ -141,7 +146,16 @@ describe('A Playground plugin factory', () => {
 });
 
 describe('A Playground plugin', () => {
-    test('should not synchronize with the playground if the connection ID is not specified', async () => {
+    beforeEach(() => {
+        sessionStorage.clear();
+        window.history.replaceState({}, 'Home page', 'http://localhost');
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it('should not synchronize with the playground if the connection ID is not specified', async () => {
         const configuration = getConfiguration();
 
         const iframe = mockIframe();
@@ -157,7 +171,7 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).toHaveBeenCalledWith('No connection ID found in URL');
     });
 
-    test('should synchronize with the playground if a connection ID is specified in the URL', async () => {
+    it('should synchronize with the playground if a connection ID is specified in the URL', async () => {
         const configuration = getConfiguration();
 
         const token = Token.issue(appId, 'c4r0l');
@@ -190,7 +204,7 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).toHaveBeenCalledWith('Connection ID found in URL');
     });
 
-    test('should synchronize with the playground and omit undefined context values', async () => {
+    it('should synchronize with the playground and omit undefined context values', async () => {
         const configuration = getConfiguration();
 
         const minimalContext: EvaluationContext = {
@@ -218,8 +232,9 @@ describe('A Playground plugin', () => {
         );
     });
 
-    test('should give higher priority to the connection ID specified in the configuration', async () => {
+    it('should give higher priority to the connection ID specified in the configuration', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         window.history.pushState({}, 'Other page', 'index.html?__cplay=321');
@@ -245,8 +260,9 @@ describe('A Playground plugin', () => {
         expect(sessionStorage.getItem('connectionId')).toBeNull();
     });
 
-    test('should abort the synchronization if the iframe window is uninitialized', async () => {
+    it('should abort the synchronization if the iframe window is uninitialized', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const iframe = mockIframe();
@@ -266,8 +282,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.warn).toHaveBeenCalledWith('Sync handshake failed');
     });
 
-    test('should wait until the page load to synchronize with the playground', async () => {
+    it('should wait until the page load to synchronize with the playground', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const iframe = mockIframe();
@@ -293,7 +310,7 @@ describe('A Playground plugin', () => {
         );
     });
 
-    test('should restore previous connection ID from storage', async () => {
+    it('should restore previous connection ID from storage', async () => {
         const configuration = getConfiguration();
 
         sessionStorage.setItem('connectionId', '123');
@@ -316,8 +333,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).toHaveBeenCalledWith('Previous connection ID found');
     });
 
-    test('should log a warning if the synchronization fails', async () => {
+    it('should log a warning if the synchronization fails', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         jest.spyOn(configuration.cidAssigner, 'assignCid').mockRejectedValue(new Error('Unexpected error'));
@@ -329,8 +347,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.warn).toHaveBeenCalledWith('Sync failed: unexpected error');
     });
 
-    test('should resynchronize on token changes', async () => {
+    it('should resynchronize on token changes', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const addListener = jest.spyOn(configuration.eventSubscriber, 'addListener');
@@ -377,7 +396,9 @@ describe('A Playground plugin', () => {
         });
 
         // Wait a few milliseconds to ensure the async callback is called
-        await new Promise(resolve => window.setTimeout(resolve, 30));
+        await new Promise(resolve => {
+            setTimeout(resolve, 30);
+        });
 
         iframe.dispatchEvent(new Event('load'));
 
@@ -399,8 +420,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).toHaveBeenLastCalledWith('Sync completed');
     });
 
-    test('should resynchronize on URL changes', async () => {
+    it('should resynchronize on URL changes', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const addListener = jest.spyOn(configuration.eventSubscriber, 'addListener');
@@ -449,7 +471,9 @@ describe('A Playground plugin', () => {
         jest.spyOn(configuration.contextFactory, 'createContext').mockReturnValue(newEvaluationContext);
 
         // Wait a few milliseconds to ensure the async callback is called
-        await new Promise(resolve => window.setTimeout(resolve, 30));
+        await new Promise(resolve => {
+            setTimeout(resolve, 30);
+        });
 
         iframe.dispatchEvent(new Event('load'));
 
@@ -471,11 +495,13 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).toHaveBeenLastCalledWith('Sync completed');
     });
 
-    test('should remove the iframe on synchronization completion', async () => {
+    it('should remove the iframe on synchronization completion', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const addEventListener = jest.spyOn(window, 'addEventListener');
+
         jest.spyOn(window, 'removeEventListener');
 
         const iframe = mockIframe();
@@ -507,8 +533,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).toHaveBeenCalledWith('Sync completed');
     });
 
-    test('should ignore the message event from another origin', async () => {
+    it('should ignore the message event from another origin', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const iframe = mockIframe();
@@ -528,8 +555,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).not.toHaveBeenCalledWith('Sync completed');
     });
 
-    test('should ignore the message event with different connection ID', async () => {
+    it('should ignore the message event with different connection ID', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const iframe = mockIframe();
@@ -549,8 +577,9 @@ describe('A Playground plugin', () => {
         expect(configuration.logger.debug).not.toHaveBeenCalledWith('Sync completed');
     });
 
-    test('should remove listeners when disabled', async () => {
+    it('should remove listeners when disabled', async () => {
         const configuration = getConfiguration();
+
         configuration.connectionId = '123';
 
         const subscriberAddListener = jest.spyOn(configuration.eventSubscriber, 'addListener');

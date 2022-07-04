@@ -6,11 +6,12 @@ import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
 import {FetchOptions} from '../src/fetch';
 
-jest.mock('../src/constants', () => {
-    return {
+jest.mock(
+    '../src/constants',
+    () => ({
         CDN_URL: 'https://cdn.croct.io/js/v1/lib/plug.js',
-    };
-});
+    }),
+);
 
 describe('The Croct plug', () => {
     const APP_ID = '7e9d59a9-e4b3-45d4-b1c7-48287f1e5e8a';
@@ -36,29 +37,38 @@ describe('The Croct plug', () => {
         await croct.unplug();
     });
 
-    test('should disallow plugin overriding', () => {
-        croct.extend('foo', () => ({
-            enable: jest.fn(),
-        }));
+    it('should disallow plugin overriding', () => {
+        croct.extend(
+            'foo',
+            () => ({
+                enable: jest.fn(),
+            }),
+        );
 
         function override(): void {
-            croct.extend('foo', () => ({
-                enable: jest.fn(),
-            }));
+            croct.extend(
+                'foo',
+                () => ({
+                    enable: jest.fn(),
+                }),
+            );
         }
 
         expect(override).toThrow('Another plugin is already registered with name "foo"');
     });
 
-    test('should fail to initialize if the app ID is not specified and cannot be auto-detected', () => {
+    it('should fail to initialize if the app ID is not specified and cannot be auto-detected', () => {
         expect(() => croct.plug()).toThrow('The app ID must be specified when it cannot be auto-detected.');
     });
 
-    test('should auto-detect app ID when loaded using an application-specific tag', () => {
+    it('should auto-detect app ID when loaded using an application-specific tag', () => {
         const script: HTMLScriptElement = window.document.createElement('script');
+
         script.src = APP_CDN_URL;
 
-        window.document.head.appendChild(script);
+        window.document
+            .head
+            .appendChild(script);
 
         const config: SdkFacadeConfiguration = {
             appId: APP_ID,
@@ -73,11 +83,14 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(config);
     });
 
-    test('should fail if the auto-detected app ID and the specified app ID are conflicting', () => {
+    it('should fail if the auto-detected app ID and the specified app ID are conflicting', () => {
         const script: HTMLScriptElement = window.document.createElement('script');
+
         script.src = APP_CDN_URL;
 
-        window.document.head.appendChild(script);
+        window.document
+            .head
+            .appendChild(script);
 
         function plug(): void {
             croct.plug({appId: '00000000-0000-0000-0000-000000000000'});
@@ -86,11 +99,14 @@ describe('The Croct plug', () => {
         expect(plug).toThrow('The specified app ID and the auto-detected app ID are conflicting.');
     });
 
-    test('should log a warning message when the app ID is specified unnecessarily', () => {
+    it('should log a warning message when the app ID is specified unnecessarily', () => {
         const script: HTMLScriptElement = window.document.createElement('script');
+
         script.src = APP_CDN_URL;
 
-        window.document.head.appendChild(script);
+        window.document
+            .head
+            .appendChild(script);
 
         const logger: Logger = {
             debug: jest.fn(),
@@ -110,7 +126,7 @@ describe('The Croct plug', () => {
         ));
     });
 
-    test('should initialize the SDK using the specified configuration', () => {
+    it('should initialize the SDK using the specified configuration', () => {
         const config: SdkFacadeConfiguration = {
             appId: APP_ID,
             track: false,
@@ -131,7 +147,7 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(config);
     });
 
-    test.each([
+    it.each([
         'test',
         'development',
         'production',
@@ -150,7 +166,7 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(expect.objectContaining({test: environment === 'test'}));
     });
 
-    test.each([
+    it.each([
         true,
         false,
     ])('should enable the test mode based on CROCT_TEST_MODE environment variable', value => {
@@ -168,7 +184,7 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(expect.objectContaining({test: value}));
     });
 
-    test('should prioritize the specified test mode over environment variables', () => {
+    it('should prioritize the specified test mode over environment variables', () => {
         const config: SdkFacadeConfiguration = {
             appId: APP_ID,
             test: false,
@@ -185,7 +201,7 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(expect.objectContaining({test: false}));
     });
 
-    test('should prioritize the test mode specified via CROCT_TEST_MODE over NODE_ENV', () => {
+    it('should prioritize the test mode specified via CROCT_TEST_MODE over NODE_ENV', () => {
         const config: SdkFacadeConfiguration = {
             appId: APP_ID,
         };
@@ -201,7 +217,7 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledWith(expect.objectContaining({test: false}));
     });
 
-    test('should call the EAP initialization hook', () => {
+    it('should call the EAP initialization hook', () => {
         window.croctEap = {
             initialize: jest.fn().mockImplementation(function initialize(this: Plug) {
                 expect(this).toBe(croct);
@@ -213,7 +229,7 @@ describe('The Croct plug', () => {
         expect(window.croctEap.initialize).toBeCalled();
     });
 
-    test('should log failures initializing plugins', () => {
+    it('should log failures initializing plugins', () => {
         croct.extend('foo', () => {
             throw new Error('Failure');
         });
@@ -236,7 +252,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    test('should log an error if a plugin is not registered', () => {
+    it('should log an error if a plugin is not registered', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -255,7 +271,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    test('should log an error if a plugin options is invalid', () => {
+    it('should log an error if a plugin options is invalid', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -280,7 +296,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    test('should not initialize disabled plugins', () => {
+    it('should not initialize disabled plugins', () => {
         const factory: PluginFactory = jest.fn();
 
         croct.extend('foo', factory);
@@ -305,7 +321,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    test('should initialize the declared plugins', () => {
+    it('should initialize the declared plugins', () => {
         const fooFactory: PluginFactory = jest.fn().mockImplementation(({sdk}) => {
             sdk.getLogger('namespace');
             sdk.getTabStorage('namespace');
@@ -344,7 +360,7 @@ describe('The Croct plug', () => {
         expect(getBrowserStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
     });
 
-    test('should handle failures enabling plugins', async () => {
+    it('should handle failures enabling plugins', async () => {
         const plugin: Plugin = {
             enable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
         };
@@ -361,22 +377,30 @@ describe('The Croct plug', () => {
         await expect(croct.plugged).resolves.toBe(croct);
     });
 
-    test('should wait for the plugins to initialize', async () => {
+    it('should wait for the plugins to initialize', async () => {
         let loadFooPlugin: () => void = jest.fn();
 
-        const fooEnable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {
-            loadFooPlugin = resolve;
-        }));
+        const fooEnable = jest.fn().mockImplementation(
+            () => new Promise<void>(resolve => {
+                loadFooPlugin = resolve;
+            }),
+        );
 
-        croct.extend('foo', () => ({
-            enable: fooEnable,
-        }));
+        croct.extend(
+            'foo',
+            () => ({
+                enable: fooEnable,
+            }),
+        );
 
         const barEnable = jest.fn();
 
-        croct.extend('bar', () => ({
-            enable: barEnable,
-        }));
+        croct.extend(
+            'bar',
+            () => ({
+                enable: barEnable,
+            }),
+        );
 
         croct.plug({
             appId: APP_ID,
@@ -393,7 +417,9 @@ describe('The Croct plug', () => {
         expect(barEnable).toHaveBeenCalledTimes(1);
         expect(plugged).not.toHaveBeenCalled();
 
-        await new Promise(resolve => window.setTimeout(resolve, 15));
+        await new Promise(resolve => {
+            setTimeout(resolve, 15);
+        });
 
         expect(plugged).not.toHaveBeenCalled();
 
@@ -404,7 +430,7 @@ describe('The Croct plug', () => {
         expect(plugged).toHaveBeenCalled();
     });
 
-    test('should not fail if plugged more than once', () => {
+    it('should not fail if plugged more than once', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
         const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
@@ -416,7 +442,7 @@ describe('The Croct plug', () => {
         expect(initialize).toBeCalledTimes(1);
     });
 
-    test('should determine whether it is initialized', async () => {
+    it('should determine whether it is initialized', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         expect(croct.initialized).toBe(false);
@@ -430,7 +456,7 @@ describe('The Croct plug', () => {
         expect(croct.initialized).toBe(false);
     });
 
-    test('should provide a callback that is called when the plug is plugged in', async () => {
+    it('should provide a callback that is called when the plug is plugged in', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         // First time
@@ -438,7 +464,9 @@ describe('The Croct plug', () => {
 
         const firstPromise = croct.plugged.then(firstCallback);
 
-        await new Promise(resolve => window.setTimeout(resolve, 15));
+        await new Promise(resolve => {
+            setTimeout(resolve, 15);
+        });
 
         expect(firstCallback).not.toHaveBeenCalled();
 
@@ -455,7 +483,9 @@ describe('The Croct plug', () => {
 
         const secondPromise = croct.plugged.then(secondCallback);
 
-        await new Promise(resolve => window.setTimeout(resolve, 15));
+        await new Promise(resolve => {
+            setTimeout(resolve, 15);
+        });
 
         expect(secondCallback).not.toHaveBeenCalled();
 
@@ -466,7 +496,7 @@ describe('The Croct plug', () => {
         expect(secondCallback).toHaveBeenCalledWith(croct);
     });
 
-    test('should provide a callback that is called when the current pending events are flushed', async () => {
+    it('should provide a callback that is called when the current pending events are flushed', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
@@ -486,7 +516,7 @@ describe('The Croct plug', () => {
         expect(flushed).toHaveBeenCalledTimes(1);
     });
 
-    test('should provide a tracker facade', () => {
+    it('should provide a tracker facade', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -499,11 +529,11 @@ describe('The Croct plug', () => {
         expect(croct.tracker).toBe(sdkFacade.tracker);
     });
 
-    test('should not provide a tracker facade if unplugged', () => {
+    it('should not provide a tracker facade if unplugged', () => {
         expect(() => croct.tracker).toThrow('Croct is not plugged in.');
     });
 
-    test('should provide a user facade', () => {
+    it('should provide a user facade', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -516,11 +546,11 @@ describe('The Croct plug', () => {
         expect(croct.user).toBe(sdkFacade.user);
     });
 
-    test('should not provide an evaluator facade if unplugged', () => {
+    it('should not provide an evaluator facade if unplugged', () => {
         expect(() => croct.evaluator).toThrow('Croct is not plugged in.');
     });
 
-    test('should provide an evaluator facade', () => {
+    it('should provide an evaluator facade', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -533,11 +563,11 @@ describe('The Croct plug', () => {
         expect(croct.evaluator).toBe(sdkFacade.evaluator);
     });
 
-    test('should not provide a user facade if unplugged', () => {
+    it('should not provide a user facade if unplugged', () => {
         expect(() => croct.user).toThrow('Croct is not plugged in.');
     });
 
-    test('should provide a session facade', () => {
+    it('should provide a session facade', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -550,11 +580,11 @@ describe('The Croct plug', () => {
         expect(croct.session).toBe(sdkFacade.session);
     });
 
-    test('should not provide a session facade if unplugged', () => {
+    it('should not provide a session facade if unplugged', () => {
         expect(() => croct.session).toThrow('Croct is not plugged in.');
     });
 
-    test('should determine whether the user is anonymous', () => {
+    it('should determine whether the user is anonymous', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -567,11 +597,11 @@ describe('The Croct plug', () => {
         expect(croct.isAnonymous()).toBe(sdkFacade.user.isAnonymous());
     });
 
-    test('should fail to determine whether the user is anonymous if unplugged', () => {
+    it('should fail to determine whether the user is anonymous if unplugged', () => {
         expect(() => croct.isAnonymous()).toThrow('Croct is not plugged in.');
     });
 
-    test('should provide the user ID', () => {
+    it('should provide the user ID', () => {
         const config: SdkFacadeConfiguration = {
             appId: APP_ID,
             userId: '3r1ck',
@@ -588,11 +618,11 @@ describe('The Croct plug', () => {
         expect(croct.getUserId()).toBe(config.userId);
     });
 
-    test('should fail to provide the user ID if unplugged', () => {
+    it('should fail to provide the user ID if unplugged', () => {
         expect(() => croct.getUserId()).toThrow('Croct is not plugged in.');
     });
 
-    test('should reject non-string user IDs', () => {
+    it('should reject non-string user IDs', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
@@ -606,7 +636,7 @@ describe('The Croct plug', () => {
         expect(() => croct.identify(1235 as unknown as string)).toThrow('The user ID must be a string.');
     });
 
-    test('should allow to identify the user', () => {
+    it('should allow to identify the user', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
 
         const sdkFacade = SdkFacade.init(config);
@@ -622,11 +652,11 @@ describe('The Croct plug', () => {
         expect(croct.getUserId()).toBe('3r1ck');
     });
 
-    test('should not allow to identify the user if unplugged', () => {
+    it('should not allow to identify the user if unplugged', () => {
         expect(() => croct.identify('3r1ck')).toThrow('Croct is not plugged in.');
     });
 
-    test('should allow to anonymize the user', () => {
+    it('should allow to anonymize the user', () => {
         const config: SdkFacadeConfiguration = {
             appId: APP_ID,
             userId: '3r1ck',
@@ -647,11 +677,11 @@ describe('The Croct plug', () => {
         expect(croct.isAnonymous()).toBeTruthy();
     });
 
-    test('should not allow to anonymize the user if unplugged', () => {
+    it('should not allow to anonymize the user if unplugged', () => {
         expect(() => croct.anonymize()).toThrow('Croct is not plugged in.');
     });
 
-    test('should allow to set a user token', () => {
+    it('should allow to set a user token', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -672,11 +702,11 @@ describe('The Croct plug', () => {
         expect(setToken).toBeCalledWith(Token.parse(token));
     });
 
-    test('should not allow to set a user token if unplugged', () => {
+    it('should not allow to set a user token if unplugged', () => {
         expect(() => croct.setToken('')).toThrow('Croct is not plugged in.');
     });
 
-    test('should allow to unset a user token', () => {
+    it('should allow to unset a user token', () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -693,11 +723,11 @@ describe('The Croct plug', () => {
         expect(unsetToken).toBeCalled();
     });
 
-    test('should not allow to unset a user token if unplugged', () => {
+    it('should not allow to unset a user token if unplugged', () => {
         expect(() => croct.unsetToken()).toThrow('Croct is not plugged in.');
     });
 
-    test('should allow to track events', async () => {
+    it('should allow to track events', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -717,11 +747,11 @@ describe('The Croct plug', () => {
         expect(track).toBeCalledWith('userSignedUp', {userId: 'c4r0l'});
     });
 
-    test('should not allow to track events if unplugged', () => {
+    it('should not allow to track events if unplugged', () => {
         expect(() => croct.track('userSignedUp', {userId: 'c4r0l'})).toThrow('Croct is not plugged in.');
     });
 
-    test('should allow to evaluate expressions', async () => {
+    it('should allow to evaluate expressions', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -740,11 +770,11 @@ describe('The Croct plug', () => {
         expect(evaluate).toBeCalledWith('user\'s name', {timeout: 5});
     });
 
-    test('should not allow to evaluate expressions if unplugged', () => {
+    it('should not allow to evaluate expressions if unplugged', () => {
         expect(() => croct.evaluate('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
     });
 
-    test('should allow to test expressions', async () => {
+    it('should allow to test expressions', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -763,7 +793,7 @@ describe('The Croct plug', () => {
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    test('should test expressions assuming non-boolean results as false', async () => {
+    it('should test expressions assuming non-boolean results as false', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -782,7 +812,7 @@ describe('The Croct plug', () => {
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    test('should not test expressions assuming errors as false', async () => {
+    it('should not test expressions assuming errors as false', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -801,7 +831,7 @@ describe('The Croct plug', () => {
         expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    test('should enable the playground plugin by default', () => {
+    it('should enable the playground plugin by default', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -817,7 +847,7 @@ describe('The Croct plug', () => {
         expect(logger.debug).toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
     });
 
-    test('should not enable the playground plugin if explicitly disabled', () => {
+    it('should not enable the playground plugin if explicitly disabled', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -836,23 +866,31 @@ describe('The Croct plug', () => {
         expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
     });
 
-    test('should wait for the plugins to disable before closing the SDK', async () => {
+    it('should wait for the plugins to disable before closing the SDK', async () => {
         let unloadFooPlugin: () => void = jest.fn();
-        const fooDisable = jest.fn().mockImplementation(() => new Promise<void>(resolve => {
-            unloadFooPlugin = resolve;
-        }));
+        const fooDisable = jest.fn().mockImplementation(
+            () => new Promise<void>(resolve => {
+                unloadFooPlugin = resolve;
+            }),
+        );
 
-        croct.extend('foo', () => ({
-            enable: jest.fn(),
-            disable: fooDisable,
-        }));
+        croct.extend(
+            'foo',
+            () => ({
+                enable: jest.fn(),
+                disable: fooDisable,
+            }),
+        );
 
         const barDisable = jest.fn();
 
-        croct.extend('bar', () => ({
-            enable: jest.fn(),
-            disable: barDisable,
-        }));
+        croct.extend(
+            'bar',
+            () => ({
+                enable: jest.fn(),
+                disable: barDisable,
+            }),
+        );
 
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
@@ -876,7 +914,9 @@ describe('The Croct plug', () => {
         expect(barDisable).toHaveBeenCalledTimes(1);
         expect(close).not.toHaveBeenCalled();
 
-        await new Promise(resolve => window.setTimeout(resolve, 15));
+        await new Promise(resolve => {
+            setTimeout(resolve, 15);
+        });
 
         expect(unplugged).not.toHaveBeenCalled();
 
@@ -887,7 +927,7 @@ describe('The Croct plug', () => {
         expect(unplugged).toHaveBeenCalled();
     });
 
-    test('should close the SDK', async () => {
+    it('should close the SDK', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -904,7 +944,7 @@ describe('The Croct plug', () => {
         expect(close).toBeCalled();
     });
 
-    test('should close the SDK even if a plugin fail to disable', async () => {
+    it('should close the SDK even if a plugin fail to disable', async () => {
         const plugin: Plugin = {
             enable: jest.fn(),
             disable: jest.fn().mockReturnValue(Promise.reject(new Error('Failure'))),
@@ -931,11 +971,11 @@ describe('The Croct plug', () => {
         expect(close).toHaveBeenCalled();
     });
 
-    test('should fail to fetch a slot content if unplugged', () => {
+    it('should fail to fetch a slot content if unplugged', () => {
         expect(() => croct.fetch('foo')).toThrow('Croct is not plugged in.');
     });
 
-    test('should fail to fetch a slot content if the fetch method is undefined', () => {
+    it('should fail to fetch a slot content if the fetch method is undefined', () => {
         window.croctEap = {
             fetch: undefined,
         };
@@ -948,7 +988,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    test('should delegate the fetch call to the external EAP method', () => {
+    it('should delegate the fetch call to the external EAP method', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -982,7 +1022,7 @@ describe('The Croct plug', () => {
         ));
     });
 
-    test('should log a warning message when using EAP features', () => {
+    it('should log a warning message when using EAP features', () => {
         croct.plug({appId: APP_ID});
 
         expect(() => croct.fetch('foo')).toThrow(

@@ -893,7 +893,7 @@ You should track this event when a user completes a desired goal, such as fillin
 #### Properties
 
 This event supports the following properties:
-Letras, números e separadores, começando e terminando com letras ou números
+
 | Property   | Type     | Required | Constraints                                                                                                                                                 | Description
 |------------|----------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | `goalId`   | `string` | Yes      | Between 3 and 100 characters long, containing only letters (A-Z), digits (0-9), and separators (`-`,`_`, `:`) , beginning or ending with letters or digits. | The ID of the goal.

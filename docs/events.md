@@ -321,7 +321,7 @@ This event supports the following properties:
 | `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                      | The original price of the product.
 | `cart.items[*].product.url`           | `string` | No       | Well-formed URL                   | The URL of the product page.
 | `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                   | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
+| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, which represents the order in which the item was added to the shopping cart.
 | `cart.items[*].quantity`              | `number` | Yes      | Positive                          | The number of units of the item.
 | `cart.items[*].total`                 | `number` | Yes      | Non-negative                      | The total for the item. It includes discounts and any other adjustment.
 | `cart.items[*].discount`              | `number` | No       | Non-negative                      | The amount of the discount applied to the item.
@@ -465,7 +465,7 @@ This event supports the following properties:
 | `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                      | The original price of the product.
 | `cart.items[*].product.url`           | `string` | No       | Well-formed URL                   | The URL of the product page.
 | `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                   | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
+| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, which represents the order in which the item was added to the shopping cart.
 | `cart.items[*].quantity`              | `number` | Yes      | Positive                          | The number of units of the item.
 | `cart.items[*].total`                 | `number` | Yes      | Non-negative                      | The total for the item. It includes discounts and any other adjustment.
 | `cart.items[*].discount`              | `number` | No       | Non-negative                      | The amount of the discount applied to the item.
@@ -610,7 +610,7 @@ This event supports the following properties:
 | `cart.items[*].product.originalPrice` | `number` | No       | Non-negative                      | The original price of the product.
 | `cart.items[*].product.url`           | `string` | No       | Well-formed URL                   | The URL of the product page.
 | `cart.items[*].product.imageUrl`      | `string` | No       | Well-formed URL                   | The URL of the main product image.
-| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, representing the cart in which the item was added to the shopping cart.
+| `cart.items[*].index`                 | `number` | Yes      | Non-negative                      | The index, starting from zero, which represents the order in which the item was added to the shopping cart.
 | `cart.items[*].quantity`              | `number` | Yes      | Positive                          | The number of units of the item.
 | `cart.items[*].total`                 | `number` | Yes      | Non-negative                      | The total for the item. It includes discounts and any other adjustment.
 | `cart.items[*].discount`              | `number` | No       | Non-negative                      | The amount of the discount applied to the item.

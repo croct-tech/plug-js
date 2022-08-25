@@ -12,31 +12,31 @@ summary of all events available to help you decide which events can benefit your
 
 - [Event Summary](#event-summary)
 - [User Events](#user-events)
-  * [userSignedUp](#usersignedup)
-  * [userSignedIn](#usersignedin)
-  * [userSignedOut](#usersignedout)
-  * [userProfileChanged](#userprofilechanged)
+    * [userSignedUp](#usersignedup)
+    * [userSignedIn](#usersignedin)
+    * [userSignedOut](#usersignedout)
+    * [userProfileChanged](#userprofilechanged)
 - [Web Events](#web-events)
-  * [tabOpened](#tabopened)
-  * [tabUrlChanged](#taburlchanged)
-  * [tabVisibilityChanged](#tabvisibilitychanged)
-  * [pageOpened](#pageopened)
-  * [pageLoaded](#pageloaded)
+    * [tabOpened](#tabopened)
+    * [tabUrlChanged](#taburlchanged)
+    * [tabVisibilityChanged](#tabvisibilitychanged)
+    * [pageOpened](#pageopened)
+    * [pageLoaded](#pageloaded)
 - [E-commerce Events](#e-commerce-events)
-  * [productViewed](#productviewed)
-  * [cartViewed](#cartviewed)
-  * [cartModified](#cartmodified)
-  * [checkoutStarted](#checkoutstarted)
-  * [orderPlaced](#orderplaced)
+    * [productViewed](#productviewed)
+    * [cartViewed](#cartviewed)
+    * [cartModified](#cartmodified)
+    * [checkoutStarted](#checkoutstarted)
+    * [orderPlaced](#orderplaced)
 - [Analytics Events](#analytics-events)
-  * [goalCompleted](#goalcompleted)
+    * [goalCompleted](#goalcompleted)
 - [Miscellaneous Events](#miscellaneous-events)
-  * [interestShown](#interestShown)
-  * [postViewed](#postViewed)
-  * [sessionAttributesChanged](#sessionattributeschanged)
-  * [nothingChanged](#nothingchanged)
-  * [eventOccurred](#eventoccurred)
-  * [linkOpened](#linkOpened)
+    * [interestShown](#interestShown)
+    * [postViewed](#postViewed)
+    * [sessionAttributesChanged](#sessionattributeschanged)
+    * [nothingChanged](#nothingchanged)
+    * [eventOccurred](#eventoccurred)
+    * [linkOpened](#linkOpened)
 
 ## Event Summary
 
@@ -121,9 +121,10 @@ Here are some examples of how to track this event:
 
 ```js
 croct.track('userSignedUp', {
-  userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
+    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
 });
 ```
+
 </details>
 
 <details>
@@ -131,34 +132,34 @@ croct.track('userSignedUp', {
 
 ```js
 croct.track('userSignedUp', {
-  userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
-  profile: {
-    firstName: 'Carol',
-    lastName: 'Doe',
-    birthDate: '2000-08-31',
-    gender: 'female',
-    email: 'carol@croct.com',
-    alternateEmail: 'example@croct.com',
-    phone: '+15555983800',
-    alternatePhone: '+15555983800',
-    address: {
-       street: '123 Some Street',
-       district: 'Kings Oak',
-       city: 'San Francisco',
-       state: 'California',
-       region: 'California',
-       country: 'US',
-       continent: 'NA'
-    },
-    avatar: 'http://croct.com/carol.png',
-    company: 'Croct',
-    companyUrl: 'http://croct.com',
-    jobTitle: 'Head of Marketing',
-    custom: {
-      points: 1,
-      favoriteEmoji: '🐊',
+    userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
+    profile: {
+        firstName: 'Carol',
+        lastName: 'Doe',
+        birthDate: '2000-08-31',
+        gender: 'female',
+        email: 'carol@croct.com',
+        alternateEmail: 'example@croct.com',
+        phone: '+15555983800',
+        alternatePhone: '+15555983800',
+        address: {
+            street: '123 Some Street',
+            district: 'Kings Oak',
+            city: 'San Francisco',
+            state: 'California',
+            region: 'California',
+            country: 'US',
+            continent: 'NA'
+        },
+        avatar: 'http://croct.com/carol.png',
+        company: 'Croct',
+        companyUrl: 'http://croct.com',
+        jobTitle: 'Head of Marketing',
+        custom: {
+            points: 1,
+            favoriteEmoji: '🐊',
+        }
     }
-  }
 });
 ```
 
@@ -251,7 +252,7 @@ This event supports the following properties:
 **Note:**
 
 - The `sku` and `productId` do not have to be different. Usually, the `productId` is the internal identifier,
-like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+  like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 
 #### Code Sample
@@ -263,11 +264,11 @@ Here are some examples of how to track this event:
 
 ```js
 croct.track('productViewed', {
-  product: {
-    productId: '12345',
-    name: 'Smartphone 9',
-    displayPrice: 599.00
-  }
+    product: {
+        productId: '12345',
+        name: 'Smartphone 9',
+        displayPrice: 599.00
+    }
 });
 ```
 
@@ -278,18 +279,18 @@ croct.track('productViewed', {
 
 ```js
 croct.track('productViewed', {
-  product: {
-    productId: '12345',
-    sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
-    name: 'Smartphone 9',
-    category: 'Smartphone',
-    brand: 'Pear',
-    variant: '64GB Green',
-    displayPrice: 599.00,
-    originalPrice: 699.00,
-    url: 'https://www.acme.com/product/smartphone9',
-    imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
-  }
+    product: {
+        productId: '12345',
+        sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+        name: 'Smartphone 9',
+        category: 'Smartphone',
+        brand: 'Pear',
+        variant: '64GB Green',
+        displayPrice: 599.00,
+        originalPrice: 699.00,
+        url: 'https://www.acme.com/product/smartphone9',
+        imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+    }
 });
 ```
 
@@ -338,9 +339,10 @@ This event supports the following properties:
 **Note:**
 
 - The `sku` and `productId` do not have to be different. Usually, the `productId` is the internal identifier,
-like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+  like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
-- When you don't specify a value for the `lastUpdateTime` property, the SDK considers the time at which you tracked the event as the last update time.
+- When you don't specify a value for the `lastUpdateTime` property, the SDK considers the time at which you tracked the
+  event as the last update time.
 
 #### Code Sample
 
@@ -351,22 +353,22 @@ Here are some examples of how to track this event:
 
 ```js
 croct.track('cartViewed', {
-  cart: {
-    currency: 'USD',
-    total: 776.49,
-    items: [
-      {
-        index: 0,
-        total: 699.00,
-        quantity: 1,
-        product: {
-          productId: '12345',
-          name: 'Smartphone 9',
-          displayPrice: 699.00
-        }
-      }
-    ]
-  }
+    cart: {
+        currency: 'USD',
+        total: 776.49,
+        items: [
+            {
+                index: 0,
+                total: 699.00,
+                quantity: 1,
+                product: {
+                    productId: '12345',
+                    name: 'Smartphone 9',
+                    displayPrice: 699.00
+                }
+            }
+        ]
+    }
 });
 ```
 
@@ -377,63 +379,63 @@ croct.track('cartViewed', {
 
 ```js
 croct.track('cartViewed', {
-  cart: {
-    currency: 'USD',
-    items: [
-      {
-        index: 0,
-        quantity: 1,
-        total: 699.00,
-        discount: 100.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '12345',
-          sku: 'SM-124-GREEN',
-          name: 'Smartphone 9',
-          category: 'Smartphone',
-          brand: 'Acme',
-          variant: '64GB Green',
-          displayPrice: 699.00,
-          originalPrice: 799.00,
-          url: 'https://www.acme.com/product/smartphone9',
-          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
-        }
-      },
-      {
-        index: 1,
-        quantity: 1,
-        total: 39.00,
-        discount: 10.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '98765',
-          sku: '03132db8-2c37-4aef-9827-60d0206683d9',
-          name: 'Silicone Case',
-          category: 'Cases',
-          brand: 'Acme',
-          variant: 'Black',
-          displayPrice: 39.00,
-          originalPrice: 49.00,
-          url: 'https://www.acme.com/product/silicone-case',
-          imageUrl: 'https://www.acme.com/images/silicone-case-black'
-        }
-      }
-    ],
-    taxes: {
-      state: 53.51,
-      local: 23.98
-    },
-    costs: {
-      manufacturing: 275.81,
-      cos: 85.37
-    },
-    subtotal: 848.00,
-    shippingPrice: 59.99,
-    discount: 169.99,
-    total: 815.49,
-    coupon: 'FREE-SHIPPING',
-    lastUpdateTime: 123456789
-  }
+    cart: {
+        currency: 'USD',
+        items: [
+            {
+                index: 0,
+                quantity: 1,
+                total: 699.00,
+                discount: 100.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '12345',
+                    sku: 'SM-124-GREEN',
+                    name: 'Smartphone 9',
+                    category: 'Smartphone',
+                    brand: 'Acme',
+                    variant: '64GB Green',
+                    displayPrice: 699.00,
+                    originalPrice: 799.00,
+                    url: 'https://www.acme.com/product/smartphone9',
+                    imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+                }
+            },
+            {
+                index: 1,
+                quantity: 1,
+                total: 39.00,
+                discount: 10.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '98765',
+                    sku: '03132db8-2c37-4aef-9827-60d0206683d9',
+                    name: 'Silicone Case',
+                    category: 'Cases',
+                    brand: 'Acme',
+                    variant: 'Black',
+                    displayPrice: 39.00,
+                    originalPrice: 49.00,
+                    url: 'https://www.acme.com/product/silicone-case',
+                    imageUrl: 'https://www.acme.com/images/silicone-case-black'
+                }
+            }
+        ],
+        taxes: {
+            state: 53.51,
+            local: 23.98
+        },
+        costs: {
+            manufacturing: 275.81,
+            cos: 85.37
+        },
+        subtotal: 848.00,
+        shippingPrice: 59.99,
+        discount: 169.99,
+        total: 815.49,
+        coupon: 'FREE-SHIPPING',
+        lastUpdateTime: 123456789
+    }
 });
 ```
 
@@ -482,9 +484,10 @@ This event supports the following properties:
 **Note:**
 
 - The `sku` and `productId` do not have to be different. Usually, the `productId` is the internal identifier,
-like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+  like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
-- When you don't specify a value for the `lastUpdateTime` property, the SDK considers the time at which you tracked the event as the last update time.
+- When you don't specify a value for the `lastUpdateTime` property, the SDK considers the time at which you tracked the
+  event as the last update time.
 
 #### Code Sample
 
@@ -495,22 +498,22 @@ Here are some examples of how to track this event:
 
 ```js
 croct.track('cartModified', {
-  cart: {
-    currency: 'USD',
-    total: 776.49,
-    items: [
-      {
-        index: 0,
-        total: 699.00,
-        quantity: 1,
-        product: {
-          productId: '12345',
-          name: 'Smartphone 9',
-          displayPrice: 699.00
-        }
-      }
-    ]
-  }
+    cart: {
+        currency: 'USD',
+        total: 776.49,
+        items: [
+            {
+                index: 0,
+                total: 699.00,
+                quantity: 1,
+                product: {
+                    productId: '12345',
+                    name: 'Smartphone 9',
+                    displayPrice: 699.00
+                }
+            }
+        ]
+    }
 });
 ```
 
@@ -521,63 +524,63 @@ croct.track('cartModified', {
 
 ```js
 croct.track('cartModified', {
-  cart: {
-    currency: 'USD',
-    items: [
-      {
-        index: 0,
-        quantity: 1,
-        total: 699.00,
-        discount: 100.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '12345',
-          sku: 'SM-124-GREEN',
-          name: 'Smartphone 9',
-          category: 'Smartphone',
-          brand: 'Acme',
-          variant: '64GB Green',
-          displayPrice: 699.00,
-          originalPrice: 799.00,
-          url: 'https://www.acme.com/product/smartphone9',
-          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
-        }
-      },
-      {
-        index: 1,
-        quantity: 1,
-        total: 39.00,
-        discount: 10.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '98765',
-          sku: '03132db8-2c37-4aef-9827-60d0206683d9',
-          name: 'Silicone Case',
-          category: 'Cases',
-          brand: 'Acme',
-          variant: 'Black',
-          displayPrice: 39.00,
-          originalPrice: 49.00,
-          url: 'https://www.acme.com/product/silicone-case',
-          imageUrl: 'https://www.acme.com/images/silicone-case-black'
-        }
-      }
-    ],
-    taxes: {
-      state: 53.51,
-      local: 23.98
-    },
-    costs: {
-      manufacturing: 275.81,
-      cos: 85.37
-    },
-    subtotal: 848.00,
-    shippingPrice: 59.99,
-    discount: 169.99,
-    total: 815.49,
-    coupon: 'FREE-SHIPPING',
-    lastUpdateTime: 123456789
-  }
+    cart: {
+        currency: 'USD',
+        items: [
+            {
+                index: 0,
+                quantity: 1,
+                total: 699.00,
+                discount: 100.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '12345',
+                    sku: 'SM-124-GREEN',
+                    name: 'Smartphone 9',
+                    category: 'Smartphone',
+                    brand: 'Acme',
+                    variant: '64GB Green',
+                    displayPrice: 699.00,
+                    originalPrice: 799.00,
+                    url: 'https://www.acme.com/product/smartphone9',
+                    imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+                }
+            },
+            {
+                index: 1,
+                quantity: 1,
+                total: 39.00,
+                discount: 10.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '98765',
+                    sku: '03132db8-2c37-4aef-9827-60d0206683d9',
+                    name: 'Silicone Case',
+                    category: 'Cases',
+                    brand: 'Acme',
+                    variant: 'Black',
+                    displayPrice: 39.00,
+                    originalPrice: 49.00,
+                    url: 'https://www.acme.com/product/silicone-case',
+                    imageUrl: 'https://www.acme.com/images/silicone-case-black'
+                }
+            }
+        ],
+        taxes: {
+            state: 53.51,
+            local: 23.98
+        },
+        costs: {
+            manufacturing: 275.81,
+            cos: 85.37
+        },
+        subtotal: 848.00,
+        shippingPrice: 59.99,
+        discount: 169.99,
+        total: 815.49,
+        coupon: 'FREE-SHIPPING',
+        lastUpdateTime: 123456789
+    }
 });
 ```
 
@@ -627,10 +630,10 @@ This event supports the following properties:
 **Note:**
 
 - The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier,
-like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+  like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
 - It may seem unusual to specify the order ID at the start of the checkout process, but some e-commerce platforms
-generate the order ID at the start or even before the process begins.
+  generate the order ID at the start or even before the process begins.
 
 #### Code Sample
 
@@ -641,24 +644,25 @@ Here are some examples of how to track this event:
 
 ```js
 croct.track('checkoutStarted', {
-  cart: {
-    currency: 'USD',
-    total: 776.49,
-    items: [
-      {
-        index: 0,
-        total: 699.00,
-        quantity: 1,
-        product: {
-          productId: '12345',
-          name: 'Smartphone 9',
-          displayPrice: 699.00
-        }
-      }
-    ]
-  }
+    cart: {
+        currency: 'USD',
+        total: 776.49,
+        items: [
+            {
+                index: 0,
+                total: 699.00,
+                quantity: 1,
+                product: {
+                    productId: '12345',
+                    name: 'Smartphone 9',
+                    displayPrice: 699.00
+                }
+            }
+        ]
+    }
 });
 ```
+
 </details>
 
 <details>
@@ -666,64 +670,64 @@ croct.track('checkoutStarted', {
 
 ```js
 croct.track('checkoutStarted', {
-  orderId: '123',
-  cart: {
-    currency: 'USD',
-    items: [
-      {
-        index: 0,
-        quantity: 1,
-        total: 699.00,
-        discount: 100.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '12345',
-          sku: 'SM-124-GREEN',
-          name: 'Smartphone 9',
-          category: 'Smartphone',
-          brand: 'Acme',
-          variant: '64GB Green',
-          displayPrice: 699.00,
-          originalPrice: 799.00,
-          url: 'https://www.acme.com/product/smartphone9',
-          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
-        }
-      },
-      {
-        index: 1,
-        quantity: 1,
-        total: 39.00,
-        discount: 10.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '98765',
-          sku: '03132db8-2c37-4aef-9827-60d0206683d9',
-          name: 'Silicone Case',
-          category: 'Cases',
-          brand: 'Acme',
-          variant: 'Black',
-          displayPrice: 39.00,
-          originalPrice: 49.00,
-          url: 'https://www.acme.com/product/silicone-case',
-          imageUrl: 'https://www.acme.com/images/silicone-case-black'
-        }
-      }
-    ],
-    taxes: {
-      state: 53.51,
-      local: 23.98
-    },
-    costs: {
-      manufacturing: 275.81,
-      cos: 85.37
-    },
-    subtotal: 848.00,
-    shippingPrice: 59.99,
-    discount: 169.99,
-    total: 815.49,
-    coupon: 'FREE-SHIPPING',
-    lastUpdateTime: 123456789
-  }
+    orderId: '123',
+    cart: {
+        currency: 'USD',
+        items: [
+            {
+                index: 0,
+                quantity: 1,
+                total: 699.00,
+                discount: 100.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '12345',
+                    sku: 'SM-124-GREEN',
+                    name: 'Smartphone 9',
+                    category: 'Smartphone',
+                    brand: 'Acme',
+                    variant: '64GB Green',
+                    displayPrice: 699.00,
+                    originalPrice: 799.00,
+                    url: 'https://www.acme.com/product/smartphone9',
+                    imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green.png'
+                }
+            },
+            {
+                index: 1,
+                quantity: 1,
+                total: 39.00,
+                discount: 10.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '98765',
+                    sku: '03132db8-2c37-4aef-9827-60d0206683d9',
+                    name: 'Silicone Case',
+                    category: 'Cases',
+                    brand: 'Acme',
+                    variant: 'Black',
+                    displayPrice: 39.00,
+                    originalPrice: 49.00,
+                    url: 'https://www.acme.com/product/silicone-case',
+                    imageUrl: 'https://www.acme.com/images/silicone-case-black'
+                }
+            }
+        ],
+        taxes: {
+            state: 53.51,
+            local: 23.98
+        },
+        costs: {
+            manufacturing: 275.81,
+            cos: 85.37
+        },
+        subtotal: 848.00,
+        shippingPrice: 59.99,
+        discount: 169.99,
+        total: 815.49,
+        coupon: 'FREE-SHIPPING',
+        lastUpdateTime: 123456789
+    }
 });
 ```
 
@@ -733,7 +737,7 @@ croct.track('checkoutStarted', {
 
 This event records a placed order.
 
-You should track this event when the user places an order. 
+You should track this event when the user places an order.
 
 #### Properties
 
@@ -775,9 +779,10 @@ This event supports the following properties:
 **Note:**
 
 - The `sku` and `productId` do not have to be different. Usually, the `product` is the internal identifier,
-like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
+  like `12345`, and the SKU is a public-facing identifier like `SM-124-GREEN`.
 - The `displayPrice` is the price the user pays, while the `originalPrice` is usually the regular retail price.
-- The `paymentMethod` property accepts arbitrary values, such as `credit-card`, `credit-balance`,  `visa`, `paypal` or `bitcoin`.
+- The `paymentMethod` property accepts arbitrary values, such as `credit-card`, `credit-balance`,  `visa`, `paypal`
+  or `bitcoin`.
 
 #### Code Sample
 
@@ -788,23 +793,23 @@ Here are some examples of how to track this event:
 
 ```js
 croct.track('orderPlaced', {
-  order: {
-    orderId: '123',
-    currency: 'USD',
-    total: 776.49,
-    items: [
-      {
-        index: 0,
-        total: 699.00,
-        quantity: 1,
-        product: {
-          productId: '12345',
-          name: 'Smartphone 9',
-          displayPrice: 699.00
-        }
-      }
-    ]
-  }
+    order: {
+        orderId: '123',
+        currency: 'USD',
+        total: 776.49,
+        items: [
+            {
+                index: 0,
+                total: 699.00,
+                quantity: 1,
+                product: {
+                    productId: '12345',
+                    name: 'Smartphone 9',
+                    displayPrice: 699.00
+                }
+            }
+        ]
+    }
 });
 ```
 
@@ -815,66 +820,66 @@ croct.track('orderPlaced', {
 
 ```js
 croct.track('orderPlaced', {
-  order: {
-    orderId: '123',
-    currency: 'USD',
-    items: [
-      {
-        index: 0,
-        quantity: 1,
-        total: 699.00,
-        discount: 100.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '12345',
-          sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
-          name: 'Smartphone 9',
-          category: 'Smartphone',
-          brand: 'Acme',
-          variant: '64GB Green',
-          displayPrice: 699.00,
-          originalPrice: 799.00,
-          url: 'https://www.acme.com/product/smartphone9',
-          imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green'
-        }
-      },
-      {
-        index: 1,
-        quantity: 1,
-        total: 39.00,
-        discount: 10.00,
-        coupon: 'PROMO',
-        product: {
-          productId: '98765',
-          sku: 'CS-987-BLACK',
-          name: 'Silicone Case',
-          category: 'Cases',
-          brand: 'Acme',
-          variant: 'Black',
-          displayPrice: 39.00,
-          originalPrice: 49.00,
-          url: 'https://www.acme.com/product/silicone-case',
-          imageUrl: 'https://www.acme.com/images/silicone-case-black.png'
-        }
-      }
-    ],
-    taxes: {
-      state: 53.51,
-      local: 23.98
-    },
-    costs: {
-      manufacturing: 275.81,
-      cos: 85.37
-    },
-    subtotal: 848.00,
-    shippingPrice: 59.99,
-    discount: 169.99,
-    total: 815.49,
-    coupon: 'FREE-SHIPPING',
-    paymentMethod: 'credit-card',
-    installments: 1,
-    status: 'paid'
-  }
+    order: {
+        orderId: '123',
+        currency: 'USD',
+        items: [
+            {
+                index: 0,
+                quantity: 1,
+                total: 699.00,
+                discount: 100.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '12345',
+                    sku: 'a9b2745f-9d0b-4bfe-8ebd-7376dd932169',
+                    name: 'Smartphone 9',
+                    category: 'Smartphone',
+                    brand: 'Acme',
+                    variant: '64GB Green',
+                    displayPrice: 699.00,
+                    originalPrice: 799.00,
+                    url: 'https://www.acme.com/product/smartphone9',
+                    imageUrl: 'https://www.acme.com/images/smartphone9-64gb-green'
+                }
+            },
+            {
+                index: 1,
+                quantity: 1,
+                total: 39.00,
+                discount: 10.00,
+                coupon: 'PROMO',
+                product: {
+                    productId: '98765',
+                    sku: 'CS-987-BLACK',
+                    name: 'Silicone Case',
+                    category: 'Cases',
+                    brand: 'Acme',
+                    variant: 'Black',
+                    displayPrice: 39.00,
+                    originalPrice: 49.00,
+                    url: 'https://www.acme.com/product/silicone-case',
+                    imageUrl: 'https://www.acme.com/images/silicone-case-black.png'
+                }
+            }
+        ],
+        taxes: {
+            state: 53.51,
+            local: 23.98
+        },
+        costs: {
+            manufacturing: 275.81,
+            cos: 85.37
+        },
+        subtotal: 848.00,
+        shippingPrice: 59.99,
+        discount: 169.99,
+        total: 815.49,
+        coupon: 'FREE-SHIPPING',
+        paymentMethod: 'credit-card',
+        installments: 1,
+        status: 'paid'
+    }
 });
 ```
 
@@ -894,11 +899,11 @@ You should track this event when a user completes a desired goal, such as fillin
 
 This event supports the following properties:
 
-| Property   | Type     | Required | Constraints                      | Description                                                                                                                                                                                                                                                                                                                                                                      |
-|------------|----------|----------|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `goalId`   | `string` | Yes      | Between 1 and 50 characters long | The ID of the goal.                                                                                                                                                                                                                                                                                                                                                              |
-| `currency` | `string` | No       | Between 1 and 10 characters long | The currency in which the monetary value is expressed. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin. |
-| `value`    | `number` | No       | Non-negative                     | The monetary value associated with the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).                                                |
+| Property   | Type     | Required | Constraints                                                                                                                                    | Description                                                                                                                                                                                                                                                                                                                                                                      |
+|------------|----------|----------|------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `goalId`   | `string` | Yes      | Between 3 and 100 characters long, containing only letters, digits, and separators (`-`,`_`, `:`), starting and ending with letters or digits. | The ID of the goal.                                                                                                                                                                                                                                                                                                                                                              |
+| `currency` | `string` | No       | Between 1 and 10 characters long                                                                                                               | The currency in which the monetary value is expressed. We recommend using the 3-letter currency codes defined by the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) standard. For currencies having no official recognition in [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217), consider using ISO-like codes adopted locally or commercially, such as `XBT` for BitCoin. |
+| `value`    | `number` | No       | Non-negative                                                                                                                                   | The monetary value associated with the completion of the goal. This can represent an estimated value or a symbolic value. For example, if the sales team can close 10% of people who sign up for a newsletter, and the average transaction is $500, then a possible value for newsletter sign-ups can be $50 (i.e., 10% of $500).                                                |
 
 #### Code Sample
 
@@ -1019,6 +1024,7 @@ croct.track('postViewed', {
     }
 });
 ```
+
 </details>
 
 ### sessionAttributesChanged
@@ -1058,8 +1064,8 @@ The following additional restrictions apply to the `details` property:
 
 - It allows up to 10 attributes
 - Attribute names should be strings up to 300 characters long, starting with a letter or underscore and
-optionally followed by more letters, digits or underscores
-- Attribute values can be strings up to 300 characters long, numbers, booleans, and null.  
+  optionally followed by more letters, digits or underscores
+- Attribute values can be strings up to 300 characters long, numbers, booleans, and null.
 
 #### Code Sample
 
@@ -1081,12 +1087,12 @@ croct.track('eventOccurred', {
 
 ```js
 croct.track('eventOccurred', {
-        "name": "personalizationApplied",
-        "personalizationId": "banner-home",
-        "audience": "loyal-users",
-        "testId": "test-banner-home",
-        "groupId": "A",
-    });
+    "name": "personalizationApplied",
+    "personalizationId": "banner-home",
+    "audience": "loyal-users",
+    "testId": "test-banner-home",
+    "groupId": "A",
+});
 ```
 
 </details>

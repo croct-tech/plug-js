@@ -20,7 +20,8 @@
     "lib": ["es6", "dom", "dom.iterable", "es2018.promise"]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": ["node_modules", "build"]
 }

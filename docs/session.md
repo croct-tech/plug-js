@@ -43,7 +43,7 @@ Refer to the [patch documentation](patch.md) for more details on how patching wo
 
 ### Code Sample
 
-Here's a minimal example showing how to edit session's attributes:
+Here's a minimal example showing how to edit session attributes:
 
 ```js
 croct.session.edit()

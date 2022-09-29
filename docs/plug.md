@@ -214,7 +214,7 @@ This method evaluates an expression written in CQL.
 Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
 
 > ℹ️️ **Note**  
-> We currently impose a hard limit of 300 characters on the length of expression.
+> We currently impose a hard limit of 500 characters on the length of expression.
 > We plan to remove this limitation in the near future.
 
 ### Signature

@@ -14,12 +14,13 @@ import {
     ExternalTrackingEventType as ExternalEventType,
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
+import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
 import {EapFeatures} from './eap';
-import {SlotId, FetchResponse, FetchOptions} from './fetch';
-import {NullableJsonObject, JsonValue} from './sdk/json';
+import {SlotId, FetchResponse, SlotContent} from './fetch';
+import {JsonValue, JsonObject} from './sdk/json';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -54,6 +55,11 @@ export interface Plug extends EapFeatures {
     track<T extends ExternalEventType>(type: T, payload: ExternalEventPayload<T>): Promise<ExternalEvent<T>>;
 
     evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
+
+    fetch<P extends JsonObject, I extends SlotId = SlotId>(
+        slotId: I,
+        options?: FetchOptions
+    ): Promise<FetchResponse<I, P>>;
 
     unplug(): Promise<void>;
 }
@@ -333,14 +339,36 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    /**
-     * This API is unstable and subject to change in future releases.
-     */
-    public fetch<P extends NullableJsonObject, I extends SlotId = SlotId>(
+    public fetch<P extends JsonObject, I extends SlotId = SlotId>(
         slotId: I,
         options: FetchOptions = {},
     ): Promise<FetchResponse<I, P>> {
-        return this.eap('fetch').call(this, slotId, options);
+        const eap = window.croctEap;
+        const method = typeof eap === 'object' ? eap.fetch : undefined;
+        const fetch = (forwardedSlotId: string, forwardedOptions: FetchOptions = {}): Promise<FetchResponse<I, P>> => (
+            this.sdk
+                .contentFetcher
+                .fetch<SlotContent<I> & P>(forwardedSlotId, forwardedOptions)
+                .then(response => ({payload: response.content}))
+        );
+
+        if (method !== undefined) {
+            return method.call(
+                new Proxy(this, {
+                    get: (target, property): any => {
+                        if (property === 'fetch') {
+                            return fetch;
+                        }
+
+                        return target[property as keyof GlobalPlug];
+                    },
+                }),
+                slotId,
+                options,
+            );
+        }
+
+        return fetch(slotId, options);
     }
 
     public async unplug(): Promise<void> {
@@ -389,23 +417,5 @@ export class GlobalPlug implements Plug {
         } finally {
             logger.info('🔌 Croct has been unplugged.');
         }
-    }
-
-    private eap<T extends keyof EapFeatures>(feature: T): EapFeatures[T] {
-        const logger = this.sdk.getLogger();
-        const eap = window.croctEap;
-        const method: EapFeatures[T] | undefined = typeof eap === 'object' ? eap[feature] : undefined;
-
-        if (typeof method !== 'function') {
-            throw new Error(
-                `The ${feature} feature is currently available only to accounts participating in our `
-                + 'Early-Access Program (EAP). Please contact your Customer Success Manager or email eap@croct.com '
-                + 'to check your account eligibility.',
-            );
-        }
-
-        logger.warn(`The ${feature} API is still unstable and subject to change in future releases.`);
-
-        return method;
     }
 }

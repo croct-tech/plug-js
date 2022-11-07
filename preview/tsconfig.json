@@ -17,11 +17,9 @@
     "outDir": "build",
     "downlevelIteration": true,
     "declaration": true,
-    "lib": ["es6", "dom", "dom.iterable", "es2018.promise", "ES2019.Object"]
   },
   "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
+    "**/*.ts"
   ],
   "exclude": ["node_modules", "build"]
 }

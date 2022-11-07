@@ -1,0 +1,26 @@
+{
+  "name": "plug-preview",
+  "version": "0.0.0-dev",
+  "license": "MIT",
+  "author": {
+    "name": "Croct",
+    "email": "lib+plug-js@croct.com",
+    "url": "https://croct.com"
+  },
+  "description": "Preview widget for Croct Plug.",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build",
+    "test": " playwright test",
+    "lint": "eslint 'test/**/*.ts'"
+  },
+  "devDependencies": {
+    "@croct/eslint-plugin": "^0.6.2",
+    "@playwright/test": "^1.27.1",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint": "^8.18.0",
+    "parcel": "^2.7.0"
+  }
+}

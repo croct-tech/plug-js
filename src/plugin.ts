@@ -11,7 +11,8 @@ export interface PluginSdk {
     readonly user: UserFacade;
     readonly session: SessionFacade;
     readonly tab: Tab;
-    readonly tokenStore: TokenStore;
+    readonly userTokenStore: TokenStore;
+    readonly previewTokenStore: TokenStore;
     readonly cidAssigner: CidAssigner;
     readonly eventManager: SdkEventManager;
 

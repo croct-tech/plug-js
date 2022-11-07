@@ -6,9 +6,12 @@ on:
       - published
 
 env:
+  # todo: review these URLs
   CDN_URL: https://cdn.croct.io/js/v1/lib/plug.js
   PLAYGROUND_ORIGIN: https://play.croct.com
   PLAYGROUND_CONNECT_URL: https://play.croct.com/connect.html
+  PREVIEW_WIDGET_ORIGIN: https://cdn.croct.io
+  PREVIEW_WIDGET_URL: https://cdn.croct.io/js/v1/lib/preview.js
 
 jobs:
   deploy:

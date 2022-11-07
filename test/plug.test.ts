@@ -1,10 +1,11 @@
 import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
+import {JsonObject} from '@croct/json';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug, Plug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
-import {FetchOptions} from '../src/fetch';
 
 jest.mock(
     '../src/constants',
@@ -80,7 +81,7 @@ describe('The Croct plug', () => {
 
         croct.plug();
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toHaveBeenCalledWith(config);
     });
 
     it('should fail if the auto-detected app ID and the specified app ID are conflicting', () => {
@@ -144,7 +145,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(config);
+        expect(initialize).toHaveBeenCalledWith(config);
     });
 
     it.each([
@@ -163,7 +164,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining({test: environment === 'test'}));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining({test: environment === 'test'}));
     });
 
     it.each([
@@ -181,7 +182,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining({test: value}));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining({test: value}));
     });
 
     it('should prioritize the specified test mode over environment variables', () => {
@@ -198,7 +199,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining({test: false}));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining({test: false}));
     });
 
     it('should prioritize the test mode specified via CROCT_TEST_MODE over NODE_ENV', () => {
@@ -214,7 +215,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining({test: false}));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining({test: false}));
     });
 
     it('should call the EAP initialization hook', () => {
@@ -226,7 +227,7 @@ describe('The Croct plug', () => {
 
         croct.plug({appId: APP_ID});
 
-        expect(window.croctEap.initialize).toBeCalled();
+        expect(window.croctEap.initialize).toHaveBeenCalled();
     });
 
     it('should log failures initializing plugins', () => {
@@ -247,7 +248,7 @@ describe('The Croct plug', () => {
             plugins: {foo: true},
         });
 
-        expect(logger.error).toBeCalledWith(
+        expect(logger.error).toHaveBeenCalledWith(
             expect.stringContaining('Failed to initialize plugin "foo": failure'),
         );
     });
@@ -316,7 +317,7 @@ describe('The Croct plug', () => {
 
         expect(factory).not.toHaveBeenCalled();
 
-        expect(logger.warn).toBeCalledWith(
+        expect(logger.warn).toHaveBeenCalledWith(
             expect.stringContaining('Plugin "foo" is declared but not enabled'),
         );
     });
@@ -350,14 +351,14 @@ describe('The Croct plug', () => {
             },
         });
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
-        expect(fooFactory).toBeCalledWith(expect.objectContaining({options: {}}));
-        expect(barFactory).toBeCalledWith(expect.objectContaining({options: {flag: true}}));
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {}}));
+        expect(barFactory).toHaveBeenCalledWith(expect.objectContaining({options: {flag: true}}));
 
-        expect(getLogger).toBeCalledWith('Plugin', 'foo', 'namespace');
-        expect(getTabStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
-        expect(getBrowserStorage).toBeCalledWith('Plugin', 'foo', 'namespace');
+        expect(getLogger).toHaveBeenCalledWith('Plugin', 'foo', 'namespace');
+        expect(getTabStorage).toHaveBeenCalledWith('Plugin', 'foo', 'namespace');
+        expect(getBrowserStorage).toHaveBeenCalledWith('Plugin', 'foo', 'namespace');
     });
 
     it('should handle failures enabling plugins', async () => {
@@ -438,8 +439,8 @@ describe('The Croct plug', () => {
         croct.plug(config);
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
-        expect(initialize).toBeCalledTimes(1);
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledTimes(1);
     });
 
     it('should determine whether it is initialized', async () => {
@@ -524,7 +525,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.tracker).toBe(sdkFacade.tracker);
     });
@@ -541,7 +542,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.user).toBe(sdkFacade.user);
     });
@@ -558,7 +559,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.evaluator).toBe(sdkFacade.evaluator);
     });
@@ -575,7 +576,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.session).toBe(sdkFacade.session);
     });
@@ -592,7 +593,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.isAnonymous()).toBe(sdkFacade.user.isAnonymous());
     });
@@ -613,7 +614,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.getUserId()).toBe(config.userId);
     });
@@ -631,7 +632,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(() => croct.identify(1235 as unknown as string)).toThrow('The user ID must be a string.');
     });
@@ -645,7 +646,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         croct.identify('3r1ck');
 
@@ -668,7 +669,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         expect(croct.isAnonymous()).toBeFalsy();
 
@@ -689,7 +690,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const setToken = jest.spyOn(sdkFacade, 'setToken');
 
@@ -699,7 +700,7 @@ describe('The Croct plug', () => {
 
         croct.setToken(token);
 
-        expect(setToken).toBeCalledWith(Token.parse(token));
+        expect(setToken).toHaveBeenCalledWith(Token.parse(token));
     });
 
     it('should not allow to set a user token if unplugged', () => {
@@ -714,13 +715,13 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const unsetToken = jest.spyOn(sdkFacade, 'unsetToken');
 
         croct.unsetToken();
 
-        expect(unsetToken).toBeCalled();
+        expect(unsetToken).toHaveBeenCalled();
     });
 
     it('should not allow to unset a user token if unplugged', () => {
@@ -735,7 +736,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const track = jest.spyOn(sdkFacade.tracker, 'track').mockResolvedValue({
             type: 'userSignedUp',
@@ -744,7 +745,7 @@ describe('The Croct plug', () => {
 
         await croct.track('userSignedUp', {userId: 'c4r0l'});
 
-        expect(track).toBeCalledWith('userSignedUp', {userId: 'c4r0l'});
+        expect(track).toHaveBeenCalledWith('userSignedUp', {userId: 'c4r0l'});
     });
 
     it('should not allow to track events if unplugged', () => {
@@ -759,7 +760,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue('carol');
 
@@ -767,7 +768,7 @@ describe('The Croct plug', () => {
 
         await expect(promise).resolves.toBe('carol');
 
-        expect(evaluate).toBeCalledWith('user\'s name', {timeout: 5});
+        expect(evaluate).toHaveBeenCalledWith('user\'s name', {timeout: 5});
     });
 
     it('should not allow to evaluate expressions if unplugged', () => {
@@ -782,7 +783,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue(true);
 
@@ -790,7 +791,7 @@ describe('The Croct plug', () => {
 
         await expect(promise).resolves.toBe(true);
 
-        expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+        expect(evaluate).toHaveBeenCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
     it('should test expressions assuming non-boolean results as false', async () => {
@@ -801,7 +802,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockResolvedValue('foo');
 
@@ -809,7 +810,7 @@ describe('The Croct plug', () => {
 
         await expect(promise).resolves.toBe(false);
 
-        expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+        expect(evaluate).toHaveBeenCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
     it('should not test expressions assuming errors as false', async () => {
@@ -820,7 +821,7 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockRejectedValue(undefined);
 
@@ -828,7 +829,100 @@ describe('The Croct plug', () => {
 
         await expect(promise).rejects.toBeUndefined();
 
-        expect(evaluate).toBeCalledWith('user\'s name is "Carol"', {timeout: 5});
+        expect(evaluate).toHaveBeenCalledWith('user\'s name is "Carol"', {timeout: 5});
+    });
+
+    it('should allow to fetch content', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
+            content: content,
+        });
+
+        const slotId = 'foo';
+        const options: FetchOptions = {timeout: 5};
+
+        await expect(croct.fetch(slotId, options)).resolves.toEqual({
+            content: content,
+            payload: content,
+        });
+
+        expect(fetch).toHaveBeenLastCalledWith('foo', options);
+    });
+
+    it('should delegate the fetch to the EAP hook', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
+            content: content,
+        });
+
+        const eapFetch: Plug['fetch'] = jest.fn().mockImplementation(function hook(this: Plug, ...args: any[]) {
+            if (!this.initialized) {
+                // Access the initialized property to ensure the proxy is working.
+                throw new Error('Croct is not plugged in.');
+            }
+
+            // eslint-disable-next-line prefer-spread -- Necessary to test the hook.
+            return this.fetch.apply(this, args);
+        });
+
+        window.croctEap = {
+            fetch: eapFetch,
+        };
+
+        const slotId = 'foo';
+        const options: FetchOptions = {timeout: 5};
+
+        await expect(croct.fetch(slotId, options)).resolves.toEqual({
+            content: content,
+            payload: content,
+        });
+
+        expect(eapFetch).toHaveBeenLastCalledWith('foo', options);
+        expect(fetch).toHaveBeenLastCalledWith('foo', options);
+
+        expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
+            'Accessing the "payload" property of the fetch response is deprecated and '
+            + 'will be removed in a future version. Use the "content" property instead.',
+        ));
+    });
+
+    it('should fail to fetch a slot content if unplugged', () => {
+        expect(() => croct.fetch('foo')).toThrow('Croct is not plugged in.');
     });
 
     it('should enable the playground plugin by default', () => {
@@ -864,6 +958,41 @@ describe('The Croct plug', () => {
         });
 
         expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
+    });
+
+    it('should enable the preview plugin by default', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(logger.debug).toHaveBeenCalledWith('[Croct] Plugin "preview" enabled');
+    });
+
+    it('should not enable the preview plugin if explicitly disabled', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+            plugins: {
+                preview: false,
+            },
+        });
+
+        expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "preview" enabled');
     });
 
     it('should wait for the plugins to disable before closing the SDK', async () => {
@@ -935,13 +1064,13 @@ describe('The Croct plug', () => {
 
         croct.plug(config);
 
-        expect(initialize).toBeCalledWith(expect.objectContaining(config));
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
         const close = jest.spyOn(sdkFacade, 'close');
 
         await croct.unplug();
 
-        expect(close).toBeCalled();
+        expect(close).toHaveBeenCalled();
     });
 
     it('should close the SDK even if a plugin fail to disable', async () => {
@@ -969,65 +1098,5 @@ describe('The Croct plug', () => {
         expect(plugin.disable).toHaveBeenCalledTimes(1);
 
         expect(close).toHaveBeenCalled();
-    });
-
-    it('should fail to fetch a slot content if unplugged', () => {
-        expect(() => croct.fetch('foo')).toThrow('Croct is not plugged in.');
-    });
-
-    it('should fail to fetch a slot content if the fetch method is undefined', () => {
-        window.croctEap = {
-            fetch: undefined,
-        };
-
-        croct.plug({appId: APP_ID});
-
-        expect(() => croct.fetch('foo')).toThrow(
-            'The fetch feature is currently available only to accounts participating '
-            + 'in our Early-Access Program (EAP).',
-        );
-    });
-
-    it('should delegate the fetch call to the external EAP method', () => {
-        const logger: Logger = {
-            debug: jest.fn(),
-            info: jest.fn(),
-            warn: jest.fn(),
-            error: jest.fn(),
-        };
-
-        croct.plug({
-            appId: APP_ID,
-            logger: logger,
-        });
-
-        const response = Promise.resolve({payload: {title: 'Hello'}});
-
-        window.croctEap = {
-            fetch: jest.fn().mockImplementation(function fetch(this: Plug) {
-                expect(this).toBe(croct);
-
-                return response;
-            }),
-        };
-
-        const options: FetchOptions = {timeout: 5, attributes: {bar: 'baz'}};
-
-        const actualResponse = croct.fetch('foo', options);
-
-        expect(window.croctEap.fetch).toHaveBeenCalledWith('foo', options);
-        expect(actualResponse).toBe(response);
-        expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
-            'The fetch API is still unstable and subject to change in future releases.',
-        ));
-    });
-
-    it('should log a warning message when using EAP features', () => {
-        croct.plug({appId: APP_ID});
-
-        expect(() => croct.fetch('foo')).toThrow(
-            'The fetch feature is currently available only to accounts participating '
-            + 'in our Early-Access Program (EAP).',
-        );
     });
 });

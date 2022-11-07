@@ -14,12 +14,14 @@ import {
     ExternalTrackingEventType as ExternalEventType,
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
+import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
+import {factory as previewPluginFactory} from './preview';
 import {EapFeatures} from './eap';
-import {SlotId, FetchResponse, FetchOptions} from './fetch';
-import {NullableJsonObject, JsonValue} from './sdk/json';
+import {SlotId, FetchResponse, SlotContent} from './fetch';
+import {JsonValue, JsonObject} from './sdk/json';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -55,6 +57,11 @@ export interface Plug extends EapFeatures {
 
     evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
 
+    fetch<P extends JsonObject, I extends SlotId = SlotId>(
+        slotId: I,
+        options?: FetchOptions
+    ): Promise<FetchResponse<I, P>>;
+
     unplug(): Promise<void>;
 }
 
@@ -71,7 +78,10 @@ function detectAppId(): string | null {
 }
 
 export class GlobalPlug implements Plug {
-    private pluginFactories: {[key: string]: PluginFactory} = {playground: playgroundPluginFactory};
+    private pluginFactories: {[key: string]: PluginFactory} = {
+        playground: playgroundPluginFactory,
+        preview: previewPluginFactory,
+    };
 
     private instance?: SdkFacade;
 
@@ -149,7 +159,12 @@ export class GlobalPlug implements Plug {
 
         const pending: Array<Promise<void>> = [];
 
-        for (const [name, options] of Object.entries({playground: true, ...plugins})) {
+        const defaultEnabledPlugins = Object.fromEntries(
+            Object.keys(this.pluginFactories)
+                .map(name => [name, true]),
+        );
+
+        for (const [name, options] of Object.entries({...defaultEnabledPlugins, ...plugins})) {
             logger.debug(`Initializing plugin "${name}"...`);
 
             const factory = this.pluginFactories[name];
@@ -185,10 +200,11 @@ export class GlobalPlug implements Plug {
                     user: sdk.user,
                     session: sdk.session,
                     tab: sdk.context.getTab(),
-                    tokenStore: {
+                    userTokenStore: {
                         getToken: sdk.getToken.bind(sdk),
                         setToken: sdk.setToken.bind(sdk),
                     },
+                    previewTokenStore: sdk.previewTokenStore,
                     cidAssigner: sdk.cidAssigner,
                     eventManager: sdk.eventManager,
                     getLogger: (...namespace: string[]): Logger => sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace),
@@ -239,11 +255,12 @@ export class GlobalPlug implements Plug {
             initializeEap.call(this);
         }
 
-        Promise.all(pending).then(() => {
-            this.initialize();
+        Promise.all(pending)
+            .then(() => {
+                this.initialize();
 
-            logger.debug('Initialization complete');
-        });
+                logger.debug('Initialization complete');
+            });
     }
 
     public get initialized(): boolean {
@@ -333,14 +350,31 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    /**
-     * This API is unstable and subject to change in future releases.
-     */
-    public fetch<P extends NullableJsonObject, I extends SlotId = SlotId>(
-        slotId: I,
-        options: FetchOptions = {},
-    ): Promise<FetchResponse<I, P>> {
-        return this.eap('fetch').call(this, slotId, options);
+    public get fetch(): Plug['fetch'] {
+        const logger = this.sdk.getLogger();
+
+        return this.eap(
+            'fetch',
+            <P extends JsonObject, I extends SlotId = SlotId>(
+                slotId: I,
+                options: FetchOptions = {},
+            ): Promise<FetchResponse<I, P>> => this.sdk
+                .contentFetcher
+                .fetch<SlotContent<I> & P>(slotId, options)
+                .then(
+                    response => ({
+                        get payload(): SlotContent<I> & P {
+                            logger.warn(
+                                'Accessing the "payload" property of the fetch response is deprecated'
+                                + ' and will be removed in a future version. Use the "content" property instead.',
+                            );
+
+                            return response.content;
+                        },
+                        content: response.content,
+                    }),
+                ),
+        );
     }
 
     public async unplug(): Promise<void> {
@@ -391,21 +425,24 @@ export class GlobalPlug implements Plug {
         }
     }
 
-    private eap<T extends keyof EapFeatures>(feature: T): EapFeatures[T] {
-        const logger = this.sdk.getLogger();
+    private eap<T extends keyof EapFeatures>(feature: T, api: EapFeatures[T]): EapFeatures[T] {
         const eap = window.croctEap;
         const method: EapFeatures[T] | undefined = typeof eap === 'object' ? eap[feature] : undefined;
 
         if (typeof method !== 'function') {
-            throw new Error(
-                `The ${feature} feature is currently available only to accounts participating in our `
-                + 'Early-Access Program (EAP). Please contact your Customer Success Manager or email eap@croct.com '
-                + 'to check your account eligibility.',
-            );
+            return api;
         }
 
-        logger.warn(`The ${feature} API is still unstable and subject to change in future releases.`);
+        return method.bind(
+            new Proxy(this, {
+                get: (plug, property): any => {
+                    if (property === feature) {
+                        return api;
+                    }
 
-        return method;
+                    return plug[property as keyof GlobalPlug];
+                },
+            }),
+        );
     }
 }

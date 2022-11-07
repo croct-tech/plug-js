@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.parcel-cache/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/test-results/
+/playwright-report/
+/playwright/.cache/

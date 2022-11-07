@@ -13,7 +13,7 @@
   "scripts": {
     "start": "parcel",
     "build": "parcel build",
-    "test": " playwright test",
+    "test": "playwright test",
     "lint": "eslint 'test/**/*.ts'"
   },
   "devDependencies": {
@@ -21,6 +21,7 @@
     "@playwright/test": "^1.27.1",
     "@typescript-eslint/parser": "^5.30.0",
     "eslint": "^8.18.0",
+    "jest": "^29.3.0",
     "parcel": "^2.7.0"
   }
 }

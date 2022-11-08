@@ -313,7 +313,7 @@ croct.fetch('home-banner').then(console.log);
 
 In this example, you should see the following output:
 
-```tson
+```json
 {
     "content": {
         "title": "Unlock the Power of Personalization",

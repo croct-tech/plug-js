@@ -17,6 +17,14 @@ export default args => {
         throw new Error('The argument "config-playground-connect-url" is missing.');
     }
 
+    if (args['config-preview-widget-origin'] === undefined) {
+        throw new Error('The argument "config-preview-widget-origin" is missing.');
+    }
+
+    if (args['config-preview-widget-url'] === undefined) {
+        throw new Error('The argument "config-preview-widget-url" is missing.');
+    }
+
     return [
         {
             input: 'src/index.ts',
@@ -39,7 +47,8 @@ export default args => {
                     cdnUrl: args['config-cdn-url'],
                     playgroundOrigin: args['config-playground-origin'],
                     playgroundConnectUrl: args['config-playground-connect-url'],
-
+                    previewWidgetOrigin: args['config-preview-widget-origin'],
+                    previewWidgetUrl: args['config-preview-widget-url'],
                 }),
                 terser({
                     format: {

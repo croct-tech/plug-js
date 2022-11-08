@@ -1,21 +1,22 @@
 name: Release
 
 on:
+  push:
   release:
     types:
       - published
 
 env:
-  # todo: review these URLs
   CDN_URL: https://cdn.croct.io/js/v1/lib/plug.js
   PLAYGROUND_ORIGIN: https://play.croct.com
   PLAYGROUND_CONNECT_URL: https://play.croct.com/connect.html
   PREVIEW_WIDGET_ORIGIN: https://cdn.croct.io
-  PREVIEW_WIDGET_URL: https://cdn.croct.io/js/v1/lib/preview.js
+  PREVIEW_WIDGET_PATH: js/v1/lib/plug/widget-${{ github.ref_name }}.html
+  PREVIEW_WIDGET_URL: https://cdn.croct.io/js/v1/lib/plug/widget-${{ github.ref_name }}.html
 
 jobs:
-  deploy:
-    runs-on: ubuntu-18.04
+  deploy-library:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -28,6 +29,7 @@ jobs:
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('**/package-lock.json', '**/package.json') }}
+
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |-
@@ -49,24 +51,28 @@ jobs:
           sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.d.ts
           sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.js
           sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.d.ts
+          sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.js
+          sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.d.ts
+          sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.js
+          sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.d.ts
 
-      - name: Publish pre-release to NPM
-        if: ${{ github.event.release.prerelease }}
-        run: |-
-          cd build
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-          npm publish --access public --tag next
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish release to NPM
-        if: ${{ !github.event.release.prerelease }}
-        run: |-
-          cd build
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
-          npm publish --access public
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#      - name: Publish pre-release to NPM
+#        if: ${{ github.event.release.prerelease }}
+#        run: |-
+#          cd build
+#          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+#          npm publish --access public --tag next
+#        env:
+#          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#
+#      - name: Publish release to NPM
+#        if: ${{ !github.event.release.prerelease }}
+#        run: |-
+#          cd build
+#          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+#          npm publish --access public
+#        env:
+#          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Bundle package
         if: ${{ !github.event.release.prerelease }}
@@ -74,7 +80,50 @@ jobs:
           rm -rf build
           npm run bundle -- --config-cdn-url=${CDN_URL} \
               --config-playground-origin=${PLAYGROUND_ORIGIN} \
-              --config-playground-connect-url=${PLAYGROUND_CONNECT_URL}
+              --config-playground-connect-url=${PLAYGROUND_CONNECT_URL} \
+              --config-preview-widget-origin=${PREVIEW_WIDGET_ORIGIN} \
+              --config-preview-widget-url=${PREVIEW_WIDGET_URL}
+
+#      - name: Authenticate to GCP
+#        if: ${{ !github.event.release.prerelease }}
+#        uses: google-github-actions/auth@v0.7.0
+#        with:
+#          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+#
+#      - name: Deploy to GCS
+#        if: ${{ !github.event.release.prerelease }}
+#        env:
+#          GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
+#        run: |-
+#          gsutil -m cp build/plug.min.js "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
+#          gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
+
+  deploy-preview-widget:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: preview
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json', '**/package.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: |-
+          npm ci
+
+      - name: Build package
+        run: |-
+          npm run build
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}
@@ -87,5 +136,5 @@ jobs:
         env:
           GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
         run: |-
-          gsutil -m cp build/plug.min.js "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
-          gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
+          gsutil -m cp dist/widget.html "gs://${GCLOUD_BUCKET}/${PREVIEW_WIDGET_PATH}"
+          gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/${PREVIEW_WIDGET_PATH}"

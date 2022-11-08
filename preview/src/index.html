@@ -14,10 +14,10 @@
     </style>
 </head>
 <body>
+
 <iframe id="widget" src="./widget.html"></iframe>
 
 <script type="text/javascript">
-
     function decodeToken(token) {
         const data = token.split('.')[1];
 
@@ -88,6 +88,7 @@
     widgetIframe.scrolling = 'no';
     widgetIframe.frameborder = '0';
     widgetIframe.style.zIndex = '2147483647';
+
     document.body.prepend(widgetIframe);
 
     window.addEventListener('message', event => {

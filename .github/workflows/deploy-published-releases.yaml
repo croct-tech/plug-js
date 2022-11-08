@@ -131,6 +131,9 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+      
       - name: Deploy to GCS
         if: ${{ !github.event.release.prerelease }}
         env:

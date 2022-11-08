@@ -104,3 +104,5 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: npm test
+          coverageLocations:
+            ./coverage/lcov.info:lcov

@@ -23,7 +23,7 @@ resolves to the tracked event after successful transmission.
 
 Here's a minimal example showing how track an event:
 
-```js
+```ts
 croct.tracker.track('goalCompleted', {goalId: 'newsletter-sign-up'});
 ```
 
@@ -43,7 +43,7 @@ croct.tracker.enable(): void
 
 Here's an example showing how to enable automatic event tracking:
 
-```js
+```ts
 croct.tracker.enable();
 ```
 
@@ -66,6 +66,6 @@ croct.tracker.disable(): void
 
 Here's an example showing how to disable automatic event tracking:
 
-```js
+```ts
 croct.tracker.disable();
 ```

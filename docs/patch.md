@@ -8,13 +8,13 @@ already used to access nested structures in JavaScript.
 
 For objects and maps, you should use the `object.property` notation:
 
-```js
+```ts
 patch.set('custom.pet', 'crocodile');
 ```
 
 For lists, you should use the `list[index]` notation:
 
-```js
+```ts
 patch.set('custom.pets[0]', 'crocodile');
 ```
 
@@ -60,7 +60,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to set a value:
 
-```js
+```ts
 patch.set('custom.pet', 'crocodile');
 ```
 
@@ -93,7 +93,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to add a value to a collection:
 
-```js
+```ts
 patch.add('custom.pets', 'crocodile');
 ```
 
@@ -132,7 +132,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to combine sets:
 
-```js
+```ts
 patch.combine('custom.pets', ['crocodile', 'iguana']);
 ```
 
@@ -169,7 +169,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to merge maps:
 
-```js
+```ts
 patch.merge('preferences', {color: 'green'});
 ```
 
@@ -199,7 +199,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to increment a value:
 
-```js
+```ts
 patch.increment('custom.score', 10);
 ```
 
@@ -229,7 +229,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to decrement a value:
 
-```js
+```ts
 patch.decrement('custom.score', 10);
 ```
 
@@ -260,7 +260,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to remove a value from a collection:
 
-```js
+```ts
 patch.remove('custom.pets', 'crocodile');
 ```
 
@@ -293,7 +293,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to clear a given path:
 
-```js
+```ts
 patch.clear('custom.pets');
 ```
 
@@ -320,7 +320,7 @@ The return is the `Patch` instance itself to allow operation chaining.
 
 Here's a minimal example showing how to unset a value:
 
-```js
+```ts
 patch.unset('custom.pets');
 ```
 
@@ -346,6 +346,6 @@ resolves to the tracked event after successful transmission.
 
 Here's a minimal example showing how save the specified changes:
 
-```js
+```ts
 patch.save();
 ```

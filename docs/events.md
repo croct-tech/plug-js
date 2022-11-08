@@ -119,7 +119,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('userSignedUp', {
     userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392'
 });
@@ -130,7 +130,7 @@ croct.track('userSignedUp', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('userSignedUp', {
     userId: '1ed2fd65-a027-4f3a-a35f-c6dd97537392',
     profile: {
@@ -262,7 +262,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('productViewed', {
     product: {
         productId: '12345',
@@ -277,7 +277,7 @@ croct.track('productViewed', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('productViewed', {
     product: {
         productId: '12345',
@@ -351,7 +351,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('cartViewed', {
     cart: {
         currency: 'USD',
@@ -377,7 +377,7 @@ croct.track('cartViewed', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('cartViewed', {
     cart: {
         currency: 'USD',
@@ -496,7 +496,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('cartModified', {
     cart: {
         currency: 'USD',
@@ -522,7 +522,7 @@ croct.track('cartModified', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('cartModified', {
     cart: {
         currency: 'USD',
@@ -642,7 +642,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('checkoutStarted', {
     cart: {
         currency: 'USD',
@@ -668,7 +668,7 @@ croct.track('checkoutStarted', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('checkoutStarted', {
     orderId: '123',
     cart: {
@@ -791,7 +791,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('orderPlaced', {
     order: {
         orderId: '123',
@@ -818,7 +818,7 @@ croct.track('orderPlaced', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('orderPlaced', {
     order: {
         orderId: '123',
@@ -912,7 +912,7 @@ Here are some examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('goalCompleted', {
     goalId: 'newsletter-sign-up',
 });
@@ -923,7 +923,7 @@ croct.track('goalCompleted', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('goalCompleted', {
     goalId: 'newsletter-sign-up',
     currency: 'USD',
@@ -958,7 +958,7 @@ Here is an example of how to track this event:
 <details>
     <summary>Example</summary>
 
-```js
+```ts
 croct.track('interestShown', {
     interests: ['music', 'movies'],
 });
@@ -995,7 +995,7 @@ Here are a few examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('postViewed', {
     post: {
         postId: 'announcing-our-seed-round',
@@ -1010,7 +1010,7 @@ croct.track('postViewed', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('postViewed', {
     post: {
         postId: 'announcing-our-seed-round',
@@ -1074,7 +1074,7 @@ Here are a few examples of how to track this event:
 <details>
     <summary>Minimal Example</summary>
 
-```js
+```ts
 croct.track('eventOccurred', {
     name: 'userLiked',
 });
@@ -1085,7 +1085,7 @@ croct.track('eventOccurred', {
 <details>
     <summary>Complete Example</summary>
 
-```js
+```ts
 croct.track('eventOccurred', {
     "name": "personalizationApplied",
     "personalizationId": "banner-home",
@@ -1118,7 +1118,7 @@ Here is an example of how to track this event:
 <details>
     <summary>Example</summary>
 
-```js
+```ts
 croct.track('linkOpened', {
     link: 'https://croct.com/',
 });

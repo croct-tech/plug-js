@@ -39,6 +39,6 @@ resolves to the evaluation result.
 
 Here's a minimal example showing how evaluate an expression:
 
-```js
+```ts
 croct.evaluator.evaluate('session is starting').then(console.log);
 ```

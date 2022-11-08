@@ -45,7 +45,7 @@ Refer to the [patch documentation](patch.md) for more details on how patching wo
 
 Here's a minimal example showing how to edit session attributes:
 
-```js
+```ts
 croct.session.edit()
   .set('plan', 'starter')
   .save()

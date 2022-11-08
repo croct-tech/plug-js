@@ -55,7 +55,7 @@ essential for the SDK to discover and load all the plugins you want to use.
 
 The following example shows how to enable the Google Analytics Plugin using the default settings:
 
-```js
+```ts
 import croct from '@croct/plug';
 
 // Install the plugin
@@ -71,7 +71,7 @@ croct.plug({
 If the problem persists, check if the plugin has been found and loaded by going through the following steps:
 
 1. Enable the debug mode
-```js
+```ts
 croct.plug({
     debug: true,
     plugins: {
@@ -101,7 +101,7 @@ in scientific notation.
 If the recommended solution isn't practical for your application, you can alternatively convert the number to string 
 on the client-side as the following example shows:
 
-```js
+```ts
 function convertId(id) {
     if (!Number.isSafeInteger(id)) {
         throw new Error(`The ID "${id}" cannot be safely converted to a string.`)

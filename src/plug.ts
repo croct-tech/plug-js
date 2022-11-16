@@ -2,8 +2,8 @@ import {Logger} from '@croct/sdk/logging';
 import {SessionFacade} from '@croct/sdk/facade/sessionFacade';
 import {UserFacade} from '@croct/sdk/facade/userFacade';
 import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
-import {EvaluatorFacade, EvaluationOptions} from '@croct/sdk/facade/evaluatorFacade';
-import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import {EvaluationOptions, EvaluatorFacade} from '@croct/sdk/facade/evaluatorFacade';
+import {Configuration as SdkFacadeConfiguration, SdkFacade} from '@croct/sdk/facade/sdkFacade';
 import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
 import {Optional} from '@croct/sdk/utilityTypes';
@@ -14,13 +14,13 @@ import {
     ExternalTrackingEventType as ExternalEventType,
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
-import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
+import {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
 import {factory as previewPluginFactory} from './preview';
 import {EapFeatures} from './eap';
-import {SlotId, FetchResponse, SlotContent} from './fetch';
+import {VersionedSlotId, SlotContent} from './slot';
 import {JsonValue, JsonObject} from './sdk/json';
 
 export interface PluginConfigurations {
@@ -29,6 +29,16 @@ export interface PluginConfigurations {
 
 export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
     plugins?: PluginConfigurations,
+};
+
+export type FetchOptions = Omit<BaseFetchOptions, 'version'>;
+
+export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject> = {
+    /**
+     * @deprecated Use `content` instead.
+     */
+    payload: SlotContent<I, C>,
+    content: SlotContent<I, C>,
 };
 
 export interface Plug extends EapFeatures {
@@ -57,7 +67,7 @@ export interface Plug extends EapFeatures {
 
     evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
 
-    fetch<P extends JsonObject, I extends SlotId = SlotId>(
+    fetch<P extends JsonObject, I extends VersionedSlotId>(
         slotId: I,
         options?: FetchOptions
     ): Promise<FetchResponse<I, P>>;
@@ -355,25 +365,32 @@ export class GlobalPlug implements Plug {
 
         return this.eap(
             'fetch',
-            <P extends JsonObject, I extends SlotId = SlotId>(
+            <C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
                 slotId: I,
                 options: FetchOptions = {},
-            ): Promise<FetchResponse<I, P>> => this.sdk
-                .contentFetcher
-                .fetch<SlotContent<I> & P>(slotId, options)
-                .then(
-                    response => ({
-                        get payload(): SlotContent<I> & P {
-                            logger.warn(
-                                'Accessing the "payload" property of the fetch response is deprecated'
-                                + ' and will be removed in a future version. Use the "content" property instead.',
-                            );
+            ): Promise<FetchResponse<I, C>> => {
+                const [id, version] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
 
-                            return response.content;
-                        },
-                        content: response.content,
-                    }),
-                ),
+                return this.sdk
+                    .contentFetcher
+                    .fetch<SlotContent<I, C>>(id, {
+                        ...options,
+                        version: version === 'latest' ? undefined : version,
+                    })
+                    .then(
+                        response => ({
+                            get payload(): SlotContent<I, C> {
+                                logger.warn(
+                                    'Accessing the "payload" property of the fetch response is deprecated'
+                                    + ' and will be removed in a future version. Use the "content" property instead.',
+                                );
+
+                                return response.content;
+                            },
+                            content: response.content,
+                        }),
+                    );
+            },
         );
     }
 

@@ -861,6 +861,67 @@ describe('The Croct plug', () => {
         expect(fetch).toHaveBeenLastCalledWith('foo', options);
     });
 
+    it('should extract the slot ID and version', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
+            content: content,
+        });
+
+        const slotId = 'foo@1';
+        const options: FetchOptions = {timeout: 5};
+
+        await expect(croct.fetch(slotId, options)).resolves.toEqual({
+            content: content,
+            payload: content,
+        });
+
+        expect(fetch).toHaveBeenLastCalledWith('foo', {
+            ...options,
+            version: '1',
+        });
+    });
+
+    it('should fetch content omitting the latest alias', async () => {
+        const config: SdkFacadeConfiguration = {appId: APP_ID};
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
+            content: content,
+        });
+
+        const slotId = 'foo@latest';
+        const options: FetchOptions = {timeout: 5};
+
+        await expect(croct.fetch(slotId, options)).resolves.toEqual({
+            content: content,
+            payload: content,
+        });
+
+        expect(fetch).toHaveBeenLastCalledWith('foo', options);
+    });
+
     it('should delegate the fetch to the EAP hook', async () => {
         const logger: Logger = {
             debug: jest.fn(),

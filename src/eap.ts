@@ -1,9 +1,9 @@
 import {VersionedSlotId} from './slot';
 import {JsonObject} from './sdk/json';
-import {FetchResponse, Plug} from './plug';
+import {LegacyFetchResponse, Plug} from './plug';
 
 export interface EapFeatures {
-    fetch<P extends JsonObject, I extends VersionedSlotId>(this: Plug, slotId: I): Promise<FetchResponse<I, P>>;
+    fetch<P extends JsonObject, I extends VersionedSlotId>(this: Plug, slotId: I): Promise<LegacyFetchResponse<I, P>>;
 }
 
 interface EapHooks extends EapFeatures{

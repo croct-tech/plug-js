@@ -34,11 +34,17 @@ export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
 export type FetchOptions = Omit<BaseFetchOptions, 'version'>;
 
 export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject> = {
+    content: SlotContent<I, C>,
+};
+
+/**
+ * @internal
+ */
+export type LegacyFetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject> = FetchResponse<I, C> & {
     /**
      * @deprecated Use `content` instead.
      */
     payload: SlotContent<I, C>,
-    content: SlotContent<I, C>,
 };
 
 export interface Plug extends EapFeatures {
@@ -70,7 +76,7 @@ export interface Plug extends EapFeatures {
     fetch<P extends JsonObject, I extends VersionedSlotId>(
         slotId: I,
         options?: FetchOptions
-    ): Promise<FetchResponse<I, P>>;
+    ): Promise<LegacyFetchResponse<I, P>>;
 
     unplug(): Promise<void>;
 }
@@ -368,7 +374,7 @@ export class GlobalPlug implements Plug {
             <C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
                 slotId: I,
                 options: FetchOptions = {},
-            ): Promise<FetchResponse<I, C>> => {
+            ): Promise<LegacyFetchResponse<I, C>> => {
                 const [id, version] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
 
                 return this.sdk

@@ -44,16 +44,11 @@ jobs:
           cp package.json LICENSE README.md build/
           cd build
           sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
-          sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.js
-          sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.d.ts
-          sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.js
-          sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.d.ts
-          sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.js
-          sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.d.ts
-          sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.js
-          sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.d.ts
-          sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.js
-          sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.d.ts
+          sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.*
+          sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.*
+          sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.*
+          sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.*
+          sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.*
 
       - name: Publish pre-release to NPM
         if: ${{ github.event.release.prerelease }}

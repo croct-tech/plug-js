@@ -209,12 +209,12 @@ This method returns `true` if the user is anonymous, `false` otherwise.
 
 ## evaluate
 
-This method evaluates an expression written in CQL.
+This method evaluates a query written in CQL.
 
 Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
 
 > ℹ️️ **Note**  
-> We currently impose a hard limit of 500 characters on the length of expression.
+> We currently impose a hard limit of 500 characters on the length of query.
 > We plan to remove this limitation in the near future.
 
 ### Signature
@@ -222,22 +222,22 @@ Check out our [quick start guide](quick-start.md) for an introduction to what is
 The `evaluation` method has the following signature:
 
 ```ts
-croct.evaluate(expression: string, options?: EvaluationOptions): Promise<JsonResult>
+croct.evaluate(query: string, options?: EvaluationOptions): Promise<JsonResult>
 ```
 
 These are the currently supported options:
 
-| Option       | Type   | Description                                                                                                                                                                                                                               |
-|--------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.                                                                                           |
-| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`. |
+| Option       | Type   | Description                                                                                                                                                                                                                           |
+|--------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.                                                                                       |
+| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in queries like `context's cities include location's city`. |
 
 The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
 resolves to the evaluation result.
 
 ### Code Sample
 
-Here's a minimal example showing how evaluate an expression:
+Here's a minimal example showing how evaluate a query:
 
 ```ts
 croct.evaluate('session is starting').then(console.log);
@@ -259,18 +259,18 @@ You can specify the version of the slot by passing a versioned ID in the form `i
 passing `home-banner@1` will fetch the content for the `home-banner` slot in version 1. Not specifying a
 version number is the same as passing `home-banner@latest`, which will load the latest version of the slot.
 
-> ✅ Best practice  
+> ✅ **Best practice**      
 > It's strongly recommended to specify a slot version for production deployments. 
 > That way, you ensure the front end will always receive content with the expected 
 > schema while your team can freely evolve the content's schema in parallel.
 
 These are the currently supported options:
 
-| Option            | Type   | Description                                                                                                                                                                                                                               |
-|-------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `preferredLocale` | string | The preferred locale for the content. If not specified, the default locale will be used.                                                                                                                                                  |
-| `attributes`      | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`. |
-| `timeout`         | number | The maximum evaluation time in milliseconds. Once reached, the plug will abort the fetch and reject the promise with a timeout error.                                                                                                     |
+| Option            | Type   | Description                                                                                                                                                                                                                           |
+|-------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `preferredLocale` | string | The preferred locale for the content. If not specified, the default locale will be used.                                                                                                                                              |
+| `attributes`      | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in queries like `context's cities include location's city`. |
+| `timeout`         | number | The maximum evaluation time in milliseconds. Once reached, the plug will abort the fetch and reject the promise with a timeout error.                                                                                                 |
 
 A slot represents a personalizable element of the interface. Each slot has a predefined structure whose content may vary 
 according to a personalization strategy. 

@@ -367,8 +367,6 @@ export class GlobalPlug implements Plug {
     }
 
     public get fetch(): Plug['fetch'] {
-        const logger = this.sdk.getLogger();
-
         return this.eap(
             'fetch',
             <C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
@@ -376,6 +374,7 @@ export class GlobalPlug implements Plug {
                 options: FetchOptions = {},
             ): Promise<LegacyFetchResponse<I, C>> => {
                 const [id, version] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
+                const logger = this.sdk.getLogger();
 
                 return this.sdk
                     .contentFetcher

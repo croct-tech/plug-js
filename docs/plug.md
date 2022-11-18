@@ -256,8 +256,13 @@ croct.fetch(id: string, options?: FetchOptions): Promise<{content: JsonObject}>
 ```
 
 You can specify the version of the slot by passing a versioned ID in the form `id@version`. For example,
-passing `home-banner@1` will fetch the content for the `home-banner` slot in version 1. If you omit the version,
-the latest version will be fetched, which is the same as passing `home-banner@latest`.
+passing `home-banner@1` will fetch the content for the `home-banner` slot in version 1. Not specifying a
+version number is the same as passing `home-banner@latest`, which will load the latest version of the slot.
+
+> ✅ Best practice
+> It's strongly recommended to specify a slot version for production deployments. 
+> That way, you ensure the front end will always receive content with the expected 
+> schema while your team can freely evolve the content's schema in parallel.
 
 These are the currently supported options:
 

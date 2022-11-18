@@ -255,11 +255,14 @@ The `fetch` method has the following signature:
 croct.fetch(id: string, options?: FetchOptions): Promise<{content: JsonObject}>
 ```
 
+You can specify the version of the slot by passing a versioned ID in the form `id@version`. For example,
+passing `home-banner@1` will fetch the content for the `home-banner` slot in version 1. If you omit the version,
+the latest version will be fetched, which is the same as passing `home-banner@latest`.
+
 These are the currently supported options:
 
 | Option            | Type   | Description                                                                                                                                                                                                                               |
 |-------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `version`         | string | The slot version, for example, `1`. If not specified, the latest version will be used.                                                                                                                                                    |
 | `preferredLocale` | string | The preferred locale for the content. If not specified, the default locale will be used.                                                                                                                                                  |
 | `attributes`      | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`. |
 | `timeout`         | number | The maximum evaluation time in milliseconds. Once reached, the plug will abort the fetch and reject the promise with a timeout error.                                                                                                     |
@@ -340,13 +343,13 @@ robust solution:
 
 ```ts
 // slots.d.ts
-import {JsonObject} from '@croct/plug/sdk/json';
-
-declare module '@croct/plug/fetch' {
-    interface SlotMap extends Record<string, JsonObject> {
+declare module '@croct/plug/slot' {
+    interface SlotMap {
         'home-banner': HomeBanner;
     }
 }
+
+export {};
 ```
 
 If you use an IDE with Typescript code completion support, you will get autocomplete suggestions for 

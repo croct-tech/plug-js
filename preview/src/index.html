@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Croct Preview</title>
+    <style>
+        @import "styles/global.css";
+
+        body, html {
+            width: 100%;
+            height: calc(2 * 100vh);
+            background-color: #F6F7F8;
+        }
+    </style>
+</head>
+<body>
+
+<iframe id="widget" src="./widget.html"></iframe>
+
+<script type="text/javascript">
+    function decodeToken(token) {
+        const data = token.split('.')[1];
+
+        let payload;
+
+        try {
+            payload = JSON.parse(window.atob(data));
+        } catch {
+            return null;
+        }
+
+        if (typeof payload !== 'object' || typeof payload.metadata !== 'object') {
+            return null;
+        }
+
+        const metadata = payload.metadata;
+
+        return {
+            experience: metadata?.experienceName ?? 'Unknown',
+            experiment: metadata?.experimentName ?? 'Unknown',
+            audience: metadata?.audienceName ?? 'Unknown',
+            variant: metadata?.variantName ?? null,
+        };
+    }
+
+    function getPreviewInfo() {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('croct-preview');
+
+        if (token !== null) {
+            return decodeToken(token);
+        }
+
+        return null;
+    }
+
+    const widgetIframe = document.getElementById('widget');
+    const previewInfo = getPreviewInfo();
+
+    if (previewInfo !== null) {
+        // Remove the token without reloading the page
+        const url = new URL(window.location.href);
+        url.searchParams.delete('croct-preview');
+        window.history.replaceState({}, '', url.toString());
+
+        const params = new URLSearchParams();
+        params.append('experience', previewInfo.experience);
+        params.append('audience', previewInfo.audience);
+
+        if (previewInfo.variant !== null) {
+            if (previewInfo.experiment !== null) {
+                params.append('experiment', previewInfo.experiment);
+            }
+
+            params.append('variant', previewInfo.variant);
+        }
+
+        widgetIframe.src = `./widget.html?${params.toString()}`;
+    }
+
+    widgetIframe.style.position = 'fixed';
+    widgetIframe.style.width = '0px';
+    widgetIframe.style.height = '0px';
+    widgetIframe.style.right = '0';
+    widgetIframe.style.bottom = '0';
+    widgetIframe.style.overflow = 'hidden';
+    widgetIframe.style.border = '0';
+    widgetIframe.scrolling = 'no';
+    widgetIframe.frameborder = '0';
+    widgetIframe.style.zIndex = '2147483647';
+
+    document.body.prepend(widgetIframe);
+
+    window.addEventListener('message', event => {
+        switch (event.data.type) {
+            case 'croct:preview:leave':
+                location.reload();
+                break;
+
+            case 'croct:preview:resize':
+                widgetIframe.style.width = event.data.width + 'px';
+                widgetIframe.style.height = event.data.height + 'px';
+                break;
+        }
+    });
+</script>
+</body>
+</html>

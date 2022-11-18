@@ -206,7 +206,7 @@ export class PlaygroundPlugin implements Plugin {
     }
 
     private createContext(): EvaluationContext {
-        const {page, campaign, timezone} = this.contextFactory.createContext();
+        const {page, campaign, timeZone} = this.contextFactory.createContext();
         const context: EvaluationContext = {};
 
         if (page !== undefined) {
@@ -217,8 +217,8 @@ export class PlaygroundPlugin implements Plugin {
             context.campaign = campaign;
         }
 
-        if (timezone !== undefined) {
-            context.timezone = timezone;
+        if (timeZone !== undefined) {
+            context.timeZone = timeZone;
         }
 
         return context;
@@ -238,7 +238,7 @@ export const factory: PluginFactory<Options> = (props): PlaygroundPlugin => {
         connectionId: options.connectionId,
         tab: sdk.tab,
         storage: sdk.getTabStorage(),
-        tokenProvider: sdk.tokenStore,
+        tokenProvider: sdk.userTokenStore,
         cidAssigner: sdk.cidAssigner,
         contextFactory: new TabContextFactory(sdk.tab),
         eventSubscriber: sdk.eventManager,

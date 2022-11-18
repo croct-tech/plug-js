@@ -1,7 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
 
 export default args => {
@@ -15,6 +15,14 @@ export default args => {
 
     if (args['config-playground-connect-url'] === undefined) {
         throw new Error('The argument "config-playground-connect-url" is missing.');
+    }
+
+    if (args['config-preview-widget-origin'] === undefined) {
+        throw new Error('The argument "config-preview-widget-origin" is missing.');
+    }
+
+    if (args['config-preview-widget-url'] === undefined) {
+        throw new Error('The argument "config-preview-widget-url" is missing.');
     }
 
     return [
@@ -39,7 +47,8 @@ export default args => {
                     cdnUrl: args['config-cdn-url'],
                     playgroundOrigin: args['config-playground-origin'],
                     playgroundConnectUrl: args['config-playground-connect-url'],
-
+                    previewWidgetOrigin: args['config-preview-widget-origin'],
+                    previewWidgetUrl: args['config-preview-widget-url'],
                 }),
                 terser({
                     format: {

@@ -107,7 +107,7 @@ Refer to the [patch documentation](patch.md) for more details on how patching wo
 
 Here's a minimal example showing how to edit a user profile:
 
-```js
+```ts
 croct.user.edit()
   .set('company', 'Croct')
   .add('interests', 'JavaScript')

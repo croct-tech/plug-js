@@ -89,7 +89,7 @@ the user remains the same as the origin page.
 
 Here's a minimal example showing how to initialize the SDK:
 
-```js
+```ts
 croct.plug({appId: '00000000-0000-0000-0000-000000000000'});
 ```
 
@@ -209,12 +209,12 @@ This method returns `true` if the user is anonymous, `false` otherwise.
 
 ## evaluate
 
-This method evaluates an expression written in CQL.
+This method evaluates a query written in CQL.
 
 Check out our [quick start guide](quick-start.md) for an introduction to what is CQL and how it works.
 
 > ℹ️️ **Note**  
-> We currently impose a hard limit of 500 characters on the length of expression.
+> We currently impose a hard limit of 500 characters on the length of query.
 > We plan to remove this limitation in the near future.
 
 ### Signature
@@ -222,24 +222,24 @@ Check out our [quick start guide](quick-start.md) for an introduction to what is
 The `evaluation` method has the following signature:
 
 ```ts
-croct.evaluate(expression: string, options?: EvaluationOptions): Promise<JsonResult>
+croct.evaluate(query: string, options?: EvaluationOptions): Promise<JsonResult>
 ```
 
 These are the currently supported options:
 
-| Option       | Type   | Description                                                                                                                                                                                                                               |
-|--------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.                                                                                           |
-| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`. |
+| Option       | Type   | Description                                                                                                                                                                                                                           |
+|--------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the evaluator will abort the evaluation and reject the promise with a timeout error.                                                                                       |
+| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in queries like `context's cities include location's city`. |
 
 The return is a [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) that 
 resolves to the evaluation result.
 
 ### Code Sample
 
-Here's a minimal example showing how evaluate an expression:
+Here's a minimal example showing how evaluate a query:
 
-```js
+```ts
 croct.evaluate('session is starting').then(console.log);
 ```
 
@@ -247,25 +247,30 @@ croct.evaluate('session is starting').then(console.log);
 
 This method fetches the content for a slot.
 
-> ⚠️️️ **Note**  
-> This API is unstable and subject to change in future releases. It is currently available only to accounts 
-> participating in our Early-Access Program (EAP). Please contact your Customer Success Manager or email eap@croct.com 
-> to check your account eligibility.
-
 ### Signature
 
 The `fetch` method has the following signature:
 
 ```ts
-croct.fetch(id: string, options?: FetchOptions): Promise<JsonObject>
+croct.fetch(id: string, options?: FetchOptions): Promise<{content: JsonObject}>
 ```
+
+You can specify the version of the slot by passing a versioned ID in the form `id@version`. For example,
+passing `home-banner@1` will fetch the content for the `home-banner` slot in version 1. Not specifying a
+version number is the same as passing `home-banner@latest`, which will load the latest version of the slot.
+
+> ✅ **Best practice**  
+> It's strongly recommended to specify a slot version for production deployments. 
+> That way, you ensure the front end will always receive content with the expected 
+> schema while your team can freely evolve the content's schema in parallel.
 
 These are the currently supported options:
 
-| Option       | Type   | Description                                                                                                                                                                                                                               |
-|--------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `timeout`    | number | The maximum evaluation time in milliseconds. Once reached, the plug will abort the fetch and reject the promise with a timeout error.                                                                                                     |
-| `attributes` | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in expressions like `context's cities include location's city`. |
+| Option            | Type   | Description                                                                                                                                                                                                                           |
+|-------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `preferredLocale` | string | The preferred locale for the content. If not specified, the default locale will be used.                                                                                                                                              |
+| `attributes`      | JSON   | The map of attributes to inject in the evaluation context. For example, passing the attributes `{cities: ['New York', 'San Francisco']}` will allow you to reference them in queries like `context's cities include location's city`. |
+| `timeout`         | number | The maximum evaluation time in milliseconds. Once reached, the plug will abort the fetch and reject the promise with a timeout error.                                                                                                 |
 
 A slot represents a personalizable element of the interface. Each slot has a predefined structure whose content may vary 
 according to a personalization strategy. 
@@ -275,8 +280,21 @@ resolves to the slot content in the format as follows:
 
 ```ts
 {
-    payload: {[key: string]: JsonValue},
+    content: {[key: string]: JsonValue},
 }
+```
+
+It is common for your slot structure to change over time. To provide a smooth workflow and ensure your application 
+won't break during new releases, we've introduced the concept of slot versioning.
+
+Our versioning system automatically increments the slot version number whenever you make a backward-incompatible change. 
+For example, if you add a new field to the slot structure, the version number increases by one. When your application 
+requests content, we take the requested slot version and return the latest available compatible content. 
+
+To take advantage of this feature, make sure to specify the slot version when requesting content:
+
+```ts
+croct.fetch('my-slot', {version: '1'});
 ```
 
 ### Code Sample
@@ -297,7 +315,7 @@ type HomeBanner = {
 
 Here's a minimal example showing how to fetch the content for the slot `home-banner`:
 
-```js
+```ts
 croct.fetch('home-banner').then(console.log);
 ```
 
@@ -305,7 +323,7 @@ In this example, you should see the following output:
 
 ```json
 {
-    "payload": {
+    "content": {
         "title": "Unlock the Power of Personalization",
         "subtitle": "Dive into the world of one-to-one engagement.",
         "image": "https://croct.com/signup.png",
@@ -330,13 +348,13 @@ robust solution:
 
 ```ts
 // slots.d.ts
-import {JsonObject} from '@croct/plug/sdk/json';
-
-declare module '@croct/plug/fetch' {
-    interface SlotMap extends Record<string, JsonObject> {
+declare module '@croct/plug/slot' {
+    interface SlotMap {
         'home-banner': HomeBanner;
     }
 }
+
+export {};
 ```
 
 If you use an IDE with Typescript code completion support, you will get autocomplete suggestions for 
@@ -365,7 +383,7 @@ resolves to the tracked event after successful transmission.
 
 Here's a minimal example showing how track an event:
 
-```js
+```ts
 croct.track('goalCompleted', {goalId: 'newsletter-sign-up'});
 ```
 
@@ -379,7 +397,7 @@ Please refer to the [User API reference](user.md) for more details.
 
 Here's a minimal example showing how to edit a user profile:
 
-```js
+```ts
 croct.user.edit()
   .add('interests', 'JavaScript')
   .save()
@@ -395,7 +413,7 @@ Please refer to the [Session API reference](session.md) for more details.
 
 Here's a minimal example showing how to edit a user profile:
 
-```js
+```ts
 croct.session.edit()
   .set('plan', 'starter')
   .save()

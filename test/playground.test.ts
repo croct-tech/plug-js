@@ -18,7 +18,7 @@ const appId = '96ce0758-d4c4-4aae-bac6-efb17de66488';
 const tabId = 'ffe5d9df-af36-4d58-8178-51f3cf1a7504';
 const sdkVersion = '0.0.1';
 const evaluationContext: EvaluationContext = {
-    timezone: 'America/Sao_Paulo',
+    timeZone: 'America/Sao_Paulo',
     campaign: {
         content: 'content',
     },
@@ -112,7 +112,7 @@ describe('A Playground plugin factory', () => {
             version: sdkVersion,
             appId: appId,
             tab: new Tab(tabId, true),
-            tokenStore: {
+            userTokenStore: {
                 getToken: jest.fn(),
                 setToken: jest.fn(),
             },
@@ -208,7 +208,7 @@ describe('A Playground plugin', () => {
         const configuration = getConfiguration();
 
         const minimalContext: EvaluationContext = {
-            timezone: 'America/Sao_Paulo',
+            timeZone: 'America/Sao_Paulo',
         };
 
         jest.spyOn(configuration.contextFactory, 'createContext').mockReturnValue(minimalContext);

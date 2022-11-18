@@ -1,5 +1,6 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-    transformIgnorePatterns: [
-        'node_modules/(?!@croct/.*)',
-    ],
+    testEnvironment: 'jsdom',
+    preset: 'ts-jest',
+    testMatch: ['<rootDir>/test/**/*.test.ts'],
 };

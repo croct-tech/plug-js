@@ -14,8 +14,9 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    run:
-      working-directory: preview
+    defaults:
+      run:
+        working-directory: preview
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1

@@ -54,8 +54,8 @@ jobs:
         id: cache-dependencies
         uses: actions/cache@v1
         with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('package-lock.json') }}
+          path: preview/node_modules
+          key: preview_node_modules-${{ hashFiles('package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'

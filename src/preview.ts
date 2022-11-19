@@ -58,6 +58,8 @@ export class PreviewPlugin implements Plugin {
 
     private updateToken(data: string): void {
         if (data === PREVIEW_EXIT) {
+            this.logger.debug('Exiting preview mode.');
+
             this.tokenStore.setToken(null);
 
             return;
@@ -68,6 +70,8 @@ export class PreviewPlugin implements Plugin {
             const {exp} = token.getPayload();
 
             if (exp !== undefined && exp <= Date.now() / 1000) {
+                this.logger.debug('Preview token expired.');
+
                 token = null;
             }
 

@@ -157,6 +157,8 @@ describe('A Preview plugin', () => {
         expect(configuration.tokenStore.getToken()).toBe(null);
 
         expect(document.body.children.length).toBe(0);
+
+        expect(configuration.logger.debug).toHaveBeenCalledWith('Preview token expired.');
     });
 
     it('should remove the stored token when leaving the preview', () => {
@@ -172,8 +174,7 @@ describe('A Preview plugin', () => {
 
         expect(window.location.href).toBe('http://localhost/');
 
-        expect(configuration.logger.warn).not
-            .toHaveBeenCalled();
+        expect(configuration.logger.debug).toHaveBeenCalledWith('Exiting preview mode.');
     });
 
     it('should log invalid token', () => {

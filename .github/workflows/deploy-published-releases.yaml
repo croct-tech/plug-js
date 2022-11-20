@@ -132,7 +132,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
 
       - name: Deploy to GCS
-        if: ${{ !github.event.release.prerelease }}
         env:
           GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
         run: |-

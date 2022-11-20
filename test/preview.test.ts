@@ -113,9 +113,19 @@ describe('A Preview plugin', () => {
     it('should remove the preview parameter from the URL', () => {
         const plugin = new PreviewPlugin(configuration);
 
-        window.history.replaceState({}, 'Home page', `http://localhost?croct-preview=${token.toString()}`);
+        jest.useFakeTimers();
+
+        window.history.replaceState({}, 'Home page', `http://localhost/?croct-preview=${token.toString()}`);
 
         plugin.enable();
+
+        expect(window.location.href).toBe('http://localhost/');
+
+        window.history.replaceState({}, 'Home page', `http://localhost/?croct-preview=${token.toString()}`);
+
+        expect(window.location.href).toBe(`http://localhost/?croct-preview=${token.toString()}`);
+
+        jest.runAllTimers();
 
         expect(window.location.href).toBe('http://localhost/');
     });

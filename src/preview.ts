@@ -39,10 +39,12 @@ export class PreviewPlugin implements Plugin {
         if (previewData !== null) {
             this.updateToken(previewData);
 
-            // Remove the token from the URL
-            url.searchParams.delete(PREVIEW_PARAMETER);
+            this.updateUrl();
 
-            window.history.replaceState({}, '', url.toString());
+            // Some frameworks (e.g. Next) may revert the URL change
+            // after the page is loaded, so ensure the token is removed
+            // from the URL after a short delay.
+            setTimeout(this.updateUrl, 500);
         }
 
         const token = this.tokenStore.getToken();
@@ -143,6 +145,16 @@ export class PreviewPlugin implements Plugin {
         });
 
         document.body.prepend(widget);
+    }
+
+    private updateUrl(): void {
+        const url = new URL(window.location.href);
+
+        if (url.searchParams.has(PREVIEW_PARAMETER)) {
+            url.searchParams.delete(PREVIEW_PARAMETER);
+
+            window.history.replaceState({}, '', url.toString());
+        }
     }
 
     private createWidget(url: string): HTMLIFrameElement {

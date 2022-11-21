@@ -17,14 +17,14 @@ jobs:
   deploy-library:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
 
       - name: Cache dependencies
         id: cache-dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('package-lock.json') }}
@@ -80,12 +80,12 @@ jobs:
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}
-        uses: google-github-actions/auth@v0.8.3
+        uses: google-github-actions/auth@v1.0.0
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: Deploy to GCS
         if: ${{ !github.event.release.prerelease }}
@@ -101,14 +101,14 @@ jobs:
       run:
         working-directory: preview
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
 
       - name: Cache dependencies
         id: cache-dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('package-lock.json') }}
@@ -124,12 +124,12 @@ jobs:
 
       - name: Authenticate to GCP
         if: ${{ !github.event.release.prerelease }}
-        uses: google-github-actions/auth@v0.8.3
+        uses: google-github-actions/auth@v1.0.0
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: Deploy to GCS
         env:

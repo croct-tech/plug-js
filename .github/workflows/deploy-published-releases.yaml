@@ -43,12 +43,14 @@ jobs:
         run: |-
           cp package.json LICENSE README.md build/
           cd build
+          find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} +
           sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
           sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.*
           sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.*
           sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.*
           sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.*
           sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.*
+          cp -r ../src src
 
       - name: Publish pre-release to NPM
         if: ${{ github.event.release.prerelease }}

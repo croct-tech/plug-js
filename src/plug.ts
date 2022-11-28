@@ -373,15 +373,12 @@ export class GlobalPlug implements Plug {
                 slotId: I,
                 options: FetchOptions = {},
             ): Promise<LegacyFetchResponse<I, C>> => {
-                const [id, version] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
+                const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
                 const logger = this.sdk.getLogger();
 
                 return this.sdk
                     .contentFetcher
-                    .fetch<SlotContent<I, C>>(id, {
-                        ...options,
-                        version: version === 'latest' ? undefined : version,
-                    })
+                    .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
                     .then(
                         response => ({
                             get payload(): SlotContent<I, C> {

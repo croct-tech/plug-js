@@ -1051,14 +1051,13 @@ You must track this event whenever you want to record that something happened fo
 
 This event supports the following properties:
 
-| Property            | Type     | Required  | Constraints                      | Description                                                                          |
-|---------------------|----------|-----------|----------------------------------|--------------------------------------------------------------------------------------|
-| `name`              | `string` | Yes       | Between 1 and 50 characters long | The name of the event.                                                               |
-| `personalizationId` | `string` | No        | Between 1 and 50 characters long | The name of the audience associated with the event.                                  |
-| `audience`          | `string` | No        | Between 1 and 50 characters long | The audience associated with the event. For example, "loyal-shoppers" or "mothers".  |
-| `testId`            | `string` | No        | Between 1 and 50 characters long | The ID of the test associated with the event.                                        |
-| `groupId`           | `string` | No        | Between 1 and 50 characters long | The ID of the test group associated with the event.                                  |
-| `details`           | `object` | No        | Map of primitives                | The details about the event.                                                         |
+| Property   | Type      | Required | Constraints                       | Description                  |
+|------------|-----------|----------|-----------------------------------|------------------------------|
+| `name`     | `string`  | Yes      | Between 1 and 50 characters long  | The name of the event.       |
+| `action`   | `string`  | No       | Between 1 and 50 characters long  | The action of the event.     |
+| `label`    | `string`  | No       | Between 1 and 50 characters long  | The label of the event.      |
+| `category` | `string`  | No       | Between 1 and 50 characters long  | The category of the event.   |
+| `details`  | `object`  | No       | Map of primitives                 | The details about the event. |
 
 The following additional restrictions apply to the `details` property:
 
@@ -1087,11 +1086,13 @@ croct.track('eventOccurred', {
 
 ```ts
 croct.track('eventOccurred', {
-    "name": "personalizationApplied",
-    "personalizationId": "banner-home",
-    "audience": "loyal-users",
-    "testId": "test-banner-home",
-    "groupId": "A",
+    "name": "videoSubscribed",
+    "action": "subscription",
+    "label": "",
+    "category": "",
+    "details": {
+        "username": "john-doe"
+    },
 });
 ```
 

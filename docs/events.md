@@ -1086,10 +1086,10 @@ croct.track('eventOccurred', {
 
 ```ts
 croct.track('eventOccurred', {
-    "name": "videoSubscribed",
-    "action": "subscription",
-    "label": "",
-    "category": "",
+    "name": "video_subscription_button",
+    "action": "user_subscribed",
+    "label": "confirmed",
+    "category": "preemium",
     "details": {
         "username": "john-doe"
     },

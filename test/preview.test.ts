@@ -253,6 +253,30 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.get('variant')).toBe(metadata.variantName);
     });
 
+    it('should insert the widget when the document is ready', () => {
+        Object.defineProperty(document, 'readyState', {
+            writable: true,
+            value: 'loading',
+        });
+
+        const plugin = new PreviewPlugin(configuration);
+
+        configuration.tokenStore.setToken(token);
+
+        plugin.enable();
+
+        expect(document.body.querySelector('iframe')).toBe(null);
+
+        Object.defineProperty(document, 'readyState', {
+            writable: true,
+            value: 'complete',
+        });
+
+        window.dispatchEvent(new Event('DOMContentLoaded'));
+
+        expect(document.body.querySelector('iframe')).not.toBe(null);
+    });
+
     it('should ignore messages from unknown origins', () => {
         const plugin = new PreviewPlugin(configuration);
 

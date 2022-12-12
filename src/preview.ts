@@ -144,7 +144,13 @@ export class PreviewPlugin implements Plugin {
             }
         });
 
-        document.body.prepend(widget);
+        const insert = (): void => document.body?.prepend(widget);
+
+        if (document.readyState === 'complete') {
+            insert();
+        } else {
+            window.addEventListener('DOMContentLoaded', insert);
+        }
     }
 
     private updateUrl(): void {

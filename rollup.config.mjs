@@ -3,6 +3,11 @@ import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 import terser from '@rollup/plugin-terser';
 import commonjs from '@rollup/plugin-commonjs';
+import {fileURLToPath} from 'url';
+
+// Temporary fix for: https://github.com/rollup/plugins/pull/1367
+const __filename = fileURLToPath(import.meta.url);
+global['__filename'] = __filename;
 
 export default args => {
     if (args['config-cdn-url'] === undefined) {

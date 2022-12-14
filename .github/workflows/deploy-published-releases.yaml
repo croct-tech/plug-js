@@ -15,6 +15,9 @@ env:
 
 jobs:
   deploy-library:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout  
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -80,11 +83,13 @@ jobs:
               --config-preview-widget-origin=${PREVIEW_WIDGET_ORIGIN} \
               --config-preview-widget-url=${PREVIEW_WIDGET_URL}
 
-      - name: Authenticate to GCP
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
         if: ${{ !github.event.release.prerelease }}
-        uses: google-github-actions/auth@v1.0.0
+        uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          workload_identity_provider: '${{ secrets.GCLOUD_WORKLOAD_IDENTITY }}'
+          service_account: '${{ secrets.GCLOUD_SERVICE_ACCOUNT }}'
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -98,6 +103,9 @@ jobs:
           gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
 
   deploy-preview-widget:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout  
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -124,10 +132,12 @@ jobs:
         run: |-
           npm run build
 
-      - name: Authenticate to GCP
-        uses: google-github-actions/auth@v1.0.0
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          workload_identity_provider: '${{ secrets.GCLOUD_WORKLOAD_IDENTITY }}'
+          service_account: '${{ secrets.GCLOUD_SERVICE_ACCOUNT }}'
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1

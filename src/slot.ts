@@ -10,6 +10,36 @@ type LatestSlotVersionMap = {[K in keyof SlotMap]: {latest: SlotMap[K]}};
 export interface VersionedSlotMap extends LatestSlotVersionMap {
 }
 
+/**
+ * Creates an intersection of the given types distributing over unions.
+ *
+ * The difference between this type and the built-in `&` operator is that the
+ * `&` operator creates an intersection of the union members instead of
+ * creating a union of the intersection members. For example, given the types
+ * `Left = A | B` and `Right = C`, the type `Left & Right` expands to
+ * `(A | B) & C`, but `Merge<Left, Right>` expands to `A & C | B & C`,
+ * which improves type inference when narrowing the type.
+ */
+type Intersection<T, E> = T extends infer O ? O & E : never;
+
+type DiscriminatedSlotMap = {
+    [K in keyof VersionedSlotMap]: {
+        [V in keyof VersionedSlotMap[K]]: Intersection<VersionedSlotMap[K][V], {_component: string | null}>
+    }
+};
+
+type UnionContent = {
+    [K in ComponentVersionId]: Intersection<ComponentContent<K>, {_component: K}>;
+};
+
+type UnknownContent = UnionContent[ComponentVersionId] extends never
+    ? (JsonObject & {_component: string | null})
+    : UnionContent[ComponentVersionId];
+
+type VersionedContent<I extends VersionedSlotId> = Versioned<I, DiscriminatedSlotMap, UnknownContent>;
+
+export type DynamicSlotId = any;
+
 export type SlotId = keyof VersionedSlotMap extends never ? string : keyof VersionedSlotMap;
 
 export type SlotVersion<I extends SlotId = SlotId> = Version<VersionedSlotMap, I>;
@@ -18,24 +48,7 @@ export type SlotVersionId<I extends SlotId = SlotId> = CanonicalVersionId<I, Ver
 
 export type VersionedSlotId<I extends SlotId = SlotId> = VersionedId<I, VersionedSlotMap>;
 
-export type DynamicSlotId = any;
-
-type DiscriminatedContent<T = Record<never, never>, I extends string|null = null> = T & {_component: I};
-
-type DiscriminatedComponentMap = {
-    [K in ComponentVersionId]: DiscriminatedContent<ComponentContent<K>, K>;
-};
-
-export type CompatibleSlotContent<T extends ComponentVersionId = ComponentVersionId> =
-    DiscriminatedComponentMap[T];
-
-type UnionContent = {[I in ComponentVersionId]: DiscriminatedComponentMap[I]}[ComponentVersionId];
-
-type UnknownContent = UnionContent extends never ? JsonObject : UnionContent | DiscriminatedContent;
+export type CompatibleSlotContent<T extends ComponentVersionId = ComponentVersionId> = UnionContent[T];
 
 export type SlotContent<I extends VersionedSlotId = VersionedSlotId, C extends JsonObject = JsonObject> =
-    JsonObject extends C
-        ? string extends I
-            ? UnknownContent
-            : DiscriminatedContent<Versioned<I, VersionedSlotMap, UnknownContent>, string>
-        : C;
+    JsonObject extends C ? (string extends I ? UnknownContent : VersionedContent<I>) : C;

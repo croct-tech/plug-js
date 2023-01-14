@@ -10,9 +10,14 @@ export type CanonicalVersionId<I extends string, M> = {
     [K in I]: `${K}@${Extract<Version<M, K>, `${number}`>}`
 }[I];
 
-export type VersionedId<I extends string, M> = I | {[K in I]: `${K}@${Version<M, K> & string}`}[I];
+/**
+ * Utility type that coerces any type to a string if it is not a string literal.
+ */
+type CastString<T extends string> = T extends `${infer V}` ? V : string;
 
-export type ExtractId<I extends string> = I extends `${infer V}@${string}` ? V : I;
+export type VersionedId<I extends string, M> = CastString<I> | {[K in I]: `${K}@${Version<M, K> & string}`}[I];
+
+export type ExtractId<I extends string> = I extends `${infer V}@${string}` ? V : CastString<I>;
 
 export type Version<M, I extends string> = LatestAlias | (I extends keyof M ? keyof M[I] : never);
 

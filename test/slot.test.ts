@@ -31,14 +31,17 @@ describe('Slot typing', () => {
         };
         
         declare module '../src/slot' {
+            type HomeBannerV1 = HomeBanner & {_component: 'banner@1' | null};
+            type HybridBannerV1 = HybridBanner & {_component: 'hybrid-banner@1' | null};
+        
             interface VersionedSlotMap {
                 'home-banner': {
-                    'latest': HomeBanner,
-                    '1': HomeBanner,
+                    'latest': HomeBannerV1,
+                    '1': HomeBannerV1,
                 };
                 'hybrid-banner': {
-                    'latest': HybridBanner,
-                    '1': HybridBanner,
+                    'latest': HybridBannerV1,
+                    '1': HybridBannerV1,
                 };
             }
         }
@@ -165,12 +168,12 @@ describe('Slot typing', () => {
 
         expect(getTypeName(code)).toBe(
             [
+                '"hybrid-banner@1"',
                 '"home-banner"',
                 '"hybrid-banner"',
                 '"home-banner@latest"',
                 '"home-banner@1"',
                 '"hybrid-banner@latest"',
-                '"hybrid-banner@1"',
             ].join(' | '),
         );
     });
@@ -222,7 +225,7 @@ describe('Slot typing', () => {
 
         expect(() => compileCode(code)).not.toThrow();
 
-        expect(getTypeName(code)).toBe('"home-banner@1" | "hybrid-banner@1"');
+        expect(getTypeName(code)).toBe('"hybrid-banner@1" | "home-banner@1"');
     });
 
     it('should export a CompatibleSlotContent type that resolves to never when no slot mapping exists', () => {
@@ -249,7 +252,7 @@ describe('Slot typing', () => {
 
         expect(() => compileCode(code)).not.toThrow();
 
-        expect(getTypeName(code)).toBe('Banner & {_component: "banner@1";}');
+        expect(getTypeName(code)).toBe('Banner & {_component: "banner@1" | null;}');
     });
 
     it('should export a CompatibleSlotContent type that resolves the slot content type for multiple components', () => {
@@ -265,9 +268,9 @@ describe('Slot typing', () => {
         expect(() => compileCode(code)).not.toThrow();
 
         expect(getTypeName(code)).toBe(
-            '(Banner & {_component: "banner@1";})'
-            + ' | (HorizontalBanner & {_type: \'horizontal-banner\';} & {_component: "hybrid-banner@1";})'
-            + ' | (VerticalBanner & {_type: \'vertical-banner\';} & {_component: "hybrid-banner@1";})',
+            '(Banner & {_component: "banner@1" | null;})'
+            + ' | (HorizontalBanner & {_type: \'horizontal-banner\';} & {_component: "hybrid-banner@1" | null;})'
+            + ' | (VerticalBanner & {...;} & {_component: "hybrid-banner@1" | null;})',
         );
     });
 
@@ -299,7 +302,7 @@ describe('Slot typing', () => {
 
         expect(() => compileCode(code)).not.toThrow();
 
-        expect(getTypeName(code)).toBe('HomeBanner & {_component: string | null;}');
+        expect(getTypeName(code)).toBe('HomeBanner & {_component: \'banner@1\' | null;}');
     });
 
     it('should export a SlotContent type that resolves to multiple slot contents', () => {
@@ -314,11 +317,7 @@ describe('Slot typing', () => {
 
         expect(() => compileCode(code)).not.toThrow();
 
-        expect(getTypeName(code)).toBe(
-            '(HomeBanner & {_component: string | null;}) | '
-            + "(HorizontalBanner & {_type: 'horizontal-banner';} & {_component: string | null;}) "
-            + '| (VerticalBanner & {...;} & {_component: string | null;})',
-        );
+        expect(getTypeName(code)).toBe('HomeBannerV1 | HybridBannerV1');
     });
 
     it('should export a SlotContent type that resolves to JsonObject when the slot is unknown', () => {
@@ -359,9 +358,9 @@ describe('Slot typing', () => {
         expect(() => compileCode(code)).not.toThrow();
 
         expect(getTypeName(code)).toBe(
-            '(Banner & {_component: "banner@1";})'
-            + ' | (HorizontalBanner & {_type: \'horizontal-banner\';} & {_component: "hybrid-banner@1";})'
-            + ' | (VerticalBanner & {_type: \'vertical-banner\';} & {_component: "hybrid-banner@1";})',
+            '(Banner & {_component: "banner@1" | null;})'
+            + ' | (HorizontalBanner & {_type: \'horizontal-banner\';} & {_component: "hybrid-banner@1" | null;})'
+            + ' | (VerticalBanner & {...;} & {_component: "hybrid-banner@1" | null;})',
         );
     });
 

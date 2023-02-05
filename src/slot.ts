@@ -22,21 +22,15 @@ export interface VersionedSlotMap extends LatestSlotVersionMap {
  */
 type Intersection<T, E> = T extends infer O ? O & E : never;
 
-type DiscriminatedSlotMap = {
-    [K in keyof VersionedSlotMap]: {
-        [V in keyof VersionedSlotMap[K]]: Intersection<VersionedSlotMap[K][V], {_component: string | null}>
-    }
-};
-
 type UnionContent = {
-    [K in ComponentVersionId]: Intersection<ComponentContent<K>, {_component: K}>;
+    [K in ComponentVersionId]: Intersection<ComponentContent<K>, {_component: K | null}>;
 };
 
 type UnknownContent = UnionContent[ComponentVersionId] extends never
     ? (JsonObject & {_component: string | null})
     : UnionContent[ComponentVersionId];
 
-type VersionedContent<I extends VersionedSlotId> = Versioned<I, DiscriminatedSlotMap, UnknownContent>;
+type VersionedContent<I extends VersionedSlotId> = Versioned<I, VersionedSlotMap, UnknownContent>;
 
 export type DynamicSlotId = any;
 

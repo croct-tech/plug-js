@@ -252,7 +252,7 @@ describe('Slot typing', () => {
 
         expect(() => compileCode(code)).not.toThrow();
 
-        expect(getTypeName(code)).toBe('Banner & {_component: "banner@1" | null;}');
+        expect(getTypeName(code)).toBe('Banner & {_component: "banner@1";}');
     });
 
     it('should export a CompatibleSlotContent type that resolves the slot content type for multiple components', () => {
@@ -268,9 +268,9 @@ describe('Slot typing', () => {
         expect(() => compileCode(code)).not.toThrow();
 
         expect(getTypeName(code)).toBe(
-            '(Banner & {_component: "banner@1" | null;})'
-            + ' | (HorizontalBanner & {_type: \'horizontal-banner\';} & {_component: "hybrid-banner@1" | null;})'
-            + ' | (VerticalBanner & {...;} & {_component: "hybrid-banner@1" | null;})',
+            '(Banner & {_component: "banner@1";})'
+            + ' | (HorizontalBanner & {_type: \'horizontal-banner\';} & {_component: "hybrid-banner@1";})'
+            + ' | (VerticalBanner & {_type: \'vertical-banner\';} & {_component: "hybrid-banner@1";})',
         );
     });
 

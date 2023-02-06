@@ -10,7 +10,7 @@ export interface VersionedComponentMap extends LatestComponentVersionMap {
 
 export type ComponentId = keyof VersionedComponentMap extends never ? string : keyof VersionedComponentMap;
 
-export type ComponentVersion<I extends ComponentId = ComponentId> = Version<VersionedComponentMap, I>;
+export type ComponentVersion<I extends ComponentId> = Version<VersionedComponentMap, I>;
 
 export type ComponentVersionId<I extends ComponentId = ComponentId> = CanonicalVersionId<I, VersionedComponentMap>;
 

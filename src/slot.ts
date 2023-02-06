@@ -36,7 +36,7 @@ export type DynamicSlotId = any;
 
 export type SlotId = keyof VersionedSlotMap extends never ? string : keyof VersionedSlotMap;
 
-export type SlotVersion<I extends SlotId = SlotId> = Version<VersionedSlotMap, I>;
+export type SlotVersion<I extends SlotId> = Version<VersionedSlotMap, I>;
 
 export type SlotVersionId<I extends SlotId = SlotId> = CanonicalVersionId<I, VersionedSlotMap>;
 

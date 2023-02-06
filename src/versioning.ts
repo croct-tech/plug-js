@@ -2,10 +2,6 @@ import {JsonObject} from '@croct/json';
 
 export type LatestAlias = 'latest';
 
-export type ExtractVersion<I extends string> = I extends `${string}@${infer V}`
-    ? (LatestAlias extends V ? LatestAlias : (V extends `${number}` ? V : never))
-    : LatestAlias;
-
 export type CanonicalVersionId<I extends string, M> = {
     [K in I]: `${K}@${Extract<Version<M, K>, `${number}`>}`
 }[I];
@@ -17,13 +13,26 @@ type CastString<T extends string> = T extends `${infer V}` ? V : string;
 
 export type VersionedId<I extends string, M> = CastString<I> | {[K in I]: `${K}@${Version<M, K> & string}`}[I];
 
-export type ExtractId<I extends string> = I extends `${infer V}@${string}` ? V : CastString<I>;
-
 export type Version<M, I extends string> = LatestAlias | (I extends keyof M ? keyof M[I] : never);
 
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+type Expand<T> = {[K in keyof T]: T[K]};
+
+type FlattenVersionMap<T> = Expand<
+    UnionToIntersection<
+        {
+            [K in Extract<keyof T, string>]: {
+                [K2 in Extract<keyof T[K], string> as (`${K}@${K2}` | (LatestAlias extends K2 ? K : never))]: T[K][K2];
+            }
+        }[Extract<keyof T, string>]
+    >
+>;
+
 export type Versioned<I extends string, M, C extends JsonObject = JsonObject> =
-    ExtractId<I> extends keyof M
-        ? ExtractVersion<I> extends keyof M[ExtractId<I>]
-            ? M[ExtractId<I>][ExtractVersion<I>]
+    // Ensure T is string
+    I extends `${infer K}`
+        ? K extends keyof FlattenVersionMap<M>
+            ? FlattenVersionMap<M>[K]
             : C
         : C;

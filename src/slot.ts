@@ -22,8 +22,8 @@ export interface VersionedSlotMap extends LatestSlotVersionMap {
  */
 type Intersection<T, E> = T extends infer O ? O & E : never;
 
-type UnionContent = {
-    [K in ComponentVersionId]: Intersection<ComponentContent<K>, {_component: K | null}>;
+type UnionContent<T = null> = {
+    [K in ComponentVersionId]: Intersection<ComponentContent<K>, {_component: K | T}>;
 };
 
 type UnknownContent = UnionContent[ComponentVersionId] extends never
@@ -42,7 +42,7 @@ export type SlotVersionId<I extends SlotId = SlotId> = CanonicalVersionId<I, Ver
 
 export type VersionedSlotId<I extends SlotId = SlotId> = VersionedId<I, VersionedSlotMap>;
 
-export type CompatibleSlotContent<T extends ComponentVersionId = ComponentVersionId> = UnionContent[T];
+export type CompatibleSlotContent<T extends ComponentVersionId = ComponentVersionId> = UnionContent<never>[T];
 
 export type SlotContent<I extends VersionedSlotId = VersionedSlotId, C extends JsonObject = JsonObject> =
     JsonObject extends C ? (string extends I ? UnknownContent : VersionedContent<I>) : C;

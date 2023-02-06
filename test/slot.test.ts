@@ -178,24 +178,13 @@ describe('Slot typing', () => {
         );
     });
 
-    it('should export a SlotVersion type that resolves to "latest" when no slot mapping exists', () => {
-        const code: CodeOptions = {
-            imports: ['SlotVersion'],
-            type: 'SlotVersion',
-        };
-
-        expect(() => compileCode(code)).not.toThrow();
-
-        expect(getTypeName(code)).toBe('"latest"');
-    });
-
     it('should export a SlotVersion that resolves to a union of all slot versions', () => {
         const code: CodeOptions = {
             imports: ['SlotVersion'],
             mapping: {
                 slot: true,
             },
-            type: 'SlotVersion',
+            type: 'SlotVersion<"home-banner">',
         };
 
         expect(() => compileCode(code)).not.toThrow();

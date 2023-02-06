@@ -132,23 +132,11 @@ describe('Component typing', () => {
         );
     });
 
-    it('should export a ComponentVersion type that resolves to "latest" when no component mapping exists', () => {
-        const code: CodeOptions = {
-            imports: ['ComponentVersion'],
-            mapping: false,
-            type: 'ComponentVersion',
-        };
-
-        expect(() => compileCode(code)).not.toThrow();
-
-        expect(getTypeName(code)).toBe('"latest"');
-    });
-
     it('should export a ComponentVersion that resolves to a union of all component versions', () => {
         const code: CodeOptions = {
             imports: ['ComponentVersion'],
             mapping: true,
-            type: 'ComponentVersion',
+            type: 'ComponentVersion<"banner">',
         };
 
         expect(() => compileCode(code)).not.toThrow();

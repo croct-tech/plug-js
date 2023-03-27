@@ -37,6 +37,7 @@ test.describe('Preview widget', () => {
             experiment: 'A very very very very long experiment name',
             audience: 'A very very very very long audience name',
             variant: 'A very very very very long variant name',
+            locale: 'A very very very very long locale name',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -55,6 +56,7 @@ test.describe('Preview widget', () => {
         await open(page, {
             experience: 'A very very very very long experience name',
             audience: 'A very very very very long audience name',
+            locale: 'A very very very very long locale name',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -73,6 +75,7 @@ test.describe('Preview widget', () => {
             experience: 'A very very very very long experience name',
             experiment: 'A very very very very long experiment name',
             audience: 'A very very very very long audience name',
+            locale: 'A very very very very long locale name',
         });
 
         const disclosure = await page.locator('#disclosure');

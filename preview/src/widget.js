@@ -100,6 +100,10 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-audience').textContent = params.get('audience');
     }
 
+    if (params.has('locale')) {
+        document.getElementById('preview-locale').textContent = params.get('locale');
+    }
+
     if (params.has('variant')) {
         if (params.has('experiment')) {
             document.getElementById('preview-experiment').textContent = params.get('experiment');

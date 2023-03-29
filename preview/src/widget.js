@@ -100,6 +100,21 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-audience').textContent = params.get('audience');
     }
 
+    if (params.has('locale')) {
+        const localeCode = params.get('locale');
+        let localeName = localeCode;
+
+        try {
+            const formatter = new Intl.DisplayNames(['en-us'], {type: 'language'});
+
+            localeName = `${formatter.of(localeCode)} <span class="detail">(${localeCode})</span>`;
+        } catch (error) {
+            // Ignore
+        }
+
+        document.getElementById('preview-locale').innerHTML = localeName;
+    }
+
     if (params.has('variant')) {
         if (params.has('experiment')) {
             document.getElementById('preview-experiment').textContent = params.get('experiment');

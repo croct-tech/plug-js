@@ -40,6 +40,7 @@
             experiment: metadata?.experimentName ?? 'Unknown',
             audience: metadata?.audienceName ?? 'Unknown',
             variant: metadata?.variantName ?? null,
+            locale: metadata?.locale ?? null,
         };
     }
 
@@ -66,6 +67,7 @@
         const params = new URLSearchParams();
         params.append('experience', previewInfo.experience);
         params.append('audience', previewInfo.audience);
+        params.append('locale', previewInfo.locale);
 
         if (previewInfo.variant !== null) {
             if (previewInfo.experiment !== null) {

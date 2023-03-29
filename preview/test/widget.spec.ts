@@ -37,6 +37,7 @@ test.describe('Preview widget', () => {
             experiment: 'A very very very very long experiment name',
             audience: 'A very very very very long audience name',
             variant: 'A very very very very long variant name',
+            locale: 'pt-br',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -55,6 +56,7 @@ test.describe('Preview widget', () => {
         await open(page, {
             experience: 'A very very very very long experience name',
             audience: 'A very very very very long audience name',
+            locale: 'en-us',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -73,6 +75,7 @@ test.describe('Preview widget', () => {
             experience: 'A very very very very long experience name',
             experiment: 'A very very very very long experiment name',
             audience: 'A very very very very long audience name',
+            locale: 'pt-br',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -170,5 +173,17 @@ test.describe('Preview widget', () => {
         expect(events).toHaveLength(1);
 
         expect(events[0].type).toEqual('croct:preview:leave');
+    });
+
+    test('should fallback to the locale code when the code is invalid', async ({page}) => {
+        await open(page, {
+            locale: 'A very very very very long locale name',
+        });
+
+        await page.locator('#disclosure').click();
+
+        const previewLocale = await page.locator('#preview-locale');
+
+        await expect(previewLocale).toHaveText('A very very very very long locale name');
     });
 });

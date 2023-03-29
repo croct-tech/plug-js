@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', () => {
         try {
             const formatter = new Intl.DisplayNames(['en-us'], {type: 'language'});
 
-            localeName = `${formatter.of(localeCode)} <span class="locale-code">(${localeCode})</span>`;
+            localeName = `${formatter.of(localeCode)} <span class="detail">(${localeCode})</span>`;
         } catch (error) {
             // Ignore
         }

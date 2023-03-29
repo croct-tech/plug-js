@@ -233,7 +233,7 @@ html {
     text-transform: uppercase;
 }
 
-.widget .content ul.options > li > .description > #preview-locale > .locale-code {
+.widget .content ul.options > li > .description .detail {
     color: var(--color-gray-400);
 }
 

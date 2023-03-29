@@ -175,7 +175,7 @@ test.describe('Preview widget', () => {
         expect(events[0].type).toEqual('croct:preview:leave');
     });
 
-    test('should fallback to the locale code when an invalid code is provided', async ({page}) => {
+    test('should fallback to the locale code when the code is invalid', async ({page}) => {
         await open(page, {
             locale: 'A very very very very long locale name',
         });

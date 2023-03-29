@@ -233,6 +233,10 @@ html {
     text-transform: uppercase;
 }
 
+.widget .content ul.options > li > .description > #preview-locale > .locale-code {
+    color: var(--color-gray-400);
+}
+
 .widget .content [role="separator"] {
     background-color: var(--color-gray-100);
     height: 1px;

@@ -101,7 +101,18 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     if (params.has('locale')) {
-        document.getElementById('preview-locale').textContent = params.get('locale');
+        const localeCode = params.get('locale');
+        let localeName = localeCode;
+
+        try {
+            const formatter = new Intl.DisplayNames(['en-us'], {type: 'language'});
+
+            localeName = `${formatter.of(localeCode)} <span class="locale-code">(${localeCode})</span>`;
+        } catch (error) {
+            // Ignore
+        }
+
+        document.getElementById('preview-locale').innerHTML = localeName;
     }
 
     if (params.has('variant')) {

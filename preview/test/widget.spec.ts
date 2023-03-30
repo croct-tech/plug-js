@@ -186,4 +186,14 @@ test.describe('Preview widget', () => {
 
         await expect(previewLocale).toHaveText('A very very very very long locale name');
     });
+
+    test('should remove the locale item when the locale is not provided', async ({page}) => {
+        await open(page);
+
+        await page.locator('#disclosure').click();
+
+        await expect(await page.getByText('Locale').count()).toBe(0);
+
+        await expect(page).toHaveScreenshot('widget-without-locale.png');
+    });
 });

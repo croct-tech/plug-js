@@ -113,6 +113,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         document.getElementById('preview-locale').innerHTML = localeName;
+    } else {
+        document.getElementById('preview-locale')
+            .closest('li')
+            .remove();
     }
 
     if (params.has('variant')) {

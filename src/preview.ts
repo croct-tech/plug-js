@@ -1,5 +1,4 @@
 import {formatCause} from '@croct/sdk/error';
-import {uuid4} from '@croct/sdk/uuid';
 import {Logger} from './sdk';
 import {Plugin, PluginFactory} from './plugin';
 import {Token, TokenStore} from './sdk/token';
@@ -25,7 +24,7 @@ export class PreviewPlugin implements Plugin {
 
     private readonly logger: Logger;
 
-    private readonly widgetId = `croct-preview:${uuid4()}`;
+    private cleanUp: Array<() => void> = [];
 
     public constructor(configuration: Configuration) {
         this.tokenStore = configuration.tokenStore;
@@ -55,7 +54,9 @@ export class PreviewPlugin implements Plugin {
     }
 
     public disable(): void {
-        document.getElementById(this.widgetId)?.remove();
+        const callbacks = this.cleanUp.splice(0);
+
+        callbacks.forEach(cleanUp => cleanUp());
     }
 
     private updateToken(data: string): void {
@@ -76,6 +77,8 @@ export class PreviewPlugin implements Plugin {
 
                 token = null;
             }
+
+            this.logger.debug('Preview token updated.');
 
             this.tokenStore.setToken(token);
         } catch (error) {
@@ -118,7 +121,7 @@ export class PreviewPlugin implements Plugin {
     private insertWidget(url: string): void {
         const widget = this.createWidget(url);
 
-        window.addEventListener('message', event => {
+        const onMessage = (event: MessageEvent): void => {
             if (event.origin !== PREVIEW_WIDGET_ORIGIN) {
                 return;
             }
@@ -142,13 +145,42 @@ export class PreviewPlugin implements Plugin {
 
                     break;
             }
-        });
+        };
 
-        const insert = (): void => document.body?.prepend(widget);
+        window.addEventListener('message', onMessage);
 
-        if (document.readyState === 'complete') {
+        this.cleanUp.push(() => window.removeEventListener('message', onMessage));
+
+        const insert = (): void => {
+            const container = document.body;
+
+            container.prepend(widget);
+
+            this.cleanUp.push(() => container.removeChild(widget));
+
+            this.logger.debug('Preview widget mounted.');
+
+            // Reinsert the widget if it is removed from the DOM (e.g. by a framework)
+            const observer = new MutationObserver(() => {
+                if (!container.contains(widget)) {
+                    container.prepend(widget);
+
+                    this.logger.debug('Preview widget removed from DOM, reinserting.');
+                }
+            });
+
+            observer.observe(container, {childList: true});
+
+            // Make sure the observer is disconnected before the widget is removed.
+            // Otherwise, the observer may reinsert the widget after it is removed.
+            this.cleanUp.unshift(() => observer.disconnect());
+        };
+
+        if (document.readyState !== 'loading') {
             insert();
         } else {
+            this.logger.debug('Waiting for document to be ready.');
+            this.cleanUp.push(() => window.removeEventListener('DOMContentLoaded', insert));
             window.addEventListener('DOMContentLoaded', insert);
         }
     }
@@ -166,7 +198,6 @@ export class PreviewPlugin implements Plugin {
     private createWidget(url: string): HTMLIFrameElement {
         const widget = document.createElement('iframe');
 
-        widget.setAttribute('id', this.widgetId);
         widget.setAttribute('src', url);
         widget.setAttribute('sandbox', 'allow-scripts allow-same-origin');
 

@@ -39,9 +39,18 @@ describe('A preview plugin factory', () => {
 describe('A Preview plugin', () => {
     beforeEach(() => {
         window.history.replaceState({}, 'Home page', 'http://localhost');
-        document.body.innerHTML = '';
+
+        document.getElementsByTagName('html')[0].innerHTML = '';
 
         const {location} = window;
+
+        jest.spyOn(window, 'removeEventListener');
+        jest.spyOn(window, 'addEventListener');
+
+        Object.defineProperty(document, 'readyState', {
+            writable: true,
+            value: 'complete',
+        });
 
         Object.defineProperty(
             window,
@@ -62,6 +71,12 @@ describe('A Preview plugin', () => {
     });
 
     afterEach(() => {
+        const {calls} = jest.mocked(window.addEventListener).mock;
+
+        for (const [event, listener] of calls) {
+            window.removeEventListener(event, listener);
+        }
+
         jest.resetAllMocks();
     });
 
@@ -267,14 +282,13 @@ describe('A Preview plugin', () => {
 
         expect(document.body.querySelector('iframe')).toBe(null);
 
-        Object.defineProperty(document, 'readyState', {
-            writable: true,
-            value: 'complete',
-        });
+        expect(configuration.logger.debug).toHaveBeenCalledWith('Waiting for document to be ready.');
 
         window.dispatchEvent(new Event('DOMContentLoaded'));
 
         expect(document.body.querySelector('iframe')).not.toBe(null);
+
+        expect(configuration.logger.debug).toHaveBeenCalledWith('Preview widget mounted.');
     });
 
     it('should ignore messages from unknown origins', () => {
@@ -358,18 +372,76 @@ describe('A Preview plugin', () => {
         expect(window.location.replace).toHaveBeenCalledWith('http://localhost/?croct-preview=exit');
     });
 
-    it('should remove widget', () => {
+    it('should remount the widget when removed from the DOM', () => {
+        const observeSpy = jest.spyOn(window, 'MutationObserver')
+            .mockImplementation(
+                () => ({
+                    observe: jest.fn(),
+                    disconnect: jest.fn(),
+                    takeRecords: jest.fn(),
+                }),
+            );
+
         const plugin = new PreviewPlugin(configuration);
 
         configuration.tokenStore.setToken(token);
 
         plugin.enable();
 
+        const widget = document.body.querySelector('iframe') as HTMLIFrameElement;
+
+        expect(widget).not.toBe(null);
+
+        document.body.removeChild(widget);
+
+        expect(document.body.querySelector('iframe')).toBe(null);
+
+        const callback: MutationCallback = observeSpy.mock.calls[0][0];
+        const instance: MutationObserver = observeSpy.mock.instances[0];
+
+        callback([], instance);
+
         expect(document.body.querySelector('iframe')).not
             .toBe(null);
 
+        expect(configuration.logger.debug).toHaveBeenCalledWith('Preview widget removed from DOM, reinserting.');
+    });
+
+    it('should remove widget', () => {
+        const disconnectSpy = jest.fn();
+
+        jest.spyOn(window, 'MutationObserver')
+            .mockImplementation(
+                () => ({
+                    observe: jest.fn(),
+                    disconnect: disconnectSpy,
+                    takeRecords: jest.fn(),
+                }),
+            );
+
+        Object.defineProperty(document, 'readyState', {
+            writable: true,
+            value: 'loading',
+        });
+
+        const plugin = new PreviewPlugin(configuration);
+
+        configuration.tokenStore.setToken(token);
+
+        expect(document.body.children.length).toBe(0);
+
+        plugin.enable();
+
+        window.dispatchEvent(new Event('DOMContentLoaded'));
+
+        expect(document.body.children.length).toBe(1);
+
         plugin.disable();
 
-        expect(document.body.querySelector('iframe')).toBe(null);
+        expect(window.removeEventListener).toHaveBeenCalledWith('message', expect.any(Function));
+        expect(window.removeEventListener).toHaveBeenCalledWith('DOMContentLoaded', expect.any(Function));
+        expect(disconnectSpy).toHaveBeenCalled();
+
+        expect(document.body.children.length).toBe(0);
     });
 });

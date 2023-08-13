@@ -1,9 +1,9 @@
 import {EvaluationContext} from '@croct/sdk/evaluator';
 import {Token} from '@croct/sdk/token';
-import {PlaygroundPlugin, Configuration, factory} from '../src/playground';
-import {Tab} from '../src/sdk';
 import {PLAYGROUND_ORIGIN} from '../src/constants';
+import {Configuration, factory, PlaygroundPlugin} from '../src/playground';
 import {PluginSdk} from '../src/plugin';
+import {Tab} from '../src/sdk';
 
 jest.mock(
     '../src/constants',
@@ -146,12 +146,19 @@ describe('A Playground plugin factory', () => {
 });
 
 describe('A Playground plugin', () => {
+    let plugin: PlaygroundPlugin | undefined;
+
     beforeEach(() => {
         sessionStorage.clear();
         window.history.replaceState({}, 'Home page', 'http://localhost');
     });
 
-    afterEach(() => {
+    afterEach(async () => {
+        // Disable the plugin regardless of the test result.
+        // A test can fail while the plugin is enabled, this affects the global state
+        // and causes every other test to also fail. By disabling it on the `afterEach` hook
+        // we ensure that each test is isolated from each other.
+        await plugin?.disable();
         jest.restoreAllMocks();
     });
 
@@ -160,7 +167,7 @@ describe('A Playground plugin', () => {
 
         const iframe = mockIframe();
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -182,7 +189,7 @@ describe('A Playground plugin', () => {
 
         const iframe = mockIframe();
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -217,7 +224,7 @@ describe('A Playground plugin', () => {
 
         const iframe = mockIframe();
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -241,7 +248,7 @@ describe('A Playground plugin', () => {
 
         const iframe = mockIframe();
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -267,7 +274,7 @@ describe('A Playground plugin', () => {
 
         const iframe = mockIframe();
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -292,7 +299,7 @@ describe('A Playground plugin', () => {
         const parent = document.body.parentNode as Node;
         const body = parent.removeChild(document.body);
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -317,7 +324,7 @@ describe('A Playground plugin', () => {
 
         const iframe = mockIframe();
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -340,7 +347,7 @@ describe('A Playground plugin', () => {
 
         jest.spyOn(configuration.cidAssigner, 'assignCid').mockRejectedValue(new Error('Unexpected error'));
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -355,7 +362,8 @@ describe('A Playground plugin', () => {
         const addListener = jest.spyOn(configuration.eventSubscriber, 'addListener');
 
         let iframe = mockIframe();
-        const plugin = new PlaygroundPlugin(configuration);
+
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -428,7 +436,8 @@ describe('A Playground plugin', () => {
         const addListener = jest.spyOn(configuration.eventSubscriber, 'addListener');
 
         let iframe = mockIframe();
-        const plugin = new PlaygroundPlugin(configuration);
+
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -505,7 +514,8 @@ describe('A Playground plugin', () => {
         jest.spyOn(window, 'removeEventListener');
 
         const iframe = mockIframe();
-        const plugin = new PlaygroundPlugin(configuration);
+
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -539,7 +549,8 @@ describe('A Playground plugin', () => {
         configuration.connectionId = '123';
 
         const iframe = mockIframe();
-        const plugin = new PlaygroundPlugin(configuration);
+
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -561,7 +572,8 @@ describe('A Playground plugin', () => {
         configuration.connectionId = '123';
 
         const iframe = mockIframe();
-        const plugin = new PlaygroundPlugin(configuration);
+
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 
@@ -587,7 +599,7 @@ describe('A Playground plugin', () => {
 
         jest.spyOn(configuration.tab, 'removeListener');
 
-        const plugin = new PlaygroundPlugin(configuration);
+        plugin = new PlaygroundPlugin(configuration);
 
         await plugin.enable();
 

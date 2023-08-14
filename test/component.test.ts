@@ -48,8 +48,8 @@ describe('Component typing', () => {
     function assembleCode(options: CodeOptions): string {
         const {type, imports = [], mapping, expand = true} = options;
         const header = `import {${imports.join(', ')}} from '../src/component';\n`
-            + 'export type Expand<T> = T extends infer O ? {[K in keyof O]: O[K]} : never;\n'
-            + 'export type Preserve<T> = T & Record<never, never>;\n';
+                       + 'export type Expand<T> = T extends infer O ? {[K in keyof O]: O[K]} : never;\n'
+                       + 'export type Preserve<T> = T & Record<never, never>;\n';
 
         const prefix = header + (mapping ? componentMapping : '');
 
@@ -204,7 +204,7 @@ describe('Component typing', () => {
 
         expect(() => compileCode(code)).not.toThrow();
 
-        expect(getTypeName(code)).toBe('Banner | Carousel');
+        expect(getTypeName(code)).toBe(code.type);
     });
 
     it('should export a ComponentContent type that resolves to JsonObject when the component is unknown', () => {

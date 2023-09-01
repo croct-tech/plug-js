@@ -38,7 +38,7 @@
     "tslib": "^2.2.0"
   },
   "devDependencies": {
-    "@croct/eslint-plugin": "^0.6.3",
+    "@croct/eslint-plugin": "^0.7.0",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.1",

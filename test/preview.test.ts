@@ -77,7 +77,8 @@ describe('A Preview plugin', () => {
             window.removeEventListener(event, listener);
         }
 
-        jest.resetAllMocks();
+        jest.restoreAllMocks();
+        jest.clearAllMocks();
     });
 
     const tokenData = {

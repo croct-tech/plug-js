@@ -52,6 +52,23 @@ test.describe('Preview widget', () => {
         await expect(page).toHaveScreenshot('widget-expanded.png');
     });
 
+    test('should not display the experience if not specified', async ({page}) => {
+        await open(page, {
+            audience: 'A very very very very long audience name',
+            locale: 'en-us',
+        });
+
+        const disclosure = await page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-experience')).not.toBeVisible();
+
+        await expect(page).toHaveScreenshot('widget-without-experience.png', {threshold: 0});
+    });
+
     test('should not display the experiment if not specified', async ({page}) => {
         await open(page, {
             experience: 'A very very very very long experience name',

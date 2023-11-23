@@ -94,6 +94,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (params.has('experience')) {
         document.getElementById('preview-experience').textContent = params.get('experience');
+    } else {
+        document.getElementById('preview-experience')
+            .closest('li')
+            .remove();
     }
 
     if (params.has('audience')) {

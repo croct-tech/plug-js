@@ -238,6 +238,26 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.has('variant')).toBe(false);
     });
 
+    it('should handle a no audience preview token', () => {
+        const plugin = new PreviewPlugin(configuration);
+
+        configuration.tokenStore.setToken(Token.of(tokenData.headers, {
+            ...tokenData.payload,
+            metadata: {
+                ...tokenData.payload.metadata,
+                audienceName: '',
+            },
+        }));
+
+        plugin.enable();
+
+        const widget = document.body.querySelector('iframe') as HTMLIFrameElement;
+
+        const src = new URL(widget.getAttribute('src')!);
+
+        expect(src.searchParams.get('audience')).toBe(PreviewPlugin.NONE_AUDIENCE);
+    });
+
     it('should insert the widget', () => {
         const plugin = new PreviewPlugin(configuration);
 

@@ -20,6 +20,8 @@ export class PreviewPlugin implements Plugin {
         variantName: 'variant',
     };
 
+    public static readonly NONE_AUDIENCE = 'None';
+
     private readonly tokenStore: TokenStore;
 
     private readonly logger: Logger;
@@ -69,7 +71,7 @@ export class PreviewPlugin implements Plugin {
         }
 
         try {
-            let token: Token|null = Token.parse(data);
+            let token: Token | null = Token.parse(data);
             const {exp} = token.getPayload();
 
             if (exp !== undefined && exp <= Date.now() / 1000) {
@@ -105,6 +107,10 @@ export class PreviewPlugin implements Plugin {
 
         if (metadata === null || typeof metadata !== 'object' || Array.isArray(metadata)) {
             return params;
+        }
+
+        if (metadata['audienceName'] === '') {
+            metadata['audienceName'] = PreviewPlugin.NONE_AUDIENCE;
         }
 
         for (const [key, param] of Object.entries(PreviewPlugin.PREVIEW_PARAMS)) {

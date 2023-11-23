@@ -18,6 +18,18 @@
 <iframe id="widget" src="./widget.html"></iframe>
 
 <script type="text/javascript">
+
+    function getPreviewInfo() {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('croct-preview');
+
+        if (token !== null) {
+            return decodeToken(token);
+        }
+
+        return null;
+    }
+
     function decodeToken(token) {
         const data = token.split('.')[1];
 
@@ -36,23 +48,24 @@
         const metadata = payload.metadata;
 
         return {
-            experience: metadata?.experienceName ?? 'Unknown',
-            experiment: metadata?.experimentName ?? 'Unknown',
-            audience: metadata?.audienceName ?? 'Unknown',
+            audience: getAudience(metadata?.audienceName),
+            experience: metadata?.experienceName !== undefined ? metadata.experienceName : 'Unknown',
+            experiment: metadata?.experimentName !== undefined ? metadata.experimentName : 'Unknown',
             variant: metadata?.variantName ?? null,
             locale: metadata?.locale ?? null,
         };
     }
 
-    function getPreviewInfo() {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('croct-preview');
-
-        if (token !== null) {
-            return decodeToken(token);
+    function getAudience(audienceName) {
+        if (audienceName === undefined) {
+            return 'Unknown';
         }
 
-        return null;
+        if (audienceName === '') {
+            return 'None';
+        }
+
+        return audienceName;
     }
 
     const widgetIframe = document.getElementById('widget');
@@ -65,9 +78,11 @@
         window.history.replaceState({}, '', url.toString());
 
         const params = new URLSearchParams();
-        params.append('experience', previewInfo.experience);
         params.append('audience', previewInfo.audience);
-        params.append('locale', previewInfo.locale);
+
+        if (previewInfo.experience !== null) {
+            params.append('experience', previewInfo.experience);
+        }
 
         if (previewInfo.variant !== null) {
             if (previewInfo.experiment !== null) {
@@ -75,6 +90,10 @@
             }
 
             params.append('variant', previewInfo.variant);
+        }
+
+        if (previewInfo.locale !== null) {
+            params.append('locale', previewInfo.locale);
         }
 
         widgetIframe.src = `./widget.html?${params.toString()}`;

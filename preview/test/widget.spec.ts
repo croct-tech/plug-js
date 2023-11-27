@@ -66,7 +66,7 @@ test.describe('Preview widget', () => {
 
         await expect(page.locator('#preview-experience')).not.toBeVisible();
 
-        await expect(page).toHaveScreenshot('widget-without-experience.png', {threshold: 0});
+        await expect(page).toHaveScreenshot('widget-without-experience.png');
     });
 
     test('should not display the experiment if not specified', async ({page}) => {

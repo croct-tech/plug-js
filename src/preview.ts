@@ -7,6 +7,13 @@ import {PREVIEW_WIDGET_ORIGIN, PREVIEW_WIDGET_URL} from './constants';
 const PREVIEW_PARAMETER = 'croct-preview';
 const PREVIEW_EXIT = 'exit';
 
+export enum ExperiencePreviewScope {
+    SLOT_DEFAULT_CONTENT = 'slotDefaultContent',
+    PUBLISHED_CONTENT = 'publishedContent',
+    EXPERIENCE_DRAFT = 'experienceDraft',
+    EXPERIMENT_DRAFT = 'experimentDraft',
+}
+
 export type Configuration = {
     tokenStore: TokenStore,
     logger: Logger,
@@ -109,7 +116,7 @@ export class PreviewPlugin implements Plugin {
             return params;
         }
 
-        if (metadata['audienceName'] === '') {
+        if (metadata['previewMode'] === ExperiencePreviewScope.SLOT_DEFAULT_CONTENT) {
             metadata['audienceName'] = PreviewPlugin.NONE_AUDIENCE;
         }
 

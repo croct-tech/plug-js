@@ -48,21 +48,21 @@
         const metadata = payload.metadata;
 
         return {
-            audience: getAudience(metadata?.audienceName),
-            experience: metadata?.experienceName !== undefined ? metadata.experienceName : 'Unknown',
-            experiment: metadata?.experimentName !== undefined ? metadata.experimentName : 'Unknown',
+            audience: getAudience(metadata?.previewMode, metadata?.audienceName),
+            experience: metadata?.experienceName ?? 'Unknown',
+            experiment: metadata?.experimentName ?? 'Unknown',
             variant: metadata?.variantName ?? null,
             locale: metadata?.locale ?? null,
         };
     }
 
-    function getAudience(audienceName) {
-        if (audienceName === undefined) {
-            return 'Unknown';
+    function getAudience(previewMode, audienceName) {
+        if (previewMode === 'slotDefaultContent') {
+            return 'None';
         }
 
-        if (audienceName === '') {
-            return 'None';
+        if (audienceName === undefined) {
+            return 'Unknown';
         }
 
         return audienceName;

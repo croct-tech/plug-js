@@ -1,6 +1,6 @@
 import {InMemoryTokenStore, Token} from '@croct/sdk/token';
 import {PluginSdk} from '../src/plugin';
-import {Configuration, factory, PreviewPlugin} from '../src/preview';
+import {Configuration, ExperiencePreviewScope, factory, PreviewPlugin} from '../src/preview';
 import {PREVIEW_WIDGET_ORIGIN} from '../src/constants';
 
 jest.mock(
@@ -238,14 +238,14 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.has('variant')).toBe(false);
     });
 
-    it('should handle a no audience preview token', () => {
+    it('should handle a slot default content preview token', () => {
         const plugin = new PreviewPlugin(configuration);
 
         configuration.tokenStore.setToken(Token.of(tokenData.headers, {
             ...tokenData.payload,
             metadata: {
                 ...tokenData.payload.metadata,
-                audienceName: '',
+                previewMode: ExperiencePreviewScope.SLOT_DEFAULT_CONTENT,
             },
         }));
 

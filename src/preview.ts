@@ -116,8 +116,8 @@ export class PreviewPlugin implements Plugin {
             return params;
         }
 
-        if (metadata['previewMode'] === ExperiencePreviewScope.SLOT_DEFAULT_CONTENT) {
-            metadata['audienceName'] = PreviewPlugin.NONE_AUDIENCE;
+        if (metadata.previewMode === ExperiencePreviewScope.SLOT_DEFAULT_CONTENT) {
+            metadata.audienceName = PreviewPlugin.NONE_AUDIENCE;
         }
 
         for (const [key, param] of Object.entries(PreviewPlugin.PREVIEW_PARAMS)) {

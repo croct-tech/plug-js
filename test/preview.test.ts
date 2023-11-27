@@ -92,6 +92,7 @@ describe('A Preview plugin', () => {
             iat: 1440979100,
             exp: 1440979200,
             metadata: {
+                previewMode: ExperiencePreviewScope.PUBLISHED_CONTENT,
                 experienceName: 'Developers experience',
                 experimentName: 'Developers experiment',
                 audienceName: 'Developers audience',

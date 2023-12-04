@@ -1,6 +1,6 @@
 import {InMemoryTokenStore, Token} from '@croct/sdk/token';
 import {PluginSdk} from '../src/plugin';
-import {Configuration, ExperiencePreviewScope, factory, PreviewPlugin} from '../src/preview';
+import {Configuration, factory, PreviewPlugin} from '../src/preview';
 import {PREVIEW_WIDGET_ORIGIN} from '../src/constants';
 
 jest.mock(
@@ -92,7 +92,6 @@ describe('A Preview plugin', () => {
             iat: 1440979100,
             exp: 1440979200,
             metadata: {
-                previewMode: ExperiencePreviewScope.PUBLISHED_CONTENT,
                 experienceName: 'Developers experience',
                 experimentName: 'Developers experiment',
                 audienceName: 'Developers audience',
@@ -237,26 +236,6 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.has('experiment')).toBe(false);
         expect(src.searchParams.has('audience')).toBe(false);
         expect(src.searchParams.has('variant')).toBe(false);
-    });
-
-    it('should handle a slot default content preview token', () => {
-        const plugin = new PreviewPlugin(configuration);
-
-        configuration.tokenStore.setToken(Token.of(tokenData.headers, {
-            ...tokenData.payload,
-            metadata: {
-                ...tokenData.payload.metadata,
-                previewMode: ExperiencePreviewScope.SLOT_DEFAULT_CONTENT,
-            },
-        }));
-
-        plugin.enable();
-
-        const widget = document.body.querySelector('iframe') as HTMLIFrameElement;
-
-        const src = new URL(widget.getAttribute('src')!);
-
-        expect(src.searchParams.get('audience')).toBe(PreviewPlugin.NONE_AUDIENCE);
     });
 
     it('should insert the widget', () => {

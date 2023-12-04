@@ -48,7 +48,7 @@
         const metadata = payload.metadata;
 
         return {
-            audience: getAudience(metadata?.previewMode, metadata?.audienceName),
+            audience: getAudienceName(metadata?.previewMode, metadata?.audienceName),
             experience: metadata?.experienceName ?? 'Unknown',
             experiment: metadata?.experimentName ?? 'Unknown',
             variant: metadata?.variantName ?? null,
@@ -56,7 +56,7 @@
         };
     }
 
-    function getAudience(previewMode, audienceName) {
+    function getAudienceName(previewMode, audienceName) {
         if (previewMode === 'slotDefaultContent') {
             return 'None';
         }

@@ -79,7 +79,7 @@ test.describe('Preview widget', () => {
         await expect(page).toHaveScreenshot('widget-slot-default-content.png');
     });
 
-    test('should display the default content without experiment if no variant is specified', async ({page}) => {
+    test('should display the default content with no experiment if no variant is specified', async ({page}) => {
         await open(page, {
             experience: 'A very very very very long experience name',
             experiment: 'A very very very very long experiment name',

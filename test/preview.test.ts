@@ -239,6 +239,7 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.has('experiment')).toBe(false);
         expect(src.searchParams.has('audience')).toBe(false);
         expect(src.searchParams.has('variant')).toBe(false);
+        expect(src.searchParams.has('locale')).toBe(false);
     });
 
     it('should insert the widget', () => {
@@ -271,6 +272,7 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.get('experiment')).toBe(metadata.experimentName);
         expect(src.searchParams.get('audience')).toBe(metadata.audienceName);
         expect(src.searchParams.get('variant')).toBe(metadata.variantName);
+        expect(src.searchParams.get('locale')).toBe(metadata.locale);
     });
 
     it('should insert the widget when the document is ready', () => {

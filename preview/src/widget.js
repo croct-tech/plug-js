@@ -90,48 +90,100 @@ window.addEventListener('DOMContentLoaded', () => {
         .ready
         .then(onLoad);
 
-    const params = new URLSearchParams(window.location.search);
+    function handleExperience(previewMode, experience) {
+        if(previewMode === 'slotDefaultContent') {
+            document.getElementById('preview-experience')
+                .closest('li')
+                .remove();
 
-    if (params.has('experience')) {
-        document.getElementById('preview-experience').textContent = params.get('experience');
-    } else {
-        document.getElementById('preview-experience')
-            .closest('li')
-            .remove();
+            return;
+        }
+
+        if (experience === null) {
+            return;
+        }
+
+        document.getElementById('preview-experience').textContent = experience;
     }
 
-    if (params.has('audience')) {
-        document.getElementById('preview-audience').textContent = params.get('audience');
+    function handleAudience(previewMode, audience) {
+        if(previewMode === 'slotDefaultContent') {
+            document.getElementById('preview-audience').textContent = 'None';
+
+            return;
+        }
+
+        if (audience === null) {
+            return;
+        }
+
+        document.getElementById('preview-audience').textContent = audience;
     }
 
-    if (params.has('locale')) {
-        const localeCode = params.get('locale');
-        let localeName = localeCode;
+    function handleExperiment(previewMode, variant, experiment) {
+        if (previewMode === 'slotDefaultContent' || variant === null) {
+            document.getElementById('preview-experiment')
+                .closest('li')
+                .remove();
+
+            return;
+        }
+
+        if (experiment === null) {
+            return;
+        }
+
+        document.getElementById('preview-experiment').textContent = experiment;
+    }
+
+    function handleContent(previewMode, variant) {
+        if (previewMode === 'slotDefaultContent' || variant === null) {
+            return;
+        }
+
+        document.getElementById('preview-content').textContent = params.get('variant');
+    }
+
+    function handleLocale(locale) {
+        if (locale === null) {
+            document.getElementById('preview-locale')
+                .closest('li')
+                .remove();
+
+            return;
+        }
+
+        let localeName = locale;
 
         try {
             const formatter = new Intl.DisplayNames(['en-us'], {type: 'language'});
 
-            localeName = `${formatter.of(localeCode)} <span class="detail">(${localeCode})</span>`;
+            localeName = `${formatter.of(locale)} <span class="detail">(${locale})</span>`;
         } catch (error) {
             // Ignore
         }
 
         document.getElementById('preview-locale').innerHTML = localeName;
-    } else {
-        document.getElementById('preview-locale')
-            .closest('li')
-            .remove();
     }
 
-    if (params.has('variant')) {
-        if (params.has('experiment')) {
-            document.getElementById('preview-experiment').textContent = params.get('experiment');
-        }
+    const params = new URLSearchParams(window.location.search);
 
-        document.getElementById('preview-content').textContent = params.get('variant');
-    } else {
-        document.getElementById('preview-experiment')
-            .closest('li')
-            .remove();
-    }
+    const [previewMode, experience, audience, experiment, variant, locale] = [
+        params.get('previewMode'),
+        params.get('experience'),
+        params.get('audience'),
+        params.get('experiment'),
+        params.get('variant'),
+        params.get('locale'),
+    ]
+
+    handleExperience(previewMode, experience);
+
+    handleAudience(previewMode, audience);
+
+    handleExperiment(previewMode, variant, experiment);
+
+    handleContent(previewMode, variant);
+
+    handleLocale(locale);
 });

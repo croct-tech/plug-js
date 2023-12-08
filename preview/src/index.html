@@ -48,24 +48,13 @@
         const metadata = payload.metadata;
 
         return {
-            audience: getAudienceName(metadata?.previewMode, metadata?.audienceName),
-            experience: metadata?.experienceName ?? 'Unknown',
-            experiment: metadata?.experimentName ?? 'Unknown',
+            previewMode: metadata?.previewMode ?? null,
+            audience: metadata?.audienceName ?? null,
+            experience: metadata?.experienceName ?? null,
+            experiment: metadata?.experimentName ?? null,
             variant: metadata?.variantName ?? null,
             locale: metadata?.locale ?? null,
         };
-    }
-
-    function getAudienceName(previewMode, audienceName) {
-        if (previewMode === 'slotDefaultContent') {
-            return 'None';
-        }
-
-        if (audienceName === undefined) {
-            return 'Unknown';
-        }
-
-        return audienceName;
     }
 
     const widgetIframe = document.getElementById('widget');
@@ -78,17 +67,24 @@
         window.history.replaceState({}, '', url.toString());
 
         const params = new URLSearchParams();
-        params.append('audience', previewInfo.audience);
+
+        if (previewInfo.previewMode !== null) {
+            params.append('previewMode', previewInfo.previewMode);
+        }
+
+        if (previewInfo.audience !== null) {
+            params.append('audience', previewInfo.audience);
+        }
 
         if (previewInfo.experience !== null) {
             params.append('experience', previewInfo.experience);
         }
 
-        if (previewInfo.variant !== null) {
-            if (previewInfo.experiment !== null) {
-                params.append('experiment', previewInfo.experiment);
-            }
+        if (previewInfo.experiment !== null) {
+            params.append('experiment', previewInfo.experiment);
+        }
 
+        if (previewInfo.variant !== null) {
             params.append('variant', previewInfo.variant);
         }
 

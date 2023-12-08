@@ -18,6 +18,7 @@ export class PreviewPlugin implements Plugin {
         experimentName: 'experiment',
         audienceName: 'audience',
         variantName: 'variant',
+        previewMode: 'previewMode',
     };
 
     private readonly tokenStore: TokenStore;

@@ -53,7 +53,6 @@ const config: PlaywrightTestConfig = {
                 viewport: defaultViewport,
             },
         },
-
         {
             name: 'firefox',
             use: {

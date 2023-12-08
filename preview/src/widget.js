@@ -90,7 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
         .ready
         .then(onLoad);
 
-    function handleExperience(previewMode, experience) {
+    function renderExperience(previewMode, experience) {
         if(previewMode === 'slotDefaultContent') {
             document.getElementById('preview-experience')
                 .closest('li')
@@ -106,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-experience').textContent = experience;
     }
 
-    function handleAudience(previewMode, audience) {
+    function renderAudience(previewMode, audience) {
         if(previewMode === 'slotDefaultContent') {
             document.getElementById('preview-audience').textContent = 'None';
 
@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-audience').textContent = audience;
     }
 
-    function handleExperiment(previewMode, variant, experiment) {
+    function renderExperiment(previewMode, variant, experiment) {
         if (previewMode === 'slotDefaultContent' || variant === null) {
             document.getElementById('preview-experiment')
                 .closest('li')
@@ -136,15 +136,15 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-experiment').textContent = experiment;
     }
 
-    function handleContent(previewMode, variant) {
+    function renderContent(previewMode, variant) {
         if (previewMode === 'slotDefaultContent' || variant === null) {
             return;
         }
 
-        document.getElementById('preview-content').textContent = params.get('variant');
+        document.getElementById('preview-content').textContent = variant;
     }
 
-    function handleLocale(locale) {
+    function renderLocale(locale) {
         if (locale === null) {
             document.getElementById('preview-locale')
                 .closest('li')
@@ -168,22 +168,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const params = new URLSearchParams(window.location.search);
 
-    const [previewMode, experience, audience, experiment, variant, locale] = [
-        params.get('previewMode'),
-        params.get('experience'),
-        params.get('audience'),
-        params.get('experiment'),
-        params.get('variant'),
-        params.get('locale'),
-    ]
+    const previewMode = params.get('previewMode');
+    const experience = params.get('experience');
+    const audience = params.get('audience');
+    const experiment = params.get('experiment');
+    const variant = params.get('variant');
+    const locale = params.get('locale');
 
-    handleExperience(previewMode, experience);
+    renderExperience(previewMode, experience);
 
-    handleAudience(previewMode, audience);
+    renderAudience(previewMode, audience);
 
-    handleExperiment(previewMode, variant, experiment);
+    renderExperiment(previewMode, variant, experiment);
 
-    handleContent(previewMode, variant);
+    renderContent(previewMode, variant);
 
-    handleLocale(locale);
+    renderLocale(locale);
 });

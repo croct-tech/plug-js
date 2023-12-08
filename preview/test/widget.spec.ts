@@ -55,10 +55,10 @@ test.describe('Preview widget', () => {
     test('should display the none audience for the slot default content preview', async ({page}) => {
         await open(page, {
             previewMode: 'slotDefaultContent',
-            experience: 'A very very very very long experience name',
-            experiment: 'A very very very very long experiment name',
-            audience: 'A very very very very long audience name',
-            variant: 'A very very very very long variant name',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
             locale: 'pt-br',
         });
 
@@ -81,9 +81,9 @@ test.describe('Preview widget', () => {
 
     test('should display the default content with no experiment if no variant is specified', async ({page}) => {
         await open(page, {
-            experience: 'A very very very very long experience name',
-            experiment: 'A very very very very long experiment name',
-            audience: 'A very very very very long audience name',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
             locale: 'en-us',
         });
 
@@ -102,8 +102,8 @@ test.describe('Preview widget', () => {
 
     test('should not display the locale if not specified', async ({page}) => {
         await open(page, {
-            experience: 'A very very very very long experience name',
-            audience: 'A very very very very long audience name',
+            experience: 'Experience',
+            audience: 'Audience',
         });
 
         await page.locator('#disclosure').click();
@@ -113,18 +113,22 @@ test.describe('Preview widget', () => {
         await expect(page).toHaveScreenshot('widget-without-locale.png');
     });
 
-    test('should display the locale code instead locale name if the specified code is invalid', async ({page}) => {
+    test('should display the locale code instead of the name if the specified code is invalid', async ({page}) => {
         await open(page, {
-            experience: 'A very very very very long experience name',
-            audience: 'A very very very very long audience name',
-            locale: 'A very very very very long locale name',
+            experience: 'Experience',
+            audience: 'Audience',
+            locale: 'Invalid code',
         });
 
         await page.locator('#disclosure').click();
 
         const previewLocale = await page.locator('#preview-locale');
 
-        await expect(previewLocale).toHaveText('A very very very very long locale name');
+        await expect(previewLocale).toHaveText('Invalid code');
+
+        await page.waitForTimeout(2000);
+
+        await page.screenshot({ path: 'widget-invalid-locale-webkit.png', scale: "css" });
 
         await expect(page).toHaveScreenshot('widget-invalid-locale.png');
     });

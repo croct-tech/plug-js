@@ -14,11 +14,12 @@ export type Configuration = {
 
 export class PreviewPlugin implements Plugin {
     private static readonly PREVIEW_PARAMS = {
+        previewMode: 'previewMode',
         experienceName: 'experience',
         experimentName: 'experiment',
         audienceName: 'audience',
         variantName: 'variant',
-        previewMode: 'previewMode',
+        locale: 'locale',
     };
 
     private readonly tokenStore: TokenStore;

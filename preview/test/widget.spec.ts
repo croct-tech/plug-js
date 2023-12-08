@@ -101,7 +101,10 @@ test.describe('Preview widget', () => {
     });
 
     test('should not display the locale if not specified', async ({page}) => {
-        await open(page);
+        await open(page, {
+            experience: 'A very very very very long experience name',
+            audience: 'A very very very very long audience name',
+        });
 
         await page.locator('#disclosure').click();
 
@@ -112,6 +115,8 @@ test.describe('Preview widget', () => {
 
     test('should display the locale code instead locale name if the specified code is invalid', async ({page}) => {
         await open(page, {
+            experience: 'A very very very very long experience name',
+            audience: 'A very very very very long audience name',
             locale: 'A very very very very long locale name',
         });
 

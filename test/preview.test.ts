@@ -97,6 +97,7 @@ describe('A Preview plugin', () => {
                 experimentName: 'Developers experiment',
                 audienceName: 'Developers audience',
                 variantName: 'JavaScript Developers',
+                locale: 'en-us',
             },
         },
     };

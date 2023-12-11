@@ -112,7 +112,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-audience').textContent = audience;
     }
 
-    function renderExperiment(previewMode, variant, experiment) {
+    function renderContentAndExperiment(previewMode, variant, experiment) {
         if (previewMode === 'slotDefaultContent' || variant === null) {
             document.getElementById('preview-experiment')
                 .closest('li')
@@ -121,15 +121,8 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        document.getElementById('preview-experiment').textContent = experiment;
-    }
-
-    function renderContent(previewMode, variant) {
-        if (previewMode === 'slotDefaultContent' || variant === null) {
-            return;
-        }
-
         document.getElementById('preview-content').textContent = variant;
+        document.getElementById('preview-experiment').textContent = experiment;
     }
 
     function renderLocale(locale) {
@@ -167,9 +160,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     renderAudience(previewMode, audience);
 
-    renderExperiment(previewMode, variant, experiment);
-
-    renderContent(previewMode, variant);
+    renderContentAndExperiment(previewMode, variant, experiment);
 
     renderLocale(locale);
 });

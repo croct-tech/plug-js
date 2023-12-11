@@ -52,7 +52,7 @@ test.describe('Preview widget', () => {
         await expect(page).toHaveScreenshot('widget-expanded.png');
     });
 
-    test('should display the none audience for the slot default content preview', async ({page}) => {
+    test('should not indicate any specific audience when previewing the default content', async ({page}) => {
         await open(page, {
             previewMode: 'slotDefaultContent',
             experience: 'Experience',

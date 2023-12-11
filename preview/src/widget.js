@@ -99,10 +99,6 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (experience === null) {
-            return;
-        }
-
         document.getElementById('preview-experience').textContent = experience;
     }
 
@@ -110,10 +106,6 @@ window.addEventListener('DOMContentLoaded', () => {
         if(previewMode === 'slotDefaultContent') {
             document.getElementById('preview-audience').textContent = 'None';
 
-            return;
-        }
-
-        if (audience === null) {
             return;
         }
 
@@ -126,10 +118,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 .closest('li')
                 .remove();
 
-            return;
-        }
-
-        if (experiment === null) {
             return;
         }
 

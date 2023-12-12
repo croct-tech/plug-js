@@ -33,10 +33,10 @@ test.describe('Preview widget', () => {
 
     test('should expand clicking on the widget', async ({page}) => {
         await open(page, {
-            experience: 'A very very very very long experience name',
-            experiment: 'A very very very very long experiment name',
-            audience: 'A very very very very long audience name',
-            variant: 'A very very very very long variant name',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
             locale: 'pt-br',
         });
 
@@ -50,6 +50,24 @@ test.describe('Preview widget', () => {
         await expect(page.locator('#preview-experiment')).toBeVisible();
 
         await expect(page).toHaveScreenshot('widget-expanded.png');
+    });
+
+    test('should truncate large names', async ({page}) => {
+        await open(page, {
+            experience: 'A very very very very long experience name',
+            experiment: 'A very very very very long experiment name',
+            audience: 'A very very very very long audience name',
+            variant: 'A very very very very long variant name',
+            locale: 'en-io',
+        });
+
+        const disclosure = await page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page).toHaveScreenshot('widget-truncated.png');
     });
 
     test('should not indicate any specific audience when previewing the default content', async ({page}) => {
@@ -125,10 +143,6 @@ test.describe('Preview widget', () => {
         const previewLocale = await page.locator('#preview-locale');
 
         await expect(previewLocale).toHaveText('Invalid code');
-
-        await page.waitForTimeout(2000);
-
-        await page.screenshot({ path: 'widget-invalid-locale-webkit.png', scale: "css" });
 
         await expect(page).toHaveScreenshot('widget-invalid-locale.png');
     });

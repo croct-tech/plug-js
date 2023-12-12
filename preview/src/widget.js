@@ -112,7 +112,7 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('preview-audience').textContent = audience;
     }
 
-    function renderContentAndExperiment(previewMode, variant, experiment) {
+    function renderExperiment(previewMode, variant, experiment) {
         if (previewMode === 'slotDefaultContent' || variant === null) {
             document.getElementById('preview-experiment')
                 .closest('li')
@@ -160,7 +160,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     renderAudience(previewMode, audience);
 
-    renderContentAndExperiment(previewMode, variant, experiment);
+    renderExperiment(previewMode, variant, experiment);
 
     renderLocale(locale);
 });

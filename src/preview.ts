@@ -14,10 +14,12 @@ export type Configuration = {
 
 export class PreviewPlugin implements Plugin {
     private static readonly PREVIEW_PARAMS = {
+        previewMode: 'previewMode',
         experienceName: 'experience',
         experimentName: 'experiment',
         audienceName: 'audience',
         variantName: 'variant',
+        locale: 'locale',
     };
 
     private readonly tokenStore: TokenStore;
@@ -69,7 +71,7 @@ export class PreviewPlugin implements Plugin {
         }
 
         try {
-            let token: Token|null = Token.parse(data);
+            let token: Token | null = Token.parse(data);
             const {exp} = token.getPayload();
 
             if (exp !== undefined && exp <= Date.now() / 1000) {

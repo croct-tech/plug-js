@@ -92,10 +92,12 @@ describe('A Preview plugin', () => {
             iat: 1440979100,
             exp: 1440979200,
             metadata: {
+                previewMode: 'publishedContent',
                 experienceName: 'Developers experience',
                 experimentName: 'Developers experiment',
                 audienceName: 'Developers audience',
                 variantName: 'JavaScript Developers',
+                locale: 'en-us',
             },
         },
     };
@@ -232,10 +234,12 @@ describe('A Preview plugin', () => {
 
         const src = new URL(widget.getAttribute('src')!);
 
+        expect(src.searchParams.has('previewMode')).toBe(false);
         expect(src.searchParams.has('experience')).toBe(false);
         expect(src.searchParams.has('experiment')).toBe(false);
         expect(src.searchParams.has('audience')).toBe(false);
         expect(src.searchParams.has('variant')).toBe(false);
+        expect(src.searchParams.has('locale')).toBe(false);
     });
 
     it('should insert the widget', () => {
@@ -263,10 +267,12 @@ describe('A Preview plugin', () => {
 
         const {metadata} = tokenData.payload;
 
+        expect(src.searchParams.get('previewMode')).toBe(metadata.previewMode);
         expect(src.searchParams.get('experience')).toBe(metadata.experienceName);
         expect(src.searchParams.get('experiment')).toBe(metadata.experimentName);
         expect(src.searchParams.get('audience')).toBe(metadata.audienceName);
         expect(src.searchParams.get('variant')).toBe(metadata.variantName);
+        expect(src.searchParams.get('locale')).toBe(metadata.locale);
     });
 
     it('should insert the widget when the document is ready', () => {

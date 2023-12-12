@@ -33,11 +33,11 @@ test.describe('Preview widget', () => {
 
     test('should expand clicking on the widget', async ({page}) => {
         await open(page, {
-            experience: 'A very very very very long experience name',
-            experiment: 'A very very very very long experiment name',
-            audience: 'A very very very very long audience name',
-            variant: 'A very very very very long variant name',
-            locale: 'pt-br',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -47,15 +47,44 @@ test.describe('Preview widget', () => {
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
         await expect(page.locator('#minimize-button')).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experiment')).toBeVisible();
+        await expect(page.locator('#preview-experience')).toBeAttached();
+
+        await expect(page.locator('#preview-experiment')).toBeAttached();
+
+        await expect(page.locator('#preview-audience')).toBeAttached();
+
+        await expect(page.locator('#preview-content')).toBeAttached();
+
+        await expect(page.locator('#preview-locale')).toBeAttached();
 
         await expect(page).toHaveScreenshot('widget-expanded.png');
     });
 
-    test('should not display the experiment if not specified', async ({page}) => {
+    test('should truncate large names', async ({page}) => {
         await open(page, {
             experience: 'A very very very very long experience name',
+            experiment: 'A very very very very long experiment name',
             audience: 'A very very very very long audience name',
+            variant: 'A very very very very long variant name',
+            locale: 'en-io',
+        });
+
+        const disclosure = await page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page).toHaveScreenshot('widget-truncated.png');
+    });
+
+    test('should not indicate any specific audience when previewing the default content', async ({page}) => {
+        await open(page, {
+            previewMode: 'slotDefaultContent',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
             locale: 'en-us',
         });
 
@@ -65,17 +94,23 @@ test.describe('Preview widget', () => {
 
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experiment')).not.toBeVisible();
+        await expect(page.locator('#preview-audience')).toHaveText('None');
 
-        await expect(page).toHaveScreenshot('widget-without-experiment.png');
+        await expect(page.locator('#preview-experience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page.locator('#preview-content')).not.toBeAttached();
+
+        await expect(page).toHaveScreenshot('widget-slot-default-content.png');
     });
 
-    test('should not display the experiment if no variant is specified', async ({page}) => {
+    test('should display the experiment default content if no variant is specified', async ({page}) => {
         await open(page, {
-            experience: 'A very very very very long experience name',
-            experiment: 'A very very very very long experiment name',
-            audience: 'A very very very very long audience name',
-            locale: 'pt-br',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            locale: 'en-us',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -84,7 +119,61 @@ test.describe('Preview widget', () => {
 
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experiment')).not.toBeVisible();
+        await expect(page.locator('#preview-content')).toHaveText('Default content');
+
+        await expect(page).toHaveScreenshot('widget-without-variant.png');
+    });
+
+    test('should not display experiment and content if no experiment is specified', async ({page}) => {
+        await open(page, {
+            experience: 'Experience',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
+        });
+
+        const disclosure = await page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page.locator('#preview-content')).not.toBeAttached();
+
+        await expect(page).toHaveScreenshot('widget-without-experiment.png');
+    });
+
+    test('should not display the locale if not specified', async ({page}) => {
+        await open(page, {
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+        });
+
+        await page.locator('#disclosure').click();
+
+        await expect(page.locator('#preview-locale')).not.toBeAttached();
+
+        await expect(page).toHaveScreenshot('widget-without-locale.png');
+    });
+
+    test('should display the locale code instead of the name if the specified code is invalid', async ({page}) => {
+        await open(page, {
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'Invalid code',
+        });
+
+        await page.locator('#disclosure').click();
+
+        await expect(page.locator('#preview-locale')).toHaveText('Invalid code');
+
+        await expect(page).toHaveScreenshot('widget-invalid-locale.png');
     });
 
     test('should minimize clicking on the minimize button', async ({page}) => {
@@ -173,27 +262,5 @@ test.describe('Preview widget', () => {
         expect(events).toHaveLength(1);
 
         expect(events[0].type).toEqual('croct:preview:leave');
-    });
-
-    test('should fallback to the locale code when the code is invalid', async ({page}) => {
-        await open(page, {
-            locale: 'A very very very very long locale name',
-        });
-
-        await page.locator('#disclosure').click();
-
-        const previewLocale = await page.locator('#preview-locale');
-
-        await expect(previewLocale).toHaveText('A very very very very long locale name');
-    });
-
-    test('should remove the locale item when the locale is not provided', async ({page}) => {
-        await open(page);
-
-        await page.locator('#disclosure').click();
-
-        await expect(await page.getByText('Locale').count()).toBe(0);
-
-        await expect(page).toHaveScreenshot('widget-without-locale.png');
     });
 });

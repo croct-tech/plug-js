@@ -37,7 +37,7 @@ test.describe('Preview widget', () => {
             experiment: 'Experiment',
             audience: 'Audience',
             variant: 'Variant',
-            locale: 'pt-br',
+            locale: 'en-us',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -47,7 +47,15 @@ test.describe('Preview widget', () => {
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
         await expect(page.locator('#minimize-button')).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experiment')).toBeVisible();
+        await expect(page.locator('#preview-experience')).toBeAttached();
+
+        await expect(page.locator('#preview-experiment')).toBeAttached();
+
+        await expect(page.locator('#preview-audience')).toBeAttached();
+
+        await expect(page.locator('#preview-content')).toBeAttached();
+
+        await expect(page.locator('#preview-locale')).toBeAttached();
 
         await expect(page).toHaveScreenshot('widget-expanded.png');
     });
@@ -77,7 +85,7 @@ test.describe('Preview widget', () => {
             experiment: 'Experiment',
             audience: 'Audience',
             variant: 'Variant',
-            locale: 'pt-br',
+            locale: 'en-us',
         });
 
         const disclosure = await page.locator('#disclosure');
@@ -88,16 +96,16 @@ test.describe('Preview widget', () => {
 
         await expect(page.locator('#preview-audience')).toHaveText('None');
 
-        await expect(page.locator('#preview-experience')).not.toBeVisible();
+        await expect(page.locator('#preview-experience')).not.toBeAttached();
 
-        await expect(page.locator('#preview-experiment')).not.toBeVisible();
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
 
-        await expect(page.locator('#preview-content')).toHaveText('Default content');
+        await expect(page.locator('#preview-content')).not.toBeAttached();
 
         await expect(page).toHaveScreenshot('widget-slot-default-content.png');
     });
 
-    test('should display the default content with no experiment if no variant is specified', async ({page}) => {
+    test('should display the experiment default content if no variant is specified', async ({page}) => {
         await open(page, {
             experience: 'Experience',
             experiment: 'Experiment',
@@ -111,9 +119,28 @@ test.describe('Preview widget', () => {
 
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experiment')).not.toBeVisible();
-
         await expect(page.locator('#preview-content')).toHaveText('Default content');
+
+        await expect(page).toHaveScreenshot('widget-without-variant.png');
+    });
+
+    test('should not display experiment and content if no experiment is specified', async ({page}) => {
+        await open(page, {
+            experience: 'Experience',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
+        });
+
+        const disclosure = await page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page.locator('#preview-content')).not.toBeAttached();
 
         await expect(page).toHaveScreenshot('widget-without-experiment.png');
     });
@@ -121,12 +148,14 @@ test.describe('Preview widget', () => {
     test('should not display the locale if not specified', async ({page}) => {
         await open(page, {
             experience: 'Experience',
+            experiment: 'Experiment',
             audience: 'Audience',
+            variant: 'Variant',
         });
 
         await page.locator('#disclosure').click();
 
-        await expect(await page.getByText('Locale').count()).toBe(0);
+        await expect(page.locator('#preview-locale')).not.toBeAttached();
 
         await expect(page).toHaveScreenshot('widget-without-locale.png');
     });
@@ -134,15 +163,15 @@ test.describe('Preview widget', () => {
     test('should display the locale code instead of the name if the specified code is invalid', async ({page}) => {
         await open(page, {
             experience: 'Experience',
+            experiment: 'Experiment',
             audience: 'Audience',
+            variant: 'Variant',
             locale: 'Invalid code',
         });
 
         await page.locator('#disclosure').click();
 
-        const previewLocale = await page.locator('#preview-locale');
-
-        await expect(previewLocale).toHaveText('Invalid code');
+        await expect(page.locator('#preview-locale')).toHaveText('Invalid code');
 
         await expect(page).toHaveScreenshot('widget-invalid-locale.png');
     });

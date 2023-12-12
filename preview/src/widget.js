@@ -113,7 +113,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderExperiment(previewMode, variant, experiment) {
-        if (previewMode === 'slotDefaultContent' || variant === null) {
+        if (previewMode === 'slotDefaultContent' || experiment === null) {
+            document.getElementById('preview-content')
+                .closest('li')
+                .remove();
+
             document.getElementById('preview-experiment')
                 .closest('li')
                 .remove();
@@ -121,8 +125,11 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        document.getElementById('preview-content').textContent = variant;
         document.getElementById('preview-experiment').textContent = experiment;
+
+        if (variant !== null){
+            document.getElementById('preview-content').textContent = variant;
+        }
     }
 
     function renderLocale(locale) {

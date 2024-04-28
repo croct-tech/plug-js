@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@croct/json": "^2.0.1",
-    "@croct/sdk": "^0.14.0",
+    "@croct/sdk": "file:/Users/marcospassos/WebstormProjects/sdk-js/build/croct-sdk-0.0.0-dev.tgz",
     "tslib": "^2.2.0"
   },
   "devDependencies": {

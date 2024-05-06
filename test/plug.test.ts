@@ -811,7 +811,7 @@ describe('The Croct plug', () => {
         expect(() => croct.evaluate('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
     });
 
-    it('should allow to test query', async () => {
+    it('should allow to test the query', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 

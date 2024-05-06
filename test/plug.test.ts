@@ -927,7 +927,7 @@ describe('The Croct plug', () => {
         expect(fetch).toHaveBeenCalledWith('foo', {});
 
         expect(logger.error).toHaveBeenCalledWith(
-            `[Croct] Failed to fetch content for slot "${slotId}@latest": Reason`,
+            `[Croct] Failed to fetch content for slot "${slotId}@latest": reason`,
         );
     });
 

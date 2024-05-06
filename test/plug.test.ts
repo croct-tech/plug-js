@@ -752,7 +752,7 @@ describe('The Croct plug', () => {
         expect(() => croct.track('userSignedUp', {userId: 'c4r0l'})).toThrow('Croct is not plugged in.');
     });
 
-    it('should allow to evaluate expressions', async () => {
+    it('should allow to evaluate queries', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -771,11 +771,47 @@ describe('The Croct plug', () => {
         expect(evaluate).toHaveBeenCalledWith('user\'s name', {timeout: 5});
     });
 
-    it('should not allow to evaluate expressions if unplugged', () => {
+    it('should log an error when the query evaluation fails', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const evaluate = jest.spyOn(sdkFacade.evaluator, 'evaluate').mockRejectedValue(new Error('Reason'));
+
+        const query = '"a long query with spaces"';
+
+        const promise = croct.evaluate(query, {timeout: 5});
+
+        await expect(promise).rejects.toThrow('Reason');
+
+        expect(evaluate).toHaveBeenCalledWith(query, {timeout: 5});
+
+        expect(logger.error).toHaveBeenCalledWith(
+            '[Croct] Failed to evaluate query ""a long query with s...": reason',
+        );
+    });
+
+    it('should not allow to evaluate query if unplugged', () => {
         expect(() => croct.evaluate('foo', {timeout: 5})).toThrow('Croct is not plugged in.');
     });
 
-    it('should allow to test expressions', async () => {
+    it('should allow to test query', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -794,7 +830,7 @@ describe('The Croct plug', () => {
         expect(evaluate).toHaveBeenCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    it('should test expressions assuming non-boolean results as false', async () => {
+    it('should test query assuming non-boolean results as false', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -813,7 +849,7 @@ describe('The Croct plug', () => {
         expect(evaluate).toHaveBeenCalledWith('user\'s name is "Carol"', {timeout: 5});
     });
 
-    it('should not test expressions assuming errors as false', async () => {
+    it('should not test query assuming errors as false', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);
 
@@ -859,6 +895,40 @@ describe('The Croct plug', () => {
         });
 
         expect(fetch).toHaveBeenLastCalledWith('foo', options);
+    });
+
+    it('should log an error when fetching content fails', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(new Error('Reason'));
+
+        const slotId = 'foo';
+
+        await expect(croct.fetch(slotId)).rejects.toThrow('Reason');
+
+        expect(fetch).toHaveBeenCalledWith('foo', {});
+
+        expect(logger.error).toHaveBeenCalledWith(
+            `[Croct] Failed to fetch content for slot "${slotId}@latest": Reason`,
+        );
     });
 
     it('should extract the slot ID and version', async () => {

@@ -355,10 +355,18 @@ export class GlobalPlug implements Plug {
             .track(type, payload);
     }
 
-    public evaluate<T extends JsonValue>(expression: string, options: EvaluationOptions = {}): Promise<T> {
+    public evaluate<T extends JsonValue>(query: string, options: EvaluationOptions = {}): Promise<T> {
         return this.sdk
             .evaluator
-            .evaluate(expression, options) as Promise<T>;
+            .evaluate(query, options)
+            .catch(error => {
+                const logger = this.sdk.getLogger();
+                const reference = query.length > 20 ? `${query.slice(0, 20)}...` : query;
+
+                logger.error(`Failed to evaluate query "${reference}": ${formatCause(error)}`);
+
+                throw error;
+            }) as Promise<T>;
     }
 
     public test(expression: string, options: EvaluationOptions = {}): Promise<boolean> {
@@ -391,7 +399,12 @@ export class GlobalPlug implements Plug {
                             },
                             content: response.content,
                         }),
-                    );
+                    )
+                    .catch(error => {
+                        logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
+
+                        throw error;
+                    });
             },
         );
     }

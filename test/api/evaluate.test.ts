@@ -1,4 +1,5 @@
 import {Evaluator} from '@croct/sdk/evaluator';
+import {Logger} from '@croct/sdk/logging';
 import {evaluate, EvaluationOptions} from '../../src/api';
 
 const mockEvaluate: Evaluator['evaluate'] = jest.fn();
@@ -8,10 +9,10 @@ jest.mock(
     () => ({
         __esModule: true,
         /*
-     * eslint-disable-next-line prefer-arrow-callback --
-     * The mock can't be an arrow function because calling new on
-     * an arrow function is not allowed in JavaScript.
-     */
+         * eslint-disable-next-line prefer-arrow-callback --
+         * The mock can't be an arrow function because calling new on
+         * an arrow function is not allowed in JavaScript.
+         */
         Evaluator: jest.fn(function constructor(this: Evaluator) {
             this.evaluate = mockEvaluate;
         }),
@@ -73,13 +74,23 @@ describe('evaluate', () => {
     });
 
     it('should return the fallback value on error', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
         const options: EvaluationOptions = {
             apiKey: apiKey,
             fallback: false,
+            logger: logger,
         };
 
-        jest.mocked(mockEvaluate).mockRejectedValue(new Error('error'));
+        jest.mocked(mockEvaluate).mockRejectedValue(new Error('Reason'));
 
-        await expect(evaluate('true', options)).resolves.toBe(false);
+        await expect(evaluate('"this is a long query"', options)).resolves.toBe(false);
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to evaluate query ""this is a long quer...": reason');
     });
 });

@@ -3,6 +3,9 @@ import {
     DynamicContentOptions as BaseDynamicOptions,
     StaticContentOptions as BaseStaticOptions,
 } from '@croct/sdk/contentFetcher';
+import type {ApiKey} from '@croct/sdk/apiKey';
+import type {Logger} from '@croct/sdk/logging';
+import {formatCause} from '@croct/sdk/error';
 import {JsonObject, JsonValue} from '../sdk/json';
 import {FetchResponse} from '../plug';
 import {SlotContent, VersionedSlotId} from '../slot';
@@ -10,12 +13,13 @@ import {SlotContent, VersionedSlotId} from '../slot';
 type FetchingOptions<T extends JsonValue> = {
     baseEndpointUrl?: string,
     fallback?: T,
+    logger?: Logger,
 };
 
 type AuthOptions = ServerSideAuthOptions | ClientSideAuthOptions;
 
 type ServerSideAuthOptions = {
-    apiKey: string,
+    apiKey: string|ApiKey,
     appId?: never,
 };
 
@@ -36,7 +40,7 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
     slotId: I,
     options?: FetchOptions<SlotContent<I, C>>,
 ): Promise<Omit<FetchResponse<I, C>, 'payload'>> {
-    const {apiKey, appId, fallback, baseEndpointUrl, ...fetchOptions} = options ?? {};
+    const {apiKey, appId, fallback, baseEndpointUrl, logger, ...fetchOptions} = options ?? {};
     const auth = {appId: appId, apiKey: apiKey};
     const [id, version = 'latest'] = slotId.split('@') as [I, `${number}` | 'latest' | undefined];
 
@@ -50,9 +54,13 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
 
     if (fallback !== undefined) {
         return promise.catch(
-            () => ({
-                content: fallback,
-            }),
+            error => {
+                if (logger !== undefined) {
+                    logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
+                }
+
+                return {content: fallback};
+            },
         );
     }
 

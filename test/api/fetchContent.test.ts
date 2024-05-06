@@ -1,4 +1,5 @@
 import {ContentFetcher} from '@croct/sdk/contentFetcher';
+import {Logger} from '@croct/sdk/logging';
 import {FetchResponse} from '../../src/plug';
 import {SlotContent} from '../../src/slot';
 import {fetchContent, FetchOptions} from '../../src/api';
@@ -185,6 +186,12 @@ describe('fetchContent', () => {
 
     it('should return the fallback value on error', async () => {
         const slotId = 'slot-id';
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
 
         const fallback: SlotContent = {
             _component: 'component-id',
@@ -195,12 +202,15 @@ describe('fetchContent', () => {
             apiKey: apiKey,
             timeout: 100,
             fallback: fallback,
+            logger: logger,
         };
 
-        jest.mocked(mockFetch).mockRejectedValue(new Error('error'));
+        jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
 
         await expect(fetchContent(slotId, options)).resolves.toEqual({
             content: fallback,
         });
+
+        expect(logger.error).toHaveBeenCalledWith(`Failed to fetch content for slot "${slotId}@latest": reason`);
     });
 });

@@ -1,1 +1,1 @@
-export {Token, TokenPayload, Headers, TokenProvider, TokenStore} from '@croct/sdk/token';
+export {Token, TokenPayload, TokenHeaders, TokenProvider, TokenStore} from '@croct/sdk/token';

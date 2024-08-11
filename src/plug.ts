@@ -138,7 +138,7 @@ export class GlobalPlug implements Plug {
                 'The specified app ID and the auto-detected app ID are conflicting. '
                 + 'There is no need to specify an app ID when using an application-specific tag. '
                 + 'Please try again omitting the "appId" option. '
-                + 'Read more on https://croct.help/sdk/js/conflicting-app-id',
+                + 'For help, see https://croct.help/sdk/js/conflicting-app-id',
 
             );
         }
@@ -149,7 +149,7 @@ export class GlobalPlug implements Plug {
             throw new Error(
                 'The app ID must be specified when it cannot be auto-detected. '
                 + 'Please try again specifying the "appId" option.'
-                + 'Read more on https://croct.help/sdk/js/missing-app-id',
+                + 'For help, see https://croct.help/sdk/js/missing-app-id',
             );
         }
 
@@ -298,7 +298,7 @@ export class GlobalPlug implements Plug {
 
     private get sdk(): SdkFacade {
         if (this.instance === undefined) {
-            throw new Error('Croct is not plugged in. Read more on https://croct.help/sdk/js/not-plugged-in');
+            throw new Error('Croct is not plugged in. For help, see https://croct.help/sdk/js/not-plugged-in');
         }
 
         return this.instance;
@@ -334,7 +334,7 @@ export class GlobalPlug implements Plug {
 
     public identify(userId: string): void {
         if (typeof userId !== 'string') {
-            throw new Error('The user ID must be a string. Read more on https://croct.help/sdk/js/invalid-user-id');
+            throw new Error('The user ID must be a string. For help, see https://croct.help/sdk/js/invalid-user-id');
         }
 
         this.sdk.identify(userId);

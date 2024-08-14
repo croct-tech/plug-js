@@ -37,16 +37,6 @@ export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = Json
     content: SlotContent<I, C>,
 };
 
-/**
- * @internal
- */
-export type LegacyFetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject> = FetchResponse<I, C> & {
-    /**
-     * @deprecated Use `content` instead.
-     */
-    payload: SlotContent<I, C>,
-};
-
 export interface Plug extends EapFeatures {
     readonly tracker: TrackerFacade;
     readonly user: UserFacade;
@@ -76,7 +66,7 @@ export interface Plug extends EapFeatures {
     fetch<P extends JsonObject, I extends VersionedSlotId>(
         slotId: I,
         options?: FetchOptions
-    ): Promise<LegacyFetchResponse<I, P>>;
+    ): Promise<FetchResponse<I, P>>;
 
     unplug(): Promise<void>;
 }
@@ -383,26 +373,13 @@ export class GlobalPlug implements Plug {
             <C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
                 slotId: I,
                 options: FetchOptions = {},
-            ): Promise<LegacyFetchResponse<I, C>> => {
+            ): Promise<FetchResponse<I, C>> => {
                 const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
                 const logger = this.sdk.getLogger();
 
                 return this.sdk
                     .contentFetcher
                     .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
-                    .then(
-                        response => ({
-                            get payload(): SlotContent<I, C> {
-                                logger.warn(
-                                    'Accessing the "payload" property of the fetch response is deprecated'
-                                    + ' and will be removed in a future version. Use the "content" property instead.',
-                                );
-
-                                return response.content;
-                            },
-                            content: response.content,
-                        }),
-                    )
                     .catch(error => {
                         logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 

@@ -3,7 +3,7 @@ import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {JsonObject} from '@croct/json';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
-import {GlobalPlug, Plug} from '../src/plug';
+import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
 
@@ -27,8 +27,6 @@ describe('The Croct plug', () => {
         delete process.env.NODE_ENV;
 
         croct = new GlobalPlug();
-
-        delete window.croctEap;
     });
 
     afterEach(async () => {
@@ -216,18 +214,6 @@ describe('The Croct plug', () => {
         croct.plug(config);
 
         expect(initialize).toHaveBeenCalledWith(expect.objectContaining({test: false}));
-    });
-
-    it('should call the EAP initialization hook', () => {
-        window.croctEap = {
-            initialize: jest.fn().mockImplementation(function initialize(this: Plug) {
-                expect(this).toBe(croct);
-            }),
-        };
-
-        croct.plug({appId: APP_ID});
-
-        expect(window.croctEap.initialize).toHaveBeenCalled();
     });
 
     it('should log failures initializing plugins', () => {
@@ -986,60 +972,6 @@ describe('The Croct plug', () => {
             content: content,
         });
 
-        expect(fetch).toHaveBeenLastCalledWith('foo', options);
-    });
-
-    it('should delegate the fetch to the EAP hook', async () => {
-        const logger: Logger = {
-            debug: jest.fn(),
-            info: jest.fn(),
-            warn: jest.fn(),
-            error: jest.fn(),
-        };
-
-        const config: SdkFacadeConfiguration = {
-            appId: APP_ID,
-            logger: logger,
-        };
-
-        const sdkFacade = SdkFacade.init(config);
-
-        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
-
-        croct.plug(config);
-
-        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
-
-        const content: JsonObject = {
-            title: 'Hello World',
-        };
-
-        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
-            content: content,
-        });
-
-        const eapFetch: Plug['fetch'] = jest.fn().mockImplementation(function hook(this: Plug, ...args: any[]) {
-            if (!this.initialized) {
-                // Access the initialized property to ensure the proxy is working.
-                throw new Error('Croct is not plugged in.');
-            }
-
-            // eslint-disable-next-line prefer-spread -- Necessary to test the hook.
-            return this.fetch.apply(this, args);
-        });
-
-        window.croctEap = {
-            fetch: eapFetch,
-        };
-
-        const slotId = 'foo';
-        const options: FetchOptions = {timeout: 5};
-
-        await expect(croct.fetch(slotId, options)).resolves.toEqual({
-            content: content,
-        });
-
-        expect(eapFetch).toHaveBeenLastCalledWith('foo', options);
         expect(fetch).toHaveBeenLastCalledWith('foo', options);
     });
 

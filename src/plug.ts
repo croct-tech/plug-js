@@ -19,7 +19,6 @@ import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
 import {factory as previewPluginFactory} from './preview';
-import {EapFeatures} from './eap';
 import {VersionedSlotId, SlotContent} from './slot';
 import {JsonValue, JsonObject} from './sdk/json';
 
@@ -37,7 +36,7 @@ export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = Json
     content: SlotContent<I, C>,
 };
 
-export interface Plug extends EapFeatures {
+export interface Plug {
     readonly tracker: TrackerFacade;
     readonly user: UserFacade;
     readonly session: SessionFacade;
@@ -258,12 +257,6 @@ export class GlobalPlug implements Plug {
             );
         }
 
-        const initializeEap = window.croctEap?.initialize;
-
-        if (typeof initializeEap === 'function') {
-            initializeEap.call(this);
-        }
-
         Promise.all(pending)
             .then(() => {
                 this.initialize();
@@ -367,26 +360,21 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    public get fetch(): Plug['fetch'] {
-        return this.eap(
-            'fetch',
-            <C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
-                slotId: I,
-                options: FetchOptions = {},
-            ): Promise<FetchResponse<I, C>> => {
-                const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
-                const logger = this.sdk.getLogger();
+    public fetch<C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
+        slotId: I,
+        options: FetchOptions = {},
+    ): Promise<FetchResponse<I, C>> {
+        const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
+        const logger = this.sdk.getLogger();
 
-                return this.sdk
-                    .contentFetcher
-                    .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
-                    .catch(error => {
-                        logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
+        return this.sdk
+            .contentFetcher
+            .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
+            .catch(error => {
+                logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
-                        throw error;
-                    });
-            },
-        );
+                throw error;
+            });
     }
 
     public async unplug(): Promise<void> {
@@ -435,26 +423,5 @@ export class GlobalPlug implements Plug {
         } finally {
             logger.info('🔌 Croct has been unplugged.');
         }
-    }
-
-    private eap<T extends keyof EapFeatures>(feature: T, api: EapFeatures[T]): EapFeatures[T] {
-        const eap = window.croctEap;
-        const method: EapFeatures[T] | undefined = typeof eap === 'object' ? eap[feature] : undefined;
-
-        if (typeof method !== 'function') {
-            return api;
-        }
-
-        return method.bind(
-            new Proxy(this, {
-                get: (plug, property): any => {
-                    if (property === feature) {
-                        return api;
-                    }
-
-                    return plug[property as keyof GlobalPlug];
-                },
-            }),
-        );
     }
 }

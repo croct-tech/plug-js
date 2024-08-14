@@ -891,7 +891,6 @@ describe('The Croct plug', () => {
 
         await expect(croct.fetch(slotId, options)).resolves.toEqual({
             content: content,
-            payload: content,
         });
 
         expect(fetch).toHaveBeenLastCalledWith('foo', options);
@@ -954,7 +953,6 @@ describe('The Croct plug', () => {
 
         await expect(croct.fetch(slotId, options)).resolves.toEqual({
             content: content,
-            payload: content,
         });
 
         expect(fetch).toHaveBeenLastCalledWith('foo', {
@@ -986,7 +984,6 @@ describe('The Croct plug', () => {
 
         await expect(croct.fetch(slotId, options)).resolves.toEqual({
             content: content,
-            payload: content,
         });
 
         expect(fetch).toHaveBeenLastCalledWith('foo', options);
@@ -1040,16 +1037,10 @@ describe('The Croct plug', () => {
 
         await expect(croct.fetch(slotId, options)).resolves.toEqual({
             content: content,
-            payload: content,
         });
 
         expect(eapFetch).toHaveBeenLastCalledWith('foo', options);
         expect(fetch).toHaveBeenLastCalledWith('foo', options);
-
-        expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining(
-            'Accessing the "payload" property of the fetch response is deprecated and '
-            + 'will be removed in a future version. Use the "content" property instead.',
-        ));
     });
 
     it('should fail to fetch a slot content if unplugged', () => {

@@ -10,6 +10,8 @@ import {JsonObject, JsonValue} from '../sdk/json';
 import {FetchResponse} from '../plug';
 import {SlotContent, VersionedSlotId} from '../slot';
 
+export {FetchResponse} from '../plug';
+
 type FetchingOptions<T extends JsonValue> = {
     baseEndpointUrl?: string,
     fallback?: T,

@@ -19,11 +19,11 @@
     "lint": "eslint 'test/**/*.ts'"
   },
   "devDependencies": {
-    "@croct/eslint-plugin": "^0.7.0",
-    "@playwright/test": "^1.27.1",
-    "@typescript-eslint/parser": "^7.0.0",
+    "@croct/eslint-plugin": "^0.7.1",
+    "@playwright/test": "^1.46.1",
+    "@typescript-eslint/parser": "^8.4.0",
     "eslint": "^8.18.0",
     "jest": "^29.3.0",
-    "parcel": "^2.7.0"
+    "parcel": "^2.12.0"
   }
 }

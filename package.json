@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@croct/json": "^2.1.0",
-    "@croct/sdk": "^0.17.1",
+    "@croct/sdk": "^0.17.2",
     "tslib": "^2.7.0"
   },
   "devDependencies": {

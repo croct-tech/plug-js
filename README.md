@@ -1,5 +1,6 @@
 <picture>
-  <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/6804b14c-c682-4681-8d9b-c8b4b52fa26b">
+    <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/6804b14c-c682-4681-8d9b-c8b4b52fa26b">
+    <img src="https://github.com/user-attachments/assets/6804b14c-c682-4681-8d9b-c8b4b52fa26b" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
 </picture>
 
 <p align="center">

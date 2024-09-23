@@ -1,19 +1,18 @@
 <div align="center">
     <picture>
-        <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/8cc88048-42b7-4397-9685-8f47a10b7492">
-        <source media="(min-width: 769px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/0d644319-7830-4068-ac65-fdaefd866d0c">
-        <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/12fe38dc-0be2-409d-8052-e5f1db008173">
-        <img src="https://github.com/user-attachments/assets/aadc6a2e-3278-4222-bacb-6bec0f18829c" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
+        <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/a96c9a07-3072-4994-a1c0-b4da37ff93fe">
+        <source media="(min-width: 769px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/c86485fe-ebfc-40e1-be34-857a65379061">
+        <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/0974fb8b-8277-4eaf-bf86-39d5dbc72b97">
+        <img src="https://github.com/user-attachments/assets/edd98ed3-e062-4864-9bbc-13f988202a47" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
     </picture>
     <strong>JavaScript SDK</strong><br/>
     Bring dynamic, personalized content to your applications.
 </div>
-<br />
+<br/>
 <div align="center">
-    📘 <a href="https://croct.com/reference/sdk/javascript/installation">Get started</a>
-    • 📦 <a href="https://github.com/croct-tech/plug-js/releases">View releases</a>
-    • 🐞 <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">Report bug</a>
-    • ✨ <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">Suggest feature</a>
+    📘 <a href="https://croct.com/reference/sdk/javascript/installation">Quickstart</a>
+    • 💬 <a href="https://croct.link/community">Slack group</a>
+    • 📦 <a href="https://github.com/croct-tech/plug-js/releases">Releases</a>
 </div>
 <br />
 <p align="center">
@@ -24,17 +23,10 @@
     <img alt="Gzipped bundle size" src="https://img.badgesize.io/https:/cdn.croct.io/js/v1/lib/plug.js?style=flat&compression=gzip" />
 </p>
 
-## Overview
+## What is Croct?
 
-Plug JS is the easiest way to collect, manage, and consume real-time data to fuel personalized experiences. 
-A single line of code gives you a fully-featured devkit for building natively personalized applications.
+Croct is a headless CMS that delivers static and dynamic content, enabling you to manage content, AB test, and personalize experiences with one API and seamless integration.
 
-- **Zero configuration.** No setup steps required.
-- **No backend necessary.** Deliver personalized experiences from static sites.
-- **Fast queries.** Double-digit millisecond latency for real-time evaluations.
-- **Fully extensible API.** Easily add and share new features via plugins.
-- **Type-Safe.** Typescript typings included.
-- **Playground integration** One-click to connect, no configuration needed.
 
 ## Installation
 

@@ -30,12 +30,12 @@ Croct is a headless CMS that helps you manage content, run A/B tests, and person
 
 ### Installation
 
-Run the following command to install the SDK:
+Run this command to install the SDK:
 
 ```sh
 npm install @croct/plug
 ```
-Check our [getting started](https://croct.com/reference/sdk/javascript/installation) guide for more details.
+See our [getting started](https://croct.com/reference/sdk/javascript/installation) guide for details.
 
 ### Documentation
 

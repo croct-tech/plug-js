@@ -9,12 +9,13 @@
     </picture>
   </a>
   <br/>
-  <strong>JavaScript SDK</strong><br/>
-  Bring dynamic, personalized content to your applications.
+  <strong>Croct JavaScript SDK</strong><br/>
+  Bring dynamic, personalized content natively into your applications.
 </p>
-<p align="center">
+<div align="center">
     <strong>📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Quick start &rarr; </a></strong>
-</p>
+</div>
+<br/>
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
     <img alt="Gzipped bundle size" src="https://img.badgesize.io/https:/cdn.croct.io/js/v1/lib/plug.js?style=flat&compression=gzip" />

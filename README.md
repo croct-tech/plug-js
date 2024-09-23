@@ -35,7 +35,7 @@ Run this command to install the SDK:
 ```sh
 npm install @croct/plug
 ```
-See our [getting started](https://croct.com/reference/sdk/javascript/installation) guide for details.
+See [Getting started](https://croct.com/reference/sdk/javascript/installation) for more details.
 
 ### Documentation
 

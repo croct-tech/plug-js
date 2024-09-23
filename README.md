@@ -9,7 +9,7 @@
     </picture>
   </a>
   <br/>
-  <strong>Croct JavaScript SDK</strong><br/>
+  <strong>Croct SDK for JavaScript</strong><br/>
   Bring dynamic, personalized content natively into your applications.
 </p>
 <div align="center">

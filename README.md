@@ -26,7 +26,7 @@
 
 ### Introduction
 
-Croct is a headless CMS that lets you manage both static and dynamic content, perform A/B testing, and personalize experiences — all through a single SDK, without the need for external services or complex integrations..
+Croct is a headless CMS that helps you manage content, run A/B tests, and personalize experiences without the hassle of complex integrations.
 
 ### Installation
 

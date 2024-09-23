@@ -1,9 +1,9 @@
 <div align="center">
     <picture>
-        <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/a96c9a07-3072-4994-a1c0-b4da37ff93fe">
-        <source media="(min-width: 769px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/c86485fe-ebfc-40e1-be34-857a65379061">
-        <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/0974fb8b-8277-4eaf-bf86-39d5dbc72b97">
-        <img src="https://github.com/user-attachments/assets/edd98ed3-e062-4864-9bbc-13f988202a47" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
+        <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/336797a2-4abd-431e-87c5-bd98351534e2">
+        <source media="(min-width: 769px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/278ffed5-2e25-4434-8cce-ede53287259d">
+        <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/bac1f045-647f-47ce-a2e7-d73341a7720d">
+        <img src="https://github.com/user-attachments/assets/43b84682-3914-437a-84b6-18f2c00d34ad" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
     </picture>
     <strong>JavaScript SDK</strong><br/>
     Bring dynamic, personalized content to your applications.

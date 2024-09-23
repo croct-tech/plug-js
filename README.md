@@ -1,12 +1,15 @@
-<div align="center">
+<p align="center">
+  <a href="https://croct" target="_blank">
     <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/278ffed5-2e25-4434-8cce-ede53287259d">
-        <img src="https://github.com/user-attachments/assets/336797a2-4abd-431e-87c5-bd98351534e2" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/278ffed5-2e25-4434-8cce-ede53287259d">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/336797a2-4abd-431e-87c5-bd98351534e2">
+      <img alt="Croct" src="https://github.com/user-attachments/assets/336797a2-4abd-431e-87c5-bd98351534e2">
     </picture>
-    <strong>JavaScript SDK</strong><br/>
-    Bring dynamic, personalized content to your applications.
-</div>
-<br/>
+  </a>
+  <br/>
+  <strong>JavaScript SDK</strong><br/>
+  Bring dynamic, personalized content to your applications.
+</p>
 <div align="center">
     📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Quick start</a>
     • 💬&nbsp;<a href="https://croct.link/community">Slack channel</a>

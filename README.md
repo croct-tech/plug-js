@@ -13,12 +13,12 @@
   Bring dynamic, personalized content to your applications.
 </p>
 <p align="center">
-    <strong>📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Get started &rarr; </a></strong>
+    <strong>📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Quick start &rarr; </a></strong>
 </p>
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
-    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
     <img alt="Gzipped bundle size" src="https://img.badgesize.io/https:/cdn.croct.io/js/v1/lib/plug.js?style=flat&compression=gzip" />
+    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
 </p>
 
 <hr/>

@@ -1,28 +1,26 @@
 <p align="center">
   <a href="https://croct" target="_blank">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/278ffed5-2e25-4434-8cce-ede53287259d">
-      <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/336797a2-4abd-431e-87c5-bd98351534e2">
-      <img alt="Croct" src="https://github.com/user-attachments/assets/336797a2-4abd-431e-87c5-bd98351534e2">
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/52c84959-8d2c-47e8-83fb-3025bdfc3471">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/f75c570b-da34-461e-b068-2eded91b6edc">
+      <img alt="Croct" src="https://github.com/user-attachments/assets/f75c570b-da34-461e-b068-2eded91b6edc">
     </picture>
   </a>
   <br/>
   <strong>JavaScript SDK</strong><br/>
   Bring dynamic, personalized content to your applications.
 </p>
-<div align="center">
+<p align="center">
     📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Quick start</a>
     • 💬&nbsp;<a href="https://croct.link/community">Slack channel</a>
     • 📦&nbsp;<a href="https://github.com/croct-tech/plug-js/releases">Releases</a>
-</div>
-<br/>
-<div align="center">
+</p>
+<p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
     <a href="https://github.com/croct-tech/plug-js/actions/workflows/library-validations.yaml"><img alt="Build" src="https://github.com/croct-tech/plug-js/actions/workflows/library-validations.yaml/badge.svg?branch=master"/></a>
-    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability"/></a>
     <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
     <img alt="Gzipped bundle size" src="https://img.badgesize.io/https:/cdn.croct.io/js/v1/lib/plug.js?style=flat&compression=gzip" />
-</div>
+</p>
 
 <hr/>
 
@@ -54,3 +52,7 @@ Contributions are always welcome!
 - Report any bugs or issues on the [issue tracker](https://github.com/croct-tech/plug-js/issues).
 - For major changes, please [open an issue](https://github.com/croct-tech/plug-js/issues) first to discuss what you would like to change.
 - Please make sure to update tests as appropriate. Run tests with `npm test`.
+
+### License
+
+This library is licensed under the [MIT license](LICENSE).

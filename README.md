@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://croct" target="_blank">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/52c84959-8d2c-47e8-83fb-3025bdfc3471">
-      <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/f75c570b-da34-461e-b068-2eded91b6edc">
-      <img alt="Croct" src="https://github.com/user-attachments/assets/f75c570b-da34-461e-b068-2eded91b6edc">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/croct-tech/plug-js/blob/update-readme/.github/assets/header-dark.svg">
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/croct-tech/plug-js/blob/update-readme/.github/assets/header-light.svg">
+      <img alt="Croct" src="https://raw.githubusercontent.com/croct-tech/plug-js/blob/update-readme/.github/assets/header-light.svg">
     </picture>
   </a>
   <br/>

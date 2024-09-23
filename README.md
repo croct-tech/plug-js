@@ -1,8 +1,6 @@
-<p align="center">
-   <img width="100%" alt="Plug JS" title="Plug JS" src="https://user-images.githubusercontent.com/943036/99672355-0c7aee80-2a52-11eb-9e89-012567237af9.png">
-</p>
-
-<br/><br/>
+<picture>
+  <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/6804b14c-c682-4681-8d9b-c8b4b52fa26b">
+</picture>
 
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>

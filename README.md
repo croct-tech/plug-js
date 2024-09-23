@@ -1,20 +1,27 @@
-<picture>
-    <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/6804b14c-c682-4681-8d9b-c8b4b52fa26b">
-    <img src="https://github.com/user-attachments/assets/6804b14c-c682-4681-8d9b-c8b4b52fa26b" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
-</picture>
-
+<div align="center">
+    <picture>
+        <source media="(min-width: 769px) and (prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/8cc88048-42b7-4397-9685-8f47a10b7492">
+        <source media="(min-width: 769px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/0d644319-7830-4068-ac65-fdaefd866d0c">
+        <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/12fe38dc-0be2-409d-8052-e5f1db008173">
+        <img src="https://github.com/user-attachments/assets/aadc6a2e-3278-4222-bacb-6bec0f18829c" alt="Croct JavaScript SDK" title="Croct JavaScript SDK" width="100%">
+    </picture>
+    <strong>JavaScript SDK</strong><br/>
+    Bring dynamic, personalized content to your applications.
+</div>
+<br />
+<div align="center">
+    📘 <a href="https://croct.com/reference/sdk/javascript/installation">Get started</a>
+    • 📦 <a href="https://github.com/croct-tech/plug-js/releases">View releases</a>
+    • 🐞 <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">Report bug</a>
+    • ✨ <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">Suggest feature</a>
+</div>
+<br />
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
-    <a href="https://github.com/croct-tech/plug-js/actions?query=workflow%3AValidations"><img alt="Build" src="https://github.com/croct-tech/plug-js/workflows/Validations/badge.svg"/></a>
+    <a href="https://github.com/croct-tech/plug-js/actions/workflows/library-validations.yaml"><img alt="Build" src="https://github.com/croct-tech/plug-js/actions/workflows/library-validations.yaml/badge.svg?branch=master"/></a>
     <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/maintainability"><img alt="Maintainability" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/maintainability"/></a>
     <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
     <img alt="Gzipped bundle size" src="https://img.badgesize.io/https:/cdn.croct.io/js/v1/lib/plug.js?style=flat&compression=gzip" />
-    <br /> <br /> <br/>
-    <a href="https://github.com/croct-tech/plug-js/releases">📦 Releases</a>
-    ·
-    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=bug&template=bug-report.md">🐞 Report Bug</a>
-    ·
-    <a href="https://github.com/croct-tech/plug-js/issues/new?labels=enhancement&template=feature-request.md">✨ Request Feature</a>
 </p>
 
 ## Overview

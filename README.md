@@ -10,9 +10,9 @@
 </div>
 <br/>
 <div align="center">
-    📘 <a href="https://croct.com/reference/sdk/javascript/installation">Quickstart</a>
-    • 💬 <a href="https://croct.link/community">Slack group</a>
-    • 📦 <a href="https://github.com/croct-tech/plug-js/releases">Releases</a>
+    📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Quickstart</a>
+    • 💬&nbsp;<a href="https://croct.link/community">Slack group</a>
+    • 📦&nbsp;<a href="https://github.com/croct-tech/plug-js/releases">Releases</a>
 </div>
 <br />
 <p align="center">

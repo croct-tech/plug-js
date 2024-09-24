@@ -13,7 +13,7 @@
   Bring dynamic, personalized content natively into your applications.
 </p>
 <div align="center">
-    <strong>📘&nbsp;<a href="https://croct.com/reference/sdk/javascript/installation">Quick start &rarr; </a></strong>
+    <strong>📘 <a href="https://croct.com/reference/sdk/javascript/installation">Quick start &rarr;</a></strong>
 </div>
 <br/>
 <p align="center">
@@ -26,7 +26,7 @@
 
 ### Introduction
 
-Croct is a headless CMS that helps you manage content, run A/B tests, and personalize experiences without the hassle of complex integrations.
+Croct is a headless CMS that helps you manage content, run AB tests, and personalize experiences without the hassle of complex integrations.
 
 ### Installation
 

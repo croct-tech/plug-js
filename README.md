@@ -9,11 +9,11 @@
     </picture>
   </a>
   <br/>
-  <strong>Croct SDK for JavaScript</strong><br/>
+  <strong>Croct JavaScript SDK</strong><br/>
   Bring dynamic, personalized content natively into your applications.
 </p>
 <div align="center">
-    <strong>📘 <a href="https://croct.com/reference/sdk/javascript/installation">Quick start &rarr;</a></strong>
+    <strong>📘 <a href="https://docs.croct.com/reference/sdk/javascript/installation">Quick start &rarr;</a></strong>
 </div>
 <br/>
 <p align="center">
@@ -35,11 +35,11 @@ Run this command to install the SDK:
 ```sh
 npm install @croct/plug
 ```
-See our [quick start guide](https://croct.com/reference/sdk/javascript/installation) for more details.
+See our [quick start guide](https://docs.croct.com/reference/sdk/javascript/installation) for more details.
 
 ### Documentation
 
-Visit our [official documentation](https://croct.com/reference/sdk/javascript/installation).
+Visit our [official documentation](https://docs.croct.com/reference/sdk/javascript/installation).
 
 ### Support
 

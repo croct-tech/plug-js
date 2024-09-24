@@ -22,13 +22,11 @@
     <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
 </p>
 
-<hr/>
-
-### Introduction
+## Introduction
 
 Croct is a headless CMS that helps you manage content, run AB tests, and personalize experiences without the hassle of complex integrations.
 
-### Installation
+## Installation
 
 Run this command to install the SDK:
 
@@ -37,15 +35,15 @@ npm install @croct/plug
 ```
 See our [quick start guide](https://docs.croct.com/reference/sdk/javascript/installation) for more details.
 
-### Documentation
+## Documentation
 
 Visit our [official documentation](https://docs.croct.com/reference/sdk/javascript/installation).
 
-### Support
+## Support
 
 Join our official [Slack channel](https://croct.link/community) to get help from the Croct team and other developers.
 
-### Contribution
+## Contribution
 
 Contributions are always welcome! 
 
@@ -53,6 +51,6 @@ Contributions are always welcome!
 - For major changes, please [open an issue](https://github.com/croct-tech/plug-js/issues) first to discuss what you would like to change.
 - Please make sure to update tests as appropriate. Run tests with `npm test`.
 
-### License
+## License
 
 This library is licensed under the [MIT license](LICENSE).

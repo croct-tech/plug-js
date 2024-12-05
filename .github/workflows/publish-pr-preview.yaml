@@ -1,0 +1,50 @@
+name: PR preview
+
+on:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+
+env:
+  BASE_ENDPOINT: https://api.croct.io
+  MAX_QUERY_LENGTH: 500
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Prepare release
+        run: |-
+          cp package.json LICENSE README.md build/
+          cd build
+          find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} +          
+          sed -i -e "s~<@version@>~0.0.0-dev~" constants.*
+          sed -i -e "s~<@baseEndpointUrl@>~${BASE_ENDPOINT}~" constants.*
+          sed -i -e "s~parseInt('<@maxQueryLength@>', 10)~${MAX_QUERY_LENGTH}~" constants.*
+          cp -r ../src src
+
+      - name: Publish preview
+        run: |-
+          npx pkg-pr-new publish \
+            --compact --comment=update \
+            ./build

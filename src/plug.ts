@@ -372,10 +372,17 @@ export class GlobalPlug implements Plug {
         return this.sdk
             .contentFetcher
             .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
-            .catch(error => {
+            .catch(async error => {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
-                throw error;
+                const locale = options.preferredLocale ?? null;
+                const file = `${locale === null ? '' : `${locale}/`}${slotId}.json`;
+
+                try {
+                    return {content: (await import(`@croct/content/slot/${file}`)).default};
+                } catch {
+                    throw error;
+                }
             });
     }
 

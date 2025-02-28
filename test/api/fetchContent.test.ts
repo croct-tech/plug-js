@@ -1,5 +1,7 @@
 import {ContentFetcher} from '@croct/sdk/contentFetcher';
 import {Logger} from '@croct/sdk/logging';
+import testEnContent from '@croct/content/slot/test.json';
+import testEsContent from '@croct/content/slot/es/test.json';
 import {FetchResponse} from '../../src/plug';
 import {SlotContent} from '../../src/slot';
 import {fetchContent, FetchOptions} from '../../src/api';
@@ -212,5 +214,74 @@ describe('fetchContent', () => {
         });
 
         expect(logger.error).toHaveBeenCalledWith(`Failed to fetch content for slot "${slotId}@latest": reason`);
+    });
+
+    it('should provide the default fallback content in case of an error', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            timeout: 100,
+            logger: logger,
+        };
+
+        jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
+
+        await expect(fetchContent('test', options)).resolves.toEqual({
+            content: testEnContent,
+        });
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
+    });
+
+    it('should provide the localized fallback content in case of an error', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            timeout: 100,
+            preferredLocale: 'es',
+            logger: logger,
+        };
+
+        jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
+
+        await expect(fetchContent('test', options)).resolves.toEqual({
+            content: testEsContent,
+        });
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
+    });
+
+    it('should rethrow the error if no fallback content is not available', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            timeout: 100,
+            preferredLocale: 'pt',
+            logger: logger,
+        };
+
+        jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
+
+        await expect(fetchContent('test', options)).rejects.toThrow('Reason');
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
     });
 });

@@ -54,17 +54,27 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
                 : {...fetchOptions, version: version},
         );
 
-    if (fallback !== undefined) {
-        return promise.catch(
-            error => {
-                if (logger !== undefined) {
-                    logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
-                }
+    return promise.catch(
+        async error => {
+            if (logger !== undefined) {
+                logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
+            }
 
+            if (fallback !== undefined) {
                 return {content: fallback};
-            },
-        );
-    }
+            }
 
-    return promise;
+            const locale = 'preferredLocale' in fetchOptions
+                ? fetchOptions.preferredLocale
+                : null;
+
+            const file = `${locale === null ? '' : `${locale}/`}${slotId}.json`;
+
+            try {
+                return {content: (await import(`@croct/content/slot/${file}`)).default};
+            } catch {
+                throw error;
+            }
+        },
+    );
 }

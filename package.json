@@ -30,9 +30,11 @@
     "test": "jest -c jest.config.js --coverage",
     "validate": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
-    "bundle": "rollup -c"
+    "bundle": "rollup -c",
+    "postinstall": "./postinstall.sh"
   },
   "dependencies": {
+    "@croct/content": "^1.0.0",
     "@croct/json": "^2.1.0",
     "@croct/sdk": "^0.17.7",
     "tslib": "^2.7.0"

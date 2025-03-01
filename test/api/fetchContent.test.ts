@@ -1,7 +1,7 @@
 import {ContentFetcher} from '@croct/sdk/contentFetcher';
 import {Logger} from '@croct/sdk/logging';
-import testEnContent from '@croct/content/slot/test.json';
-import testEsContent from '@croct/content/slot/es/test.json';
+import {join} from 'node:path';
+import {existsSync, rmSync, mkdirSync, writeFileSync} from 'node:fs';
 import {FetchResponse} from '../../src/plug';
 import {SlotContent} from '../../src/slot';
 import {fetchContent, FetchOptions} from '../../src/api';
@@ -25,9 +25,43 @@ jest.mock(
 
 describe('fetchContent', () => {
     const apiKey = '00000000-0000-0000-0000-000000000000';
+    const testSlotId = 'test';
+    const enContent = {
+        title: 'Hello, World!',
+    };
+
+    const esContent = {
+        title: '¡Hola, Mundo!',
+    };
 
     afterEach(() => {
         jest.clearAllMocks();
+    });
+
+    beforeAll(() => {
+        const contentDir = join(
+            __dirname,
+            '..',
+            '..',
+            'node_modules',
+            '@croct',
+            'content',
+            'slot',
+        );
+        const esJsonContent = JSON.stringify(esContent);
+        const endJsonContent = JSON.stringify(enContent);
+
+        if (existsSync(contentDir)) {
+            rmSync(contentDir, {recursive: true, force: true});
+        }
+
+        // Create necessary directories
+        mkdirSync(join(contentDir, 'en'), {recursive: true});
+        mkdirSync(join(contentDir, 'es'), {recursive: true});
+
+        writeFileSync(join(contentDir, 'en', `${testSlotId}.json`), endJsonContent);
+        writeFileSync(join(contentDir, `${testSlotId}.json`), endJsonContent);
+        writeFileSync(join(contentDir, 'es', `${testSlotId}.json`), esJsonContent);
     });
 
     it('should forward a server-side content request', async () => {
@@ -232,8 +266,8 @@ describe('fetchContent', () => {
 
         jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
 
-        await expect(fetchContent('test', options)).resolves.toEqual({
-            content: testEnContent,
+        await expect(fetchContent(testSlotId, options)).resolves.toEqual({
+            content: enContent,
         });
 
         expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
@@ -256,8 +290,8 @@ describe('fetchContent', () => {
 
         jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
 
-        await expect(fetchContent('test', options)).resolves.toEqual({
-            content: testEsContent,
+        await expect(fetchContent(testSlotId, options)).resolves.toEqual({
+            content: esContent,
         });
 
         expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
@@ -280,7 +314,7 @@ describe('fetchContent', () => {
 
         jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
 
-        await expect(fetchContent('test', options)).rejects.toThrow('Reason');
+        await expect(fetchContent(testSlotId, options)).rejects.toThrow('Reason');
 
         expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
     });

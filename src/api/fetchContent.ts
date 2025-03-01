@@ -71,7 +71,7 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
             const file = `${locale === null ? '' : `${locale}/`}${slotId}.json`;
 
             try {
-                return {content: (await import(`@croct/content/slot/${file}`)).default};
+                return {content: (await import(`@croct/content/slot/${file}`))};
             } catch {
                 throw error;
             }

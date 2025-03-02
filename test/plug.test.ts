@@ -1,6 +1,7 @@
 import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {JsonObject} from '@croct/json';
+import {getSlotContent} from '@croct/content';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
@@ -11,6 +12,14 @@ jest.mock(
     '../src/constants',
     () => ({
         CDN_URL: 'https://cdn.croct.io/js/v1/lib/plug.js',
+    }),
+);
+
+jest.mock(
+    '@croct/content',
+    () => ({
+        __esModule: true,
+        getSlotContent: jest.fn().mockResolvedValue(null),
     }),
 );
 
@@ -879,7 +888,7 @@ describe('The Croct plug', () => {
             content: content,
         });
 
-        expect(fetch).toHaveBeenLastCalledWith('foo', options);
+        expect(fetch).toHaveBeenLastCalledWith(slotId, options);
     });
 
     it('should log an error when fetching content fails', async () => {
@@ -903,13 +912,101 @@ describe('The Croct plug', () => {
 
         expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
-        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(new Error('Reason'));
+        const error = new Error('Reason');
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(error);
 
         const slotId = 'foo';
 
-        await expect(croct.fetch(slotId)).rejects.toThrow('Reason');
+        await expect(croct.fetch(slotId)).rejects.toBe(error);
 
-        expect(fetch).toHaveBeenCalledWith('foo', {});
+        expect(fetch).toHaveBeenCalledWith(slotId, {});
+
+        expect(logger.error).toHaveBeenCalledWith(
+            `[Croct] Failed to fetch content for slot "${slotId}@latest": reason`,
+        );
+    });
+
+    it('should provide the default fallback content when fetching content fails', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(new Error('Reason'));
+
+        const slotId = 'test';
+
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        jest.mocked(getSlotContent).mockResolvedValue(content);
+
+        await expect(croct.fetch(slotId)).resolves.toEqual({
+            content: content,
+        });
+
+        expect(fetch).toHaveBeenCalledWith(slotId, {});
+
+        expect(logger.error).toHaveBeenCalledWith(
+            `[Croct] Failed to fetch content for slot "${slotId}@latest": reason`,
+        );
+    });
+
+    it('should provide a localized fallback content when fetching content fails', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(new Error('Reason'));
+
+        const slotId = 'test';
+
+        const options: FetchOptions = {preferredLocale: 'es'};
+
+        const content: JsonObject = {
+            title: '¡Hola, Mundo!',
+        };
+
+        jest.mocked(getSlotContent).mockResolvedValue(content);
+
+        await expect(croct.fetch(slotId, options)).resolves.toEqual({
+            content: content,
+        });
+
+        expect(fetch).toHaveBeenCalledWith(slotId, options);
 
         expect(logger.error).toHaveBeenCalledWith(
             `[Croct] Failed to fetch content for slot "${slotId}@latest": reason`,

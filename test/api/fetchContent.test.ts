@@ -1,5 +1,7 @@
 import {ContentFetcher} from '@croct/sdk/contentFetcher';
 import {Logger} from '@croct/sdk/logging';
+import {JsonObject} from '@croct/json';
+import {getSlotContent} from '@croct/content';
 import {FetchResponse} from '../../src/plug';
 import {SlotContent} from '../../src/slot';
 import {fetchContent, FetchOptions} from '../../src/api';
@@ -18,6 +20,14 @@ jest.mock(
         ContentFetcher: jest.fn(function constructor(this: ContentFetcher) {
             this.fetch = mockFetch;
         }),
+    }),
+);
+
+jest.mock(
+    '@croct/content',
+    () => ({
+        __esModule: true,
+        getSlotContent: jest.fn().mockResolvedValue(null),
     }),
 );
 
@@ -212,5 +222,90 @@ describe('fetchContent', () => {
         });
 
         expect(logger.error).toHaveBeenCalledWith(`Failed to fetch content for slot "${slotId}@latest": reason`);
+    });
+
+    it('should provide the default fallback content in case of an error', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            timeout: 100,
+            logger: logger,
+        };
+
+        jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
+
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        jest.mocked(getSlotContent).mockResolvedValue(content);
+
+        await expect(fetchContent('test', options)).resolves.toEqual({
+            content: content,
+        });
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
+    });
+
+    it('should provide the localized fallback content in case of an error', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            timeout: 100,
+            preferredLocale: 'es',
+            logger: logger,
+        };
+
+        jest.mocked(mockFetch).mockRejectedValue(new Error('Reason'));
+
+        const content: JsonObject = {
+            title: '¡Hola, Mundo!',
+        };
+
+        jest.mocked(getSlotContent).mockResolvedValue(content);
+
+        await expect(fetchContent('test', options)).resolves.toEqual({
+            content: content,
+        });
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
+    });
+
+    it('should rethrow the error if no fallback content is not available', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            timeout: 100,
+            preferredLocale: 'pt',
+            logger: logger,
+        };
+
+        const error = new Error('Reason');
+
+        jest.mocked(mockFetch).mockRejectedValue(error);
+
+        jest.mocked(getSlotContent).mockResolvedValue(null);
+
+        await expect(fetchContent('test', options)).rejects.toBe(error);
+
+        expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
     });
 });

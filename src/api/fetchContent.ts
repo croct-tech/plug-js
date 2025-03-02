@@ -6,6 +6,7 @@ import {
 import type {ApiKey} from '@croct/sdk/apiKey';
 import type {Logger} from '@croct/sdk/logging';
 import {formatCause} from '@croct/sdk/error';
+import {getSlotContent} from '@croct/content';
 import {JsonObject, JsonValue} from '../sdk/json';
 import {FetchResponse} from '../plug';
 import {SlotContent, VersionedSlotId} from '../slot';
@@ -64,17 +65,13 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
                 return {content: fallback};
             }
 
-            const locale = 'preferredLocale' in fetchOptions
-                ? fetchOptions.preferredLocale
-                : null;
+            const staticContent = await getSlotContent(id, (fetchOptions as DynamicContentOptions).preferredLocale);
 
-            const file = `${locale === null ? '' : `${locale}/`}${slotId}.json`;
-
-            try {
-                return {content: (await import(`@croct/content/slot/${file}`))};
-            } catch {
+            if (staticContent === null) {
                 throw error;
             }
+
+            return {content: staticContent as SlotContent<I, C>};
         },
     );
 }

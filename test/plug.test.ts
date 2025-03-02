@@ -1,8 +1,7 @@
 import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {JsonObject} from '@croct/json';
-import testEnContent from '@croct/content/slot/test.json';
-import testEsContent from '@croct/content/slot/es/test.json';
+import {getSlotContent} from '@croct/content';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
@@ -13,6 +12,14 @@ jest.mock(
     '../src/constants',
     () => ({
         CDN_URL: 'https://cdn.croct.io/js/v1/lib/plug.js',
+    }),
+);
+
+jest.mock(
+    '@croct/content',
+    () => ({
+        __esModule: true,
+        getSlotContent: jest.fn().mockResolvedValue(null),
     }),
 );
 
@@ -905,11 +912,13 @@ describe('The Croct plug', () => {
 
         expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
-        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(new Error('Reason'));
+        const error = new Error('Reason');
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(error);
 
         const slotId = 'foo';
 
-        await expect(croct.fetch(slotId)).rejects.toThrow('Reason');
+        await expect(croct.fetch(slotId)).rejects.toBe(error);
 
         expect(fetch).toHaveBeenCalledWith(slotId, {});
 
@@ -943,8 +952,14 @@ describe('The Croct plug', () => {
 
         const slotId = 'test';
 
+        const content: JsonObject = {
+            title: 'Hello World',
+        };
+
+        jest.mocked(getSlotContent).mockResolvedValue(content);
+
         await expect(croct.fetch(slotId)).resolves.toEqual({
-            content: testEnContent,
+            content: content,
         });
 
         expect(fetch).toHaveBeenCalledWith(slotId, {});
@@ -981,8 +996,14 @@ describe('The Croct plug', () => {
 
         const options: FetchOptions = {preferredLocale: 'es'};
 
+        const content: JsonObject = {
+            title: '¡Hola, Mundo!',
+        };
+
+        jest.mocked(getSlotContent).mockResolvedValue(content);
+
         await expect(croct.fetch(slotId, options)).resolves.toEqual({
-            content: testEsContent,
+            content: content,
         });
 
         expect(fetch).toHaveBeenCalledWith(slotId, options);

@@ -37,8 +37,7 @@
     "test": "jest -c jest.config.mjs --coverage",
     "validate": "tsc --noEmit",
     "build": "tsup",
-    "postbuild": "./post-build.mjs",
-    "bundle": "rollup -c"
+    "postbuild": "./post-build.mjs"
   },
   "dependencies": {
     "@croct/content": "https://pkg.pr.new/@croct/content@2",

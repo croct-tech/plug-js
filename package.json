@@ -37,6 +37,7 @@
     "test": "jest -c jest.config.mjs --coverage",
     "validate": "tsc --noEmit",
     "build": "tsup",
+    "postbuild": "./post-build.mjs",
     "bundle": "rollup -c"
   },
   "dependencies": {

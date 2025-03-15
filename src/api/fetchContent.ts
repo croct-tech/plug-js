@@ -11,7 +11,7 @@ import {JsonObject, JsonValue} from '../sdk/json';
 import {FetchResponse} from '../plug';
 import {SlotContent, VersionedSlotId} from '../slot';
 
-export {FetchResponse} from '../plug';
+export type {FetchResponse} from '../plug';
 
 type FetchingOptions<T extends JsonValue> = {
     baseEndpointUrl?: string,

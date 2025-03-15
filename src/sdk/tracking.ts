@@ -2,8 +2,8 @@ import {EventInfo as SdkEventInfo} from '@croct/sdk/tracker';
 import {TrackingEvent, TrackingEventType} from '@croct/sdk/trackingEvents';
 
 export {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
-export {EventListener} from '@croct/sdk/tracker';
-export {
+export type {EventListener} from '@croct/sdk/tracker';
+export type {
     TrackingEvent,
     TrackingEventType,
     ExternalTrackingEvent,

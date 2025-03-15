@@ -15,6 +15,7 @@ import {
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
 import {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
+import {getSlotContent} from '@croct/content';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as playgroundPluginFactory} from './playground';
@@ -372,10 +373,16 @@ export class GlobalPlug implements Plug {
         return this.sdk
             .contentFetcher
             .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
-            .catch(error => {
+            .catch(async error => {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
-                throw error;
+                const fallback = await getSlotContent(slotId, options.preferredLocale);
+
+                if (fallback === null) {
+                    throw error;
+                }
+
+                return {content: fallback as SlotContent<I, C>};
             });
     }
 

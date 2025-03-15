@@ -15,8 +15,15 @@
     "javascript",
     "typescript"
   ],
+  "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
+  "exports": {
+    "./*": {
+      "import": "./*.js",
+      "require": "./*.cjs"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/croct-tech/plug-js.git"
@@ -27,15 +34,15 @@
   "homepage": "https://github.com/croct-tech/plug-js",
   "scripts": {
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "jest -c jest.config.js --coverage",
+    "test": "jest -c jest.config.mjs --coverage",
     "validate": "tsc --noEmit",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsup",
     "bundle": "rollup -c"
   },
   "dependencies": {
-    "@croct/content": "^1.0.1",
+    "@croct/content": "https://pkg.pr.new/@croct/content@7a7f449",
     "@croct/json": "^2.1.0",
-    "@croct/sdk": "^0.17.7",
+    "@croct/sdk": "^0.17.10",
     "tslib": "^2.7.0"
   },
   "devDependencies": {
@@ -56,6 +63,7 @@
     "rollup": "^4.0.0",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
+    "tsup": "^8.4.0",
     "typescript": "^5.0.0"
   },
   "browserslist": [
@@ -63,6 +71,8 @@
   ],
   "files": [
     "**/*.js",
+    "**/*.cjs",
+    "**/*.mjs",
     "**/*.ts",
     "**/*.map"
   ]

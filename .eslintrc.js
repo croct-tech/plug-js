@@ -14,4 +14,12 @@ module.exports = {
     env: {
         browser: true,
     },
+    overrides: [
+        {
+            files: ['jest.config.mjs', 'babel.config.mjs'],
+            rules: {
+                'import/no-default-export': 'off',
+            },
+        },
+    ],
 };

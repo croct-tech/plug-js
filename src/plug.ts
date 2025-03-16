@@ -31,7 +31,7 @@ export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
     plugins?: PluginConfigurations,
 };
 
-export type FetchOptions<T extends JsonObject = SlotContent> = Omit<BaseFetchOptions, 'version'> & {
+export type FetchOptions<T> = Omit<BaseFetchOptions, 'version'> & {
     fallback?: T,
 };
 
@@ -65,10 +65,12 @@ export interface Plug {
 
     evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
 
-    fetch<P extends JsonObject, I extends VersionedSlotId>(
+    fetch<I extends VersionedSlotId>(slotId: I, options?: FetchOptions<SlotContent<I>>): Promise<FetchResponse<I>>;
+
+    fetch<F, I extends VersionedSlotId>(
         slotId: I,
-        options?: FetchOptions<SlotContent<I, P>>
-    ): Promise<FetchResponse<I, P>>;
+        options?: FetchOptions<SlotContent<I>|F>
+    ): Promise<FetchResponse<I>|{content: F}>;
 
     unplug(): Promise<void>;
 }

@@ -6,7 +6,7 @@ import {
 import type {ApiKey} from '@croct/sdk/apiKey';
 import type {Logger} from '@croct/sdk/logging';
 import {formatCause} from '@croct/sdk/error';
-import {getSlotContent} from '@croct/content';
+import {loadSlotContent} from '@croct/content';
 import {JsonObject, JsonValue} from '../sdk/json';
 import {FetchResponse} from '../plug';
 import {SlotContent, VersionedSlotId} from '../slot';
@@ -65,7 +65,7 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
                 return {content: fallback};
             }
 
-            const staticContent = await getSlotContent(id, (fetchOptions as DynamicContentOptions).preferredLocale);
+            const staticContent = await loadSlotContent(id, (fetchOptions as DynamicContentOptions).preferredLocale);
 
             if (staticContent === null) {
                 throw error;

@@ -35,8 +35,8 @@ export type FetchOptions<T> = Omit<BaseFetchOptions, 'version'> & {
     fallback?: T,
 };
 
-export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject> = {
-    content: SlotContent<I, C>,
+export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject, F = never> = {
+    content: SlotContent<I, C>|F,
 };
 
 export interface Plug {
@@ -70,7 +70,7 @@ export interface Plug {
     fetch<F, I extends VersionedSlotId>(
         slotId: I,
         options?: FetchOptions<SlotContent<I>|F>
-    ): Promise<FetchResponse<I>|{content: F}>;
+    ): Promise<FetchResponse<I, JsonObject, F>>;
 
     unplug(): Promise<void>;
 }

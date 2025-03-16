@@ -7,6 +7,7 @@ import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
+import {SlotContent} from '../src/slot';
 
 jest.mock(
     '../src/constants',
@@ -36,6 +37,8 @@ describe('The Croct plug', () => {
         delete process.env.NODE_ENV;
 
         croct = new GlobalPlug();
+
+        jest.clearAllMocks();
     });
 
     afterEach(async () => {
@@ -919,6 +922,49 @@ describe('The Croct plug', () => {
         const slotId = 'foo';
 
         await expect(croct.fetch(slotId)).rejects.toBe(error);
+
+        expect(fetch).toHaveBeenCalledWith(slotId, {});
+
+        expect(logger.error).toHaveBeenCalledWith(
+            `[Croct] Failed to fetch content for slot "${slotId}@latest": reason`,
+        );
+    });
+
+    it('should provide the specified fallback content when fetching content fails', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(new Error('Reason'));
+
+        const slotId = 'test';
+
+        const fallback: SlotContent = {
+            _component: null,
+            title: 'Hello World',
+        };
+
+        expect(loadSlotContent).not.toHaveBeenCalled();
+
+        await expect(croct.fetch(slotId, {fallback: fallback})).resolves.toEqual({
+            content: fallback,
+        });
 
         expect(fetch).toHaveBeenCalledWith(slotId, {});
 

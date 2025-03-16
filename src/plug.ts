@@ -31,7 +31,9 @@ export type Configuration = Optional<SdkFacadeConfiguration, 'appId'> & {
     plugins?: PluginConfigurations,
 };
 
-export type FetchOptions = Omit<BaseFetchOptions, 'version'>;
+export type FetchOptions<T extends JsonObject = SlotContent> = Omit<BaseFetchOptions, 'version'> & {
+    fallback?: T,
+};
 
 export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject> = {
     content: SlotContent<I, C>,
@@ -65,7 +67,7 @@ export interface Plug {
 
     fetch<P extends JsonObject, I extends VersionedSlotId>(
         slotId: I,
-        options?: FetchOptions
+        options?: FetchOptions<SlotContent<I, P>>
     ): Promise<FetchResponse<I, P>>;
 
     unplug(): Promise<void>;
@@ -363,26 +365,28 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    public fetch<C extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
+    public fetch<P extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
         slotId: I,
-        options: FetchOptions = {},
-    ): Promise<FetchResponse<I, C>> {
+        {fallback, ...options}: FetchOptions<SlotContent<I, P>> = {},
+    ): Promise<FetchResponse<I, P>> {
         const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
         const logger = this.sdk.getLogger();
 
         return this.sdk
             .contentFetcher
-            .fetch<SlotContent<I, C>>(id, version === 'latest' ? options : {...options, version: version})
+            .fetch<SlotContent<I, P>>(id, version === 'latest' ? options : {...options, version: version})
             .catch(async error => {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
-                const fallback = await loadSlotContent(slotId, options.preferredLocale);
+                const resolvedFallback = fallback === undefined
+                    ? (await loadSlotContent(slotId, options.preferredLocale) as SlotContent<I, P>|null ?? undefined)
+                    : fallback;
 
-                if (fallback === null) {
+                if (resolvedFallback === undefined) {
                     throw error;
                 }
 
-                return {content: fallback as SlotContent<I, C>};
+                return {content: resolvedFallback};
             });
     }
 

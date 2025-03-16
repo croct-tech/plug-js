@@ -7,7 +7,6 @@ import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
-import {SlotContent} from '../src/slot';
 
 jest.mock(
     '../src/constants',
@@ -955,10 +954,7 @@ describe('The Croct plug', () => {
 
         const slotId = 'test';
 
-        const fallback: SlotContent = {
-            _component: null,
-            title: 'Hello World',
-        };
+        const fallback = null;
 
         expect(loadSlotContent).not.toHaveBeenCalled();
 

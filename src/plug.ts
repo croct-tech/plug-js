@@ -367,21 +367,31 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    public fetch<P extends JsonObject, I extends VersionedSlotId = VersionedSlotId>(
+    public fetch<I extends VersionedSlotId>(
         slotId: I,
-        {fallback, ...options}: FetchOptions<SlotContent<I, P>> = {},
-    ): Promise<FetchResponse<I, P>> {
+        options?: FetchOptions<SlotContent<I>>
+    ): Promise<FetchResponse<I>>;
+
+    public fetch<F, I extends VersionedSlotId>(
+        slotId: I,
+        options?: FetchOptions<SlotContent<I>|F>
+    ): Promise<FetchResponse<I, JsonObject, F>>;
+
+    public fetch<I extends VersionedSlotId = VersionedSlotId>(
+        slotId: I,
+        {fallback, ...options}: FetchOptions<SlotContent<I>> = {},
+    ): Promise<FetchResponse<I>> {
         const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
         const logger = this.sdk.getLogger();
 
         return this.sdk
             .contentFetcher
-            .fetch<SlotContent<I, P>>(id, version === 'latest' ? options : {...options, version: version})
+            .fetch<SlotContent<I>>(id, version === 'latest' ? options : {...options, version: version})
             .catch(async error => {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
                 const resolvedFallback = fallback === undefined
-                    ? (await loadSlotContent(slotId, options.preferredLocale) as SlotContent<I, P>|null ?? undefined)
+                    ? (await loadSlotContent(slotId, options.preferredLocale) as SlotContent<I>|null ?? undefined)
                     : fallback;
 
                 if (resolvedFallback === undefined) {

@@ -41,7 +41,7 @@
     "bundle": "rollup -c"
   },
   "dependencies": {
-    "@croct/content": "https://pkg.pr.new/@croct/content@2",
+    "@croct/content": "https://pkg.pr.new/@croct/content@3",
     "@croct/json": "^2.1.0",
     "@croct/sdk": "https://pkg.pr.new/@croct/sdk@448",
     "tslib": "^2.7.0"

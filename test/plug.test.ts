@@ -893,7 +893,7 @@ describe('The Croct plug', () => {
         expect(fetch).toHaveBeenLastCalledWith(slotId, options);
     });
 
-    it('should log an error when fetching content fails', async () => {
+    it('should log an error if content fetching fails', async () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -929,7 +929,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    it('should provide the specified fallback content when fetching content fails', async () => {
+    it('should provide the specified fallback content if content fetching fails', async () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -969,7 +969,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    it('should provide the default fallback content when fetching content fails', async () => {
+    it('should provide the default fallback content if content fetching fails', async () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -1011,7 +1011,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    it('should provide a localized fallback content when fetching content fails', async () => {
+    it('should provide a localized fallback content if content fetching fails', async () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),

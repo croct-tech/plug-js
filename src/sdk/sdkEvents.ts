@@ -1,1 +1,1 @@
-export {SdkEvent, SdkEventType} from '@croct/sdk/sdkEvents';
+export type {SdkEvent, SdkEventType} from '@croct/sdk/sdkEvents';

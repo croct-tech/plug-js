@@ -1,7 +1,7 @@
 import {ContentFetcher} from '@croct/sdk/contentFetcher';
 import {Logger} from '@croct/sdk/logging';
 import {JsonObject} from '@croct/json';
-import {getSlotContent} from '@croct/content';
+import {loadSlotContent} from '@croct/content';
 import {FetchResponse} from '../../src/plug';
 import {SlotContent} from '../../src/slot';
 import {fetchContent, FetchOptions} from '../../src/api';
@@ -27,7 +27,7 @@ jest.mock(
     '@croct/content',
     () => ({
         __esModule: true,
-        getSlotContent: jest.fn().mockResolvedValue(null),
+        loadSlotContent: jest.fn().mockResolvedValue(null),
     }),
 );
 
@@ -244,7 +244,7 @@ describe('fetchContent', () => {
             title: 'Hello World',
         };
 
-        jest.mocked(getSlotContent).mockResolvedValue(content);
+        jest.mocked(loadSlotContent).mockResolvedValue(content);
 
         await expect(fetchContent('test', options)).resolves.toEqual({
             content: content,
@@ -274,7 +274,7 @@ describe('fetchContent', () => {
             title: '¡Hola, Mundo!',
         };
 
-        jest.mocked(getSlotContent).mockResolvedValue(content);
+        jest.mocked(loadSlotContent).mockResolvedValue(content);
 
         await expect(fetchContent('test', options)).resolves.toEqual({
             content: content,
@@ -302,7 +302,7 @@ describe('fetchContent', () => {
 
         jest.mocked(mockFetch).mockRejectedValue(error);
 
-        jest.mocked(getSlotContent).mockResolvedValue(null);
+        jest.mocked(loadSlotContent).mockResolvedValue(null);
 
         await expect(fetchContent('test', options)).rejects.toBe(error);
 

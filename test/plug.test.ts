@@ -1,7 +1,7 @@
 import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
 import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
 import {JsonObject} from '@croct/json';
-import {getSlotContent} from '@croct/content';
+import {loadSlotContent} from '@croct/content';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
 import {GlobalPlug} from '../src/plug';
@@ -19,7 +19,7 @@ jest.mock(
     '@croct/content',
     () => ({
         __esModule: true,
-        getSlotContent: jest.fn().mockResolvedValue(null),
+        loadSlotContent: jest.fn().mockResolvedValue(null),
     }),
 );
 
@@ -956,7 +956,7 @@ describe('The Croct plug', () => {
             title: 'Hello World',
         };
 
-        jest.mocked(getSlotContent).mockResolvedValue(content);
+        jest.mocked(loadSlotContent).mockResolvedValue(content);
 
         await expect(croct.fetch(slotId)).resolves.toEqual({
             content: content,
@@ -1000,7 +1000,7 @@ describe('The Croct plug', () => {
             title: '¡Hola, Mundo!',
         };
 
-        jest.mocked(getSlotContent).mockResolvedValue(content);
+        jest.mocked(loadSlotContent).mockResolvedValue(content);
 
         await expect(croct.fetch(slotId, options)).resolves.toEqual({
             content: content,

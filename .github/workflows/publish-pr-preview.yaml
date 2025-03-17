@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 23
 
       - name: Cache dependencies
         id: cache-dependencies
@@ -35,13 +35,12 @@ jobs:
 
       - name: Prepare release
         run: |-
-          cp package.json LICENSE README.md build/
+          cp LICENSE README.md build/
           cd build
           find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} +          
           sed -i -e "s~<@version@>~0.0.0-dev~" constants.*
           sed -i -e "s~<@baseEndpointUrl@>~${BASE_ENDPOINT}~" constants.*
           sed -i -e "s~parseInt('<@maxQueryLength@>', 10)~${MAX_QUERY_LENGTH}~" constants.*
-          cp -r ../src src
 
       - name: Publish preview
         run: |-

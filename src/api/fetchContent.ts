@@ -49,7 +49,7 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
         fallback,
         baseEndpointUrl,
         logger,
-        preferredLocale,
+        preferredLocale = '',
         ...fetchOptions
     } = options ?? {};
 

@@ -325,8 +325,6 @@ describe('fetchContent', () => {
 
         expect(loadSlotContent).toHaveBeenCalledWith('test', undefined);
 
-        expect(mockFetch).toHaveBeenCalledWith('test', {
-            preferredLocale: undefined,
-        });
+        expect(jest.mocked(mockFetch).mock.calls[0][1]).toStrictEqual({});
     });
 });

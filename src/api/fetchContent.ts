@@ -46,14 +46,16 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
     const {apiKey, appId, fallback, baseEndpointUrl, logger, ...fetchOptions} = options ?? {};
     const auth = {appId: appId, apiKey: apiKey};
     const [id, version = 'latest'] = slotId.split('@') as [I, `${number}` | 'latest' | undefined];
+    const preferredLocale = options?.preferredLocale !== undefined && options.preferredLocale !== ''
+        ? options.preferredLocale
+        : undefined;
 
     const promise = (new ContentFetcher({...auth, baseEndpointUrl: baseEndpointUrl}))
-        .fetch<SlotContent<I, C>>(
-            id,
-            version === 'latest'
-                ? fetchOptions
-                : {...fetchOptions, version: version},
-        );
+        .fetch<SlotContent<I, C>>(id, {
+            ...fetchOptions,
+            preferredLocale: preferredLocale,
+            version: version === 'latest' ? undefined : version,
+        });
 
     return promise.catch(
         async error => {
@@ -65,7 +67,7 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
                 return {content: fallback};
             }
 
-            const staticContent = await loadSlotContent(id, (fetchOptions as DynamicContentOptions).preferredLocale);
+            const staticContent = await loadSlotContent(id, preferredLocale);
 
             if (staticContent === null) {
                 throw error;

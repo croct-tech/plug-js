@@ -308,4 +308,25 @@ describe('fetchContent', () => {
 
         expect(logger.error).toHaveBeenCalledWith('Failed to fetch content for slot "test@latest": reason');
     });
+
+    it('should normalize an empty preferred locale to undefined', async () => {
+        const options: FetchOptions = {
+            apiKey: apiKey,
+            preferredLocale: '',
+        };
+
+        const error = new Error('Reason');
+
+        jest.mocked(mockFetch).mockRejectedValue(error);
+
+        jest.mocked(loadSlotContent).mockResolvedValue(null);
+
+        await expect(fetchContent('test', options)).rejects.toBe(error);
+
+        expect(loadSlotContent).toHaveBeenCalledWith('test', undefined);
+
+        expect(mockFetch).toHaveBeenCalledWith('test', {
+            preferredLocale: undefined,
+        });
+    });
 });

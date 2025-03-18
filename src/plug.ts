@@ -149,6 +149,10 @@ export class GlobalPlug implements Plug {
 
         const {plugins, test, ...sdkConfiguration} = configuration;
 
+        if (sdkConfiguration.defaultPreferredLocale === '') {
+            delete sdkConfiguration.defaultPreferredLocale;
+        }
+
         const sdk = SdkFacade.init({
             ...sdkConfiguration,
             appId: appId,
@@ -383,15 +387,22 @@ export class GlobalPlug implements Plug {
     ): Promise<FetchResponse<I>> {
         const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
         const logger = this.sdk.getLogger();
+        const preferredLocale = options.preferredLocale !== undefined && options.preferredLocale !== ''
+            ? options.preferredLocale
+            : undefined;
 
         return this.sdk
             .contentFetcher
-            .fetch<SlotContent<I>>(id, version === 'latest' ? options : {...options, version: version})
+            .fetch<SlotContent<I>>(id, {
+                ...options,
+                preferredLocale: preferredLocale,
+                version: version === 'latest' ? undefined : version,
+            })
             .catch(async error => {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
                 const resolvedFallback = fallback === undefined
-                    ? (await loadSlotContent(slotId, options.preferredLocale) as SlotContent<I>|null ?? undefined)
+                    ? (await loadSlotContent(slotId, preferredLocale) as SlotContent<I>|null ?? undefined)
                     : fallback;
 
                 if (resolvedFallback === undefined) {

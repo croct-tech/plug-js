@@ -1055,6 +1055,45 @@ describe('The Croct plug', () => {
         );
     });
 
+    it('should normalize an empty locale to undefined', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            logger: logger,
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug(config);
+
+        expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
+
+        const error = new Error('Reason');
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockRejectedValue(error);
+
+        const slotId = 'test';
+
+        const options: FetchOptions = {preferredLocale: ''};
+
+        jest.mocked(loadSlotContent).mockResolvedValue(null);
+
+        await expect(croct.fetch(slotId, options)).rejects.toBe(error);
+
+        expect(fetch).toHaveBeenCalledWith(slotId, {
+            preferredLocale: undefined,
+        });
+
+        expect(loadSlotContent).toHaveBeenCalledWith(slotId, undefined);
+    });
+
     it('should extract the slot ID and version', async () => {
         const config: SdkFacadeConfiguration = {appId: APP_ID};
         const sdkFacade = SdkFacade.init(config);

@@ -383,26 +383,24 @@ export class GlobalPlug implements Plug {
 
     public fetch<I extends VersionedSlotId = VersionedSlotId>(
         slotId: I,
-        {fallback, ...options}: FetchOptions<SlotContent<I>> = {},
+        {fallback, preferredLocale = '', ...options}: FetchOptions<SlotContent<I>> = {},
     ): Promise<FetchResponse<I>> {
         const [id, version = 'latest'] = slotId.split('@') as [string, `${number}` | 'latest' | undefined];
         const logger = this.sdk.getLogger();
-        const preferredLocale = options.preferredLocale !== undefined && options.preferredLocale !== ''
-            ? options.preferredLocale
-            : undefined;
+        const normalizedLocale = preferredLocale === '' ? undefined : preferredLocale;
 
         return this.sdk
             .contentFetcher
             .fetch<SlotContent<I>>(id, {
                 ...options,
-                preferredLocale: preferredLocale,
-                version: version === 'latest' ? undefined : version,
+                ...(normalizedLocale !== undefined ? {preferredLocale: normalizedLocale} : {}),
+                ...(version !== 'latest' ? {version: version} : {}),
             })
             .catch(async error => {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
                 const resolvedFallback = fallback === undefined
-                    ? (await loadSlotContent(slotId, preferredLocale) as SlotContent<I>|null ?? undefined)
+                    ? (await loadSlotContent(slotId, normalizedLocale) as SlotContent<I>|null ?? undefined)
                     : fallback;
 
                 if (resolvedFallback === undefined) {

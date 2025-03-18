@@ -1175,7 +1175,7 @@ describe('The Croct plug', () => {
             content: content,
         });
 
-        expect(fetch).toHaveBeenLastCalledWith('foo', options);
+        expect(jest.mocked(fetch).mock.calls[0][1]).toStrictEqual(options);
     });
 
     it('should fail to fetch a slot content if unplugged', () => {

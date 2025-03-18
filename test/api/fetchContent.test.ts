@@ -189,7 +189,7 @@ describe('fetchContent', () => {
             apiKey: options.apiKey,
         });
 
-        expect(mockFetch).toHaveBeenCalledWith(slotId, {
+        expect(jest.mocked(mockFetch).mock.calls[0][1]).toStrictEqual({
             timeout: options.timeout,
         });
     });

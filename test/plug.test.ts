@@ -157,6 +157,33 @@ describe('The Croct plug', () => {
         expect(initialize).toHaveBeenCalledWith(config);
     });
 
+    it('should normalize an empty default preferred locale to undefined', () => {
+        const config: SdkFacadeConfiguration = {
+            appId: APP_ID,
+            track: false,
+            debug: false,
+            test: true,
+            tokenScope: 'isolated',
+            userId: 'c4r0l',
+            eventMetadata: {
+                foo: 'bar',
+            },
+        };
+
+        const sdkFacade = SdkFacade.init(config);
+        const initialize = jest.spyOn(SdkFacade, 'init').mockReturnValue(sdkFacade);
+
+        croct.plug({
+            ...config,
+            defaultPreferredLocale: '',
+        });
+
+        expect(initialize).toHaveBeenCalledWith({
+            ...config,
+            defaultPreferredLocale: undefined,
+        });
+    });
+
     it.each([
         'test',
         'development',

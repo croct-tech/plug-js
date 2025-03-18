@@ -149,6 +149,10 @@ export class GlobalPlug implements Plug {
 
         const {plugins, test, ...sdkConfiguration} = configuration;
 
+        if (sdkConfiguration.defaultPreferredLocale === '') {
+            delete sdkConfiguration.defaultPreferredLocale;
+        }
+
         const sdk = SdkFacade.init({
             ...sdkConfiguration,
             appId: appId,

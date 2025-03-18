@@ -1114,9 +1114,7 @@ describe('The Croct plug', () => {
 
         await expect(croct.fetch(slotId, options)).rejects.toBe(error);
 
-        expect(fetch).toHaveBeenCalledWith(slotId, {
-            preferredLocale: undefined,
-        });
+        expect(jest.mocked(fetch).mock.calls[0][1]).toStrictEqual({});
 
         expect(loadSlotContent).toHaveBeenCalledWith(slotId, undefined);
     });
@@ -1177,7 +1175,7 @@ describe('The Croct plug', () => {
             content: content,
         });
 
-        expect(fetch).toHaveBeenLastCalledWith('foo', options);
+        expect(jest.mocked(fetch).mock.calls[0][1]).toStrictEqual(options);
     });
 
     it('should fail to fetch a slot content if unplugged', () => {

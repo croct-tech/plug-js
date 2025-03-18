@@ -43,18 +43,25 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
     slotId: I,
     options?: FetchOptions<SlotContent<I, C>>,
 ): Promise<Omit<FetchResponse<I, C>, 'payload'>> {
-    const {apiKey, appId, fallback, baseEndpointUrl, logger, ...fetchOptions} = options ?? {};
+    const {
+        apiKey,
+        appId,
+        fallback,
+        baseEndpointUrl,
+        logger,
+        preferredLocale = '',
+        ...fetchOptions
+    } = options ?? {};
+
     const auth = {appId: appId, apiKey: apiKey};
     const [id, version = 'latest'] = slotId.split('@') as [I, `${number}` | 'latest' | undefined];
-    const preferredLocale = options?.preferredLocale !== undefined && options.preferredLocale !== ''
-        ? options.preferredLocale
-        : undefined;
+    const normalizedLocale = preferredLocale === '' ? undefined : preferredLocale;
 
     const promise = (new ContentFetcher({...auth, baseEndpointUrl: baseEndpointUrl}))
         .fetch<SlotContent<I, C>>(id, {
             ...fetchOptions,
-            preferredLocale: preferredLocale,
-            version: version === 'latest' ? undefined : version,
+            ...(normalizedLocale !== undefined ? {preferredLocale: normalizedLocale} : {}),
+            ...(version !== 'latest' ? {version: version} : {}),
         });
 
     return promise.catch(
@@ -67,7 +74,7 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
                 return {content: fallback};
             }
 
-            const staticContent = await loadSlotContent(id, preferredLocale);
+            const staticContent = await loadSlotContent(id, normalizedLocale);
 
             if (staticContent === null) {
                 throw error;

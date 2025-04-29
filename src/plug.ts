@@ -88,6 +88,8 @@ function detectAppId(): string | null {
 }
 
 export class GlobalPlug implements Plug {
+    public static readonly GLOBAL = new GlobalPlug();
+
     private pluginFactories: {[key: string]: PluginFactory} = {
         playground: playgroundPluginFactory,
         preview: previewPluginFactory,

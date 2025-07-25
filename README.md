@@ -19,7 +19,8 @@
 <p align="center">
     <a href="https://www.npmjs.com/package/@croct/plug"><img alt="Version" src="https://img.shields.io/npm/v/@croct/plug"/></a>
     <img alt="Gzipped bundle size" src="https://img.badgesize.io/https:/cdn.croct.io/js/v1/lib/plug.js?style=flat&compression=gzip" />
-    <a href="https://codeclimate.com/repos/5e7251a86589d75edf000f9e/test_coverage"><img alt="Coverage" src="https://api.codeclimate.com/v1/badges/2288af031dccbec256d9/test_coverage"/></a>
+    <a href="https://qlty.sh/gh/croct-tech/projects/plug-js"><img src="https://qlty.sh/badges/116cbaf6-8bd6-4ae9-b755-75a6ece12f91/coverage.svg" alt="Code Coverage" /></a>
+<a href="https://qlty.sh/gh/croct-tech/projects/plug-js"><img src="https://qlty.sh/badges/116cbaf6-8bd6-4ae9-b755-75a6ece12f91/maintainability.svg" alt="Maintainability" /></a>
 </p>
 
 ## Introduction

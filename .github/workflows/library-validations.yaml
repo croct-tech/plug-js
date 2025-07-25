@@ -99,10 +99,11 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
 
-      - uses: paambaati/codeclimate-action@v9.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      - name: Run tests
+        run: npm run test
+
+      - uses: qltysh/qlty-action/coverage@v1
         with:
-          coverageCommand: npm test
-          coverageLocations:
-            ./coverage/lcov.info:lcov
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: ${{ github.workspace }}/coverage/lcov.info
+          skip-errors: false

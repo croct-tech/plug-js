@@ -1,10 +1,10 @@
 import {InMemoryTokenStore, Token} from '@croct/sdk/token';
-import {PluginSdk} from '../src/plugin';
-import {Configuration, factory, PreviewPlugin} from '../src/preview';
-import {PREVIEW_WIDGET_ORIGIN} from '../src/constants';
+import {PluginSdk} from '../../../src/plugin';
+import {Configuration, factory, PreviewPlugin} from '../../../src/plugins/preview';
+import {PREVIEW_WIDGET_ORIGIN} from '../../../src/constants';
 
 jest.mock(
-    '../src/constants',
+    '../../../src/constants',
     () => ({
         PREVIEW_WIDGET_URL: 'https://cdn.croct.com/preview.html',
         PREVIEW_WIDGET_ORIGIN: 'https://cdn.croct.com',

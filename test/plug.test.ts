@@ -1182,41 +1182,6 @@ describe('The Croct plug', () => {
         expect(() => croct.fetch('foo')).toThrow('Croct is not plugged in.');
     });
 
-    it('should enable the playground plugin by default', () => {
-        const logger: Logger = {
-            debug: jest.fn(),
-            info: jest.fn(),
-            warn: jest.fn(),
-            error: jest.fn(),
-        };
-
-        croct.plug({
-            appId: APP_ID,
-            logger: logger,
-        });
-
-        expect(logger.debug).toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
-    });
-
-    it('should not enable the playground plugin if explicitly disabled', () => {
-        const logger: Logger = {
-            debug: jest.fn(),
-            info: jest.fn(),
-            warn: jest.fn(),
-            error: jest.fn(),
-        };
-
-        croct.plug({
-            appId: APP_ID,
-            logger: logger,
-            plugins: {
-                playground: false,
-            },
-        });
-
-        expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "playground" enabled');
-    });
-
     it('should enable the preview plugin by default', () => {
         const logger: Logger = {
             debug: jest.fn(),

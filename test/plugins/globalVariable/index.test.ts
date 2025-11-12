@@ -120,4 +120,78 @@ describe('GlobalVariable', () => {
 
         expect(window.croct).toBeUndefined();
     });
+
+    it('should remove window.croctListener on disable', () => {
+        const listener = jest.fn();
+
+        window.croctListener = listener;
+
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        expect(listener).toHaveBeenCalledTimes(1);
+
+        plugin.disable();
+
+        expect(window.croctListener).toBeUndefined();
+    });
+
+    it('should call listener assigned after enable is called', () => {
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        const listener = jest.fn();
+
+        window.croctListener = listener;
+
+        expect(listener).toHaveBeenCalledTimes(1);
+        expect(listener).toHaveBeenCalledWith(mockPlug);
+    });
+
+    it('should call multiple listeners assigned after enable', () => {
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        const listener1 = jest.fn();
+        const listener2 = jest.fn();
+
+        window.croctListener = [listener1, listener2];
+
+        expect(listener1).toHaveBeenCalledTimes(1);
+        expect(listener1).toHaveBeenCalledWith(mockPlug);
+        expect(listener2).toHaveBeenCalledTimes(1);
+        expect(listener2).toHaveBeenCalledWith(mockPlug);
+    });
+
+    it('should call listener each time it is assigned', () => {
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        const listener1 = jest.fn();
+
+        window.croctListener = listener1;
+
+        expect(listener1).toHaveBeenCalledTimes(1);
+
+        const listener2 = jest.fn();
+
+        window.croctListener = listener2;
+
+        expect(listener1).toHaveBeenCalledTimes(1); // Should not be called again
+        expect(listener2).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle non-function listener assigned after enable', () => {
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        expect(() => {
+            window.croctListener = 'not a function' as any;
+        }).not.toThrow();
+    });
 });

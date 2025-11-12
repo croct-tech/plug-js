@@ -16,18 +16,28 @@ export class GlobalVariablePlugin implements Plugin {
         window.croct = this.plug;
 
         if (window.croctListener !== undefined) {
-            const listeners = Array.isArray(window.croctListener) ? window.croctListener : [window.croctListener];
-
-            for (const listener of listeners) {
-                if (typeof listener === 'function') {
-                    listener(this.plug);
-                }
-            }
+            this.notifyListeners(window.croctListener);
         }
+
+        Object.defineProperty(window, 'croctListener', {
+            configurable: true,
+            set: listener => {
+                this.notifyListeners(listener);
+            },
+        });
     }
 
     public disable(): void {
         delete window.croct;
+        delete window.croctListener;
+    }
+
+    private notifyListeners(listeners: CroctListener | CroctListener[] | undefined): void {
+        for (const listener of Array.isArray(listeners) ? listeners : [listeners]) {
+            if (typeof listener === 'function') {
+                listener(this.plug);
+            }
+        }
     }
 }
 

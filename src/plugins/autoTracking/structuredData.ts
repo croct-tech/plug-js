@@ -344,7 +344,7 @@ export function extractProduct(data: JsonObject): ProductEntity | null {
         product.originalPrice = originalPrice;
     }
 
-    if (typeof productSku === 'string' && productSku.length > 0) {
+    if (typeof productSku === 'string') {
         product.sku = productSku;
     }
 

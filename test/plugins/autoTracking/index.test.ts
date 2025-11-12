@@ -1,39 +1,14 @@
 import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
-import {Tab} from '@croct/sdk/tab';
+import {Tab, TabUrlChangeEvent} from '@croct/sdk/tab';
 import {Article, Product} from 'schema-dts';
-import {AutoTrackingPlugin, Configuration, factory} from '../../../src/plugins/autoTracking';
-import {PluginSdk} from '../../../src/plugin';
+import {EventListener} from '@croct/sdk/eventManager';
+import {Configuration, Options, factory, type AutoTrackingPlugin} from '../../../src/plugins/autoTracking';
+import {PluginArguments, PluginSdk} from '../../../src/plugin';
 import mocked = jest.mocked;
-
-describe('AutoTrackingPlugin factory', () => {
-    it('should instantiate the AutoTrackingPlugin', () => {
-        const mockTab: Partial<Tab> = {
-            addListener: jest.fn(),
-            removeListener: jest.fn(),
-        };
-
-        const mockTracker: Partial<TrackerFacade> = {
-            track: jest.fn(),
-        };
-
-        const sdk: Partial<PluginSdk> = {
-            tab: mockTab as Tab,
-            tracker: mockTracker as TrackerFacade,
-        };
-
-        const plugin = factory({
-            sdk: sdk as PluginSdk,
-            options: {},
-        });
-
-        expect(plugin).toBeInstanceOf(AutoTrackingPlugin);
-    });
-});
 
 describe('AutoTrackingPlugin', () => {
     let mockTab: jest.Mocked<Tab>;
     let mockTracker: jest.Mocked<TrackerFacade>;
-    let plugin: AutoTrackingPlugin;
     const now = Date.now();
 
     beforeEach(() => {
@@ -60,6 +35,18 @@ describe('AutoTrackingPlugin', () => {
         };
     });
 
+    function createPlugin(options: Options = {}): AutoTrackingPlugin {
+        const sdk: Partial<PluginSdk> = {
+            tab: mockTab as Tab,
+            tracker: mockTracker as TrackerFacade,
+        };
+
+        return factory({
+            sdk: sdk as PluginSdk,
+            options: options,
+        });
+    }
+
     afterEach(() => {
         jest.clearAllMocks();
     });
@@ -79,12 +66,19 @@ describe('AutoTrackingPlugin', () => {
 
         document.body.appendChild(articleScript);
 
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
+        const sdk: Partial<PluginSdk> = {
+            tab: mockTab as Tab,
+            tracker: mockTracker as TrackerFacade,
         };
 
-        plugin = new AutoTrackingPlugin(configuration);
+        // Spy constructor
+        const options: PluginArguments<Options> = {
+            sdk: sdk as PluginSdk,
+            options: {},
+        };
+
+        const plugin = factory(options);
+
         plugin.enable();
 
         expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
@@ -110,17 +104,14 @@ describe('AutoTrackingPlugin', () => {
 
         document.body.appendChild(articleScript);
 
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
-            options: {
+        const plugin = createPlugin(
+            {
                 disablePostViewed: true,
                 disableProductViewed: true,
                 disableLinkOpened: true,
             } satisfies Required<Configuration['options']>,
-        };
+        );
 
-        plugin = new AutoTrackingPlugin(configuration);
         plugin.enable();
 
         expect(mockTab.addListener).not.toHaveBeenCalled();
@@ -128,15 +119,11 @@ describe('AutoTrackingPlugin', () => {
     });
 
     it('should clean up listener on disable', () => {
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
-        };
-
         jest.spyOn(document, 'addEventListener');
         jest.spyOn(document, 'removeEventListener');
 
-        plugin = new AutoTrackingPlugin(configuration);
+        const plugin = createPlugin();
+
         plugin.enable();
         plugin.disable();
 
@@ -191,12 +178,8 @@ describe('AutoTrackingPlugin', () => {
             articleScript.textContent = JSON.stringify(article);
             document.body.appendChild(articleScript);
 
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
@@ -236,12 +219,8 @@ describe('AutoTrackingPlugin', () => {
 
             document.body.appendChild(articleScript);
 
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
@@ -252,6 +231,52 @@ describe('AutoTrackingPlugin', () => {
                     categories: ['c'.repeat(50)],
                     authors: ['a'.repeat(100)],
                     publishTime: now,
+                },
+            });
+        });
+
+        it('should track posts on URL change', () => {
+            const articleScript = document.createElement('script');
+
+            const article = {
+                '@type': 'Article',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                url: 'https://example.com/article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            document.body.appendChild(articleScript);
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+
+            const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+                .mock
+                .calls
+                .find(call => call[0] === 'urlChange')![1];
+
+            urlChangeListener(
+                new CustomEvent('urlChange', {
+                    detail: {
+                        tab: mockTab,
+                        url: 'https://example.com/article',
+                    },
+                }),
+            );
+
+            expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
+                post: {
+                    postId: article.identifier,
+                    title: article.headline,
+                    url: article.url,
+                    publishTime: Date.parse(article.datePublished),
                 },
             });
         });
@@ -292,12 +317,8 @@ describe('AutoTrackingPlugin', () => {
 
             document.body.appendChild(productScript);
 
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
@@ -338,12 +359,8 @@ describe('AutoTrackingPlugin', () => {
 
             document.body.appendChild(productScript);
 
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
@@ -358,16 +375,65 @@ describe('AutoTrackingPlugin', () => {
                 },
             });
         });
+
+        it('should track products on URL change', () => {
+            const productScript = document.createElement('script');
+
+            const product = {
+                '@type': 'Product',
+                productID: 'prod-123',
+                sku: 'SKU-123',
+                name: 'Test Product',
+                brand: 'TestBrand',
+                url: 'https://example.com/product',
+                offers: {
+                    '@type': 'Offer',
+                    price: 99.99,
+                },
+            } satisfies Product;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            document.body.appendChild(productScript);
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+
+            const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+                .mock
+                .calls
+                .find(call => call[0] === 'urlChange')![1];
+
+            urlChangeListener(
+                new CustomEvent('urlChange', {
+                    detail: {
+                        tab: mockTab,
+                        url: 'https://example.com/product',
+                    },
+                }),
+            );
+
+            expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
+                product: {
+                    productId: product.productID,
+                    sku: product.sku,
+                    name: product.name,
+                    brand: product.brand,
+                    displayPrice: 99.99,
+                    url: product.url,
+                },
+            });
+        });
     });
 
     describe('Link tracking', () => {
         it('should track when a link is clicked', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const link = document.createElement('a');
@@ -383,12 +449,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should track when a child element of a link is clicked', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const link = document.createElement('a');
@@ -410,12 +472,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should track when a deeply nested child element of a link is clicked', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const link = document.createElement('a');
@@ -441,12 +499,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should not track when a non-link element is clicked', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const button = document.createElement('button');
@@ -460,12 +514,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should not track when link has no href', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const link = document.createElement('a');
@@ -478,12 +528,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should track relative URLs', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const link = document.createElement('a');
@@ -500,12 +546,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should use capture phase for event listening', () => {
-            const configuration: Configuration = {
-                tab: mockTab,
-                tracker: mockTracker,
-            };
+            const plugin = createPlugin();
 
-            plugin = new AutoTrackingPlugin(configuration);
             plugin.enable();
 
             const link = document.createElement('a');

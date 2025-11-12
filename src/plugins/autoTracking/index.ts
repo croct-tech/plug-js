@@ -98,8 +98,8 @@ export class AutoTrackingPlugin implements Plugin {
                 brand: info.brand !== undefined ? AutoTrackingPlugin.truncate(info.brand, 100) : undefined,
                 variant: info.variant !== undefined ? AutoTrackingPlugin.truncate(info.variant, 50) : undefined,
                 category: info.category !== undefined ? AutoTrackingPlugin.truncate(info.category, 100) : undefined,
-                originalPrice: info.originalPrice !== undefined ? info.originalPrice : undefined,
-                imageUrl: info.imageUrl !== undefined ? info.imageUrl : undefined,
+                originalPrice: info.originalPrice,
+                imageUrl: info.imageUrl,
             },
         });
     }
@@ -131,7 +131,8 @@ export type Options = {
     disableLinkOpened?: boolean,
 };
 
-export const factory: PluginFactory<Options> = (props): AutoTrackingPlugin => new AutoTrackingPlugin({
+export const factory = ((props): AutoTrackingPlugin => new AutoTrackingPlugin({
     tab: props.sdk.tab,
     tracker: props.sdk.tracker,
-});
+    options: props.options,
+})) satisfies PluginFactory<Options>;

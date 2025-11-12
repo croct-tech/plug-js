@@ -1,6 +1,243 @@
 import {JsonObject, JsonValue} from '@croct/json';
 
-export type ProductInfo = {
+type EntityMap = {
+    article: ArticleEntity,
+    product: ProductEntity,
+};
+
+export type EntityType = keyof EntityMap;
+
+export type Entity<T extends EntityType = EntityType> = {
+    [K in T]: {type: K} & EntityMap[K];
+}[T];
+
+const articleTypes = new Set([
+    'Article',
+    'NewsArticle',
+    'BlogPosting',
+    'ScholarlyArticle',
+    'TechArticle',
+    'Report',
+    'SocialMediaPosting',
+    'OpinionNewsArticle',
+    'ReviewNewsArticle',
+    'AnalysisNewsArticle',
+    'BackgroundNewsArticle',
+    'AdvertiserContentArticle',
+    'SatiricalArticle',
+    'APIReference',
+    'DiscussionForumPosting',
+    'LiveBlogPosting',
+]);
+
+const productTypes = new Set([
+    'Product',
+    'ProductModel',
+    'ProductGroup',
+    'SomeProducts',
+    'Vehicle',
+    'Car',
+    'Motorcycle',
+    'IndividualProduct',
+]);
+
+export function parseEntity(content: string): Entity | null {
+    const data = parseJsonLd(content);
+
+    if (data === null) {
+        return null;
+    }
+
+    return extractEntity(data);
+}
+
+export function extractEntity(data: JsonObject): Entity | null {
+    const type = getValue(data, '@type');
+
+    if (contains(productTypes, type)) {
+        const product = extractProduct(data);
+
+        if (product !== null) {
+            return {type: 'product', ...product};
+        }
+    }
+
+    if (contains(articleTypes, type)) {
+        const article = extractArticle(data);
+
+        if (article !== null) {
+            return {type: 'article', ...article};
+        }
+    }
+
+    return null;
+}
+
+export type ArticleEntity = {
+    postId: string,
+    url?: string,
+    title: string,
+    tags?: string[],
+    categories?: string[],
+    authors?: string[],
+    publishTime?: number,
+    updateTime?: number,
+};
+
+export function extractArticle(data: JsonObject): ArticleEntity | null {
+    // Extract ID - try multiple possible fields
+    let postId = getValue(data, 'identifier');
+    const url = getValue(data, 'url', 'mainEntityOfPage');
+
+    if (typeof postId !== 'string' && typeof url === 'string' && URL.canParse(url)) {
+        const parsedUrl = new URL(url);
+        const pathSegments = parsedUrl.pathname
+            .split('/')
+            .filter(segment => segment.length > 0);
+
+        if (pathSegments.length > 0) {
+            postId = pathSegments[pathSegments.length - 1];
+        }
+    }
+
+    // Extract title
+    const title = getValue(data, 'headline', 'name');
+
+    // Validate required fields
+    if (typeof postId !== 'string' || typeof title !== 'string') {
+        return null;
+    }
+
+    const post: ArticleEntity = {
+        postId: postId,
+        title: title,
+    };
+
+    const datePublished = getValue(data, 'datePublished', 'dateCreated');
+    const dateModified = getValue(data, 'dateModified');
+    const updateTime = parseTimestamp(dateModified);
+    const publishTime = parseTimestamp(datePublished) ?? updateTime;
+
+    if (publishTime !== null) {
+        post.publishTime = publishTime;
+
+        if (updateTime !== null && updateTime > publishTime) {
+            post.updateTime = updateTime;
+        }
+    }
+
+    if (typeof url === 'string' && URL.canParse(url)) {
+        post.url = url;
+    } else if (isObject(url)) {
+        const urlValue = getValue(url, 'url', '@id');
+
+        if (typeof urlValue === 'string' && URL.canParse(urlValue)) {
+            post.url = urlValue;
+        }
+    }
+
+    // Extract tags (keywords)
+    const tags: string[] = [];
+    const keywords = getValue(data, 'keywords');
+
+    if (typeof keywords === 'string') {
+        tags.push(
+            ...keywords.split(',')
+                .map(keyword => keyword.trim())
+                .filter(keyword => keyword.length > 0),
+        );
+    } else if (Array.isArray(keywords)) {
+        for (const keyword of keywords) {
+            if (typeof keyword === 'string') {
+                tags.push(keyword);
+            }
+        }
+    }
+
+    if (tags.length > 0) {
+        post.tags = tags;
+    }
+
+    // Extract categories (articleSection, genre, about)
+    const categories: string[] = [];
+
+    for (const key of ['articleSection', 'genre']) {
+        const value = getValue(data, key);
+
+        if (typeof value === 'string') {
+            categories.push(value);
+        } else if (Array.isArray(value)) {
+            for (const item of value) {
+                if (typeof item === 'string') {
+                    categories.push(item);
+                }
+            }
+        }
+    }
+
+    // Also check 'about' field for additional categories
+    const about = getValue(data, 'about');
+
+    if (isObject(about)) {
+        const aboutName = getValue(about, 'name');
+
+        if (typeof aboutName === 'string') {
+            categories.push(aboutName);
+        }
+    } else if (Array.isArray(about)) {
+        for (const item of about) {
+            if (isObject(item)) {
+                const itemName = getValue(item, 'name');
+
+                if (typeof itemName === 'string') {
+                    categories.push(itemName);
+                }
+            }
+        }
+    }
+
+    if (categories.length > 0) {
+        post.categories = categories;
+    }
+
+    // Extract authors
+    const authors: string[] = [];
+    const authorData = getValue(data, 'author', 'creator');
+    const authorList = Array.isArray(authorData) ? authorData : [authorData];
+
+    for (const author of authorList) {
+        if (typeof author === 'string') {
+            authors.push(author);
+        } else if (isObject(author)) {
+            const name = getValue(author, 'name');
+
+            if (typeof name === 'string') {
+                authors.push(name);
+            }
+        }
+    }
+
+    if (authors.length > 0) {
+        post.authors = authors;
+    }
+
+    return post;
+}
+
+function parseTimestamp(value: unknown): number | null {
+    if (typeof value === 'string') {
+        // Parse ISO 8601 date string
+        const date = Date.parse(value);
+
+        if (!Number.isNaN(date)) {
+            return date;
+        }
+    }
+
+    return null;
+}
+
+export type ProductEntity = {
     productId: string,
     sku?: string,
     name: string,
@@ -13,7 +250,7 @@ export type ProductInfo = {
     imageUrl?: string,
 };
 
-export function extractProductInfo(data: JsonObject): ProductInfo | null {
+export function extractProduct(data: JsonObject): ProductEntity | null {
     const productSku = getValue(data, 'sku');
     const productId = getValue(data, 'productID') ?? productSku;
     const productName = getValue(data, 'name');
@@ -75,7 +312,7 @@ export function extractProductInfo(data: JsonObject): ProductInfo | null {
     const originalPrice = Math.max(...prices);
 
     // Build product object with all extracted data
-    const product: ProductInfo = {
+    const product: ProductEntity = {
         productId: productId,
         name: productName,
         displayPrice: displayPrice,
@@ -84,33 +321,17 @@ export function extractProductInfo(data: JsonObject): ProductInfo | null {
     // Extract variant information
     const variant: string[] = [];
 
-    const color = getValue(data, 'color');
+    for (const key of ['color', 'pattern', 'size', 'material', 'model']) {
+        const value = getValue(data, key);
 
-    if (typeof color === 'string') {
-        variant.push(color);
-    }
+        if (typeof value === 'string') {
+            variant.push(value);
+        } else if (isObject(value)) {
+            const name = getValue(value, 'name');
 
-    const size = getValue(data, 'size');
-
-    if (typeof size === 'string') {
-        variant.push(size);
-    } else if (isObject(size)) {
-        const sizeName = getValue(size, 'name');
-
-        if (typeof sizeName === 'string') {
-            variant.push(sizeName);
-        }
-    }
-
-    const material = getValue(data, 'material');
-
-    if (typeof material === 'string') {
-        variant.push(material);
-    } else if (isObject(material)) {
-        const materialName = getValue(material, 'name');
-
-        if (typeof materialName === 'string') {
-            variant.push(materialName);
+            if (typeof name === 'string') {
+                variant.push(name);
+            }
         }
     }
 
@@ -187,6 +408,28 @@ export function extractProductInfo(data: JsonObject): ProductInfo | null {
     }
 
     return product;
+}
+
+function parseJsonLd(content: string): JsonObject | null {
+    try {
+        const data = JSON.parse(content);
+
+        if (isObject(data)) {
+            return data;
+        }
+    } catch {
+        // Ignore parsing errors
+    }
+
+    return null;
+}
+
+function contains(set: Set<JsonValue>, value: JsonValue): boolean {
+    if (typeof value === 'string') {
+        return set.has(value);
+    }
+
+    return false;
 }
 
 function isObject(value: JsonValue | unknown): value is JsonObject {

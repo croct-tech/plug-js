@@ -133,16 +133,33 @@ describe('AutoTrackingPlugin', () => {
             tracker: mockTracker,
         };
 
+        jest.spyOn(document, 'addEventListener');
+        jest.spyOn(document, 'removeEventListener');
+
         plugin = new AutoTrackingPlugin(configuration);
         plugin.enable();
         plugin.disable();
 
         expect(mockTab.removeListener).toHaveBeenCalledWith('urlChange', expect.any(Function));
 
-        const addedListener = mocked(mockTab.addListener).mock.calls[0][1];
-        const removedListener = mocked(mockTab.removeListener).mock.calls[0][1];
+        const addedTabListener = mocked(mockTab.addListener).mock.calls[0][1];
+        const removedTabListener = mocked(mockTab.removeListener).mock.calls[0][1];
 
-        expect(addedListener).toBe(removedListener);
+        expect(addedTabListener).toBe(removedTabListener);
+
+        expect(document.removeEventListener).toHaveBeenCalledWith('click', expect.any(Function), true);
+
+        const addedClickListener = mocked(document.addEventListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'click')![1];
+
+        const removedClickListener = mocked(document.removeEventListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'click')![1];
+
+        expect(addedClickListener).toBe(removedClickListener);
     });
 
     describe('Post view tracking', () => {

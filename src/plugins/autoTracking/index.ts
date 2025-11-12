@@ -45,6 +45,7 @@ export class AutoTrackingPlugin implements Plugin {
 
     public disable(): Promise<void> | void {
         this.tab.removeListener('urlChange', this.trackStructuredData);
+        document.removeEventListener('click', this.trackLinkOpened, true);
     }
 
     private trackStructuredData(): void {

@@ -18,8 +18,7 @@ import {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcher
 import {loadSlotContent} from '@croct/content';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
-import {factory as playgroundPluginFactory} from './playground';
-import {factory as previewPluginFactory} from './preview';
+import {factory as previewPluginFactory} from './plugins/preview';
 import {VersionedSlotId, SlotContent} from './slot';
 import {JsonValue, JsonObject} from './sdk/json';
 
@@ -91,7 +90,6 @@ export class GlobalPlug implements Plug {
     public static readonly GLOBAL = new GlobalPlug();
 
     private pluginFactories: {[key: string]: PluginFactory} = {
-        playground: playgroundPluginFactory,
         preview: previewPluginFactory,
     };
 

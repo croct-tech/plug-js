@@ -1,8 +1,8 @@
 import {formatCause} from '@croct/sdk/error';
-import {Logger} from './sdk';
-import {Plugin, PluginFactory} from './plugin';
-import {Token, TokenStore} from './sdk/token';
-import {PREVIEW_WIDGET_ORIGIN, PREVIEW_WIDGET_URL} from './constants';
+import {Logger} from '../../sdk';
+import {Plugin, PluginFactory} from '../../plugin';
+import {Token, TokenStore} from '../../sdk/token';
+import {PREVIEW_WIDGET_ORIGIN, PREVIEW_WIDGET_URL} from '../../constants';
 
 const PREVIEW_PARAMETER = 'croct-preview';
 const PREVIEW_EXIT = 'exit';

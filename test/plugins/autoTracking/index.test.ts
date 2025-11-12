@@ -116,6 +116,7 @@ describe('AutoTrackingPlugin', () => {
             options: {
                 disablePostViewed: true,
                 disableProductViewed: true,
+                disableLinkOpened: true,
             } satisfies Required<Configuration['options']>,
         };
 
@@ -144,197 +145,367 @@ describe('AutoTrackingPlugin', () => {
         expect(addedListener).toBe(removedListener);
     });
 
-    it('should track viewed posts', () => {
-        const articleScript = document.createElement('script');
+    describe('Post view tracking', () => {
+        it('should track viewed posts', () => {
+            const articleScript = document.createElement('script');
 
-        const article = {
-            '@type': 'Article',
-            identifier: 'article-123',
-            headline: 'Test Article',
-            url: 'https://example.com/article',
-            keywords: ['tag1', 'tag2'],
-            articleSection: 'Technology',
-            author: [
-                {
-                    '@type': 'Person',
-                    name: 'John Doe',
+            const article = {
+                '@type': 'Article',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                url: 'https://example.com/article',
+                keywords: ['tag1', 'tag2'],
+                articleSection: 'Technology',
+                author: [
+                    {
+                        '@type': 'Person',
+                        name: 'John Doe',
+                    },
+                    {
+                        '@type': 'Person',
+                        name: 'Jane Smith',
+                    },
+                ],
+                datePublished: '2024-01-01T00:00:00Z',
+                dateModified: '2024-01-02T00:00:00Z',
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
+                post: {
+                    postId: article.identifier,
+                    title: article.headline,
+                    url: article.url,
+                    tags: article.keywords,
+                    categories: [article.articleSection],
+                    authors: article.author.map(author => author.name),
+                    publishTime: Date.parse(article.datePublished),
+                    updateTime: Date.parse(article.dateModified),
                 },
-                {
-                    '@type': 'Person',
-                    name: 'Jane Smith',
+            });
+        });
+
+        it('should truncate post properties when exceeding limits', () => {
+            const articleScript = document.createElement('script');
+
+            const article = {
+                '@type': 'Article',
+                identifier: 'a'.repeat(300),
+                headline: 'T'.repeat(300),
+                keywords: ['t'.repeat(100), 'shortTag'],
+                articleSection: 'c'.repeat(100),
+                author: [
+                    {
+                        '@type': 'Person',
+                        name: 'a'.repeat(150),
+                    },
+                ],
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+
+            articleScript.textContent = JSON.stringify(article);
+
+            document.body.appendChild(articleScript);
+
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
+                post: {
+                    postId: 'a'.repeat(200),
+                    title: 'T'.repeat(200),
+                    tags: ['t'.repeat(50), 'shortTag'],
+                    categories: ['c'.repeat(50)],
+                    authors: ['a'.repeat(100)],
+                    publishTime: now,
                 },
-            ],
-            datePublished: '2024-01-01T00:00:00Z',
-            dateModified: '2024-01-02T00:00:00Z',
-        } satisfies Article;
-
-        articleScript.type = 'application/ld+json';
-        articleScript.textContent = JSON.stringify(article);
-        document.body.appendChild(articleScript);
-
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
-        };
-
-        plugin = new AutoTrackingPlugin(configuration);
-        plugin.enable();
-
-        expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
-            post: {
-                postId: article.identifier,
-                title: article.headline,
-                url: article.url,
-                tags: article.keywords,
-                categories: [article.articleSection],
-                authors: article.author.map(author => author.name),
-                publishTime: Date.parse(article.datePublished),
-                updateTime: Date.parse(article.dateModified),
-            },
+            });
         });
     });
 
-    it('should truncate post properties when exceeding limits', () => {
-        const articleScript = document.createElement('script');
+    describe('Product view tracking', () => {
+        it('should track viewed products', () => {
+            const productScript = document.createElement('script');
 
-        const article = {
-            '@type': 'Article',
-            identifier: 'a'.repeat(300),
-            headline: 'T'.repeat(300),
-            keywords: ['t'.repeat(100), 'shortTag'],
-            articleSection: 'c'.repeat(100),
-            author: [
-                {
-                    '@type': 'Person',
-                    name: 'a'.repeat(150),
+            const product = {
+                '@type': 'Product',
+                productID: 'prod-123',
+                sku: 'SKU-123',
+                name: 'Test Product',
+                category: 'Electronics',
+                brand: {
+                    '@type': 'Brand',
+                    name: 'TestBrand',
                 },
-            ],
-        } satisfies Article;
+                color: 'Red',
+                size: 'Large',
+                url: 'https://example.com/product',
+                image: 'https://example.com/image.jpg',
+                offers: [
+                    {
+                        '@type': 'Offer',
+                        price: 99.99,
+                    },
+                    {
+                        '@type': 'Offer',
+                        price: 119.99,
+                    },
+                ],
+            } satisfies Product;
 
-        articleScript.type = 'application/ld+json';
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
 
-        articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(productScript);
 
-        document.body.appendChild(articleScript);
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
 
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
-        };
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
 
-        plugin = new AutoTrackingPlugin(configuration);
-        plugin.enable();
-
-        expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
-            post: {
-                postId: 'a'.repeat(200),
-                title: 'T'.repeat(200),
-                tags: ['t'.repeat(50), 'shortTag'],
-                categories: ['c'.repeat(50)],
-                authors: ['a'.repeat(100)],
-                publishTime: now,
-            },
+            expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
+                product: {
+                    productId: product.productID,
+                    sku: product.sku,
+                    name: product.name,
+                    category: product.category,
+                    brand: product.brand.name,
+                    variant: [product.color, product.size].join(', '),
+                    displayPrice: 99.99,
+                    originalPrice: 119.99,
+                    url: product.url,
+                    imageUrl: product.image,
+                },
+            });
         });
-    });
 
-    it('should track viewed products', () => {
-        const productScript = document.createElement('script');
+        it('should truncate product properties when exceeding limits', () => {
+            const productScript = document.createElement('script');
 
-        const product = {
-            '@type': 'Product',
-            productID: 'prod-123',
-            sku: 'SKU-123',
-            name: 'Test Product',
-            category: 'Electronics',
-            brand: {
-                '@type': 'Brand',
-                name: 'TestBrand',
-            },
-            color: 'Red',
-            size: 'Large',
-            url: 'https://example.com/product',
-            image: 'https://example.com/image.jpg',
-            offers: [
-                {
+            const product = {
+                '@type': 'Product',
+                productID: 'p'.repeat(100),
+                sku: 's'.repeat(100),
+                name: 'n'.repeat(300),
+                category: 'c'.repeat(200),
+                brand: 'b'.repeat(150),
+                url: 'https://example.com/product',
+                offers: {
                     '@type': 'Offer',
-                    price: 99.99,
+                    price: 49.99,
                 },
-                {
-                    '@type': 'Offer',
-                    price: 119.99,
+            } satisfies Product;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            document.body.appendChild(productScript);
+
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
+                product: {
+                    productId: 'p'.repeat(50),
+                    sku: 's'.repeat(50),
+                    name: 'n'.repeat(200),
+                    category: 'c'.repeat(100),
+                    brand: 'b'.repeat(100),
+                    displayPrice: 49.99,
+                    url: product.url,
                 },
-            ],
-        } satisfies Product;
-
-        productScript.type = 'application/ld+json';
-        productScript.textContent = JSON.stringify(product);
-
-        document.body.appendChild(productScript);
-
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
-        };
-
-        plugin = new AutoTrackingPlugin(configuration);
-        plugin.enable();
-
-        expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
-            product: {
-                productId: product.productID,
-                sku: product.sku,
-                name: product.name,
-                category: product.category,
-                brand: product.brand.name,
-                variant: [product.color, product.size].join(', '),
-                displayPrice: 99.99,
-                originalPrice: 119.99,
-                url: product.url,
-                imageUrl: product.image,
-            },
+            });
         });
     });
 
-    it('should truncate product properties when exceeding limits', () => {
-        const productScript = document.createElement('script');
+    describe('Link tracking', () => {
+        it('should track when a link is clicked', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
 
-        const product = {
-            '@type': 'Product',
-            productID: 'p'.repeat(100),
-            sku: 's'.repeat(100),
-            name: 'n'.repeat(300),
-            category: 'c'.repeat(200),
-            brand: 'b'.repeat(150),
-            url: 'https://example.com/product',
-            offers: {
-                '@type': 'Offer',
-                price: 49.99,
-            },
-        } satisfies Product;
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
 
-        productScript.type = 'application/ld+json';
-        productScript.textContent = JSON.stringify(product);
+            const link = document.createElement('a');
 
-        document.body.appendChild(productScript);
+            link.href = 'https://example.com/page';
+            document.body.appendChild(link);
 
-        const configuration: Configuration = {
-            tab: mockTab,
-            tracker: mockTracker,
-        };
+            link.click();
 
-        plugin = new AutoTrackingPlugin(configuration);
-        plugin.enable();
+            expect(mockTracker.track).toHaveBeenCalledWith('linkOpened', {
+                link: 'https://example.com/page',
+            });
+        });
 
-        expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
-            product: {
-                productId: 'p'.repeat(50),
-                sku: 's'.repeat(50),
-                name: 'n'.repeat(200),
-                category: 'c'.repeat(100),
-                brand: 'b'.repeat(100),
-                displayPrice: 49.99,
-                url: product.url,
-            },
+        it('should track when a child element of a link is clicked', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            const link = document.createElement('a');
+
+            link.href = 'https://example.com/page';
+
+            const span = document.createElement('span');
+
+            span.textContent = 'Click me';
+            link.appendChild(span);
+
+            document.body.appendChild(link);
+
+            span.click();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('linkOpened', {
+                link: 'https://example.com/page',
+            });
+        });
+
+        it('should track when a deeply nested child element of a link is clicked', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            const link = document.createElement('a');
+
+            link.href = 'https://example.com/nested';
+
+            const div = document.createElement('div');
+            const span = document.createElement('span');
+            const button = document.createElement('button');
+
+            button.textContent = 'Click me';
+
+            span.appendChild(button);
+            div.appendChild(span);
+            link.appendChild(div);
+            document.body.appendChild(link);
+
+            button.click();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('linkOpened', {
+                link: 'https://example.com/nested',
+            });
+        });
+
+        it('should not track when a non-link element is clicked', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            const button = document.createElement('button');
+
+            button.textContent = 'Not a link';
+            document.body.appendChild(button);
+
+            button.click();
+
+            expect(mockTracker.track).not.toHaveBeenCalledWith('linkOpened', expect.anything());
+        });
+
+        it('should not track when link has no href', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            const link = document.createElement('a');
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            expect(mockTracker.track).not.toHaveBeenCalledWith('linkOpened', expect.anything());
+        });
+
+        it('should track relative URLs', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            const link = document.createElement('a');
+
+            link.href = '/relative/path#section';
+            document.body.appendChild(link);
+
+            link.click();
+
+            // The browser resolves relative URLs to absolute URLs
+            expect(mockTracker.track).toHaveBeenCalledWith('linkOpened', {
+                link: new URL(link.href, document.baseURI).toString(),
+            });
+        });
+
+        it('should use capture phase for event listening', () => {
+            const configuration: Configuration = {
+                tab: mockTab,
+                tracker: mockTracker,
+            };
+
+            plugin = new AutoTrackingPlugin(configuration);
+            plugin.enable();
+
+            const link = document.createElement('a');
+
+            link.href = 'https://example.com/capture';
+
+            link.addEventListener('click', event => {
+                event.stopImmediatePropagation();
+            });
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('linkOpened', {
+                link: 'https://example.com/capture',
+            });
         });
     });
 });

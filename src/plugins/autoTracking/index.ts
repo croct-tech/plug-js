@@ -20,12 +20,14 @@ export class AutoTrackingPlugin implements Plugin {
         this.tab = configuration.tab;
         this.tracker = configuration.tracker;
         this.options = configuration.options;
-        this.track = this.track.bind(this);
+        this.trackStructuredData = this.trackStructuredData.bind(this);
+        this.trackLinkOpened = this.trackLinkOpened.bind(this);
     }
 
     private isDisabled(): boolean {
         return this.options?.disablePostViewed === true
-            && this.options?.disableProductViewed === true;
+            && this.options?.disableProductViewed === true
+            && this.options?.disableLinkOpened === true;
     }
 
     public enable(): Promise<void> | void {
@@ -33,15 +35,19 @@ export class AutoTrackingPlugin implements Plugin {
             return;
         }
 
-        this.track();
-        this.tab.addListener('urlChange', this.track);
+        this.trackStructuredData();
+        this.tab.addListener('urlChange', this.trackStructuredData);
+
+        if (this.options?.disableLinkOpened !== true) {
+            document.addEventListener('click', this.trackLinkOpened, true);
+        }
     }
 
     public disable(): Promise<void> | void {
-        this.tab.removeListener('urlChange', this.track);
+        this.tab.removeListener('urlChange', this.trackStructuredData);
     }
 
-    private track(): void {
+    private trackStructuredData(): void {
         const structuredDataElements = document.querySelectorAll('script[type="application/ld+json"]');
 
         for (const element of structuredDataElements) {
@@ -97,6 +103,18 @@ export class AutoTrackingPlugin implements Plugin {
         });
     }
 
+    private trackLinkOpened(event: MouseEvent): void {
+        if (event.target instanceof HTMLElement) {
+            const link = event.target.closest('a');
+
+            if (link?.href !== undefined && URL.canParse(link.href, document.baseURI)) {
+                this.tracker.track('linkOpened', {
+                    link: new URL(link.href, document.baseURI).toString(),
+                });
+            }
+        }
+    }
+
     private static truncate(value: string, maxLength: number): string {
         if (value.length <= maxLength) {
             return value;
@@ -109,6 +127,7 @@ export class AutoTrackingPlugin implements Plugin {
 export type Options = {
     disablePostViewed?: boolean,
     disableProductViewed?: boolean,
+    disableLinkOpened?: boolean,
 };
 
 export const factory: PluginFactory<Options> = (props): AutoTrackingPlugin => new AutoTrackingPlugin({

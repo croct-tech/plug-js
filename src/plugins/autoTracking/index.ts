@@ -30,7 +30,7 @@ export class AutoTrackingPlugin implements Plugin {
             && this.options?.disableLinkOpened === true;
     }
 
-    public enable(): Promise<void> | void {
+    public enable(): void {
         if (this.isDisabled()) {
             return;
         }
@@ -43,7 +43,7 @@ export class AutoTrackingPlugin implements Plugin {
         }
     }
 
-    public disable(): Promise<void> | void {
+    public disable(): void {
         this.tab.removeListener('urlChange', this.trackStructuredData);
         document.removeEventListener('click', this.trackLinkOpened, true);
     }

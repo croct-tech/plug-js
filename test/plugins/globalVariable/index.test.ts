@@ -9,12 +9,12 @@ describe('GlobalVariable', () => {
         mockPlug = {} as jest.Mocked<Plug>;
 
         delete window.croct;
-        delete window.croctListener;
+        delete window.onCroctLoad;
     });
 
     afterEach(() => {
         delete window.croct;
-        delete window.croctListener;
+        delete window.onCroctLoad;
     });
 
     function createPlugin(): GlobalVariablePlugin {
@@ -32,7 +32,7 @@ describe('GlobalVariable', () => {
         expect(window.croct).toBe(mockPlug);
     });
 
-    it('should not call any listeners when croctListener is undefined', () => {
+    it('should not call any listeners when onCroctLoad is undefined', () => {
         const plugin = createPlugin();
 
         plugin.enable();
@@ -40,57 +40,21 @@ describe('GlobalVariable', () => {
         expect(window.croct).toBe(mockPlug);
     });
 
-    it('should call a single function listener with the plug', () => {
-        const listener = jest.fn();
+    it('should call the callback passing the plug', () => {
+        const callback = jest.fn();
 
-        window.croctListener = listener;
-
-        const plugin = createPlugin();
-
-        plugin.enable();
-
-        expect(listener).toHaveBeenCalledTimes(1);
-        expect(listener).toHaveBeenCalledWith(mockPlug);
-    });
-
-    it('should call multiple function listeners in an array with the plug', () => {
-        const listener1 = jest.fn();
-        const listener2 = jest.fn();
-        const listener3 = jest.fn();
-
-        window.croctListener = [listener1, listener2, listener3];
+        window.onCroctLoad = callback;
 
         const plugin = createPlugin();
 
         plugin.enable();
 
-        expect(listener1).toHaveBeenCalledTimes(1);
-        expect(listener1).toHaveBeenCalledWith(mockPlug);
-        expect(listener2).toHaveBeenCalledTimes(1);
-        expect(listener2).toHaveBeenCalledWith(mockPlug);
-        expect(listener3).toHaveBeenCalledTimes(1);
-        expect(listener3).toHaveBeenCalledWith(mockPlug);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith(mockPlug);
     });
 
-    it('should skip non-function listeners in array', () => {
-        const listener1 = jest.fn();
-        const listener2 = 'not a function';
-        const listener3 = jest.fn();
-
-        window.croctListener = [listener1, listener2 as any, listener3];
-
-        const plugin = createPlugin();
-
-        plugin.enable();
-
-        expect(listener1).toHaveBeenCalledTimes(1);
-        expect(listener1).toHaveBeenCalledWith(mockPlug);
-        expect(listener3).toHaveBeenCalledTimes(1);
-        expect(listener3).toHaveBeenCalledWith(mockPlug);
-    });
-
-    it('should not call listener if it is not a function (single listener)', () => {
-        window.croctListener = 'not a function' as any;
+    it('should not call listener if it is not a function', () => {
+        window.onCroctLoad = 'not a function' as any;
 
         const plugin = createPlugin();
 
@@ -99,17 +63,21 @@ describe('GlobalVariable', () => {
         expect(window.croct).toBe(mockPlug);
     });
 
-    it('should handle empty array of listeners', () => {
-        window.croctListener = [];
+    it('should not overwrite window.croct if it was globally available before enable', () => {
+        window.croct = mockPlug;
 
         const plugin = createPlugin();
 
         plugin.enable();
 
         expect(window.croct).toBe(mockPlug);
+
+        plugin.disable();
+
+        expect(window.croct).toBe(mockPlug);
     });
 
-    it('should remove window.croct', () => {
+    it('should remove window.croct if it was not globally available before enable', () => {
         const plugin = createPlugin();
 
         plugin.enable();
@@ -121,20 +89,20 @@ describe('GlobalVariable', () => {
         expect(window.croct).toBeUndefined();
     });
 
-    it('should remove window.croctListener on disable', () => {
-        const listener = jest.fn();
+    it('should keep onCroctLoad value after disable', () => {
+        const callback = jest.fn();
 
-        window.croctListener = listener;
+        window.onCroctLoad = callback;
 
         const plugin = createPlugin();
 
         plugin.enable();
 
-        expect(listener).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledTimes(1);
 
         plugin.disable();
 
-        expect(window.croctListener).toBeUndefined();
+        expect(window.onCroctLoad).toBe(callback);
     });
 
     it('should call listener assigned after enable is called', () => {
@@ -144,45 +112,10 @@ describe('GlobalVariable', () => {
 
         const listener = jest.fn();
 
-        window.croctListener = listener;
+        window.onCroctLoad = listener;
 
         expect(listener).toHaveBeenCalledTimes(1);
         expect(listener).toHaveBeenCalledWith(mockPlug);
-    });
-
-    it('should call multiple listeners assigned after enable', () => {
-        const plugin = createPlugin();
-
-        plugin.enable();
-
-        const listener1 = jest.fn();
-        const listener2 = jest.fn();
-
-        window.croctListener = [listener1, listener2];
-
-        expect(listener1).toHaveBeenCalledTimes(1);
-        expect(listener1).toHaveBeenCalledWith(mockPlug);
-        expect(listener2).toHaveBeenCalledTimes(1);
-        expect(listener2).toHaveBeenCalledWith(mockPlug);
-    });
-
-    it('should call listener each time it is assigned', () => {
-        const plugin = createPlugin();
-
-        plugin.enable();
-
-        const listener1 = jest.fn();
-
-        window.croctListener = listener1;
-
-        expect(listener1).toHaveBeenCalledTimes(1);
-
-        const listener2 = jest.fn();
-
-        window.croctListener = listener2;
-
-        expect(listener1).toHaveBeenCalledTimes(1); // Should not be called again
-        expect(listener2).toHaveBeenCalledTimes(1);
     });
 
     it('should handle non-function listener assigned after enable', () => {
@@ -191,7 +124,7 @@ describe('GlobalVariable', () => {
         plugin.enable();
 
         expect(() => {
-            window.croctListener = 'not a function' as any;
+            window.onCroctLoad = 'not a function' as any;
         }).not.toThrow();
     });
 });

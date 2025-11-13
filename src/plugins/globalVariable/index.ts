@@ -8,35 +8,48 @@ export type Configuration = {
 export class GlobalVariablePlugin implements Plugin {
     private readonly plug: Plug;
 
+    private globallyAvailable = true;
+
     public constructor(configuration: Configuration) {
         this.plug = configuration.plug;
     }
 
     public enable(): void {
-        window.croct = this.plug;
-
-        if (window.croctListener !== undefined) {
-            this.notifyListeners(window.croctListener);
+        if (window.croct !== this.plug) {
+            window.croct = this.plug;
+            this.globallyAvailable = false;
         }
 
-        Object.defineProperty(window, 'croctListener', {
+        let callback = window.onCroctLoad;
+
+        Object.defineProperty(window, 'onCroctLoad', {
             configurable: true,
+            get: () => callback,
             set: listener => {
-                this.notifyListeners(listener);
+                this.notify(listener);
+                callback = listener;
             },
         });
+
+        this.notify(callback);
     }
 
     public disable(): void {
-        delete window.croct;
-        delete window.croctListener;
+        if (!this.globallyAvailable) {
+            delete window.croct;
+        }
+
+        const callback = window.onCroctLoad;
+
+        // Restore original property descriptor
+        delete window.onCroctLoad;
+
+        window.onCroctLoad = callback;
     }
 
-    private notifyListeners(listeners: CroctListener | CroctListener[] | undefined): void {
-        for (const listener of Array.isArray(listeners) ? listeners : [listeners]) {
-            if (typeof listener === 'function') {
-                listener(this.plug);
-            }
+    private notify(callback: CroctCallback | undefined): void {
+        if (typeof callback === 'function') {
+            callback(this.plug);
         }
     }
 }

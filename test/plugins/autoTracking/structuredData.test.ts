@@ -686,6 +686,20 @@ describe('extractEntity', () => {
         },
         // Service types
         {
+            description: 'Service type',
+            data: {
+                '@type': 'Service',
+                identifier: 'service-123',
+                name: 'Cleaning Service',
+
+            },
+            expected: {
+                type: 'service',
+                id: 'service-123',
+                name: 'Cleaning Service',
+            },
+        },
+        {
             description: 'BroadcastService type',
             data: {
                 '@type': 'BroadcastService',

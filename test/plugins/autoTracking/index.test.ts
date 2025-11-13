@@ -1,6 +1,6 @@
 import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
 import {Tab, TabUrlChangeEvent} from '@croct/sdk/tab';
-import {Article, Product} from 'schema-dts';
+import {Article, Product, Service} from 'schema-dts';
 import {EventListener} from '@croct/sdk/eventManager';
 import {Configuration, Options, factory, type AutoTrackingPlugin} from '../../../src/plugins/autoTracking';
 import {PluginArguments, PluginSdk} from '../../../src/plugin';
@@ -50,7 +50,7 @@ describe('AutoTrackingPlugin', () => {
         const articleScript = document.createElement('script');
 
         const article = {
-            '@type': 'Article',
+            '@type': 'BlogPosting',
             identifier: 'article-123',
             headline: 'Test Article',
             datePublished: '2024-01-01T00:00:00Z',
@@ -149,7 +149,7 @@ describe('AutoTrackingPlugin', () => {
             const articleScript = document.createElement('script');
 
             const article = {
-                '@type': 'Article',
+                '@type': 'BlogPosting',
                 identifier: 'article-123',
                 headline: 'Test Article',
                 url: 'https://example.com/article',
@@ -195,7 +195,7 @@ describe('AutoTrackingPlugin', () => {
             const articleScript = document.createElement('script');
 
             const article = {
-                '@type': 'Article',
+                '@type': 'BlogPosting',
                 headline: 'Test Article',
                 url: 'https://example.com/articles/article-456',
                 datePublished: '2024-01-01T00:00:00Z',
@@ -226,7 +226,7 @@ describe('AutoTrackingPlugin', () => {
             const articleScript = document.createElement('script');
 
             const article = {
-                '@type': 'Article',
+                '@type': 'BlogPosting',
                 headline: 'Test Article',
                 url: 'https://example.com/',
             } satisfies Article;
@@ -247,8 +247,31 @@ describe('AutoTrackingPlugin', () => {
             const articleScript = document.createElement('script');
 
             const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                url: 'https://example.com/article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+
+        it('should not track general articles', () => {
+            const articleScript = document.createElement('script');
+
+            const article = {
                 '@type': 'Article',
                 identifier: 'article-123',
+                headline: 'Test Article',
                 url: 'https://example.com/article',
                 datePublished: '2024-01-01T00:00:00Z',
             } satisfies Article;
@@ -269,7 +292,7 @@ describe('AutoTrackingPlugin', () => {
             const articleScript = document.createElement('script');
 
             const article = {
-                '@type': 'Article',
+                '@type': 'BlogPosting',
                 identifier: 'a'.repeat(300),
                 headline: 'T'.repeat(300),
                 keywords: ['t'.repeat(100), 'shortTag'],
@@ -308,7 +331,7 @@ describe('AutoTrackingPlugin', () => {
             const articleScript = document.createElement('script');
 
             const article = {
-                '@type': 'Article',
+                '@type': 'BlogPosting',
                 identifier: 'article-123',
                 headline: 'Test Article',
                 url: 'https://example.com/article',
@@ -402,6 +425,39 @@ describe('AutoTrackingPlugin', () => {
                     originalPrice: 119.99,
                     url: product.url,
                     imageUrl: product.image,
+                },
+            });
+        });
+
+        it('should track viewed services', () => {
+            const productScript = document.createElement('script');
+
+            const product = {
+                '@type': 'Service',
+                identifier: 'serv-456',
+                name: 'Test Service',
+                url: 'https://example.com/service',
+                offers: {
+                    '@type': 'Offer',
+                    price: 199.99,
+                },
+            } satisfies Service;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            document.body.appendChild(productScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
+                product: {
+                    productId: product.identifier,
+                    name: product.name,
+                    displayPrice: 199.99,
+                    url: product.url,
                 },
             });
         });

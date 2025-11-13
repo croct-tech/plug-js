@@ -55,7 +55,7 @@ export class AutoTrackingPlugin implements Plugin {
             const entity = parseEntity(element.textContent ?? '');
 
             switch (entity?.type) {
-                case 'article':
+                case 'post':
                     if (this.options?.disablePostViewed !== true) {
                         this.trackPostViewed(entity);
                     }
@@ -63,6 +63,7 @@ export class AutoTrackingPlugin implements Plugin {
                     break;
 
                 case 'product':
+                case 'service':
                     if (this.options?.disableProductViewed !== true) {
                         this.trackProductViewed(entity);
                     }

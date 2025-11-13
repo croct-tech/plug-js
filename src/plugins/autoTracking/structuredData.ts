@@ -81,6 +81,7 @@ const typeMap: Record<EntityType, Set<string>> = {
         'Drug',
     ]),
     service: new Set([
+        'Service',
         'BroadcastService',
         'CableOrSatelliteService',
         'FinancialProduct',

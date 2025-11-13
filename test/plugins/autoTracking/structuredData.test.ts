@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import {Article, Organization, Product} from 'schema-dts';
+import {Article, Organization, Product, Service} from 'schema-dts';
 import {
     ArticleEntity,
     extractArticle,
@@ -51,7 +51,7 @@ describe('parseEntity', () => {
             } satisfies Article),
             expected: {
                 type: 'article',
-                postId: 'article-123',
+                id: 'article-123',
                 title: 'Test Article',
                 publishTime: 1705305600000,
             },
@@ -69,7 +69,7 @@ describe('parseEntity', () => {
             } satisfies Product),
             expected: {
                 type: 'product',
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 99.99,
             },
@@ -102,8 +102,8 @@ describe('parseEntity', () => {
                 },
             } satisfies Article),
             expected: {
-                type: 'article',
-                postId: 'blog-post-123',
+                type: 'post',
+                id: 'blog-post-123',
                 title: 'My Blog Post',
                 publishTime: 1705305600000,
                 url: 'https://blog.example.com/my-post',
@@ -138,7 +138,7 @@ describe('parseEntity', () => {
             } satisfies Product),
             expected: {
                 type: 'product',
-                productId: 'PROD-001',
+                id: 'PROD-001',
                 sku: 'SKU-001',
                 name: 'Nike Shoes',
                 brand: 'Nike',
@@ -158,11 +158,12 @@ describe('parseEntity', () => {
 describe('extractEntity', () => {
     type EntityScenario = {
         description: string,
-        data: Article|Product|Organization,
+        data: Article | Product | Service | Organization,
         expected: Entity | null,
     };
 
     it.each<EntityScenario>([
+        // Articles
         {
             description: 'Article type',
             data: {
@@ -173,9 +174,9 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'article',
-                postId: 'article-123',
+                id: 'article-123',
                 title: 'Test Article',
-                publishTime: 1705305600000,
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
         },
         {
@@ -187,10 +188,205 @@ describe('extractEntity', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                type: 'article',
-                postId: 'news-123',
+                type: 'post',
+                id: 'news-123',
                 title: 'Breaking News',
-                publishTime: 1705305600000,
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'ScholarlyArticle type',
+            data: {
+                '@type': 'ScholarlyArticle',
+                identifier: 'doi:10.1234/example',
+                headline: 'Research Paper',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'doi:10.1234/example',
+                title: 'Research Paper',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'TechArticle type',
+            data: {
+                '@type': 'TechArticle',
+                identifier: 'tech-123',
+                headline: 'Technical Guide',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'tech-123',
+                title: 'Technical Guide',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'Report type',
+            data: {
+                '@type': 'Report',
+                identifier: 'report-123',
+                headline: 'Annual Report',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'report-123',
+                title: 'Annual Report',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'SocialMediaPosting type',
+            data: {
+                '@type': 'SocialMediaPosting',
+                identifier: 'post-123',
+                headline: 'Social Post',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'post-123',
+                title: 'Social Post',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'OpinionNewsArticle type',
+            data: {
+                '@type': 'OpinionNewsArticle',
+                identifier: 'opinion-123',
+                headline: 'My Opinion',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'opinion-123',
+                title: 'My Opinion',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'ReviewNewsArticle type',
+            data: {
+                '@type': 'ReviewNewsArticle',
+                identifier: 'review-123',
+                headline: 'Product Review',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'review-123',
+                title: 'Product Review',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'AnalysisNewsArticle type',
+            data: {
+                '@type': 'AnalysisNewsArticle',
+                identifier: 'analysis-123',
+                headline: 'Market Analysis',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'analysis-123',
+                title: 'Market Analysis',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'BackgroundNewsArticle type',
+            data: {
+                '@type': 'BackgroundNewsArticle',
+                identifier: 'background-123',
+                headline: 'Background Story',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'background-123',
+                title: 'Background Story',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'AdvertiserContentArticle type',
+            data: {
+                '@type': 'AdvertiserContentArticle',
+                identifier: 'sponsored-123',
+                headline: 'Sponsored Content',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'sponsored-123',
+                title: 'Sponsored Content',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'SatiricalArticle type',
+            data: {
+                '@type': 'SatiricalArticle',
+                identifier: 'satire-123',
+                headline: 'Satirical Piece',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'satire-123',
+                title: 'Satirical Piece',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'APIReference type',
+            data: {
+                '@type': 'APIReference',
+                identifier: 'api-docs',
+                headline: 'API Documentation',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'api-docs',
+                title: 'API Documentation',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'DiscussionForumPosting type',
+            data: {
+                '@type': 'DiscussionForumPosting',
+                identifier: 'forum-123',
+                headline: 'Forum Discussion',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'forum-123',
+                title: 'Forum Discussion',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'LiveBlogPosting type',
+            data: {
+                '@type': 'LiveBlogPosting',
+                identifier: 'live-123',
+                headline: 'Live Blog',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'live-123',
+                title: 'Live Blog',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
         },
         {
@@ -202,12 +398,58 @@ describe('extractEntity', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                type: 'article',
-                postId: 'blog-123',
+                type: 'post',
+                id: 'blog-123',
                 title: 'Blog Post',
-                publishTime: 1705305600000,
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
         },
+        {
+            description: 'AskPublicNewsArticle type',
+            data: {
+                '@type': 'AskPublicNewsArticle',
+                identifier: 'askpublic-123',
+                headline: 'Your Questions Answered',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'askpublic-123',
+                title: 'Your Questions Answered',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'ReportageNewsArticle type',
+            data: {
+                '@type': 'ReportageNewsArticle',
+                identifier: 'reportage-123',
+                headline: 'On-Scene Reporting',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'post',
+                id: 'reportage-123',
+                title: 'On-Scene Reporting',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        {
+            description: 'MedicalScholarlyArticle type',
+            data: {
+                '@type': 'MedicalScholarlyArticle',
+                identifier: 'medical-study-123',
+                headline: 'Clinical Study Results',
+                datePublished: '2024-01-15T08:00:00Z',
+            },
+            expected: {
+                type: 'article',
+                id: 'medical-study-123',
+                title: 'Clinical Study Results',
+                publishTime: Date.parse('2024-01-15T08:00:00Z'),
+            },
+        },
+        // Products
         {
             description: 'Product type',
             data: {
@@ -221,7 +463,7 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 99.99,
             },
@@ -239,7 +481,7 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'MODEL-123',
+                id: 'MODEL-123',
                 name: 'Product Model',
                 displayPrice: 199.99,
             },
@@ -257,259 +499,9 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'CAR-123',
+                id: 'CAR-123',
                 name: 'Tesla Model 3',
                 displayPrice: 45000,
-            },
-        },
-        {
-            description: 'unsupported type',
-            data: {
-                '@type': 'Organization',
-                name: 'Company Name',
-            },
-            expected: null,
-        },
-        {
-            description: 'missing @type',
-            data: {
-                identifier: 'article-123',
-                headline: 'Test Article',
-                datePublished: '2024-01-15T08:00:00Z',
-            } as Article,
-            expected: null,
-        },
-        {
-            description: 'Article with invalid data (missing required fields)',
-            data: {
-                '@type': 'Article',
-                identifier: 'article-123',
-                // Missing headline and datePublished
-            },
-            expected: null,
-        },
-        {
-            description: 'Product with invalid data (missing required fields)',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                // Missing name and offers
-            },
-            expected: null,
-        },
-        {
-            description: 'Product checked before Article when both match',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-                headline: 'Should not be treated as article',
-                datePublished: '2024-01-15T08:00:00Z',
-                offers: {
-                    '@type': 'Offer',
-                    price: 99.99,
-                },
-            } as Product & Article,
-            expected: {
-                type: 'product',
-                productId: '12345',
-                name: 'Test Product',
-                displayPrice: 99.99,
-            },
-        },
-        {
-            description: 'ScholarlyArticle type',
-            data: {
-                '@type': 'ScholarlyArticle',
-                identifier: 'doi:10.1234/example',
-                headline: 'Research Paper',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'doi:10.1234/example',
-                title: 'Research Paper',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'TechArticle type',
-            data: {
-                '@type': 'TechArticle',
-                identifier: 'tech-123',
-                headline: 'Technical Guide',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'tech-123',
-                title: 'Technical Guide',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'Report type',
-            data: {
-                '@type': 'Report',
-                identifier: 'report-123',
-                headline: 'Annual Report',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'report-123',
-                title: 'Annual Report',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'SocialMediaPosting type',
-            data: {
-                '@type': 'SocialMediaPosting',
-                identifier: 'post-123',
-                headline: 'Social Post',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'post-123',
-                title: 'Social Post',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'OpinionNewsArticle type',
-            data: {
-                '@type': 'OpinionNewsArticle',
-                identifier: 'opinion-123',
-                headline: 'My Opinion',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'opinion-123',
-                title: 'My Opinion',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'ReviewNewsArticle type',
-            data: {
-                '@type': 'ReviewNewsArticle',
-                identifier: 'review-123',
-                headline: 'Product Review',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'review-123',
-                title: 'Product Review',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'AnalysisNewsArticle type',
-            data: {
-                '@type': 'AnalysisNewsArticle',
-                identifier: 'analysis-123',
-                headline: 'Market Analysis',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'analysis-123',
-                title: 'Market Analysis',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'BackgroundNewsArticle type',
-            data: {
-                '@type': 'BackgroundNewsArticle',
-                identifier: 'background-123',
-                headline: 'Background Story',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'background-123',
-                title: 'Background Story',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'AdvertiserContentArticle type',
-            data: {
-                '@type': 'AdvertiserContentArticle',
-                identifier: 'sponsored-123',
-                headline: 'Sponsored Content',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'sponsored-123',
-                title: 'Sponsored Content',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'SatiricalArticle type',
-            data: {
-                '@type': 'SatiricalArticle',
-                identifier: 'satire-123',
-                headline: 'Satirical Piece',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'satire-123',
-                title: 'Satirical Piece',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'APIReference type',
-            data: {
-                '@type': 'APIReference',
-                identifier: 'api-docs',
-                headline: 'API Documentation',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'api-docs',
-                title: 'API Documentation',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'DiscussionForumPosting type',
-            data: {
-                '@type': 'DiscussionForumPosting',
-                identifier: 'forum-123',
-                headline: 'Forum Discussion',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'forum-123',
-                title: 'Forum Discussion',
-                publishTime: 1705305600000,
-            },
-        },
-        {
-            description: 'LiveBlogPosting type',
-            data: {
-                '@type': 'LiveBlogPosting',
-                identifier: 'live-123',
-                headline: 'Live Blog',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: {
-                type: 'article',
-                postId: 'live-123',
-                title: 'Live Blog',
-                publishTime: 1705305600000,
             },
         },
         {
@@ -525,7 +517,7 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'GROUP-123',
+                id: 'GROUP-123',
                 name: 'Product Group',
                 displayPrice: 299.99,
             },
@@ -543,7 +535,7 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'SOME-123',
+                id: 'SOME-123',
                 name: 'Some Products',
                 displayPrice: 399.99,
             },
@@ -561,7 +553,7 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'CAR-456',
+                id: 'CAR-456',
                 name: 'Honda Civic',
                 displayPrice: 25000,
             },
@@ -579,7 +571,7 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'MOTO-789',
+                id: 'MOTO-789',
                 name: 'Harley Davidson',
                 displayPrice: 15000,
             },
@@ -597,11 +589,254 @@ describe('extractEntity', () => {
             },
             expected: {
                 type: 'product',
-                productId: 'INDIVIDUAL-123',
+                id: 'INDIVIDUAL-123',
                 name: 'Individual Product',
                 displayPrice: 599.99,
             },
         },
+        {
+            description: 'ProductCollection type',
+            data: {
+                '@type': 'ProductCollection',
+                productID: 'COLLECTION-123',
+                name: 'Product Collection',
+                offers: {
+                    '@type': 'Offer',
+                    price: 499.99,
+                },
+            },
+            expected: {
+                type: 'product',
+                id: 'COLLECTION-123',
+                name: 'Product Collection',
+                displayPrice: 499.99,
+            },
+        },
+        {
+            description: 'BusOrCoach type (vehicle subtype)',
+            data: {
+                '@type': 'BusOrCoach',
+                productID: 'BUS-123',
+                name: 'City Bus Model X',
+                offers: {
+                    '@type': 'Offer',
+                    price: 350000,
+                },
+            },
+            expected: {
+                type: 'product',
+                id: 'BUS-123',
+                name: 'City Bus Model X',
+                displayPrice: 350000,
+            },
+        },
+        {
+            description: 'MotorizedBicycle type',
+            data: {
+                '@type': 'MotorizedBicycle',
+                productID: 'MOPED-123',
+                name: 'Electric Moped',
+                offers: {
+                    '@type': 'Offer',
+                    price: 2500,
+                },
+            },
+            expected: {
+                type: 'product',
+                id: 'MOPED-123',
+                name: 'Electric Moped',
+                displayPrice: 2500,
+            },
+        },
+        {
+            description: 'DietarySupplement type',
+            data: {
+                '@type': 'DietarySupplement',
+                productID: 'SUPPLEMENT-123',
+                name: 'Vitamin D3',
+                offers: {
+                    '@type': 'Offer',
+                    price: 19.99,
+                },
+            },
+            expected: {
+                type: 'product',
+                id: 'SUPPLEMENT-123',
+                name: 'Vitamin D3',
+                displayPrice: 19.99,
+            },
+        },
+        {
+            description: 'Drug type',
+            data: {
+                '@type': 'Drug',
+                productID: 'DRUG-123',
+                name: 'Pain Relief Medication',
+                offers: {
+                    '@type': 'Offer',
+                    price: 12.50,
+                },
+            },
+            expected: {
+                type: 'product',
+                id: 'DRUG-123',
+                name: 'Pain Relief Medication',
+                displayPrice: 12.50,
+            },
+        },
+        // Service types
+        {
+            description: 'BroadcastService type',
+            data: {
+                '@type': 'BroadcastService',
+                identifier: 'broadcast-123',
+                name: 'Streaming TV Service',
+                offers: {
+                    '@type': 'Offer',
+                },
+            },
+            expected: {
+                type: 'service',
+                id: 'broadcast-123',
+                name: 'Streaming TV Service',
+            },
+        },
+        {
+            description: 'CableOrSatelliteService type',
+            data: {
+                '@type': 'CableOrSatelliteService',
+                identifier: 'cable-123',
+                name: 'Cable TV Package',
+            },
+            expected: {
+                type: 'service',
+                id: 'cable-123',
+                name: 'Cable TV Package',
+            },
+        },
+        {
+            description: 'FinancialProduct type',
+            data: {
+                '@type': 'FinancialProduct',
+                identifier: 'loan-123',
+                name: 'Home Mortgage Loan',
+            },
+            expected: {
+                type: 'service',
+                id: 'loan-123',
+                name: 'Home Mortgage Loan',
+            },
+        },
+        {
+            description: 'FoodService type',
+            data: {
+                '@type': 'FoodService',
+                identifier: 'restaurant-123',
+                name: 'Fine Dining Restaurant',
+            },
+            expected: {
+                type: 'service',
+                id: 'restaurant-123',
+                name: 'Fine Dining Restaurant',
+            },
+        },
+        {
+            description: 'GovernmentService type',
+            data: {
+                '@type': 'GovernmentService',
+                identifier: 'gov-service-123',
+                name: 'Passport Application Service',
+            },
+            expected: {
+                type: 'service',
+                id: 'gov-service-123',
+                name: 'Passport Application Service',
+            },
+        },
+        {
+            description: 'TaxiService type',
+            data: {
+                '@type': 'TaxiService',
+                identifier: 'taxi-123',
+                name: 'City Taxi Service',
+            },
+            expected: {
+                type: 'service',
+                id: 'taxi-123',
+                name: 'City Taxi Service',
+            },
+        },
+        {
+            description: 'WebAPI type',
+            data: {
+                '@type': 'WebAPI',
+                identifier: 'api-123',
+                name: 'REST API v1',
+            },
+            expected: {
+                type: 'service',
+                id: 'api-123',
+                name: 'REST API v1',
+            },
+        },
+        // Edge cases
+        {
+            description: 'Product checked before Article when both match',
+            data: {
+                '@type': 'Product',
+                productID: '12345',
+                name: 'Test Product',
+                headline: 'Should not be treated as article',
+                datePublished: '2024-01-15T08:00:00Z',
+                offers: {
+                    '@type': 'Offer',
+                    price: 99.99,
+                },
+            } as Product & Article,
+            expected: {
+                type: 'product',
+                id: '12345',
+                name: 'Test Product',
+                displayPrice: 99.99,
+            },
+        },
+        {
+            description: 'Empty product',
+            data: {
+                '@type': 'Product',
+            },
+            expected: {
+                type: 'product',
+            },
+        },
+        {
+            description: 'Empty article',
+            data: {
+                '@type': 'Article',
+            },
+            expected: {
+                type: 'article',
+            },
+        },
+        // Invalid cases
+        {
+            description: 'unsupported type',
+            data: {
+                '@type': 'Organization',
+                name: 'Company Name',
+            },
+            expected: null,
+        },
+        {
+            description: 'missing @type',
+            data: {
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-15T08:00:00Z',
+            } as Article,
+            expected: null,
+        },
+
     ])('should extract $description', ({data, expected}) => {
         expect(extractEntity(data as any)).toEqual(expected);
     });
@@ -627,16 +862,16 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 1,
             },
         },
         {
-            description: 'product with SKU as productId',
+            description: 'product with identifier',
             data: {
                 '@type': 'Product',
-                sku: 'SKU-001',
+                identifier: 'SKU-001',
                 name: 'Test Product',
                 offers: {
                     '@type': 'Offer',
@@ -644,8 +879,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: 'SKU-001',
-                sku: 'SKU-001',
+                id: 'SKU-001',
                 name: 'Test Product',
                 displayPrice: 99.99,
             },
@@ -663,7 +897,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 sku: 'SKU-001',
                 name: 'Test Product',
                 displayPrice: 100,
@@ -687,7 +921,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 sku: 'SKU-001',
                 name: 'Test Product',
                 category: 'Electronics',
@@ -713,7 +947,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 category: 'Electronics',
                 displayPrice: 100,
@@ -735,7 +969,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 brand: 'TestBrand',
                 displayPrice: 100,
@@ -754,7 +988,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Red',
                 displayPrice: 100,
@@ -773,7 +1007,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Large',
                 displayPrice: 100,
@@ -795,7 +1029,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Large',
                 displayPrice: 100,
@@ -814,7 +1048,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Cotton',
                 displayPrice: 100,
@@ -836,7 +1070,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Cotton',
                 displayPrice: 100,
@@ -855,7 +1089,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Striped',
                 displayPrice: 100,
@@ -877,7 +1111,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Striped',
                 displayPrice: 100,
@@ -896,7 +1130,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Version 2',
                 displayPrice: 100,
@@ -918,7 +1152,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Version 2',
                 displayPrice: 100,
@@ -940,7 +1174,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 variant: 'Red, Striped, Large, Cotton',
                 displayPrice: 100,
@@ -964,7 +1198,7 @@ describe('extractProduct', () => {
                 ],
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 90,
                 originalPrice: 100,
@@ -983,7 +1217,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 50,
                 originalPrice: 100,
@@ -1005,7 +1239,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 90,
                 originalPrice: 120,
@@ -1034,7 +1268,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 90,
                 originalPrice: 150,
@@ -1052,7 +1286,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 99.99,
             },
@@ -1075,7 +1309,7 @@ describe('extractProduct', () => {
                 ],
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
             },
@@ -1093,7 +1327,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
                 url: 'https://example.com/buy',
@@ -1113,7 +1347,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
                 url: 'https://example.com/product',
@@ -1132,7 +1366,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
             },
@@ -1150,7 +1384,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
                 imageUrl: 'https://example.com/image.jpg',
@@ -1172,7 +1406,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
                 imageUrl: 'https://example.com/image.jpg',
@@ -1194,7 +1428,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
                 imageUrl: 'https://example.com/image1.jpg',
@@ -1213,7 +1447,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
             },
@@ -1231,7 +1465,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
             },
@@ -1249,106 +1483,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
-                name: 'Test Product',
-                displayPrice: 100,
-            },
-        },
-        {
-            description: 'null for missing productId',
-            data: {
-                '@type': 'Product',
-                name: 'Test Product',
-                offers: {
-                    '@type': 'Offer',
-                    price: 100,
-                },
-            },
-            expected: null,
-        },
-        {
-            description: 'null for missing name',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                offers: {
-                    '@type': 'Offer',
-                    price: 100,
-                },
-            },
-            expected: null,
-        },
-        {
-            description: 'null for missing offers',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-            },
-            expected: null,
-        },
-        {
-            description: 'null for invalid offer',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-                offers: 'invalid' as any,
-            },
-            expected: null,
-        },
-        {
-            description: 'null for offer without price',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-                offers: {
-                    '@type': 'Offer',
-                },
-            },
-            expected: null,
-        },
-        {
-            description: 'null for non-numeric price',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-                offers: {
-                    '@type': 'Offer',
-                    price: 'invalid',
-                },
-            },
-            expected: null,
-        },
-        {
-            description: 'null for all negative prices',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-                offers: {
-                    '@type': 'Offer',
-                    price: -100,
-                },
-            },
-            expected: null,
-        },
-        {
-            description: 'product with invalid priceSpecification ignored',
-            data: {
-                '@type': 'Product',
-                productID: '12345',
-                name: 'Test Product',
-                offers: {
-                    '@type': 'Offer',
-                    price: 100,
-                    priceSpecification: 'invalid' as any,
-                },
-            },
-            expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
             },
@@ -1367,18 +1502,10 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: '12345',
+                id: '12345',
                 name: 'Test Product',
                 displayPrice: 100,
             },
-        },
-        {
-            description: 'invalid product data returns null',
-            data: {
-                '@type': 'Product',
-                offers: null as any,
-            },
-            expected: null,
         },
         {
             description: 'real-world product example',
@@ -1441,7 +1568,7 @@ describe('extractProduct', () => {
                 },
             },
             expected: {
-                productId: 'CN8490-002',
+                id: 'CN8490-002',
                 sku: 'CN8490-002-10',
                 name: 'Nike Air Max 90',
                 category: 'Athletic Shoes',
@@ -1475,7 +1602,7 @@ describe('extractArticle', () => {
                 datePublished: '2017-07-12T12:00:00Z',
             },
             expected: {
-                postId: 'article-123',
+                id: 'article-123',
                 title: 'Test Article',
                 publishTime: Date.parse('2017-07-12T12:00:00Z'),
             },
@@ -1489,7 +1616,6 @@ describe('extractArticle', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'my-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://blog.example.com/my-article',
@@ -1504,7 +1630,6 @@ describe('extractArticle', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'my-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://blog.example.com/posts/2024/my-article',
@@ -1519,7 +1644,6 @@ describe('extractArticle', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'my-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://blog.example.com/my-article/',
@@ -1534,7 +1658,6 @@ describe('extractArticle', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'my-article-slug',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://blog.example.com/category/subcategory/year/month/my-article-slug',
@@ -1550,7 +1673,7 @@ describe('extractArticle', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'article-id-123',
+                id: 'article-id-123',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/different-slug',
@@ -1579,7 +1702,7 @@ describe('extractArticle', () => {
                 ],
             },
             expected: {
-                postId: 'croct-launches-new-sdk',
+                id: 'croct-launches-new-sdk',
                 title: 'Croct launches new SDK',
                 publishTime: Date.parse('2017-07-12T12:00:00Z'),
                 updateTime: Date.parse('2017-07-13T10:00:00Z'),
@@ -1599,7 +1722,7 @@ describe('extractArticle', () => {
                 url: 'https://croct.com/blog/croct-launches-new-sdk',
             },
             expected: {
-                postId: 'croct-launches-new-sdk',
+                id: 'croct-launches-new-sdk',
                 title: 'Croct launches new SDK',
                 publishTime: Date.parse('2017-07-13T10:00:00Z'),
                 url: 'https://croct.com/blog/croct-launches-new-sdk',
@@ -1630,7 +1753,7 @@ describe('extractArticle', () => {
                 dateline: 'San Francisco, CA',
             },
             expected: {
-                postId: 'news-001',
+                id: 'news-001',
                 title: 'Breaking: Major Tech Announcement',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 updateTime: Date.parse('2024-01-15T10:30:00Z'),
@@ -1649,7 +1772,7 @@ describe('extractArticle', () => {
                 datePublished: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Article Title',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
@@ -1667,7 +1790,7 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/article',
@@ -1683,7 +1806,6 @@ describe('extractArticle', () => {
                 mainEntityOfPage: 'https://example.com/article',
             },
             expected: {
-                postId: 'article-slug',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/article-slug',
@@ -1702,7 +1824,7 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/article',
@@ -1717,7 +1839,6 @@ describe('extractArticle', () => {
                 mainEntityOfPage: 'https://example.com/blog/my-article',
             },
             expected: {
-                postId: 'my-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/blog/my-article',
@@ -1733,7 +1854,7 @@ describe('extractArticle', () => {
                 keywords: ['tech', 'innovation', 'ai'],
             },
             expected: {
-                postId: 'tech-article',
+                id: 'tech-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 tags: ['tech', 'innovation', 'ai'],
@@ -1749,7 +1870,7 @@ describe('extractArticle', () => {
                 keywords: 'tech, innovation, ai',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 tags: ['tech', 'innovation', 'ai'],
@@ -1765,7 +1886,6 @@ describe('extractArticle', () => {
                 keywords: '  tech  ,  innovation  ,  ai  ',
             },
             expected: {
-                postId: 'my-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/my-article',
@@ -1782,7 +1902,7 @@ describe('extractArticle', () => {
                 keywords: 'tech, , innovation, , ai',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 tags: ['tech', 'innovation', 'ai'],
@@ -1798,7 +1918,7 @@ describe('extractArticle', () => {
                 author: 'John Doe',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 authors: ['John Doe'],
@@ -1817,7 +1937,6 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'article-slug',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/article-slug',
@@ -1843,7 +1962,7 @@ describe('extractArticle', () => {
                 ],
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 authors: ['John Doe', 'Jane Smith'],
@@ -1862,7 +1981,6 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'company-news',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/company-news',
@@ -1882,7 +2000,7 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 authors: ['John Creator'],
@@ -1905,7 +2023,7 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 authors: ['John Author'],
@@ -1921,7 +2039,6 @@ describe('extractArticle', () => {
                 genre: 'Technology',
             },
             expected: {
-                postId: 'tech-news',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/tech-news',
@@ -1938,7 +2055,7 @@ describe('extractArticle', () => {
                 genre: ['Technology', 'Innovation'],
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 categories: ['Technology', 'Innovation'],
@@ -1954,7 +2071,6 @@ describe('extractArticle', () => {
                 articleSection: 'Technology',
             },
             expected: {
-                postId: 'article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/article',
@@ -1971,7 +2087,7 @@ describe('extractArticle', () => {
                 articleSection: ['Technology', 'Business'],
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 categories: ['Technology', 'Business'],
@@ -1990,7 +2106,6 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'web-dev',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/web-dev',
@@ -2016,7 +2131,7 @@ describe('extractArticle', () => {
                 ],
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 categories: ['JavaScript', 'TypeScript'],
@@ -2037,7 +2152,6 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'tech-ai',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/tech-ai',
@@ -2053,7 +2167,7 @@ describe('extractArticle', () => {
                 dateCreated: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
@@ -2068,7 +2182,7 @@ describe('extractArticle', () => {
                 dateModified: '2024-01-15T08:00:00Z',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
@@ -2083,7 +2197,6 @@ describe('extractArticle', () => {
                 dateModified: '2024-01-14T08:00:00Z',
             },
             expected: {
-                postId: 'article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 url: 'https://example.com/article',
@@ -2099,7 +2212,7 @@ describe('extractArticle', () => {
                 dateModified: '2024-01-16T10:00:00Z',
             },
             expected: {
-                postId: 'article-1',
+                id: 'article-1',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
                 updateTime: Date.parse('2024-01-16T10:00:00Z'),
@@ -2115,7 +2228,7 @@ describe('extractArticle', () => {
                 url: 'not-a-url',
             },
             expected: {
-                postId: 'my-article',
+                id: 'my-article',
                 title: 'Test Article',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
             },
@@ -2136,7 +2249,6 @@ describe('extractArticle', () => {
                 dependencies: 'TypeScript 5.0+',
             },
             expected: {
-                postId: 'typescript-generics',
                 title: 'Complete Guide to TypeScript Generics',
                 publishTime: Date.parse('2024-03-01T10:00:00Z'),
                 url: 'https://docs.example.com/typescript-generics',
@@ -2175,7 +2287,7 @@ describe('extractArticle', () => {
                 reportNumber: '2024-Q1-001',
             },
             expected: {
-                postId: 'report-2024-q1',
+                id: 'report-2024-q1',
                 title: 'Q1 2024 Market Analysis Report',
                 publishTime: Date.parse('2024-04-01T08:00:00Z'),
                 url: 'https://research.example.com/reports/2024-q1',
@@ -2214,7 +2326,7 @@ describe('extractArticle', () => {
                 pageEnd: '67',
             },
             expected: {
-                postId: 'doi:10.1234/example.2024.001',
+                id: 'doi:10.1234/example.2024.001',
                 title: 'Machine Learning Applications in Healthcare',
                 publishTime: Date.parse('2024-05-15T00:00:00Z'),
                 url: 'https://journal.example.com/articles/ml-healthcare',
@@ -2241,7 +2353,6 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: '12345',
                 title: 'Exciting Product Launch Announcement',
                 publishTime: Date.parse('2024-06-01T15:30:00Z'),
                 url: 'https://social.example.com/posts/12345',
@@ -2265,7 +2376,6 @@ describe('extractArticle', () => {
                 keywords: 'remote work, future of work, workplace',
             },
             expected: {
-                postId: 'remote-work-future',
                 title: 'Why Remote Work Is Here to Stay',
                 publishTime: Date.parse('2024-07-01T09:00:00Z'),
                 url: 'https://opinion.example.com/remote-work-future',
@@ -2294,7 +2404,7 @@ describe('extractArticle', () => {
                 },
             },
             expected: {
-                postId: 'review-001',
+                id: 'review-001',
                 title: 'iPhone 15 Pro Review: A Comprehensive Look',
                 publishTime: Date.parse('2024-08-01T10:00:00Z'),
                 url: 'https://reviews.example.com/iphone-15-pro',
@@ -2331,7 +2441,6 @@ describe('extractArticle', () => {
                 ],
             },
             expected: {
-                postId: 'ai-job-impact',
                 title: 'Understanding the Impact of AI on Job Markets',
                 publishTime: Date.parse('2024-09-01T08:00:00Z'),
                 updateTime: Date.parse('2024-09-05T12:00:00Z'),
@@ -2357,7 +2466,7 @@ describe('extractArticle', () => {
                 keywords: ['cryptocurrency', 'Bitcoin', 'blockchain', 'history'],
             },
             expected: {
-                postId: 'background-001',
+                id: 'background-001',
                 title: 'The History of Cryptocurrency: From Bitcoin to Today',
                 publishTime: Date.parse('2024-10-01T09:00:00Z'),
                 url: 'https://news.example.com/crypto-history',
@@ -2381,7 +2490,6 @@ describe('extractArticle', () => {
                 keywords: ['business', 'growth', 'SaaS', 'productivity'],
             },
             expected: {
-                postId: 'business-growth',
                 title: 'How Our Platform Helps Businesses Grow',
                 publishTime: Date.parse('2024-11-01T10:00:00Z'),
                 url: 'https://content.example.com/business-growth',
@@ -2407,7 +2515,7 @@ describe('extractArticle', () => {
                 keywords: ['humor', 'workplace', 'satire'],
             },
             expected: {
-                postId: 'satire-001',
+                id: 'satire-001',
                 title: 'Area Man Discovers Revolutionary Way to Avoid Meetings',
                 publishTime: Date.parse('2024-12-01T12:00:00Z'),
                 url: 'https://satire.example.com/avoid-meetings',
@@ -2432,7 +2540,6 @@ describe('extractArticle', () => {
                 assemblyVersion: '2.0.0',
             },
             expected: {
-                postId: 'v2',
                 title: 'REST API v2.0 Documentation',
                 publishTime: Date.parse('2024-01-10T08:00:00Z'),
                 updateTime: Date.parse('2024-11-01T10:00:00Z'),
@@ -2455,7 +2562,7 @@ describe('extractArticle', () => {
                 keywords: ['React', 'hooks', 'best practices', 'JavaScript'],
             },
             expected: {
-                postId: 'forum-post-456',
+                id: 'forum-post-456',
                 title: 'Best Practices for React Hooks',
                 publishTime: Date.parse('2024-02-20T14:30:00Z'),
                 url: 'https://forum.example.com/posts/456',
@@ -2486,7 +2593,6 @@ describe('extractArticle', () => {
                 keywords: ['live', 'product launch', 'event'],
             },
             expected: {
-                postId: 'launch-event',
                 title: 'Live: Product Launch Event 2024',
                 publishTime: Date.parse('2024-03-15T16:00:00Z'),
                 updateTime: Date.parse('2024-03-15T18:30:00Z'),
@@ -2496,33 +2602,86 @@ describe('extractArticle', () => {
             },
         },
         {
-            description: 'Article with URL containing query parameters',
+            description: 'AskPublicNewsArticle with Q&A format',
             data: {
-                '@type': 'Article',
-                url: 'https://blog.example.com/my-article?utm_source=twitter&utm_medium=social',
-                headline: 'Test Article',
+                '@type': 'AskPublicNewsArticle',
+                identifier: 'qa-001',
+                headline: 'Readers Ask: What is Climate Change?',
                 datePublished: '2024-01-15T08:00:00Z',
+                url: 'https://news.example.com/qa/climate-change',
+                author: {
+                    '@type': 'Person',
+                    name: 'Science Reporter',
+                },
+                articleSection: 'Q&A',
+                keywords: ['climate change', 'environment', 'science'],
             },
             expected: {
-                postId: 'my-article',
-                title: 'Test Article',
+                id: 'qa-001',
+                title: 'Readers Ask: What is Climate Change?',
                 publishTime: Date.parse('2024-01-15T08:00:00Z'),
-                url: 'https://blog.example.com/my-article?utm_source=twitter&utm_medium=social',
+                url: 'https://news.example.com/qa/climate-change',
+                authors: ['Science Reporter'],
+                categories: ['Q&A'],
+                tags: ['climate change', 'environment', 'science'],
             },
         },
         {
-            description: 'Article with URL containing hash fragment',
+            description: 'ReportageNewsArticle with field reporting',
             data: {
-                '@type': 'Article',
-                url: 'https://blog.example.com/my-article#section-2',
-                headline: 'Test Article',
-                datePublished: '2024-01-15T08:00:00Z',
+                '@type': 'ReportageNewsArticle',
+                url: 'https://news.example.com/field-report',
+                headline: 'From the Ground: Hurricane Recovery Efforts',
+                datePublished: '2024-02-20T09:00:00Z',
+                author: {
+                    '@type': 'Person',
+                    name: 'Field Reporter',
+                },
+                articleSection: 'Field Reports',
+                dateline: 'Miami, FL',
+                keywords: ['hurricane', 'disaster', 'recovery'],
             },
             expected: {
-                postId: 'my-article',
-                title: 'Test Article',
-                publishTime: Date.parse('2024-01-15T08:00:00Z'),
-                url: 'https://blog.example.com/my-article#section-2',
+                title: 'From the Ground: Hurricane Recovery Efforts',
+                publishTime: Date.parse('2024-02-20T09:00:00Z'),
+                url: 'https://news.example.com/field-report',
+                authors: ['Field Reporter'],
+                categories: ['Field Reports'],
+                tags: ['hurricane', 'disaster', 'recovery'],
+            },
+        },
+        {
+            description: 'MedicalScholarlyArticle with medical research',
+            data: {
+                '@type': 'MedicalScholarlyArticle',
+                identifier: 'doi:10.1234/medical.2024.001',
+                headline: 'Clinical Trial Results for New Treatment',
+                datePublished: '2024-03-10T00:00:00Z',
+                url: 'https://medical-journal.example.com/articles/new-treatment',
+                author: [
+                    {
+                        '@type': 'Person',
+                        name: 'Dr. Medical Researcher',
+                    },
+                    {
+                        '@type': 'Person',
+                        name: 'Dr. Clinical Specialist',
+                    },
+                ],
+                keywords: ['clinical trial', 'treatment', 'medicine', 'research'],
+                about: {
+                    '@type': 'Thing',
+                    name: 'Medical Research',
+                },
+            },
+            expected: {
+                id: 'doi:10.1234/medical.2024.001',
+                title: 'Clinical Trial Results for New Treatment',
+                publishTime: Date.parse('2024-03-10T00:00:00Z'),
+                url: 'https://medical-journal.example.com/articles/new-treatment',
+                authors: ['Dr. Medical Researcher', 'Dr. Clinical Specialist'],
+                tags: ['clinical trial', 'treatment', 'medicine', 'research'],
+                categories: ['Medical Research'],
             },
         },
         {
@@ -2533,7 +2692,7 @@ describe('extractArticle', () => {
                 headline: 'Test Article',
             },
             expected: {
-                postId: 'article-slug',
+                id: 'article-slug',
                 title: 'Test Article',
             },
         },
@@ -2546,47 +2705,9 @@ describe('extractArticle', () => {
                 datePublished: 'invalid-date',
             },
             expected: {
-                postId: 'article-slug',
+                id: 'article-slug',
                 title: 'Test Article',
             },
-        },
-        {
-            description: 'null for missing postId',
-            data: {
-                '@type': 'Article',
-                headline: 'Test Article',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: null,
-        },
-        {
-            description: 'null for URL with no path segments',
-            data: {
-                '@type': 'Article',
-                url: 'https://example.com/',
-                headline: 'Test Article',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: null,
-        },
-        {
-            description: 'null for URL with only root path',
-            data: {
-                '@type': 'Article',
-                url: 'https://example.com',
-                headline: 'Test Article',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: null,
-        },
-        {
-            description: 'null for missing title',
-            data: {
-                '@type': 'Article',
-                identifier: 'article-1',
-                datePublished: '2024-01-15T08:00:00Z',
-            },
-            expected: null,
         },
     ])('should extract $description', ({data, expected}) => {
         expect(extractArticle(data as any)).toEqual(expected);

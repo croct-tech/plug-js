@@ -1,8 +1,34 @@
 import {JsonObject, JsonValue} from '@croct/json';
 
 type EntityMap = {
+    post: ArticleEntity,
     article: ArticleEntity,
     product: ProductEntity,
+    service: ProductEntity,
+};
+
+export type ProductEntity = {
+    id?: string,
+    sku?: string,
+    name?: string,
+    category?: string,
+    brand?: string,
+    variant?: string,
+    displayPrice?: number,
+    originalPrice?: number,
+    url?: string,
+    imageUrl?: string,
+};
+
+export type ArticleEntity = {
+    id?: string,
+    url?: string,
+    title?: string,
+    tags?: string[],
+    categories?: string[],
+    authors?: string[],
+    publishTime?: number,
+    updateTime?: number,
 };
 
 export type EntityType = keyof EntityMap;
@@ -11,35 +37,59 @@ export type Entity<T extends EntityType = EntityType> = {
     [K in T]: {type: K} & EntityMap[K];
 }[T];
 
-const articleTypes = new Set([
-    'Article',
-    'NewsArticle',
-    'BlogPosting',
-    'ScholarlyArticle',
-    'TechArticle',
-    'Report',
-    'SocialMediaPosting',
-    'OpinionNewsArticle',
-    'ReviewNewsArticle',
-    'AnalysisNewsArticle',
-    'BackgroundNewsArticle',
-    'AdvertiserContentArticle',
-    'SatiricalArticle',
-    'APIReference',
-    'DiscussionForumPosting',
-    'LiveBlogPosting',
-]);
-
-const productTypes = new Set([
-    'Product',
-    'ProductModel',
-    'ProductGroup',
-    'SomeProducts',
-    'Vehicle',
-    'Car',
-    'Motorcycle',
-    'IndividualProduct',
-]);
+const typeMap: Record<EntityType, Set<string>> = {
+    post: new Set([
+        'BlogPosting',
+        'LiveBlogPosting',
+        'NewsArticle',
+        'AnalysisNewsArticle',
+        'AskPublicNewsArticle',
+        'BackgroundNewsArticle',
+        'OpinionNewsArticle',
+        'ReportageNewsArticle',
+        'ReviewNewsArticle',
+        'SocialMediaPosting',
+        'BlogPosting',
+        'DiscussionForumPosting',
+        'LiveBlogPosting',
+    ]),
+    article: new Set([
+        'Article',
+        'TechArticle',
+        'APIReference',
+        'Report',
+        'AdvertiserContentArticle',
+        'SatiricalArticle',
+        'ScholarlyArticle',
+        'MedicalScholarlyArticle',
+    ]),
+    product: new Set([
+        'Product',
+        'ProductCollection',
+        'ProductModel',
+        'ProductGroup',
+        'SomeProducts',
+        'Vehicle',
+        'BusOrCoach',
+        'Car',
+        'Motorcycle',
+        'MotorizedBicycle',
+        'Car',
+        'Motorcycle',
+        'IndividualProduct',
+        'DietarySupplement',
+        'Drug',
+    ]),
+    service: new Set([
+        'BroadcastService',
+        'CableOrSatelliteService',
+        'FinancialProduct',
+        'FoodService',
+        'GovernmentService',
+        'TaxiService',
+        'WebAPI',
+    ]),
+};
 
 export function parseEntity(content: string): Entity | null {
     const data = parseJsonLd(content);
@@ -52,66 +102,54 @@ export function parseEntity(content: string): Entity | null {
 }
 
 export function extractEntity(data: JsonObject): Entity | null {
-    const type = getValue(data, '@type');
+    const type = getEntityType(data);
 
-    if (contains(productTypes, type)) {
-        const product = extractProduct(data);
-
-        if (product !== null) {
-            return {type: 'product', ...product};
+    switch (type) {
+        case 'article':
+        case 'post': {
+            return {
+                type: type,
+                ...extractArticle(data),
+            };
         }
-    }
 
-    if (contains(articleTypes, type)) {
-        const article = extractArticle(data);
-
-        if (article !== null) {
-            return {type: 'article', ...article};
+        case 'product':
+        case 'service': {
+            return {
+                type: type,
+                ...extractProduct(data),
+            };
         }
     }
 
     return null;
 }
 
-export type ArticleEntity = {
-    postId: string,
-    url?: string,
-    title: string,
-    tags?: string[],
-    categories?: string[],
-    authors?: string[],
-    publishTime?: number,
-    updateTime?: number,
-};
+function getEntityType(data: JsonObject): EntityType | null {
+    const type = getValue(data, '@type');
 
-export function extractArticle(data: JsonObject): ArticleEntity | null {
-    // Extract ID - try multiple possible fields
-    let postId = getValue(data, 'identifier');
-    const url = getValue(data, 'url', 'mainEntityOfPage');
-
-    if (typeof postId !== 'string' && typeof url === 'string' && URL.canParse(url)) {
-        const parsedUrl = new URL(url);
-        const pathSegments = parsedUrl.pathname
-            .split('/')
-            .filter(segment => segment.length > 0);
-
-        if (pathSegments.length > 0) {
-            postId = pathSegments[pathSegments.length - 1];
+    for (const [entityType, typeSet] of Object.entries(typeMap) as Array<[EntityType, Set<string>]>) {
+        if (contains(typeSet, type)) {
+            return entityType;
         }
     }
 
-    // Extract title
-    const title = getValue(data, 'headline', 'name');
+    return null;
+}
 
-    // Validate required fields
-    if (typeof postId !== 'string' || typeof title !== 'string') {
-        return null;
+export function extractArticle(data: JsonObject): ArticleEntity {
+    const postId = getValue(data, 'identifier');
+    const post: ArticleEntity = {};
+
+    if (typeof postId === 'string') {
+        post.id = postId;
     }
 
-    const post: ArticleEntity = {
-        postId: postId,
-        title: title,
-    };
+    const title = getValue(data, 'headline', 'name');
+
+    if (typeof title === 'string') {
+        post.title = title;
+    }
 
     const datePublished = getValue(data, 'datePublished', 'dateCreated');
     const dateModified = getValue(data, 'dateModified');
@@ -125,6 +163,8 @@ export function extractArticle(data: JsonObject): ArticleEntity | null {
             post.updateTime = updateTime;
         }
     }
+
+    const url = getValue(data, 'url', 'mainEntityOfPage');
 
     if (typeof url === 'string' && URL.canParse(url)) {
         post.url = url;
@@ -224,40 +264,19 @@ export function extractArticle(data: JsonObject): ArticleEntity | null {
     return post;
 }
 
-function parseTimestamp(value: unknown): number | null {
-    if (typeof value === 'string') {
-        // Parse ISO 8601 date string
-        const date = Date.parse(value);
+export function extractProduct(data: JsonObject): ProductEntity {
+    const product: ProductEntity = {};
 
-        if (!Number.isNaN(date)) {
-            return date;
-        }
+    const productId = getValue(data, 'productID', 'identifier');
+
+    if (typeof productId === 'string') {
+        product.id = productId;
     }
 
-    return null;
-}
-
-export type ProductEntity = {
-    productId: string,
-    sku?: string,
-    name: string,
-    category?: string,
-    brand?: string,
-    variant?: string,
-    displayPrice: number,
-    originalPrice?: number,
-    url?: string,
-    imageUrl?: string,
-};
-
-export function extractProduct(data: JsonObject): ProductEntity | null {
-    const productSku = getValue(data, 'sku');
-    const productId = getValue(data, 'productID') ?? productSku;
     const productName = getValue(data, 'name');
 
-    // Validate required fields
-    if (typeof productId !== 'string' || typeof productName !== 'string') {
-        return null;
+    if (typeof productName === 'string') {
+        product.name = productName;
     }
 
     // Extract price information
@@ -304,19 +323,17 @@ export function extractProduct(data: JsonObject): ProductEntity | null {
         }
     }
 
-    if (prices.length === 0) {
-        return null;
+    if (prices.length > 0) {
+        const displayPrice = Math.min(...prices);
+        const originalPrice = Math.max(...prices);
+
+        product.displayPrice = displayPrice;
+
+        // Only set originalPrice if it's meaningfully different
+        if (originalPrice > displayPrice) {
+            product.originalPrice = originalPrice;
+        }
     }
-
-    const displayPrice = Math.min(...prices);
-    const originalPrice = Math.max(...prices);
-
-    // Build product object with all extracted data
-    const product: ProductEntity = {
-        productId: productId,
-        name: productName,
-        displayPrice: displayPrice,
-    };
 
     // Extract variant information
     const variant: string[] = [];
@@ -339,10 +356,7 @@ export function extractProduct(data: JsonObject): ProductEntity | null {
         product.variant = variant.join(', ');
     }
 
-    // Only set originalPrice if it's meaningfully different
-    if (originalPrice > displayPrice) {
-        product.originalPrice = originalPrice;
-    }
+    const productSku = getValue(data, 'sku');
 
     if (typeof productSku === 'string') {
         product.sku = productSku;
@@ -434,6 +448,19 @@ function contains(set: Set<JsonValue>, value: JsonValue): boolean {
 
 function isObject(value: JsonValue | unknown): value is JsonObject {
     return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function parseTimestamp(value: unknown): number | null {
+    if (typeof value === 'string') {
+        // Parse ISO 8601 date string
+        const date = Date.parse(value);
+
+        if (!Number.isNaN(date)) {
+            return date;
+        }
+    }
+
+    return null;
 }
 
 function parseNumber(value: unknown): number | null {

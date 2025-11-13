@@ -191,6 +191,80 @@ describe('AutoTrackingPlugin', () => {
             });
         });
 
+        it('should extract ID from URL if identifier is missing', () => {
+            const articleScript = document.createElement('script');
+
+            const article = {
+                '@type': 'Article',
+                headline: 'Test Article',
+                url: 'https://example.com/articles/article-456',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+
+            articleScript.textContent = JSON.stringify(article);
+
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
+                post: {
+                    postId: 'article-456',
+                    title: article.headline,
+                    url: article.url,
+                    publishTime: Date.parse(article.datePublished),
+
+                },
+            });
+        });
+
+        it('should not track if no slug can be extracted from URL and identifier is missing', () => {
+            const articleScript = document.createElement('script');
+
+            const article = {
+                '@type': 'Article',
+                headline: 'Test Article',
+                url: 'https://example.com/',
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+
+        it('should not track post if the title is missing', () => {
+            const articleScript = document.createElement('script');
+
+            const article = {
+                '@type': 'Article',
+                identifier: 'article-123',
+                url: 'https://example.com/article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+
         it('should truncate post properties when exceeding limits', () => {
             const articleScript = document.createElement('script');
 
@@ -330,6 +404,103 @@ describe('AutoTrackingPlugin', () => {
                     imageUrl: product.image,
                 },
             });
+        });
+
+        it('should not track product if ID is missing', () => {
+            const productScript = document.createElement('script');
+
+            const product = {
+                '@type': 'Product',
+                name: 'Test Product',
+                url: 'https://example.com/product',
+                offers: {
+                    '@type': 'Offer',
+                    price: 49.99,
+                },
+            } satisfies Product;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            document.body.appendChild(productScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+
+        it('should not track product if name is missing', () => {
+            const productScript = document.createElement('script');
+
+            const product = {
+                '@type': 'Product',
+                productID: 'prod-123',
+                url: 'https://example.com/product',
+                offers: {
+                    '@type': 'Offer',
+                    price: 49.99,
+                },
+            } satisfies Product;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            document.body.appendChild(productScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+
+        it('should not track product if price is missing', () => {
+            const productScript = document.createElement('script');
+
+            const product = {
+                '@type': 'Product',
+                productID: 'prod-123',
+                name: 'Test Product',
+                url: 'https://example.com/product',
+            } satisfies Product;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            document.body.appendChild(productScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+
+        it('should not track product if URL is missing', () => {
+            const productScript = document.createElement('script');
+
+            const product = {
+                '@type': 'Product',
+                productID: 'prod-123',
+                name: 'Test Product',
+                offers: {
+                    '@type': 'Offer',
+                    price: 49.99,
+                },
+            } satisfies Product;
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+
+            document.body.appendChild(productScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
         });
 
         it('should truncate product properties when exceeding limits', () => {

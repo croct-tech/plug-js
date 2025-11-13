@@ -73,9 +73,26 @@ export class AutoTrackingPlugin implements Plugin {
     }
 
     private trackPostViewed(info: ArticleEntity): void {
+        let postId = info.id;
+
+        if (postId === undefined && info.url !== undefined) {
+            const parsedUrl = new URL(info.url);
+            const pathSegments = parsedUrl.pathname
+                .split('/')
+                .filter(segment => segment.length > 0);
+
+            if (pathSegments.length > 0) {
+                postId = pathSegments[pathSegments.length - 1];
+            }
+        }
+
+        if (postId === undefined || info.title === undefined) {
+            return;
+        }
+
         this.tracker.track('postViewed', {
             post: {
-                postId: AutoTrackingPlugin.truncate(info.postId, 200),
+                postId: AutoTrackingPlugin.truncate(postId, 200),
                 title: AutoTrackingPlugin.truncate(info.title, 200),
                 url: info.url,
                 tags: info.tags?.map(tag => AutoTrackingPlugin.truncate(tag, 50)),
@@ -88,9 +105,18 @@ export class AutoTrackingPlugin implements Plugin {
     }
 
     private trackProductViewed(info: ProductEntity): void {
+        if (
+            info.id === undefined
+            || info.name === undefined
+            || info.displayPrice === undefined
+            || info.url === undefined
+        ) {
+            return;
+        }
+
         this.tracker.track('productViewed', {
             product: {
-                productId: AutoTrackingPlugin.truncate(info.productId, 50),
+                productId: AutoTrackingPlugin.truncate(info.id, 50),
                 name: AutoTrackingPlugin.truncate(info.name, 200),
                 displayPrice: info.displayPrice,
                 url: info.url,

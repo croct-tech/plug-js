@@ -527,31 +527,6 @@ describe('AutoTrackingPlugin', () => {
             expect(mockTracker.track).not.toHaveBeenCalled();
         });
 
-        it('should not track product if URL is missing', () => {
-            const productScript = document.createElement('script');
-
-            const product = {
-                '@type': 'Product',
-                productID: 'prod-123',
-                name: 'Test Product',
-                offers: {
-                    '@type': 'Offer',
-                    price: 49.99,
-                },
-            } satisfies Product;
-
-            productScript.type = 'application/ld+json';
-            productScript.textContent = JSON.stringify(product);
-
-            document.body.appendChild(productScript);
-
-            const plugin = createPlugin();
-
-            plugin.enable();
-
-            expect(mockTracker.track).not.toHaveBeenCalled();
-        });
-
         it('should truncate product properties when exceeding limits', () => {
             const productScript = document.createElement('script');
 

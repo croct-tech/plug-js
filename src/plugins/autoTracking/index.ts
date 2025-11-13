@@ -112,12 +112,7 @@ export class AutoTrackingPlugin implements Plugin {
     }
 
     private trackProductViewed(info: ProductEntity): void {
-        if (
-            info.id === undefined
-            || info.name === undefined
-            || info.displayPrice === undefined
-            || info.url === undefined
-        ) {
+        if (info.id === undefined || info.name === undefined || info.displayPrice === undefined) {
             return;
         }
 

@@ -15,7 +15,7 @@ export class GlobalVariablePlugin implements Plugin {
     }
 
     public enable(): void {
-        if (window.croct !== this.plug) {
+        if (window.croct === undefined) {
             window.croct = this.plug;
             this.globallyAvailable = false;
         }

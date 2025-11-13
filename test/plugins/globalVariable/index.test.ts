@@ -32,14 +32,6 @@ describe('GlobalVariable', () => {
         expect(window.croct).toBe(mockPlug);
     });
 
-    it('should not call any listeners when onCroctLoad is undefined', () => {
-        const plugin = createPlugin();
-
-        plugin.enable();
-
-        expect(window.croct).toBe(mockPlug);
-    });
-
     it('should call the callback passing the plug', () => {
         const callback = jest.fn();
 
@@ -53,7 +45,7 @@ describe('GlobalVariable', () => {
         expect(callback).toHaveBeenCalledWith(mockPlug);
     });
 
-    it('should not call listener if it is not a function', () => {
+    it('should not call callback if it is not a function', () => {
         window.onCroctLoad = 'not a function' as any;
 
         const plugin = createPlugin();
@@ -105,20 +97,20 @@ describe('GlobalVariable', () => {
         expect(window.onCroctLoad).toBe(callback);
     });
 
-    it('should call listener assigned after enable is called', () => {
+    it('should call callback assigned after enable', () => {
         const plugin = createPlugin();
 
         plugin.enable();
 
-        const listener = jest.fn();
+        const callback = jest.fn();
 
-        window.onCroctLoad = listener;
+        window.onCroctLoad = callback;
 
-        expect(listener).toHaveBeenCalledTimes(1);
-        expect(listener).toHaveBeenCalledWith(mockPlug);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith(mockPlug);
     });
 
-    it('should handle non-function listener assigned after enable', () => {
+    it('should handle non-function callback assigned after enable', () => {
         const plugin = createPlugin();
 
         plugin.enable();

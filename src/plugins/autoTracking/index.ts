@@ -9,6 +9,12 @@ export type Configuration = {
     options?: Options,
 };
 
+export type Options = {
+    disablePostViewed?: boolean,
+    disableProductViewed?: boolean,
+    disableLinkOpened?: boolean,
+};
+
 export class AutoTrackingPlugin implements Plugin {
     private readonly tab: Tab;
 
@@ -151,12 +157,6 @@ export class AutoTrackingPlugin implements Plugin {
         return value.slice(0, maxLength);
     }
 }
-
-export type Options = {
-    disablePostViewed?: boolean,
-    disableProductViewed?: boolean,
-    disableLinkOpened?: boolean,
-};
 
 export const factory = ((props): AutoTrackingPlugin => new AutoTrackingPlugin({
     tab: props.sdk.tab,

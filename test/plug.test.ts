@@ -1252,6 +1252,41 @@ describe('The Croct plug', () => {
         expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "globalVariable" enabled');
     });
 
+    it('should enable the auto-tracking plugin by default', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(logger.debug).toHaveBeenCalledWith('[Croct] Plugin "autoTracking" enabled');
+    });
+
+    it('should not enable the auto-tracking plugin if explicitly disabled', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+            plugins: {
+                autoTracking: false,
+            },
+        });
+
+        expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "autoTracking" enabled');
+    });
+
     it('should wait for the plugins to disable before closing the SDK', async () => {
         let unloadFooPlugin: () => void = jest.fn();
         const fooDisable = jest.fn().mockImplementation(

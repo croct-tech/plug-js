@@ -151,7 +151,7 @@ describe('parseEntity', () => {
             },
         },
     ])('should parse $description', ({content, expected}) => {
-        expect(parseEntity(content)).toEqual(expected);
+        expect(parseEntity(content)).toStrictEqual(expected);
     });
 });
 
@@ -852,7 +852,7 @@ describe('extractEntity', () => {
         },
 
     ])('should extract $description', ({data, expected}) => {
-        expect(extractEntity(data as any)).toEqual(expected);
+        expect(extractEntity(data as any)).toStrictEqual(expected);
     });
 });
 
@@ -1595,7 +1595,7 @@ describe('extractProduct', () => {
             },
         },
     ])('should extract $description', ({data, expected}) => {
-        expect(extractProduct(data as any)).toEqual(expected);
+        expect(extractProduct(data as any)).toStrictEqual(expected);
     });
 });
 
@@ -2724,6 +2724,6 @@ describe('extractArticle', () => {
             },
         },
     ])('should extract $description', ({data, expected}) => {
-        expect(extractArticle(data as any)).toEqual(expected);
+        expect(extractArticle(data as any)).toStrictEqual(expected);
     });
 });

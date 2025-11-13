@@ -76,12 +76,19 @@ describe('AutoTrackingPlugin', () => {
 
         plugin.enable();
 
-        expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
-            post: expect.objectContaining({
+        expect(mockTracker.track).toHaveBeenCalled();
+
+        const call = mockTracker.track
+            .mock
+            .calls
+            .find(args => args[0] === 'postViewed');
+
+        expect(call?.[1]).toStrictEqual({
+            post: {
                 postId: 'article-123',
                 title: 'Test Article',
                 publishTime: Date.parse(article.datePublished),
-            }),
+            },
         });
     });
 
@@ -381,27 +388,12 @@ describe('AutoTrackingPlugin', () => {
             const product = {
                 '@type': 'Product',
                 productID: 'prod-123',
-                sku: 'SKU-123',
                 name: 'Test Product',
-                category: 'Electronics',
-                brand: {
-                    '@type': 'Brand',
-                    name: 'TestBrand',
-                },
-                color: 'Red',
-                size: 'Large',
                 url: 'https://example.com/product',
-                image: 'https://example.com/image.jpg',
-                offers: [
-                    {
-                        '@type': 'Offer',
-                        price: 99.99,
-                    },
-                    {
-                        '@type': 'Offer',
-                        price: 119.99,
-                    },
-                ],
+                offers: {
+                    '@type': 'Offer',
+                    price: 99.99,
+                },
             } satisfies Product;
 
             productScript.type = 'application/ld+json';
@@ -413,18 +405,19 @@ describe('AutoTrackingPlugin', () => {
 
             plugin.enable();
 
-            expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
+            expect(mockTracker.track).toHaveBeenCalled();
+
+            const call = mockTracker.track
+                .mock
+                .calls
+                .find(args => args[0] === 'productViewed');
+
+            expect(call?.[1]).toStrictEqual({
                 product: {
                     productId: product.productID,
-                    sku: product.sku,
                     name: product.name,
-                    category: product.category,
-                    brand: product.brand.name,
-                    variant: [product.color, product.size].join(', '),
-                    displayPrice: 99.99,
-                    originalPrice: 119.99,
                     url: product.url,
-                    imageUrl: product.image,
+                    displayPrice: 99.99,
                 },
             });
         });

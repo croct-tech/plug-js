@@ -98,7 +98,7 @@ export class AutoTrackingPlugin implements Plugin {
         }
 
         this.tracker.track('postViewed', {
-            post: {
+            post: AutoTrackingPlugin.clean({
                 postId: AutoTrackingPlugin.truncate(postId, 200),
                 title: AutoTrackingPlugin.truncate(info.title, 200),
                 url: info.url,
@@ -107,7 +107,7 @@ export class AutoTrackingPlugin implements Plugin {
                 authors: info.authors?.map(author => AutoTrackingPlugin.truncate(author, 100)),
                 publishTime: info.publishTime ?? Date.now(),
                 updateTime: info.updateTime,
-            },
+            }),
         });
     }
 
@@ -122,7 +122,7 @@ export class AutoTrackingPlugin implements Plugin {
         }
 
         this.tracker.track('productViewed', {
-            product: {
+            product: AutoTrackingPlugin.clean({
                 productId: AutoTrackingPlugin.truncate(info.id, 50),
                 name: AutoTrackingPlugin.truncate(info.name, 200),
                 displayPrice: info.displayPrice,
@@ -133,7 +133,7 @@ export class AutoTrackingPlugin implements Plugin {
                 category: info.category !== undefined ? AutoTrackingPlugin.truncate(info.category, 100) : undefined,
                 originalPrice: info.originalPrice,
                 imageUrl: info.imageUrl,
-            },
+            }),
         });
     }
 
@@ -155,6 +155,18 @@ export class AutoTrackingPlugin implements Plugin {
         }
 
         return value.slice(0, maxLength);
+    }
+
+    private static clean<T extends Record<string, unknown>>(obj: T): T {
+        const result: T = {...obj};
+
+        for (const key of Object.keys(result)) {
+            if (result[key] === undefined) {
+                delete result[key];
+            }
+        }
+
+        return result;
     }
 }
 

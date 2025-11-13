@@ -1217,6 +1217,41 @@ describe('The Croct plug', () => {
         expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "preview" enabled');
     });
 
+    it('should enable the globalVariable plugin by default', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(logger.debug).toHaveBeenCalledWith('[Croct] Plugin "globalVariable" enabled');
+    });
+
+    it('should not enable the globalVariable plugin if explicitly disabled', () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+            plugins: {
+                globalVariable: false,
+            },
+        });
+
+        expect(logger.debug).not.toHaveBeenCalledWith('[Croct] Plugin "globalVariable" enabled');
+    });
+
     it('should enable the auto-tracking plugin by default', () => {
         const logger: Logger = {
             debug: jest.fn(),

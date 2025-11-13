@@ -22,6 +22,7 @@ import {factory as previewPluginFactory} from './plugins/preview';
 import {factory as autoTrackingPluginFactory} from './plugins/autoTracking';
 import {VersionedSlotId, SlotContent} from './slot';
 import {JsonValue, JsonObject} from './sdk/json';
+import {factory as globalVariablePluginFactory} from './plugins/globalVariable';
 
 export interface PluginConfigurations {
     [key: string]: any;
@@ -92,6 +93,7 @@ export class GlobalPlug implements Plug {
 
     private pluginFactories: {[key: string]: PluginFactory} = {
         preview: previewPluginFactory,
+        globalVariable: globalVariablePluginFactory,
         autoTracking: autoTrackingPluginFactory,
     };
 
@@ -214,6 +216,7 @@ export class GlobalPlug implements Plug {
                 sdk: {
                     version: VERSION,
                     appId: appId,
+                    plug: this,
                     tracker: sdk.tracker,
                     evaluator: sdk.evaluator,
                     user: sdk.user,

@@ -15,14 +15,9 @@ describe('AutoTrackingPlugin', () => {
         // Clear the DOM before each test
         document.body.innerHTML = '';
 
-        mockTab = {
-            addListener: jest.fn(),
-            removeListener: jest.fn(),
-        } as any;
+        mockTab = {addListener: jest.fn(), removeListener: jest.fn()} as unknown as jest.Mocked<Tab>;
 
-        mockTracker = {
-            track: jest.fn(),
-        } as any;
+        mockTracker = {track: jest.fn()} as unknown as jest.Mocked<TrackerFacade>;
 
         jest.spyOn(Date, 'now').mockReturnValue(now);
 
@@ -67,8 +62,8 @@ describe('AutoTrackingPlugin', () => {
         document.body.appendChild(articleScript);
 
         const sdk: Partial<PluginSdk> = {
-            tab: mockTab as Tab,
-            tracker: mockTracker as TrackerFacade,
+            tab: mockTab,
+            tracker: mockTracker,
         };
 
         // Spy constructor

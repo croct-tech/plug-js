@@ -12,11 +12,6 @@ describe('GlobalVariable', () => {
         delete window.onCroctLoad;
     });
 
-    afterEach(() => {
-        delete window.croct;
-        delete window.onCroctLoad;
-    });
-
     function createPlugin(): GlobalVariablePlugin {
         return factory({
             sdk: {plug: mockPlug} as unknown as PluginSdk,

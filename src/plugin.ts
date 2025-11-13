@@ -2,7 +2,7 @@ import {TokenStore} from './sdk/token';
 import {EvaluatorFacade} from './sdk/evaluation';
 import {TrackerFacade} from './sdk/tracking';
 import {Tab, Logger, SdkEventManager, SessionFacade, UserFacade, CidAssigner} from './sdk';
-import {Plug} from './plug';
+import type {Plug} from './plug';
 
 export interface PluginSdk {
     readonly version: string;

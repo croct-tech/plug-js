@@ -19,6 +19,7 @@ import {loadSlotContent} from '@croct/content';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as previewPluginFactory} from './plugins/preview';
+import {factory as autoTrackingPluginFactory} from './plugins/autoTracking';
 import {VersionedSlotId, SlotContent} from './slot';
 import {JsonValue, JsonObject} from './sdk/json';
 
@@ -91,6 +92,7 @@ export class GlobalPlug implements Plug {
 
     private pluginFactories: {[key: string]: PluginFactory} = {
         preview: previewPluginFactory,
+        autoTracking: autoTrackingPluginFactory,
     };
 
     private instance?: SdkFacade;

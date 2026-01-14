@@ -39,10 +39,14 @@ export type StaticContentOptions<T extends JsonObject = JsonObject> =
 
 export type FetchOptions<T extends JsonObject = SlotContent> = DynamicContentOptions<T> | StaticContentOptions<T>;
 
-export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
+export function fetchContent<
+    I extends VersionedSlotId,
+    C extends JsonObject,
+    O extends FetchOptions<SlotContent<I, C>>
+>(
     slotId: I,
-    options?: FetchOptions<SlotContent<I, C>>,
-): Promise<Omit<FetchResponse<I, C>, 'payload'>> {
+    options?: O,
+): Promise<FetchResponse<I, C, never, O>> {
     const {
         apiKey,
         appId,
@@ -58,11 +62,11 @@ export function fetchContent<I extends VersionedSlotId, C extends JsonObject>(
     const normalizedLocale = preferredLocale === '' ? undefined : preferredLocale;
 
     const promise = (new ContentFetcher({...auth, baseEndpointUrl: baseEndpointUrl}))
-        .fetch<SlotContent<I, C>>(id, {
+        .fetch<SlotContent<I, C>, O>(id, {
             ...fetchOptions,
             ...(normalizedLocale !== undefined ? {preferredLocale: normalizedLocale} : {}),
             ...(version !== 'latest' ? {version: version} : {}),
-        });
+        } as O);
 
     return promise.catch(
         async error => {

@@ -15,6 +15,7 @@ import {
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
 import {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
+import {SlotMetadata, FetchResponseOptions} from '@croct/sdk/contentFetcher';
 import {loadSlotContent} from '@croct/content';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
@@ -36,7 +37,13 @@ export type FetchOptions<T> = Omit<BaseFetchOptions, 'version'> & {
     fallback?: T,
 };
 
-export type FetchResponse<I extends VersionedSlotId, C extends JsonObject = JsonObject, F = never> = {
+export type FetchResponse<
+    I extends VersionedSlotId,
+    C extends JsonObject = JsonObject,
+    F = never,
+    O extends FetchResponseOptions = FetchResponseOptions
+> = {
+    metadata?: SlotMetadata<O>,
     content: SlotContent<I, C>|F,
 };
 
@@ -66,12 +73,15 @@ export interface Plug {
 
     evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
 
-    fetch<I extends VersionedSlotId>(slotId: I, options?: FetchOptions<SlotContent<I>>): Promise<FetchResponse<I>>;
-
-    fetch<F, I extends VersionedSlotId>(
+    fetch<I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>>>(
         slotId: I,
-        options?: FetchOptions<SlotContent<I>|F>
-    ): Promise<FetchResponse<I, JsonObject, F>>;
+        options?: O
+    ): Promise<FetchResponse<I, JsonObject, never, O>>;
+
+    fetch<F, I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>|F>>(
+        slotId: I,
+        options?: O
+    ): Promise<FetchResponse<I, JsonObject, F, O>>;
 
     unplug(): Promise<void>;
 }
@@ -376,15 +386,15 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    public fetch<I extends VersionedSlotId>(
+    public fetch<I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>>>(
         slotId: I,
-        options?: FetchOptions<SlotContent<I>>
-    ): Promise<FetchResponse<I>>;
+        options?: O
+    ): Promise<FetchResponse<I, O>>;
 
-    public fetch<F, I extends VersionedSlotId>(
+    public fetch<F, I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>|F>>(
         slotId: I,
-        options?: FetchOptions<SlotContent<I>|F>
-    ): Promise<FetchResponse<I, JsonObject, F>>;
+        options?: O
+    ): Promise<FetchResponse<I, JsonObject, F, O>>;
 
     public fetch<I extends VersionedSlotId = VersionedSlotId>(
         slotId: I,
@@ -396,7 +406,7 @@ export class GlobalPlug implements Plug {
 
         return this.sdk
             .contentFetcher
-            .fetch<SlotContent<I>>(id, {
+            .fetch<SlotContent<I>, FetchResponseOptions>(id, {
                 ...options,
                 ...(normalizedLocale !== undefined ? {preferredLocale: normalizedLocale} : {}),
                 ...(version !== 'latest' ? {version: version} : {}),
@@ -412,7 +422,9 @@ export class GlobalPlug implements Plug {
                     throw error;
                 }
 
-                return {content: resolvedFallback};
+                return {
+                    content: resolvedFallback,
+                };
             });
     }
 

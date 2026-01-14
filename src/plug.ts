@@ -389,7 +389,7 @@ export class GlobalPlug implements Plug {
     public fetch<I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>>>(
         slotId: I,
         options?: O
-    ): Promise<FetchResponse<I, O>>;
+    ): Promise<FetchResponse<I, JsonObject, never, O>>;
 
     public fetch<F, I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>|F>>(
         slotId: I,

@@ -15,7 +15,7 @@ import {
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
 import {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
-import {SlotMetadata, FetchResponseOptions} from '@croct/sdk/contentFetcher';
+import {FetchResponseOptions, FetchResponse as BaseFetchResponse} from '@croct/sdk/contentFetcher';
 import {loadSlotContent} from '@croct/content';
 import {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
@@ -42,10 +42,7 @@ export type FetchResponse<
     C extends JsonObject = JsonObject,
     F = never,
     O extends FetchResponseOptions = FetchResponseOptions
-> = {
-    metadata?: SlotMetadata<O>,
-    content: SlotContent<I, C>|F,
-};
+> = Optional<BaseFetchResponse<SlotContent<I, C>|F, O>, 'metadata'>;
 
 export interface Plug {
     readonly tracker: TrackerFacade;

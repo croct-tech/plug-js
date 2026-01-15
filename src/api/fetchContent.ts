@@ -1,7 +1,9 @@
 import {
     ContentFetcher,
     DynamicContentOptions as BaseDynamicOptions,
+    FetchResponseOptions,
     StaticContentOptions as BaseStaticOptions,
+    FetchOptions as BaseFetchOptions,
 } from '@croct/sdk/contentFetcher';
 import type {ApiKey} from '@croct/sdk/apiKey';
 import type {Logger} from '@croct/sdk/logging';
@@ -39,13 +41,9 @@ export type StaticContentOptions<T extends JsonObject = JsonObject> =
 
 export type FetchOptions<T extends JsonObject = SlotContent> = DynamicContentOptions<T> | StaticContentOptions<T>;
 
-export function fetchContent<
-    I extends VersionedSlotId,
-    C extends JsonObject,
-    O extends FetchOptions<SlotContent<I, C>>
->(
+export function fetchContent<I extends VersionedSlotId, C extends JsonObject, O extends FetchResponseOptions>(
     slotId: I,
-    options?: O,
+    options?: O & FetchOptions<SlotContent<I, C>>,
 ): Promise<FetchResponse<I, C, never, O>> {
     const {
         apiKey,
@@ -61,12 +59,14 @@ export function fetchContent<
     const [id, version = 'latest'] = slotId.split('@') as [I, `${number}` | 'latest' | undefined];
     const normalizedLocale = preferredLocale === '' ? undefined : preferredLocale;
 
+    const resolvedOptions: BaseFetchOptions = {
+        ...fetchOptions,
+        ...(normalizedLocale !== undefined ? {preferredLocale: normalizedLocale} : {}),
+        ...(version !== 'latest' ? {version: version} : {}),
+    };
+
     const promise = (new ContentFetcher({...auth, baseEndpointUrl: baseEndpointUrl}))
-        .fetch<SlotContent<I, C>, O>(id, {
-            ...fetchOptions,
-            ...(normalizedLocale !== undefined ? {preferredLocale: normalizedLocale} : {}),
-            ...(version !== 'latest' ? {version: version} : {}),
-        } as O);
+        .fetch<SlotContent<I, C>, O>(id, resolvedOptions);
 
     return promise.catch(
         async error => {

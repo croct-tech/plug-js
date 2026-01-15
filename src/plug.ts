@@ -70,14 +70,14 @@ export interface Plug {
 
     evaluate<T extends JsonValue>(expression: string, options?: EvaluationOptions): Promise<T>;
 
-    fetch<I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>>>(
+    fetch<I extends VersionedSlotId, O extends FetchResponseOptions>(
         slotId: I,
-        options?: O
+        options?: O & FetchOptions<SlotContent<I>>
     ): Promise<FetchResponse<I, JsonObject, never, O>>;
 
-    fetch<F, I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>|F>>(
+    fetch<F, I extends VersionedSlotId, O extends FetchResponseOptions>(
         slotId: I,
-        options?: O
+        options?: O & FetchOptions<SlotContent<I>|F>
     ): Promise<FetchResponse<I, JsonObject, F, O>>;
 
     unplug(): Promise<void>;
@@ -383,14 +383,14 @@ export class GlobalPlug implements Plug {
             .then(result => result === true);
     }
 
-    public fetch<I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>>>(
+    public fetch<I extends VersionedSlotId, O extends FetchResponseOptions>(
         slotId: I,
-        options?: O
+        options?: O & FetchOptions<SlotContent<I>>
     ): Promise<FetchResponse<I, JsonObject, never, O>>;
 
-    public fetch<F, I extends VersionedSlotId, O extends FetchOptions<SlotContent<I>|F>>(
+    public fetch<F, I extends VersionedSlotId, O extends FetchResponseOptions>(
         slotId: I,
-        options?: O
+        options?: O & FetchOptions<SlotContent<I>|F>
     ): Promise<FetchResponse<I, JsonObject, F, O>>;
 
     public fetch<I extends VersionedSlotId = VersionedSlotId>(

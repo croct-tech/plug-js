@@ -41,7 +41,11 @@ export type StaticContentOptions<T extends JsonObject = JsonObject> =
 
 export type FetchOptions<T extends JsonObject = SlotContent> = DynamicContentOptions<T> | StaticContentOptions<T>;
 
-export function fetchContent<I extends VersionedSlotId, C extends JsonObject, O extends FetchResponseOptions>(
+export function fetchContent<
+    I extends VersionedSlotId,
+    C extends JsonObject,
+    O extends FetchResponseOptions = FetchResponseOptions
+>(
     slotId: I,
     options?: O & FetchOptions<SlotContent<I, C>>,
 ): Promise<FetchResponse<I, C, never, O>> {

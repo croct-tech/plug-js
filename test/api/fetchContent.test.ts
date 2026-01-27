@@ -3,7 +3,7 @@ import {Logger} from '@croct/sdk/logging';
 import {JsonObject} from '@croct/json';
 import {loadSlotContent} from '@croct/content';
 import {FetchResponse} from '../../src/plug';
-import {SlotContent} from '../../src/slot';
+import {DynamicSlotId, SlotContent} from '../../src/slot';
 import {fetchContent, FetchOptions} from '../../src/api';
 
 const mockFetch: ContentFetcher['fetch'] = jest.fn();
@@ -50,12 +50,15 @@ describe('fetchContent', () => {
             },
         };
 
-        const result: FetchResponse<typeof slotId> = {
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
             content: {
                 _component: 'component',
                 id: 'test',
             },
-        };
+        } satisfies FetchResponse<DynamicSlotId>;
 
         jest.mocked(mockFetch).mockResolvedValue(result);
 
@@ -82,12 +85,15 @@ describe('fetchContent', () => {
             },
         };
 
-        const result: FetchResponse<typeof slotId> = {
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
             content: {
                 _component: 'component',
                 id: 'test',
             },
-        };
+        } satisfies FetchResponse<DynamicSlotId>;
 
         jest.mocked(mockFetch).mockResolvedValue(result);
 
@@ -113,12 +119,15 @@ describe('fetchContent', () => {
             },
         };
 
-        const result: FetchResponse<typeof slotId> = {
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
             content: {
                 _component: 'component',
                 id: 'test',
             },
-        };
+        } satisfies FetchResponse<DynamicSlotId>;
 
         jest.mocked(mockFetch).mockResolvedValue(result);
 
@@ -143,12 +152,15 @@ describe('fetchContent', () => {
             timeout: 100,
         };
 
-        const result: FetchResponse<typeof slotId> = {
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
             content: {
                 _component: 'component',
                 id: 'test',
             },
-        };
+        } satisfies FetchResponse<DynamicSlotId>;
 
         jest.mocked(mockFetch).mockResolvedValue(result);
 
@@ -174,12 +186,15 @@ describe('fetchContent', () => {
             timeout: 100,
         };
 
-        const result: FetchResponse<typeof slotId> = {
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
             content: {
                 _component: 'component',
                 id: 'test',
             },
-        };
+        } satisfies FetchResponse<DynamicSlotId>;
 
         jest.mocked(mockFetch).mockResolvedValue(result);
 

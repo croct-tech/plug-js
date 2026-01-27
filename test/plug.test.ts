@@ -4,9 +4,10 @@ import {JsonObject} from '@croct/json';
 import {loadSlotContent} from '@croct/content';
 import {Logger} from '../src/sdk';
 import {Plugin, PluginFactory} from '../src/plugin';
-import {GlobalPlug} from '../src/plug';
+import {FetchResponse, GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
+import {VersionedSlotId} from '../src/slot';
 
 jest.mock(
     '../src/constants',
@@ -902,20 +903,22 @@ describe('The Croct plug', () => {
 
         expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
-        const content: JsonObject = {
-            title: 'Hello World',
-        };
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
+            content: {
+                _component: 'component',
+                title: 'Hello World',
+            },
+        } satisfies FetchResponse<VersionedSlotId>;
 
-        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
-            content: content,
-        });
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue(result);
 
         const slotId = 'foo';
         const options: FetchOptions = {timeout: 5};
 
-        await expect(croct.fetch(slotId, options)).resolves.toEqual({
-            content: content,
-        });
+        await expect(croct.fetch(slotId, options)).resolves.toEqual(result);
 
         expect(fetch).toHaveBeenLastCalledWith(slotId, options);
     });
@@ -1129,20 +1132,22 @@ describe('The Croct plug', () => {
 
         expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
-        const content: JsonObject = {
-            title: 'Hello World',
-        };
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
+            content: {
+                _component: 'component',
+                title: 'Hello World',
+            },
+        } satisfies FetchResponse<VersionedSlotId>;
 
-        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
-            content: content,
-        });
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue(result);
 
         const slotId = 'foo@1';
         const options: FetchOptions = {timeout: 5};
 
-        await expect(croct.fetch(slotId, options)).resolves.toEqual({
-            content: content,
-        });
+        await expect(croct.fetch(slotId, options)).resolves.toEqual(result);
 
         expect(fetch).toHaveBeenLastCalledWith('foo', {
             ...options,
@@ -1160,20 +1165,22 @@ describe('The Croct plug', () => {
 
         expect(initialize).toHaveBeenCalledWith(expect.objectContaining(config));
 
-        const content: JsonObject = {
-            title: 'Hello World',
-        };
+        const result = {
+            metadata: {
+                version: '1.0',
+            },
+            content: {
+                _component: 'component',
+                title: 'Hello World',
+            },
+        } satisfies FetchResponse<VersionedSlotId>;
 
-        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue({
-            content: content,
-        });
+        const fetch = jest.spyOn(sdkFacade.contentFetcher, 'fetch').mockResolvedValue(result);
 
         const slotId = 'foo@latest';
         const options: FetchOptions = {timeout: 5};
 
-        await expect(croct.fetch(slotId, options)).resolves.toEqual({
-            content: content,
-        });
+        await expect(croct.fetch(slotId, options)).resolves.toEqual(result);
 
         expect(jest.mocked(fetch).mock.calls[0][1]).toStrictEqual(options);
     });

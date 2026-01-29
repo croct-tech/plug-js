@@ -1,8 +1,9 @@
-import {Evaluator, EvaluationOptions as BaseOptions} from '@croct/sdk/evaluator';
+import type {EvaluationOptions as BaseOptions} from '@croct/sdk/evaluator';
+import {Evaluator} from '@croct/sdk/evaluator';
 import type {ApiKey} from '@croct/sdk/apiKey';
 import type {Logger} from '@croct/sdk/logging';
 import {formatCause} from '@croct/sdk/error';
-import {JsonValue} from '../sdk/json';
+import type {JsonValue} from '../sdk/json';
 
 export type EvaluationOptions<T extends JsonValue = JsonValue> = BaseOptions & AuthOptions & FetchingOptions<T>;
 
@@ -15,7 +16,7 @@ type FetchingOptions<T extends JsonValue> = {
 type AuthOptions = ServerSideAuthOptions | ClientSideAuthOptions;
 
 type ServerSideAuthOptions = {
-    apiKey: string|ApiKey,
+    apiKey: string | ApiKey,
     appId?: never,
 };
 

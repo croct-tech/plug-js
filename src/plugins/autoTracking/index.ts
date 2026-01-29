@@ -1,7 +1,8 @@
-import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
-import {Tab} from '@croct/sdk/tab';
-import {Plugin, PluginFactory} from '../../plugin';
-import {parseEntity, ArticleEntity, ProductEntity} from './structuredData';
+import type {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
+import type {Tab} from '@croct/sdk/tab';
+import type {Plugin, PluginFactory} from '../../plugin';
+import type {ArticleEntity, ProductEntity} from './structuredData';
+import {parseEntity} from './structuredData';
 
 export type Configuration = {
     tab: Tab,
@@ -97,7 +98,7 @@ export class AutoTrackingPlugin implements Plugin {
             return;
         }
 
-        this.tracker.track('postViewed', {
+        void this.tracker.track('postViewed', {
             post: AutoTrackingPlugin.clean({
                 postId: AutoTrackingPlugin.truncate(postId, 200),
                 title: AutoTrackingPlugin.truncate(info.title, 200),
@@ -116,7 +117,7 @@ export class AutoTrackingPlugin implements Plugin {
             return;
         }
 
-        this.tracker.track('productViewed', {
+        void this.tracker.track('productViewed', {
             product: AutoTrackingPlugin.clean({
                 productId: AutoTrackingPlugin.truncate(info.id, 50),
                 name: AutoTrackingPlugin.truncate(info.name, 200),
@@ -137,7 +138,7 @@ export class AutoTrackingPlugin implements Plugin {
             const link = event.target.closest('a');
 
             if (link?.href !== undefined && URL.canParse(link.href, document.baseURI)) {
-                this.tracker.track('linkOpened', {
+                void this.tracker.track('linkOpened', {
                     link: new URL(link.href, document.baseURI).toString(),
                 });
             }

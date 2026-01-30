@@ -1,5 +1,5 @@
-import {EventListener, EventDispatcher, EventSubscriber, EventManager} from '@croct/sdk/eventManager';
-import {SdkEventMap, SdkEventType} from '@croct/sdk/sdkEvents';
+import type {EventListener, EventDispatcher, EventSubscriber, EventManager} from '@croct/sdk/eventManager';
+import type {SdkEventMap, SdkEventType} from '@croct/sdk/sdkEvents';
 
 export type {Logger} from '@croct/sdk/logging';
 export {SessionFacade} from '@croct/sdk/facade/sessionFacade';

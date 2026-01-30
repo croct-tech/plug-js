@@ -1,4 +1,4 @@
-import {CanonicalVersionId, Version, Versioned, VersionedId} from './versioning';
+import type {CanonicalVersionId, Version, Versioned, VersionedId} from './versioning';
 
 export interface ComponentMap {
 }

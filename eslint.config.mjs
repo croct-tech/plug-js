@@ -16,6 +16,7 @@ export default defineConfig(
             '@typescript-eslint/no-empty-object-type': 'off',
             '@typescript-eslint/unbound-method': 'off',
             '@typescript-eslint/no-redundant-type-constituents': 'off',
+            '@typescript-eslint/no-floating-promises': 'off',
         },
         languageOptions: {
             globals: {

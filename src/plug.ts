@@ -279,7 +279,7 @@ export class GlobalPlug implements Plug {
             );
         }
 
-        void Promise.all(pending)
+        Promise.all(pending)
             .then(() => {
                 this.initialize();
 

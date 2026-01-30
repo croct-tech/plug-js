@@ -98,7 +98,7 @@ export class AutoTrackingPlugin implements Plugin {
             return;
         }
 
-        void this.tracker.track('postViewed', {
+        this.tracker.track('postViewed', {
             post: AutoTrackingPlugin.clean({
                 postId: AutoTrackingPlugin.truncate(postId, 200),
                 title: AutoTrackingPlugin.truncate(info.title, 200),
@@ -117,7 +117,7 @@ export class AutoTrackingPlugin implements Plugin {
             return;
         }
 
-        void this.tracker.track('productViewed', {
+        this.tracker.track('productViewed', {
             product: AutoTrackingPlugin.clean({
                 productId: AutoTrackingPlugin.truncate(info.id, 50),
                 name: AutoTrackingPlugin.truncate(info.name, 200),
@@ -138,7 +138,7 @@ export class AutoTrackingPlugin implements Plugin {
             const link = event.target.closest('a');
 
             if (link?.href !== undefined && URL.canParse(link.href, document.baseURI)) {
-                void this.tracker.track('linkOpened', {
+                this.tracker.track('linkOpened', {
                     link: new URL(link.href, document.baseURI).toString(),
                 });
             }

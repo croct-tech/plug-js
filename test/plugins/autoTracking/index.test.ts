@@ -2,7 +2,8 @@ import type {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
 import type {Tab, TabUrlChangeEvent} from '@croct/sdk/tab';
 import type {Article, Product, Service} from 'schema-dts';
 import type {EventListener} from '@croct/sdk/eventManager';
-import type {Configuration, Options, factory, type AutoTrackingPlugin} from '../../../src/plugins/autoTracking';
+import type {Configuration, Options, AutoTrackingPlugin} from '../../../src/plugins/autoTracking';
+import {factory} from '../../../src/plugins/autoTracking';
 import type {PluginArguments, PluginSdk} from '../../../src/plugin';
 import mocked = jest.mocked;
 

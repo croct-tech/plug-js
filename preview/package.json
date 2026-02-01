@@ -19,7 +19,7 @@
     "lint": "eslint 'test/**/*.ts'"
   },
   "devDependencies": {
-    "@croct/eslint-plugin": "^0.7.1",
+    "@croct/eslint-plugin": "^0.8.0",
     "@playwright/test": "^1.46.1",
     "@typescript-eslint/parser": "^8.4.0",
     "eslint": "^8.18.0",

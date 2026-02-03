@@ -1,6 +1,6 @@
-import {JsonObject} from '@croct/json';
-import {CanonicalVersionId, Version, Versioned, VersionedId} from './versioning';
-import {ComponentContent, ComponentVersionId} from './component';
+import type {JsonObject} from '@croct/json';
+import type {CanonicalVersionId, Version, Versioned, VersionedId} from './versioning';
+import type {ComponentContent, ComponentVersionId} from './component';
 
 export interface SlotMap {
 }

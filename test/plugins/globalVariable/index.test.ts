@@ -1,6 +1,7 @@
-import {GlobalVariablePlugin, factory} from '../../../src/plugins/globalVariable';
-import {Plug} from '../../../src';
-import {PluginSdk} from '../../../src/plugin';
+import type {GlobalVariablePlugin} from '../../../src/plugins/globalVariable';
+import {factory} from '../../../src/plugins/globalVariable';
+import type {Plug} from '../../../src';
+import type {PluginSdk} from '../../../src/plugin';
 
 describe('GlobalVariable', () => {
     let mockPlug: jest.Mocked<Plug>;

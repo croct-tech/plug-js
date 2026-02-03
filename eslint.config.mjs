@@ -1,4 +1,5 @@
 import { defineConfig } from 'eslint/config';
+import globals from 'globals';
 import { configs } from '@croct/eslint-plugin';
 
 export default defineConfig(
@@ -17,5 +18,10 @@ export default defineConfig(
             '@typescript-eslint/no-redundant-type-constituents': 'off',
             '@typescript-eslint/no-floating-promises': 'off',
         },
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            }
+        }
     }
 );

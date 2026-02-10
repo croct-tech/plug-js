@@ -909,6 +909,37 @@ describe('AutoTrackingPlugin', () => {
 
             expect(mockTracker.track).not.toHaveBeenCalled();
         });
+
+        it('should not scan if disabled before scheduled scan runs', async () => {
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const script = document.createElement('script');
+
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(article);
+
+            // The initial scan on enable finds no JSON-LD
+            expect(mockTracker.track).not.toHaveBeenCalled();
+
+            // Trigger a mutation that schedules a scan via microtask
+            document.body.appendChild(script);
+
+            // Disable before the microtask runs
+            plugin.disable();
+
+            await flushMutationObserver();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
     });
 
     describe('Link tracking', () => {

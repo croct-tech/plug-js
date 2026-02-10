@@ -66,6 +66,7 @@ export class AutoTrackingPlugin implements Plugin {
     public disable(): void {
         this.observer?.disconnect();
         this.observer = null;
+        this.scanScheduled = false;
         this.trackedEntities.clear();
 
         this.tab.removeListener('urlChange', this.handleUrlChange);
@@ -109,7 +110,10 @@ export class AutoTrackingPlugin implements Plugin {
 
         queueMicrotask(() => {
             this.scanScheduled = false;
-            this.trackStructuredData();
+
+            if (this.observer !== null) {
+                this.trackStructuredData();
+            }
         });
     }
 

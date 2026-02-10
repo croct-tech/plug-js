@@ -6,6 +6,12 @@ import {Configuration, Options, factory, type AutoTrackingPlugin} from '../../..
 import {PluginArguments, PluginSdk} from '../../../src/plugin';
 import mocked = jest.mocked;
 
+function flushMutationObserver(): Promise<void> {
+    return new Promise(resolve => {
+        setTimeout(resolve, 0);
+    });
+}
+
 describe('AutoTrackingPlugin', () => {
     let mockTab: jest.Mocked<Tab>;
     let mockTracker: jest.Mocked<TrackerFacade>;
@@ -123,6 +129,8 @@ describe('AutoTrackingPlugin', () => {
     it('should clean up listener on disable', () => {
         jest.spyOn(document, 'addEventListener');
         jest.spyOn(document, 'removeEventListener');
+        jest.spyOn(window, 'addEventListener');
+        jest.spyOn(window, 'removeEventListener');
 
         const plugin = createPlugin();
 
@@ -149,6 +157,18 @@ describe('AutoTrackingPlugin', () => {
             .find(call => call[0] === 'click')![1];
 
         expect(addedClickListener).toBe(removedClickListener);
+
+        const addedPageShowListener = mocked(window.addEventListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'pageshow')![1];
+
+        const removedPageShowListener = mocked(window.removeEventListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'pageshow')![1];
+
+        expect(addedPageShowListener).toBe(removedPageShowListener);
     });
 
     describe('Post view tracking', () => {
@@ -334,9 +354,7 @@ describe('AutoTrackingPlugin', () => {
             });
         });
 
-        it('should track posts on URL change', () => {
-            const articleScript = document.createElement('script');
-
+        it('should track posts when JSON-LD is added to DOM after enable', async () => {
             const article = {
                 '@type': 'BlogPosting',
                 identifier: 'article-123',
@@ -345,30 +363,19 @@ describe('AutoTrackingPlugin', () => {
                 datePublished: '2024-01-01T00:00:00Z',
             } satisfies Article;
 
-            articleScript.type = 'application/ld+json';
-            articleScript.textContent = JSON.stringify(article);
-
             const plugin = createPlugin();
 
             plugin.enable();
 
-            document.body.appendChild(articleScript);
-
             expect(mockTracker.track).not.toHaveBeenCalled();
 
-            const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
-                .mock
-                .calls
-                .find(call => call[0] === 'urlChange')![1];
+            const articleScript = document.createElement('script');
 
-            urlChangeListener(
-                new CustomEvent('urlChange', {
-                    detail: {
-                        tab: mockTab,
-                        url: 'https://example.com/article',
-                    },
-                }),
-            );
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            await flushMutationObserver();
 
             expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
                 post: {
@@ -566,9 +573,7 @@ describe('AutoTrackingPlugin', () => {
             });
         });
 
-        it('should track products on URL change', () => {
-            const productScript = document.createElement('script');
-
+        it('should track products when JSON-LD is added to DOM after enable', async () => {
             const product = {
                 '@type': 'Product',
                 productID: 'prod-123',
@@ -582,30 +587,19 @@ describe('AutoTrackingPlugin', () => {
                 },
             } satisfies Product;
 
-            productScript.type = 'application/ld+json';
-            productScript.textContent = JSON.stringify(product);
-
             const plugin = createPlugin();
 
             plugin.enable();
 
-            document.body.appendChild(productScript);
-
             expect(mockTracker.track).not.toHaveBeenCalled();
 
-            const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
-                .mock
-                .calls
-                .find(call => call[0] === 'urlChange')![1];
+            const productScript = document.createElement('script');
 
-            urlChangeListener(
-                new CustomEvent('urlChange', {
-                    detail: {
-                        tab: mockTab,
-                        url: 'https://example.com/product',
-                    },
-                }),
-            );
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+            document.body.appendChild(productScript);
+
+            await flushMutationObserver();
 
             expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
                 product: {
@@ -617,6 +611,277 @@ describe('AutoTrackingPlugin', () => {
                     url: product.url,
                 },
             });
+        });
+    });
+
+    describe('Deduplication', () => {
+        it('should not re-track the same post on the same page visit', async () => {
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const articleScript = document.createElement('script');
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+            // Add another script with the same entity
+            const duplicateScript = document.createElement('script');
+
+            duplicateScript.type = 'application/ld+json';
+            duplicateScript.textContent = JSON.stringify(article);
+            document.body.appendChild(duplicateScript);
+
+            await flushMutationObserver();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not re-track the same product on the same page visit', async () => {
+            const product = {
+                '@type': 'Product',
+                productID: 'prod-123',
+                name: 'Test Product',
+                offers: {
+                    '@type': 'Offer',
+                    price: 99.99,
+                },
+            } satisfies Product;
+
+            const productScript = document.createElement('script');
+
+            productScript.type = 'application/ld+json';
+            productScript.textContent = JSON.stringify(product);
+            document.body.appendChild(productScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+            const duplicateScript = document.createElement('script');
+
+            duplicateScript.type = 'application/ld+json';
+            duplicateScript.textContent = JSON.stringify(product);
+            document.body.appendChild(duplicateScript);
+
+            await flushMutationObserver();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+        });
+
+        it('should re-track entities after URL change and new DOM content', async () => {
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const articleScript = document.createElement('script');
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+            // Simulate URL change (clears dedup set)
+            const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+                .mock
+                .calls
+                .find(call => call[0] === 'urlChange')![1];
+
+            urlChangeListener(
+                new CustomEvent('urlChange', {
+                    detail: {
+                        tab: mockTab,
+                        url: 'https://example.com/new-page',
+                    },
+                }),
+            );
+
+            // Add the same entity again (simulating framework re-render)
+            const newScript = document.createElement('script');
+
+            newScript.type = 'application/ld+json';
+            newScript.textContent = JSON.stringify(article);
+            document.body.appendChild(newScript);
+
+            await flushMutationObserver();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe('URL change handling', () => {
+        it('should not scan DOM on urlChange', () => {
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const articleScript = document.createElement('script');
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            mockTracker.track.mockClear();
+
+            // Trigger URL change — should NOT re-scan DOM
+            const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+                .mock
+                .calls
+                .find(call => call[0] === 'urlChange')![1];
+
+            urlChangeListener(
+                new CustomEvent('urlChange', {
+                    detail: {
+                        tab: mockTab,
+                        url: 'https://example.com/new-page',
+                    },
+                }),
+            );
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('bfcache restoration', () => {
+        it('should re-track entities on bfcache restoration', () => {
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const articleScript = document.createElement('script');
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+            // Simulate bfcache restoration
+            const pageshowEvent = new PageTransitionEvent('pageshow', {persisted: true});
+
+            window.dispatchEvent(pageshowEvent);
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(2);
+        });
+
+        it('should not re-scan on regular pageshow', () => {
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const articleScript = document.createElement('script');
+
+            articleScript.type = 'application/ld+json';
+            articleScript.textContent = JSON.stringify(article);
+            document.body.appendChild(articleScript);
+
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+            const pageshowEvent = new PageTransitionEvent('pageshow', {persisted: false});
+
+            window.dispatchEvent(pageshowEvent);
+
+            expect(mockTracker.track).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('MutationObserver', () => {
+        it('should detect deeply nested JSON-LD additions', async () => {
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const wrapper = document.createElement('div');
+            const inner = document.createElement('div');
+            const script = document.createElement('script');
+
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(article);
+
+            inner.appendChild(script);
+            wrapper.appendChild(inner);
+            document.body.appendChild(wrapper);
+
+            await flushMutationObserver();
+
+            expect(mockTracker.track).toHaveBeenCalledWith('postViewed', expect.objectContaining({
+                post: expect.objectContaining({
+                    postId: 'article-123',
+                }),
+            }));
+        });
+
+        it('should disconnect on disable', async () => {
+            const plugin = createPlugin();
+
+            plugin.enable();
+
+            plugin.disable();
+
+            const article = {
+                '@type': 'BlogPosting',
+                identifier: 'article-123',
+                headline: 'Test Article',
+                datePublished: '2024-01-01T00:00:00Z',
+            } satisfies Article;
+
+            const script = document.createElement('script');
+
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(article);
+            document.body.appendChild(script);
+
+            await flushMutationObserver();
+
+            expect(mockTracker.track).not.toHaveBeenCalled();
         });
     });
 

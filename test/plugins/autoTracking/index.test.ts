@@ -171,6 +171,32 @@ describe('AutoTrackingPlugin', () => {
         expect(addedPageShowListener).toBe(removedPageShowListener);
     });
 
+    it('should re-track entities after disable and re-enable', () => {
+        const article = {
+            '@type': 'BlogPosting',
+            identifier: 'article-123',
+            headline: 'Test Article',
+            datePublished: '2024-01-01T00:00:00Z',
+        } satisfies Article;
+
+        const articleScript = document.createElement('script');
+
+        articleScript.type = 'application/ld+json';
+        articleScript.textContent = JSON.stringify(article);
+        document.body.appendChild(articleScript);
+
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+        plugin.disable();
+        plugin.enable();
+
+        expect(mockTracker.track).toHaveBeenCalledTimes(2);
+    });
+
     describe('Post view tracking', () => {
         it('should track viewed posts', () => {
             const articleScript = document.createElement('script');

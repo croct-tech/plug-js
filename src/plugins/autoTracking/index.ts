@@ -26,6 +26,8 @@ export class AutoTrackingPlugin implements Plugin {
 
     private readonly trackedEntities: Set<string> = new Set();
 
+    private scanScheduled = false;
+
     public constructor(configuration: Configuration) {
         this.tab = configuration.tab;
         this.tracker = configuration.tracker;
@@ -73,6 +75,10 @@ export class AutoTrackingPlugin implements Plugin {
     }
 
     private handleMutations(mutations: MutationRecord[]): void {
+        if (this.scanScheduled) {
+            return;
+        }
+
         for (const mutation of mutations) {
             for (const node of mutation.addedNodes) {
                 if (!(node instanceof HTMLElement)) {
@@ -83,12 +89,28 @@ export class AutoTrackingPlugin implements Plugin {
                     AutoTrackingPlugin.isJsonLdScript(node)
                     || node.querySelector('script[type="application/ld+json"]') !== null
                 ) {
-                    this.trackStructuredData();
+                    this.scheduleScan();
 
                     return;
                 }
             }
         }
+    }
+
+    /**
+     * Defers the scan to a microtask to coalesce multiple DOM mutations
+     * into a single scan. Frameworks like Next.js can insert several nodes
+     * in quick succession during a route transition, each triggering the
+     * MutationObserver. Without batching, each mutation would cause a
+     * redundant full-document querySelectorAll for JSON-LD scripts.
+     */
+    private scheduleScan(): void {
+        this.scanScheduled = true;
+
+        queueMicrotask(() => {
+            this.scanScheduled = false;
+            this.trackStructuredData();
+        });
     }
 
     private handleUrlChange(): void {

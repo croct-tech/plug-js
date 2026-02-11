@@ -1,9 +1,9 @@
-import {expect, Page, Response, test} from '@playwright/test';
+import {expect, type Page, type Response, test} from '@playwright/test';
 
 type WidgetEvent = Record<string, any>;
 
 test.describe('Preview widget', () => {
-    function open(page: Page, params: Record<string, string> = {}): Promise<Response|null> {
+    function open(page: Page, params: Record<string, string> = {}): Promise<Response | null> {
         const query = new URLSearchParams();
 
         for (const [key, value] of Object.entries(params)) {
@@ -40,7 +40,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -69,7 +69,7 @@ test.describe('Preview widget', () => {
             locale: 'en-io',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -88,7 +88,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -113,7 +113,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -132,7 +132,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -181,7 +181,7 @@ test.describe('Preview widget', () => {
 
         await page.locator('#disclosure').click();
 
-        const minimizeButton = await page.locator('#minimize-button');
+        const minimizeButton = page.locator('#minimize-button');
 
         await expect(minimizeButton).toHaveAttribute('aria-expanded', 'true');
 
@@ -196,7 +196,7 @@ test.describe('Preview widget', () => {
 
         await page.locator('#disclosure').click();
 
-        const minimizeButton = await page.locator('#minimize-button');
+        const minimizeButton = page.locator('#minimize-button');
 
         await expect(minimizeButton).toHaveAttribute('aria-expanded', 'true');
 

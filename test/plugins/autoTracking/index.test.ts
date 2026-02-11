@@ -151,6 +151,160 @@ describe('AutoTrackingPlugin', () => {
         expect(addedClickListener).toBe(removedClickListener);
     });
 
+    it('should not scan DOM immediately on URL change', () => {
+        jest.useFakeTimers();
+
+        const articleScript = document.createElement('script');
+
+        articleScript.type = 'application/ld+json';
+
+        articleScript.textContent = JSON.stringify({
+            '@type': 'BlogPosting',
+            identifier: 'article-123',
+            headline: 'Test Article',
+            datePublished: '2024-01-01T00:00:00Z',
+        } satisfies Article);
+
+        document.body.appendChild(articleScript);
+
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        mockTracker.track.mockClear();
+
+        const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'urlChange')![1];
+
+        urlChangeListener(
+            new CustomEvent('urlChange', {
+                detail: {
+                    tab: mockTab,
+                    url: 'https://example.com/new-page',
+                },
+            }),
+        );
+
+        expect(mockTracker.track).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(1000);
+
+        expect(mockTracker.track).toHaveBeenCalled();
+
+        jest.useRealTimers();
+    });
+
+    it('should cancel pending scan on disable', () => {
+        jest.useFakeTimers();
+
+        const articleScript = document.createElement('script');
+
+        articleScript.type = 'application/ld+json';
+
+        articleScript.textContent = JSON.stringify({
+            '@type': 'BlogPosting',
+            identifier: 'article-123',
+            headline: 'Test Article',
+            datePublished: '2024-01-01T00:00:00Z',
+        } satisfies Article);
+
+        document.body.appendChild(articleScript);
+
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        mockTracker.track.mockClear();
+
+        const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'urlChange')![1];
+
+        urlChangeListener(
+            new CustomEvent('urlChange', {
+                detail: {
+                    tab: mockTab,
+                    url: 'https://example.com/new-page',
+                },
+            }),
+        );
+
+        plugin.disable();
+
+        jest.advanceTimersByTime(1000);
+
+        expect(mockTracker.track).not.toHaveBeenCalled();
+
+        jest.useRealTimers();
+    });
+
+    it('should cancel previous scan when a new URL change fires', () => {
+        jest.useFakeTimers();
+
+        const plugin = createPlugin();
+
+        plugin.enable();
+
+        mockTracker.track.mockClear();
+
+        const urlChangeListener: EventListener<TabUrlChangeEvent> = mocked(mockTab.addListener)
+            .mock
+            .calls
+            .find(call => call[0] === 'urlChange')![1];
+
+        urlChangeListener(
+            new CustomEvent('urlChange', {
+                detail: {
+                    tab: mockTab,
+                    url: 'https://example.com/page-1',
+                },
+            }),
+        );
+
+        jest.advanceTimersByTime(500);
+
+        const articleScript = document.createElement('script');
+
+        articleScript.type = 'application/ld+json';
+
+        articleScript.textContent = JSON.stringify({
+            '@type': 'BlogPosting',
+            identifier: 'article-456',
+            headline: 'Second Article',
+            datePublished: '2024-01-01T00:00:00Z',
+        } satisfies Article);
+
+        document.body.appendChild(articleScript);
+
+        urlChangeListener(
+            new CustomEvent('urlChange', {
+                detail: {
+                    tab: mockTab,
+                    url: 'https://example.com/page-2',
+                },
+            }),
+        );
+
+        jest.advanceTimersByTime(500);
+
+        expect(mockTracker.track).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(500);
+
+        expect(mockTracker.track).toHaveBeenCalledTimes(1);
+
+        expect(mockTracker.track).toHaveBeenCalledWith('postViewed', expect.objectContaining({
+            post: expect.objectContaining({
+                postId: 'article-456',
+            }),
+        }));
+
+        jest.useRealTimers();
+    });
+
     describe('Post view tracking', () => {
         it('should track viewed posts', () => {
             const articleScript = document.createElement('script');
@@ -335,6 +489,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should track posts on URL change', () => {
+            jest.useFakeTimers();
+
             const articleScript = document.createElement('script');
 
             const article = {
@@ -370,6 +526,8 @@ describe('AutoTrackingPlugin', () => {
                 }),
             );
 
+            jest.advanceTimersByTime(1000);
+
             expect(mockTracker.track).toHaveBeenCalledWith('postViewed', {
                 post: {
                     postId: article.identifier,
@@ -378,6 +536,8 @@ describe('AutoTrackingPlugin', () => {
                     publishTime: Date.parse(article.datePublished),
                 },
             });
+
+            jest.useRealTimers();
         });
     });
 
@@ -567,6 +727,8 @@ describe('AutoTrackingPlugin', () => {
         });
 
         it('should track products on URL change', () => {
+            jest.useFakeTimers();
+
             const productScript = document.createElement('script');
 
             const product = {
@@ -607,6 +769,8 @@ describe('AutoTrackingPlugin', () => {
                 }),
             );
 
+            jest.advanceTimersByTime(1000);
+
             expect(mockTracker.track).toHaveBeenCalledWith('productViewed', {
                 product: {
                     productId: product.productID,
@@ -617,6 +781,8 @@ describe('AutoTrackingPlugin', () => {
                     url: product.url,
                 },
             });
+
+            jest.useRealTimers();
         });
     });
 

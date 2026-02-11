@@ -22,12 +22,15 @@ export class AutoTrackingPlugin implements Plugin {
 
     private readonly options?: Options;
 
+    private scanTimeout: ReturnType<typeof setTimeout> | null = null;
+
     public constructor(configuration: Configuration) {
         this.tab = configuration.tab;
         this.tracker = configuration.tracker;
         this.options = configuration.options;
         this.trackStructuredData = this.trackStructuredData.bind(this);
         this.trackLinkOpened = this.trackLinkOpened.bind(this);
+        this.handleUrlChange = this.handleUrlChange.bind(this);
     }
 
     private isDisabled(): boolean {
@@ -42,7 +45,7 @@ export class AutoTrackingPlugin implements Plugin {
         }
 
         this.trackStructuredData();
-        this.tab.addListener('urlChange', this.trackStructuredData);
+        this.tab.addListener('urlChange', this.handleUrlChange);
 
         if (this.options?.disableLinkOpened !== true) {
             document.addEventListener('click', this.trackLinkOpened, true);
@@ -50,8 +53,27 @@ export class AutoTrackingPlugin implements Plugin {
     }
 
     public disable(): void {
-        this.tab.removeListener('urlChange', this.trackStructuredData);
+        if (this.scanTimeout !== null) {
+            clearTimeout(this.scanTimeout);
+            this.scanTimeout = null;
+        }
+
+        this.tab.removeListener('urlChange', this.handleUrlChange);
         document.removeEventListener('click', this.trackLinkOpened, true);
+    }
+
+    private handleUrlChange(): void {
+        if (this.scanTimeout !== null) {
+            clearTimeout(this.scanTimeout);
+        }
+
+        this.scanTimeout = setTimeout(
+            () => {
+                this.scanTimeout = null;
+                this.trackStructuredData();
+            },
+            1000,
+        );
     }
 
     private trackStructuredData(): void {

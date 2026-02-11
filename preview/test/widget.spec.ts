@@ -222,9 +222,7 @@ test.describe('Preview widget', () => {
 
         await open(page);
 
-        await page.waitForFunction(length => length === 1, events.length);
-
-        expect(events).toHaveLength(1);
+        await expect.poll(() => events.length).toBe(1);
 
         expect(events[0].type).toEqual('croct:preview:resize');
         expect(events[0].width).toBeGreaterThan(100);
@@ -251,15 +249,13 @@ test.describe('Preview widget', () => {
 
         await expect(page.locator('#disclosure')).toHaveAttribute('aria-expanded', 'true');
 
-        await page.waitForFunction(length => length > 0, events.length);
+        await expect.poll(() => events.length).toBeGreaterThan(0);
 
         events.splice(0, events.length);
 
         await page.locator('#leave-button').click();
 
-        await page.waitForFunction(length => length === 1, events.length);
-
-        expect(events).toHaveLength(1);
+        await expect.poll(() => events.length).toBe(1);
 
         expect(events[0].type).toEqual('croct:preview:leave');
     });

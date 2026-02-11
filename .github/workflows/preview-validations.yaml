@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: preview/node_modules
-          key: preview_node_modules-${{ hashFiles('package-lock.json') }}
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: preview/node_modules
-          key: preview_node_modules-${{ hashFiles('package-lock.json') }}
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
@@ -81,7 +81,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: preview/node_modules
-          key: preview_node_modules-${{ hashFiles('package-lock.json') }}
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'

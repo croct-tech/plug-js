@@ -1,13 +1,15 @@
-import {SdkFacade, Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
-import {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
-import {JsonObject} from '@croct/json';
+import type {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import {SdkFacade} from '@croct/sdk/facade/sdkFacade';
+import type {FetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
+import type {JsonObject} from '@croct/json';
 import {loadSlotContent} from '@croct/content';
-import {Logger} from '../src/sdk';
-import {Plugin, PluginFactory} from '../src/plugin';
-import {FetchResponse, GlobalPlug} from '../src/plug';
+import type {Logger} from '../src/sdk';
+import type {Plugin, PluginFactory} from '../src/plugin';
+import type {FetchResponse} from '../src/plug';
+import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
-import {VersionedSlotId} from '../src/slot';
+import type {VersionedSlotId} from '../src/slot';
 
 jest.mock(
     '../src/constants',

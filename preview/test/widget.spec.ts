@@ -1,9 +1,9 @@
-import {expect, Page, Response, test} from '@playwright/test';
+import {expect, type Page, type Response, test} from '@playwright/test';
 
 type WidgetEvent = Record<string, any>;
 
 test.describe('Preview widget', () => {
-    function open(page: Page, params: Record<string, string> = {}): Promise<Response|null> {
+    function open(page: Page, params: Record<string, string> = {}): Promise<Response | null> {
         const query = new URLSearchParams();
 
         for (const [key, value] of Object.entries(params)) {
@@ -40,7 +40,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -69,7 +69,7 @@ test.describe('Preview widget', () => {
             locale: 'en-io',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -88,7 +88,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -113,7 +113,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -132,7 +132,7 @@ test.describe('Preview widget', () => {
             locale: 'en-us',
         });
 
-        const disclosure = await page.locator('#disclosure');
+        const disclosure = page.locator('#disclosure');
 
         await disclosure.click();
 
@@ -181,7 +181,7 @@ test.describe('Preview widget', () => {
 
         await page.locator('#disclosure').click();
 
-        const minimizeButton = await page.locator('#minimize-button');
+        const minimizeButton = page.locator('#minimize-button');
 
         await expect(minimizeButton).toHaveAttribute('aria-expanded', 'true');
 
@@ -196,7 +196,7 @@ test.describe('Preview widget', () => {
 
         await page.locator('#disclosure').click();
 
-        const minimizeButton = await page.locator('#minimize-button');
+        const minimizeButton = page.locator('#minimize-button');
 
         await expect(minimizeButton).toHaveAttribute('aria-expanded', 'true');
 
@@ -222,9 +222,7 @@ test.describe('Preview widget', () => {
 
         await open(page);
 
-        await page.waitForFunction(length => length === 1, events.length);
-
-        expect(events).toHaveLength(1);
+        await expect.poll(() => events.length).toBe(1);
 
         expect(events[0].type).toEqual('croct:preview:resize');
         expect(events[0].width).toBeGreaterThan(100);
@@ -251,15 +249,13 @@ test.describe('Preview widget', () => {
 
         await expect(page.locator('#disclosure')).toHaveAttribute('aria-expanded', 'true');
 
-        await page.waitForFunction(length => length > 0, events.length);
+        await expect.poll(() => events.length).toBeGreaterThan(0);
 
         events.splice(0, events.length);
 
         await page.locator('#leave-button').click();
 
-        await page.waitForFunction(length => length === 1, events.length);
-
-        expect(events).toHaveLength(1);
+        await expect.poll(() => events.length).toBe(1);
 
         expect(events[0].type).toEqual('croct:preview:leave');
     });

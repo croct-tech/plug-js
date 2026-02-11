@@ -1,7 +1,8 @@
-import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
-import {Tab} from '@croct/sdk/tab';
-import {Plugin, PluginFactory} from '../../plugin';
-import {parseEntity, ArticleEntity, ProductEntity} from './structuredData';
+import type {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
+import type {Tab} from '@croct/sdk/tab';
+import type {Plugin, PluginFactory} from '../../plugin';
+import type {ArticleEntity, ProductEntity} from './structuredData';
+import {parseEntity} from './structuredData';
 
 export type Configuration = {
     tab: Tab,

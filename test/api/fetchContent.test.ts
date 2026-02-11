@@ -1,10 +1,11 @@
 import {ContentFetcher} from '@croct/sdk/contentFetcher';
-import {Logger} from '@croct/sdk/logging';
-import {JsonObject} from '@croct/json';
+import type {Logger} from '@croct/sdk/logging';
+import type {JsonObject} from '@croct/json';
 import {loadSlotContent} from '@croct/content';
-import {FetchResponse} from '../../src/plug';
-import {DynamicSlotId, SlotContent} from '../../src/slot';
-import {fetchContent, FetchOptions} from '../../src/api';
+import type {FetchResponse} from '../../src/plug';
+import type {DynamicSlotId, SlotContent} from '../../src/slot';
+import type {FetchOptions} from '../../src/api';
+import {fetchContent} from '../../src/api';
 
 const mockFetch: ContentFetcher['fetch'] = jest.fn();
 

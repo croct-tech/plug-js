@@ -2,15 +2,13 @@
  * @jest-environment node
  */
 
-import {Article, Organization, Product, Service} from 'schema-dts';
+import type {Article, Organization, Product, Service} from 'schema-dts';
+import type {ArticleEntity, ProductEntity, Entity} from '../../../src/plugins/autoTracking/structuredData';
 import {
-    ArticleEntity,
     extractArticle,
     extractProduct,
-    ProductEntity,
     parseEntity,
     extractEntity,
-    Entity,
 } from '../../../src/plugins/autoTracking/structuredData';
 
 describe('parseEntity', () => {

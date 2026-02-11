@@ -1,17 +1,17 @@
-import {
-    ContentFetcher,
+import type {
     DynamicContentOptions as BaseDynamicOptions,
     FetchResponseOptions,
     StaticContentOptions as BaseStaticOptions,
     FetchOptions as BaseFetchOptions,
 } from '@croct/sdk/contentFetcher';
+import {ContentFetcher} from '@croct/sdk/contentFetcher';
 import type {ApiKey} from '@croct/sdk/apiKey';
 import type {Logger} from '@croct/sdk/logging';
 import {formatCause} from '@croct/sdk/error';
 import {loadSlotContent} from '@croct/content';
-import {JsonObject, JsonValue} from '../sdk/json';
-import {FetchResponse} from '../plug';
-import {SlotContent, VersionedSlotId} from '../slot';
+import type {JsonObject, JsonValue} from '../sdk/json';
+import type {FetchResponse} from '../plug';
+import type {SlotContent, VersionedSlotId} from '../slot';
 
 export type {FetchResponse} from '../plug';
 
@@ -24,7 +24,7 @@ type FetchingOptions<T extends JsonValue> = {
 type AuthOptions = ServerSideAuthOptions | ClientSideAuthOptions;
 
 type ServerSideAuthOptions = {
-    apiKey: string|ApiKey,
+    apiKey: string | ApiKey,
     appId?: never,
 };
 
@@ -44,7 +44,7 @@ export type FetchOptions<T extends JsonObject = SlotContent> = DynamicContentOpt
 export function fetchContent<
     I extends VersionedSlotId,
     C extends JsonObject,
-    O extends FetchResponseOptions = FetchResponseOptions
+    O extends FetchResponseOptions = FetchResponseOptions,
 >(
     slotId: I,
     options?: O & FetchOptions<SlotContent<I, C>>,

@@ -1,4 +1,4 @@
-import {Plug} from './plug';
+import type {Plug} from './plug';
 
 declare global {
     type CroctCallback = (instance: Plug) => void;

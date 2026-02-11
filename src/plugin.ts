@@ -1,7 +1,7 @@
-import {TokenStore} from './sdk/token';
-import {EvaluatorFacade} from './sdk/evaluation';
-import {TrackerFacade} from './sdk/tracking';
-import {Tab, Logger, SdkEventManager, SessionFacade, UserFacade, CidAssigner} from './sdk';
+import type {TokenStore} from './sdk/token';
+import type {EvaluatorFacade} from './sdk/evaluation';
+import type {TrackerFacade} from './sdk/tracking';
+import type {Tab, Logger, SdkEventManager, SessionFacade, UserFacade, CidAssigner} from './sdk';
 import type {Plug} from './plug';
 
 export interface PluginSdk {
@@ -35,7 +35,7 @@ export interface PluginFactory<T = any> {
 }
 
 export interface Plugin {
-    enable(): Promise<void>|void;
+    enable(): Promise<void> | void;
 
-    disable?(): Promise<void>|void;
+    disable?(): Promise<void> | void;
 }

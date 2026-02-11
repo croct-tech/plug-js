@@ -1,4 +1,4 @@
-import {JsonObject, JsonValue} from '@croct/json';
+import type {JsonObject, JsonValue} from '@croct/json';
 
 type EntityMap = {
     post: ArticleEntity,

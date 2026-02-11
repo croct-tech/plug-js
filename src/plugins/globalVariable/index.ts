@@ -1,5 +1,5 @@
-import {Plugin, PluginFactory} from '../../plugin';
-import {Plug} from '../../plug';
+import type {Plugin, PluginFactory} from '../../plugin';
+import type {Plug} from '../../plug';
 
 export type Configuration = {
     plug: Plug,

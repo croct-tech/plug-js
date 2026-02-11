@@ -1,5 +1,5 @@
-import {EventInfo as SdkEventInfo} from '@croct/sdk/tracker';
-import {TrackingEvent, TrackingEventType} from '@croct/sdk/trackingEvents';
+import type {EventInfo as SdkEventInfo} from '@croct/sdk/tracker';
+import type {TrackingEvent, TrackingEventType} from '@croct/sdk/trackingEvents';
 
 export {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
 export type {EventListener} from '@croct/sdk/tracker';

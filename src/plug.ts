@@ -1,28 +1,29 @@
-import {Logger} from '@croct/sdk/logging';
-import {SessionFacade} from '@croct/sdk/facade/sessionFacade';
-import {UserFacade} from '@croct/sdk/facade/userFacade';
-import {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
-import {EvaluationOptions, EvaluatorFacade} from '@croct/sdk/facade/evaluatorFacade';
-import {Configuration as SdkFacadeConfiguration, SdkFacade} from '@croct/sdk/facade/sdkFacade';
+import type {Logger} from '@croct/sdk/logging';
+import type {SessionFacade} from '@croct/sdk/facade/sessionFacade';
+import type {UserFacade} from '@croct/sdk/facade/userFacade';
+import type {TrackerFacade} from '@croct/sdk/facade/trackerFacade';
+import type {EvaluationOptions, EvaluatorFacade} from '@croct/sdk/facade/evaluatorFacade';
+import type {Configuration as SdkFacadeConfiguration} from '@croct/sdk/facade/sdkFacade';
+import {SdkFacade} from '@croct/sdk/facade/sdkFacade';
 import {formatCause} from '@croct/sdk/error';
 import {describe} from '@croct/sdk/validation';
-import {Optional} from '@croct/sdk/utilityTypes';
+import type {Optional} from '@croct/sdk/utilityTypes';
 import {Token} from '@croct/sdk/token';
-import {
+import type {
     ExternalTrackingEvent as ExternalEvent,
     ExternalTrackingEventPayload as ExternalEventPayload,
     ExternalTrackingEventType as ExternalEventType,
 } from '@croct/sdk/trackingEvents';
 import {VERSION} from '@croct/sdk';
-import {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
-import {FetchResponseOptions, FetchResponse as BaseFetchResponse} from '@croct/sdk/contentFetcher';
+import type {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFetcherFacade';
+import type {FetchResponseOptions, FetchResponse as BaseFetchResponse} from '@croct/sdk/contentFetcher';
 import {loadSlotContent} from '@croct/content';
-import {Plugin, PluginArguments, PluginFactory} from './plugin';
+import type {Plugin, PluginArguments, PluginFactory} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as previewPluginFactory} from './plugins/preview';
 import {factory as autoTrackingPluginFactory} from './plugins/autoTracking';
-import {VersionedSlotId, SlotContent} from './slot';
-import {JsonValue, JsonObject} from './sdk/json';
+import type {VersionedSlotId, SlotContent} from './slot';
+import type {JsonValue, JsonObject} from './sdk/json';
 import {factory as globalVariablePluginFactory} from './plugins/globalVariable';
 
 export interface PluginConfigurations {
@@ -41,8 +42,8 @@ export type FetchResponse<
     I extends VersionedSlotId,
     C extends JsonObject = JsonObject,
     F = never,
-    O extends FetchResponseOptions = FetchResponseOptions
-> = Optional<BaseFetchResponse<SlotContent<I, C>|F, O>, 'metadata'>;
+    O extends FetchResponseOptions = FetchResponseOptions,
+> = Optional<BaseFetchResponse<SlotContent<I, C> | F, O>, 'metadata'>;
 
 export interface Plug {
     readonly tracker: TrackerFacade;
@@ -77,7 +78,7 @@ export interface Plug {
 
     fetch<F, I extends VersionedSlotId, O extends FetchResponseOptions>(
         slotId: I,
-        options?: O & FetchOptions<SlotContent<I>|F>
+        options?: O & FetchOptions<SlotContent<I> | F>
     ): Promise<FetchResponse<I, JsonObject, F, O>>;
 
     unplug(): Promise<void>;
@@ -390,7 +391,7 @@ export class GlobalPlug implements Plug {
 
     public fetch<F, I extends VersionedSlotId, O extends FetchResponseOptions>(
         slotId: I,
-        options?: O & FetchOptions<SlotContent<I>|F>
+        options?: O & FetchOptions<SlotContent<I> | F>
     ): Promise<FetchResponse<I, JsonObject, F, O>>;
 
     public fetch<I extends VersionedSlotId = VersionedSlotId>(
@@ -412,7 +413,7 @@ export class GlobalPlug implements Plug {
                 logger.error(`Failed to fetch content for slot "${id}@${version}": ${formatCause(error)}`);
 
                 const resolvedFallback = fallback === undefined
-                    ? (await loadSlotContent(slotId, normalizedLocale) as SlotContent<I>|null ?? undefined)
+                    ? (await loadSlotContent(slotId, normalizedLocale) as SlotContent<I> | null ?? undefined)
                     : fallback;
 
                 if (resolvedFallback === undefined) {

@@ -1,6 +1,7 @@
 import {Evaluator} from '@croct/sdk/evaluator';
-import {Logger} from '@croct/sdk/logging';
-import {evaluate, EvaluationOptions} from '../../src/api';
+import type {Logger} from '@croct/sdk/logging';
+import type {EvaluationOptions} from '../../src/api';
+import {evaluate} from '../../src/api';
 
 const mockEvaluate: Evaluator['evaluate'] = jest.fn();
 

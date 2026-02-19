@@ -908,6 +908,7 @@ describe('The Croct plug', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',
@@ -1137,6 +1138,7 @@ describe('The Croct plug', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',
@@ -1170,6 +1172,7 @@ describe('The Croct plug', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',

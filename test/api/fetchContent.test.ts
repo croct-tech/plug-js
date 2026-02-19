@@ -54,6 +54,7 @@ describe('fetchContent', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',
@@ -89,6 +90,7 @@ describe('fetchContent', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',
@@ -123,6 +125,7 @@ describe('fetchContent', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',
@@ -156,6 +159,7 @@ describe('fetchContent', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',
@@ -190,6 +194,7 @@ describe('fetchContent', () => {
         const result = {
             metadata: {
                 version: '1.0',
+                contentSource: 'slot',
             },
             content: {
                 _component: 'component',

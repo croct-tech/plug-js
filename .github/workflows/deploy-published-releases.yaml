@@ -15,7 +15,7 @@ env:
 
 jobs:
   publish-npm:
-    uses: croct-tech/github-workflows/.github/workflows/general/publish-npm-package.yml@unify-workflows
+    uses: croct-tech/github-workflows/.github/workflows/publish-npm-package.yml@unify-workflows
     with:
       node-version: "23"
       publish-access: "public"

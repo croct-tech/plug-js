@@ -15,7 +15,7 @@ env:
 
 jobs:
   publish-npm:
-    uses: croct-tech/github-workflows/.github/workflows/publish-npm-package.yml@unify-workflows
+    uses: croct-tech/shared-public-configs/.github/workflows/publish-public-npm-package.yml@master
     with:
       publish-access: "public"
       prepare-script: >-

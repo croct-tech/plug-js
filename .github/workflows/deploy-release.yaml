@@ -1,4 +1,4 @@
-name: Release
+name: Deploy release
 
 on:
   release:
@@ -14,7 +14,7 @@ env:
   PREVIEW_WIDGET_URL: https://cdn.croct.io/js/v1/lib/plug/widget-${{ github.ref_name }}.html
 
 jobs:
-  publish-npm:
+  deploy:
     uses: croct-tech/shared-public-configs/.github/workflows/publish-public-npm-package.yml@master
     with:
       prepare-script: >-
@@ -30,7 +30,7 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  deploy-library:
+  deploy-cdn:
     if: ${{ !github.event.release.prerelease }}
     needs: publish-npm
     permissions:

@@ -1,4 +1,4 @@
-name: Library validations
+name: Validate branch
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
       - opened
 
 jobs:
-  validations:
+  validate:
     uses: croct-tech/shared-public-configs/.github/workflows/javascript-validations.yml@master
     with:
       run-security: true

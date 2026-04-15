@@ -1,4 +1,4 @@
-name: Preview validations
+name: Validate preview
 
 on:
   push:

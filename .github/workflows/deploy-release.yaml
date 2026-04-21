@@ -30,7 +30,7 @@ jobs:
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  deploy-cdn:
+  cdn:
     if: ${{ !github.event.release.prerelease }}
     needs: deploy
     permissions:
@@ -83,7 +83,7 @@ jobs:
           gsutil -m cp build/plug.min.js "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
           gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
 
-  deploy-preview-widget:
+  preview-widget:
     permissions:
       id-token: write # This is required for requesting the JWT
       contents: read  # This is required for actions/checkout

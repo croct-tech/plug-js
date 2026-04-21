@@ -12,7 +12,7 @@ on:
       - opened
 
 jobs:
-  validate:
+  type-check:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,7 +38,7 @@ jobs:
         run: npm run validate
 
   lint:
-    needs: [ validate ]
+    needs: [ type-check ]
     runs-on: ubuntu-latest
     defaults:
       run:

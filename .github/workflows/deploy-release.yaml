@@ -1,4 +1,4 @@
-name: Release
+name: Deploy release
 
 on:
   release:
@@ -14,7 +14,25 @@ env:
   PREVIEW_WIDGET_URL: https://cdn.croct.io/js/v1/lib/plug/widget-${{ github.ref_name }}.html
 
 jobs:
-  deploy-library:
+  deploy:
+    uses: croct-tech/shared-public-configs/.github/workflows/publish-public-npm-package.yml@master
+    with:
+      prepare-script: >-
+        cp LICENSE README.md build/ &&
+        cd build &&
+        find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} + &&
+        sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json &&
+        sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.* &&
+        sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.* &&
+        sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.* &&
+        sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.* &&
+        sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.*
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  cdn:
+    if: ${{ !github.event.release.prerelease }}
+    needs: deploy
     permissions:
       id-token: write # This is required for requesting the JWT
       contents: read  # This is required for actions/checkout
@@ -37,44 +55,9 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: |-
-          npm ci
-          rm -rf ~/.npmrc
-
-      - name: Build package
-        run: |-
-          npm run build
-
-      - name: Prepare release
-        run: |-
-          cp LICENSE README.md build/
-          cd build
-          find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} +
-          sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json
-          sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.*
-          sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.*
-          sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.*
-          sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.*
-          sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.*
-
-      - name: Publish pre-release to NPM
-        if: ${{ github.event.release.prerelease }}
-        run: |-
-          cd build
-          npm publish --access public --tag next
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish release to NPM
-        if: ${{ !github.event.release.prerelease }}
-        run: |-
-          cd build
-          npm publish --access public
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
 
       - name: Bundle package
-        if: ${{ !github.event.release.prerelease }}
         run: |-
           rm -rf build
           npm run bundle -- --config-cdn-url=${CDN_URL} \
@@ -85,7 +68,6 @@ jobs:
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
-        if: ${{ !github.event.release.prerelease }}
         uses: 'google-github-actions/auth@v3'
         with:
           workload_identity_provider: '${{ secrets.GCLOUD_WORKLOAD_IDENTITY }}'
@@ -95,14 +77,13 @@ jobs:
         uses: google-github-actions/setup-gcloud@v3
 
       - name: Deploy to GCS
-        if: ${{ !github.event.release.prerelease }}
         env:
           GCLOUD_BUCKET: ${{ secrets.GCLOUD_BUCKET }}
         run: |-
           gsutil -m cp build/plug.min.js "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
           gsutil -m setmeta -h "Cache-Control: public, max-age=3600" "gs://${GCLOUD_BUCKET}/js/v1/lib/plug.js"
 
-  deploy-preview-widget:
+  preview-widget:
     permissions:
       id-token: write # This is required for requesting the JWT
       contents: read  # This is required for actions/checkout

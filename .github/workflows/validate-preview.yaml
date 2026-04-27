@@ -1,4 +1,4 @@
-name: Library validations
+name: Validate preview
 
 on:
   push:
@@ -12,8 +12,11 @@ on:
       - opened
 
 jobs:
-  security-checks:
+  type-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: preview
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -24,30 +27,8 @@ jobs:
         id: cache-dependencies
         uses: actions/cache@v5
         with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('package-lock.json') }}
-
-      - name: Install dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: npm ci
-
-      - name: Check dependency vulnerabilities
-        run: npm audit
-
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 23
-
-      - name: Cache dependencies
-        id: cache-dependencies
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('package-lock.json') }}
+          path: preview/node_modules
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
@@ -57,8 +38,11 @@ jobs:
         run: npm run validate
 
   lint:
+    needs: [ type-check ]
     runs-on: ubuntu-latest
-    needs: [ validate ]
+    defaults:
+      run:
+        working-directory: preview
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -69,8 +53,8 @@ jobs:
         id: cache-dependencies
         uses: actions/cache@v5
         with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('package-lock.json') }}
+          path: preview/node_modules
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
@@ -80,8 +64,12 @@ jobs:
         run: npm run lint
 
   test:
+    needs: [ lint ]
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    needs: [ validate ]
+    defaults:
+      run:
+        working-directory: preview
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -92,12 +80,22 @@ jobs:
         id: cache-dependencies
         uses: actions/cache@v5
         with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('package-lock.json') }}
+          path: preview/node_modules
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Run tests
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright test
         run: npm run test
+
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: playwright-report
+          path: preview/playwright-report/
+          retention-days: 30

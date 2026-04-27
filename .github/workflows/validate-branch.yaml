@@ -1,0 +1,19 @@
+name: Validate branch
+
+on:
+  push:
+    tags-ignore:
+      - '**'
+    branches:
+      - master
+  pull_request:
+    types:
+      - synchronize
+      - opened
+
+jobs:
+  validate:
+    uses: croct-tech/shared-public-configs/.github/workflows/javascript-validations.yml@master
+    with:
+      run-security: true
+      use-private-registry: false

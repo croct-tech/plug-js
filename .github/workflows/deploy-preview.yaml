@@ -1,4 +1,4 @@
-name: PR preview
+name: Deploy preview
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ env:
   MAX_QUERY_LENGTH: 500
 
 jobs:
-  preview:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

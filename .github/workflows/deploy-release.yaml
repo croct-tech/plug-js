@@ -21,7 +21,11 @@ jobs:
         cp LICENSE README.md build/ &&
         cd build &&
         find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} + &&
-        sed -i -e "s~\"version\": \"0.0.0-dev\"~\"version\": \"${GITHUB_REF##*/}\"~" package.json &&
+        tmp=$(mktemp) &&
+        jq --arg version "$GITHUB_REF_NAME" '
+          .version = $version
+        ' package.json > "$tmp" &&
+        mv "$tmp" package.json &&
         sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.* &&
         sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.* &&
         sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.* &&

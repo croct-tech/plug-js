@@ -25,6 +25,18 @@ export interface PluginSdk {
     getBrowserStorage(...namespace: string[]): Storage;
 }
 
+export namespace PluginSdk {
+    export function register(name: string, factory: PluginFactory): void {
+        if (typeof window !== 'undefined') {
+            if (window.croctPlugins === undefined) {
+                window.croctPlugins = {};
+            }
+
+            window.croctPlugins[name] = factory;
+        }
+    }
+}
+
 export interface PluginArguments<T = any> {
     options: T;
     sdk: PluginSdk;

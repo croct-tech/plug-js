@@ -5,6 +5,7 @@ import type {JsonObject} from '@croct/json';
 import {loadSlotContent} from '@croct/content';
 import type {Logger} from '../src/sdk';
 import type {Plugin, PluginFactory} from '../src/plugin';
+import {PluginSdk} from '../src/plugin';
 import type {FetchResponse} from '../src/plug';
 import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
@@ -46,6 +47,8 @@ describe('The Croct plug', () => {
     afterEach(async () => {
         jest.restoreAllMocks();
         process.env = ENV_VARS;
+
+        delete window.croctPlugins;
 
         await croct.unplug();
     });
@@ -386,6 +389,256 @@ describe('The Croct plug', () => {
         expect(getLogger).toHaveBeenCalledWith('Plugin', 'foo', 'namespace');
         expect(getTabStorage).toHaveBeenCalledWith('Plugin', 'foo', 'namespace');
         expect(getBrowserStorage).toHaveBeenCalledWith('Plugin', 'foo', 'namespace');
+    });
+
+    it('should auto-discover and enable plugins declared on window.croctPlugins', () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        croct.plug({appId: APP_ID});
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {}}));
+    });
+
+    it('should enable a plugin registered through PluginSdk.register', () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        PluginSdk.register('foo', fooFactory);
+
+        expect(window.croctPlugins).toEqual({foo: fooFactory});
+
+        croct.plug({appId: APP_ID});
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {}}));
+    });
+
+    it('should pass the configured options to an auto-discovered plugin', () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {
+                foo: {flag: true},
+            },
+        });
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {flag: true}}));
+    });
+
+    it('should not enable an auto-discovered plugin disabled through the configuration', () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {
+                foo: false,
+            },
+        });
+
+        expect(fooFactory).not.toHaveBeenCalled();
+    });
+
+    it('should ignore an auto-discovered plugin conflicting with a registered one', () => {
+        const registeredFactory: PluginFactory = jest.fn();
+        const discoveredFactory: PluginFactory = jest.fn();
+
+        croct.extend('foo', registeredFactory);
+
+        window.croctPlugins = {
+            foo: discoveredFactory,
+        };
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(registeredFactory).toHaveBeenCalled();
+        expect(discoveredFactory).not.toHaveBeenCalled();
+
+        expect(logger.warn).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is already registered, ignoring global registration.'),
+        );
+    });
+
+    it('should ignore a globally declared plugin that is not a valid factory', () => {
+        window.croctPlugins = {
+            foo: 'not a factory' as unknown as PluginFactory,
+        };
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('The plugin "foo" declared globally is not a valid factory, ignoring it.'),
+        );
+    });
+
+    it('should not enable a plugin registered after the plug is unplugged', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        await croct.unplug();
+
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).not.toHaveBeenCalled();
+    });
+
+    it('should re-discover and re-enable a globally declared plugin after re-plugging', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        expect(fooFactory).toHaveBeenCalledTimes(1);
+
+        await croct.unplug();
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        expect(fooFactory).toHaveBeenCalledTimes(2);
+    });
+
+    it('should keep discovering plugins across repeated plug/unplug cycles', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        for (let cycle = 1; cycle <= 3; cycle++) {
+            croct.plug({appId: APP_ID});
+
+            await croct.plugged;
+
+            expect(fooFactory).toHaveBeenCalledTimes(cycle);
+
+            await croct.unplug();
+        }
+    });
+
+    it('should enable on the next plug a plugin registered while unplugged', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        await croct.unplug();
+
+        // Registered while unplugged: ignored now, but picked up on the next plug.
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).not.toHaveBeenCalled();
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        expect(fooFactory).toHaveBeenCalledTimes(1);
+    });
+
+    it('should discover and enable a plugin registered after the plug is loaded', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {}}));
+    });
+
+    it('should apply the configured options to a plugin registered after the plug is loaded', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {
+                foo: {flag: true},
+            },
+        });
+
+        await croct.plugged;
+
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {flag: true}}));
+    });
+
+    it('should not enable a plugin registered after the plug if disabled in the configuration', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {
+                foo: false,
+            },
+        });
+
+        await croct.plugged;
+
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).not.toHaveBeenCalled();
+    });
+
+    it('should not re-enable a plugin already enabled when registered again after load', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        expect(fooFactory).toHaveBeenCalledTimes(1);
+
+        // Re-registering the same factory must not enable the plugin twice.
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).toHaveBeenCalledTimes(1);
     });
 
     it('should handle failures enabling plugins', async () => {

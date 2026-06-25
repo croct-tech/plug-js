@@ -86,6 +86,15 @@ export interface Plug {
 
 const PLUGIN_NAMESPACE = 'Plugin';
 
+/**
+ * The state of a single plug session needed to enable plugins.
+ */
+type PluginContext = {
+    sdk: SdkFacade,
+    appId: string,
+    logger: Logger,
+};
+
 function detectAppId(): string | null {
     const script = window.document.querySelector(`script[src^='${CDN_URL}']`);
 
@@ -186,6 +195,15 @@ export class GlobalPlug implements Plug {
             );
         }
 
+        const configurations = plugins ?? {};
+        const context: PluginContext = {
+            sdk: sdk,
+            appId: appId,
+            logger: logger,
+        };
+
+        this.watchPluginRegistry(context, configurations);
+
         const pending: Array<Promise<void>> = [];
 
         const defaultEnabledPlugins = Object.fromEntries(
@@ -193,90 +211,12 @@ export class GlobalPlug implements Plug {
                 .map(name => [name, true]),
         );
 
-        for (const [name, options] of Object.entries({...defaultEnabledPlugins, ...plugins})) {
-            logger.debug(`Initializing plugin "${name}"...`);
+        for (const [name, options] of Object.entries({...defaultEnabledPlugins, ...configurations})) {
+            const promise = this.enablePlugin(name, options, context);
 
-            const factory = this.pluginFactories[name];
-
-            if (factory === undefined) {
-                logger.error(`Plugin "${name}" is not registered.`);
-
-                continue;
+            if (promise instanceof Promise) {
+                pending.push(promise);
             }
-
-            if (typeof options !== 'boolean' && (options === null || typeof options !== 'object')) {
-                logger.error(
-                    `Invalid options for plugin "${name}", `
-                    + `expected either boolean or object but got ${describe(options)}`,
-                );
-
-                continue;
-            }
-
-            if (options === false) {
-                logger.warn(`Plugin "${name}" is declared but not enabled`);
-
-                continue;
-            }
-
-            const args: PluginArguments = {
-                options: options === true ? {} : options,
-                sdk: {
-                    version: VERSION,
-                    appId: appId,
-                    plug: this,
-                    tracker: sdk.tracker,
-                    evaluator: sdk.evaluator,
-                    user: sdk.user,
-                    session: sdk.session,
-                    tab: sdk.context.getTab(),
-                    userTokenStore: {
-                        getToken: sdk.getToken.bind(sdk),
-                        setToken: sdk.setToken.bind(sdk),
-                    },
-                    previewTokenStore: sdk.previewTokenStore,
-                    cidAssigner: sdk.cidAssigner,
-                    eventManager: sdk.eventManager,
-                    getLogger: (...namespace: string[]): Logger => sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace),
-                    getTabStorage: (...namespace: string[]): Storage => (
-                        sdk.getTabStorage(PLUGIN_NAMESPACE, name, ...namespace)
-                    ),
-                    getBrowserStorage: (...namespace: string[]): Storage => (
-                        sdk.getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace)
-                    ),
-                },
-            };
-
-            let plugin;
-
-            try {
-                plugin = factory(args);
-            } catch (error) {
-                logger.error(`Failed to initialize plugin "${name}": ${formatCause(error)}`);
-
-                continue;
-            }
-
-            logger.debug(`Plugin "${name}" initialized`);
-
-            if (typeof plugin !== 'object') {
-                continue;
-            }
-
-            this.plugins[name] = plugin;
-
-            const promise = plugin.enable();
-
-            if (!(promise instanceof Promise)) {
-                logger.debug(`Plugin "${name}" enabled`);
-
-                continue;
-            }
-
-            pending.push(
-                promise.then(() => logger.debug(`Plugin "${name}" enabled`))
-                    .catch(error => logger.error(`Failed to enable plugin "${name}": ${formatCause(error)}`)),
-            );
         }
 
         Promise.all(pending)
@@ -285,6 +225,168 @@ export class GlobalPlug implements Plug {
 
                 logger.debug('Initialization complete');
             });
+    }
+
+    /**
+     * Registers plugins declared on the `window.croctPlugins` global registry.
+     *
+     * Plugins already present are registered eagerly so they are enabled as part
+     * of the regular initialization. The registry is then replaced with a proxy
+     * that registers and enables any plugin declared after the plug is loaded,
+     * making the registration order irrelevant.
+     *
+     * The proxy traps the captured session: once the plug is unplugged or plugged
+     * again, the `this.instance === context.sdk` check turns it inert, so no
+     * registry state has to be reset on the instance.
+     */
+    private watchPluginRegistry(context: PluginContext, configurations: PluginConfigurations): void {
+        const {sdk, logger} = context;
+
+        // Spread into a fresh object so a proxy installed by a previous session is
+        // discarded rather than re-wrapped, preventing proxies from nesting.
+        const registry = {...window.croctPlugins};
+
+        for (const [name, factory] of Object.entries(registry)) {
+            this.registerExternalPlugin(name, factory, logger);
+        }
+
+        window.croctPlugins = new Proxy(registry, {
+            set: (target, property, factory): boolean => {
+                const result = Reflect.set(target, property, factory);
+
+                if (result && this.instance === sdk && typeof property === 'string') {
+                    if (this.registerExternalPlugin(property, factory, logger)) {
+                        void this.enablePlugin(property, configurations[property] ?? true, context);
+                    }
+                }
+
+                return result;
+            },
+        });
+    }
+
+    /**
+     * Registers a plugin factory declared on the global registry.
+     *
+     * Unlike {@link extend}, conflicts are tolerated so a single malformed or
+     * duplicated declaration cannot prevent the plug from initializing. A factory
+     * already registered under the same name is silently ignored, allowing the
+     * registry to be safely re-scanned across re-plugs.
+     *
+     * @returns Whether the factory was newly registered.
+     */
+    private registerExternalPlugin(name: string, factory: unknown, logger: Logger): boolean {
+        if (typeof factory !== 'function') {
+            logger.error(`The plugin "${name}" declared globally is not a valid factory, ignoring it.`);
+
+            return false;
+        }
+
+        const registered = this.pluginFactories[name];
+
+        if (registered !== undefined) {
+            if (registered !== factory) {
+                logger.warn(`Plugin "${name}" is already registered, ignoring global registration.`);
+            }
+
+            return false;
+        }
+
+        this.pluginFactories[name] = factory as PluginFactory;
+
+        return true;
+    }
+
+    /**
+     * Instantiates and enables a single plugin.
+     *
+     * @returns A promise that resolves once the plugin is enabled, or nothing if
+     *          the plugin is synchronous, disabled, or could not be initialized.
+     */
+    private enablePlugin(name: string, options: unknown, context: PluginContext): Promise<void> | void {
+        const {sdk, appId, logger} = context;
+
+        logger.debug(`Initializing plugin "${name}"...`);
+
+        const factory = this.pluginFactories[name];
+
+        if (factory === undefined) {
+            logger.error(`Plugin "${name}" is not registered.`);
+
+            return;
+        }
+
+        if (typeof options !== 'boolean' && (options === null || typeof options !== 'object')) {
+            logger.error(
+                `Invalid options for plugin "${name}", `
+                + `expected either boolean or object but got ${describe(options)}`,
+            );
+
+            return;
+        }
+
+        if (options === false) {
+            logger.warn(`Plugin "${name}" is declared but not enabled`);
+
+            return;
+        }
+
+        const args: PluginArguments = {
+            options: options === true ? {} : options,
+            sdk: {
+                version: VERSION,
+                appId: appId,
+                plug: this,
+                tracker: sdk.tracker,
+                evaluator: sdk.evaluator,
+                user: sdk.user,
+                session: sdk.session,
+                tab: sdk.context.getTab(),
+                userTokenStore: {
+                    getToken: sdk.getToken.bind(sdk),
+                    setToken: sdk.setToken.bind(sdk),
+                },
+                previewTokenStore: sdk.previewTokenStore,
+                cidAssigner: sdk.cidAssigner,
+                eventManager: sdk.eventManager,
+                getLogger: (...namespace: string[]): Logger => sdk.getLogger(PLUGIN_NAMESPACE, name, ...namespace),
+                getTabStorage: (...namespace: string[]): Storage => (
+                    sdk.getTabStorage(PLUGIN_NAMESPACE, name, ...namespace)
+                ),
+                getBrowserStorage: (...namespace: string[]): Storage => (
+                    sdk.getBrowserStorage(PLUGIN_NAMESPACE, name, ...namespace)
+                ),
+            },
+        };
+
+        let plugin;
+
+        try {
+            plugin = factory(args);
+        } catch (error) {
+            logger.error(`Failed to initialize plugin "${name}": ${formatCause(error)}`);
+
+            return;
+        }
+
+        logger.debug(`Plugin "${name}" initialized`);
+
+        if (typeof plugin !== 'object') {
+            return;
+        }
+
+        this.plugins[name] = plugin;
+
+        const promise = plugin.enable();
+
+        if (!(promise instanceof Promise)) {
+            logger.debug(`Plugin "${name}" enabled`);
+
+            return;
+        }
+
+        return promise.then(() => logger.debug(`Plugin "${name}" enabled`))
+            .catch(error => logger.error(`Failed to enable plugin "${name}": ${formatCause(error)}`));
     }
 
     public get initialized(): boolean {

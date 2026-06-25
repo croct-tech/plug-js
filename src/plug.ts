@@ -19,6 +19,7 @@ import type {FetchOptions as BaseFetchOptions} from '@croct/sdk/facade/contentFe
 import type {FetchResponseOptions, FetchResponse as BaseFetchResponse} from '@croct/sdk/contentFetcher';
 import {loadSlotContent} from '@croct/content';
 import type {Plugin, PluginArguments, PluginFactory} from './plugin';
+import {isReservedPluginName} from './plugin';
 import {CDN_URL} from './constants';
 import {factory as previewPluginFactory} from './plugins/preview';
 import {factory as autoTrackingPluginFactory} from './plugins/autoTracking';
@@ -86,6 +87,12 @@ export interface Plug {
 
 const PLUGIN_NAMESPACE = 'Plugin';
 
+const objectHasOwnProperty = Object.prototype.hasOwnProperty;
+
+function hasOwn(target: object, property: PropertyKey): boolean {
+    return objectHasOwnProperty.call(target, property);
+}
+
 /**
  * The state of a single plug session needed to enable plugins.
  */
@@ -129,7 +136,11 @@ export class GlobalPlug implements Plug {
     }
 
     public extend(name: string, plugin: PluginFactory): void {
-        if (this.pluginFactories[name] !== undefined) {
+        if (isReservedPluginName(name)) {
+            throw new Error(`The plugin name "${name}" is reserved and cannot be used.`);
+        }
+
+        if (hasOwn(this.pluginFactories, name)) {
             throw new Error(`Another plugin is already registered with name "${name}".`);
         }
 
@@ -256,11 +267,25 @@ export class GlobalPlug implements Plug {
 
                 if (result && this.instance === sdk && typeof property === 'string') {
                     if (this.registerExternalPlugin(property, factory, logger)) {
-                        void this.enablePlugin(property, configurations[property] ?? true, context);
+                        // Read the options as an own property only, so inherited keys
+                        // such as `toString` are treated as "not configured".
+                        const options = hasOwn(configurations, property) ? configurations[property] : true;
+
+                        void this.enablePlugin(property, options, context);
                     }
                 }
 
                 return result;
+            },
+            deleteProperty: (target, property): boolean => {
+                if (this.instance === sdk && typeof property === 'string' && hasOwn(this.pluginFactories, property)) {
+                    logger.error(
+                        `Plugin "${property}" cannot be unregistered; `
+                        + 'it will remain registered until the page is reloaded.',
+                    );
+                }
+
+                return Reflect.deleteProperty(target, property);
             },
         });
     }
@@ -276,13 +301,19 @@ export class GlobalPlug implements Plug {
      * @returns Whether the factory was newly registered.
      */
     private registerExternalPlugin(name: string, factory: unknown, logger: Logger): boolean {
+        if (isReservedPluginName(name)) {
+            logger.error(`The plugin name "${name}" is reserved and cannot be used, ignoring it.`);
+
+            return false;
+        }
+
         if (typeof factory !== 'function') {
             logger.error(`The plugin "${name}" declared globally is not a valid factory, ignoring it.`);
 
             return false;
         }
 
-        const registered = this.pluginFactories[name];
+        const registered = hasOwn(this.pluginFactories, name) ? this.pluginFactories[name] : undefined;
 
         if (registered !== undefined) {
             if (registered !== factory) {
@@ -306,9 +337,15 @@ export class GlobalPlug implements Plug {
     private enablePlugin(name: string, options: unknown, context: PluginContext): Promise<void> | void {
         const {sdk, appId, logger} = context;
 
+        if (isReservedPluginName(name)) {
+            logger.error(`The plugin name "${name}" is reserved and cannot be used, ignoring it.`);
+
+            return;
+        }
+
         logger.debug(`Initializing plugin "${name}"...`);
 
-        const factory = this.pluginFactories[name];
+        const factory = hasOwn(this.pluginFactories, name) ? this.pluginFactories[name] : undefined;
 
         if (factory === undefined) {
             logger.error(`Plugin "${name}" is not registered.`);

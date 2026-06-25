@@ -6,7 +6,7 @@ import {loadSlotContent} from '@croct/content';
 import type {Logger} from '../src/sdk';
 import type {Plugin, PluginFactory} from '../src/plugin';
 import {PluginSdk} from '../src/plugin';
-import type {FetchResponse} from '../src/plug';
+import type {FetchResponse, PluginConfigurations} from '../src/plug';
 import {GlobalPlug} from '../src/plug';
 import {CDN_URL} from '../src/constants';
 import {Token} from '../src/sdk/token';
@@ -71,6 +71,11 @@ describe('The Croct plug', () => {
         }
 
         expect(override).toThrow('Another plugin is already registered with name "foo"');
+    });
+
+    it('should disallow extending with a reserved plugin name', () => {
+        expect(() => croct.extend('__proto__', () => ({enable: jest.fn()})))
+            .toThrow('The plugin name "__proto__" is reserved and cannot be used.');
     });
 
     it('should fail to initialize if the app ID is not specified and cannot be auto-detected', () => {
@@ -498,6 +503,127 @@ describe('The Croct plug', () => {
 
         expect(logger.error).toHaveBeenCalledWith(
             expect.stringContaining('The plugin "foo" declared globally is not a valid factory, ignoring it.'),
+        );
+    });
+
+    it('should reject a globally declared plugin using a reserved name', () => {
+        const fooFactory: PluginFactory = jest.fn();
+        const registry: Record<string, PluginFactory> = {};
+
+        // Own, enumerable "__proto__" key (a plain literal would set the prototype instead).
+        Object.defineProperty(registry, '__proto__', {
+            value: fooFactory,
+            enumerable: true,
+            configurable: true,
+            writable: true,
+        });
+
+        window.croctPlugins = registry;
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        expect(fooFactory).not.toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('The plugin name "__proto__" is reserved and cannot be used, ignoring it.'),
+        );
+    });
+
+    it('should reject a configured plugin using a reserved name', () => {
+        const plugins: PluginConfigurations = {};
+
+        // Own, enumerable reserved key (a plain literal would set the prototype instead).
+        Object.defineProperty(plugins, '__proto__', {
+            value: true,
+            enumerable: true,
+            configurable: true,
+            writable: true,
+        });
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+            plugins: plugins,
+        });
+
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('The plugin name "__proto__" is reserved and cannot be used, ignoring it.'),
+        );
+    });
+
+    it('should throw when registering a plugin with a reserved name through PluginSdk.register', () => {
+        expect(() => PluginSdk.register('__proto__', jest.fn()))
+            .toThrow('The plugin name "__proto__" is reserved and cannot be used.');
+
+        expect(window.croctPlugins).toBeUndefined();
+    });
+
+    it('should do nothing when registering a plugin outside the browser', () => {
+        const original = Object.getOwnPropertyDescriptor(globalThis, 'window');
+
+        Object.defineProperty(globalThis, 'window', {value: undefined, configurable: true});
+
+        try {
+            expect(() => PluginSdk.register('foo', jest.fn())).not.toThrow();
+        } finally {
+            Object.defineProperty(globalThis, 'window', original!);
+        }
+    });
+
+    it('should treat an inherited configuration key as unconfigured for a late plugin', async () => {
+        const factory: PluginFactory = jest.fn();
+
+        croct.plug({appId: APP_ID});
+
+        await croct.plugged;
+
+        // "toString" exists on Object.prototype but not as an own config key.
+        PluginSdk.register('toString', factory);
+
+        expect(factory).toHaveBeenCalledWith(expect.objectContaining({options: {}}));
+    });
+
+    it('should warn that a plugin removed from the registry stays registered', async () => {
+        const fooFactory: PluginFactory = jest.fn();
+
+        window.croctPlugins = {
+            foo: fooFactory,
+        };
+
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        croct.plug({
+            appId: APP_ID,
+            logger: logger,
+        });
+
+        await croct.plugged;
+
+        delete window.croctPlugins?.foo;
+
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" cannot be unregistered'),
         );
     });
 

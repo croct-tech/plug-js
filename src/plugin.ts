@@ -25,6 +25,30 @@ export interface PluginSdk {
     getBrowserStorage(...namespace: string[]): Storage;
 }
 
+const RESERVED_PLUGIN_NAMES: readonly string[] = ['__proto__', 'constructor', 'prototype'];
+
+export function isReservedPluginName(name: string): boolean {
+    return RESERVED_PLUGIN_NAMES.includes(name);
+}
+
+export namespace PluginSdk {
+    export function register(name: string, factory: PluginFactory): void {
+        if (isReservedPluginName(name)) {
+            throw new Error(`The plugin name "${name}" is reserved and cannot be used.`);
+        }
+
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        if (window.croctPlugins === undefined) {
+            window.croctPlugins = {};
+        }
+
+        window.croctPlugins[name] = factory;
+    }
+}
+
 export interface PluginArguments<T = any> {
     options: T;
     sdk: PluginSdk;

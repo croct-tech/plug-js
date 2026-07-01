@@ -29,8 +29,6 @@ jobs:
         sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.* &&
         sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.* &&
         sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.*
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   cdn:
     if: ${{ !github.event.release.prerelease }}

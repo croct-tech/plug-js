@@ -47,8 +47,6 @@ jobs:
         run: |-
           rm -rf build
           npm run bundle -- --config-cdn-url=${CDN_URL} \
-              --config-playground-origin=${PLAYGROUND_ORIGIN} \
-              --config-playground-connect-url=${PLAYGROUND_CONNECT_URL} \
               --config-preview-widget-origin=${PREVIEW_WIDGET_ORIGIN} \
               --config-preview-widget-url=${PREVIEW_WIDGET_URL}
 

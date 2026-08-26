@@ -2,15 +2,12 @@
 import {pathToFileURL} from 'url';
 
 const CDN_ORIGIN = 'https://cdn.croct.io';
-const PLAYGROUND_ORIGIN = 'https://play.croct.com';
 
 /**
  * The environment variable that exposes each constant to the workflows.
  */
 const VARIABLES = {
     cdnUrl: 'CDN_URL',
-    playgroundOrigin: 'PLAYGROUND_ORIGIN',
-    playgroundConnectUrl: 'PLAYGROUND_CONNECT_URL',
     previewWidgetOrigin: 'PREVIEW_WIDGET_ORIGIN',
     previewWidgetUrl: 'PREVIEW_WIDGET_URL',
 };
@@ -35,8 +32,6 @@ export function getWidgetPath(version) {
 export function getConstants(version) {
     return {
         cdnUrl: `${CDN_ORIGIN}/js/v1/lib/plug.js`,
-        playgroundOrigin: PLAYGROUND_ORIGIN,
-        playgroundConnectUrl: `${PLAYGROUND_ORIGIN}/connect.html`,
         previewWidgetOrigin: CDN_ORIGIN,
         previewWidgetUrl: `${CDN_ORIGIN}/${getWidgetPath(version)}`,
     };

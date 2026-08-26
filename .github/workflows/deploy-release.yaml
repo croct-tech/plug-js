@@ -5,30 +5,13 @@ on:
     types:
       - published
 
-env:
-  CDN_URL: https://cdn.croct.io/js/v1/lib/plug.js
-  PLAYGROUND_ORIGIN: https://play.croct.com
-  PLAYGROUND_CONNECT_URL: https://play.croct.com/connect.html
-  PREVIEW_WIDGET_ORIGIN: https://cdn.croct.io
-  PREVIEW_WIDGET_PATH: js/v1/lib/plug/widget-${{ github.ref_name }}.html
-  PREVIEW_WIDGET_URL: https://cdn.croct.io/js/v1/lib/plug/widget-${{ github.ref_name }}.html
-
 jobs:
   deploy:
     uses: croct-tech/shared-public-configs/.github/workflows/publish-public-npm-package.yml@master
     with:
-      prepare-script: >-
-        cp LICENSE README.md build/ &&
-        cd build &&
-        find . -type f -path '*/*\.js.map' -exec sed -i -e "s~../src~src~" {} + &&
-        tmp=$(mktemp) &&
-        jq --arg version "$GITHUB_REF_NAME" '.version = $version' package.json > "$tmp" &&
-        mv "$tmp" package.json &&
-        sed -i -e "s~<@cdnUrl@>~${CDN_URL}~" constants.* &&
-        sed -i -e "s~<@playgroundOrigin@>~${PLAYGROUND_ORIGIN}~" constants.* &&
-        sed -i -e "s~<@playgroundConnectUrl@>~${PLAYGROUND_CONNECT_URL}~" constants.* &&
-        sed -i -e "s~<@previewWidgetOrigin@>~${PREVIEW_WIDGET_ORIGIN}~" constants.* &&
-        sed -i -e "s~<@previewWidgetUrl@>~${PREVIEW_WIDGET_URL}~" constants.*
+      # The caller's `env` block is not propagated to reusable workflows, so the
+      # constants are resolved by the script itself, from `release-config.mjs`.
+      prepare-script: node prepare-release.mjs
 
   cdn:
     if: ${{ !github.event.release.prerelease }}
@@ -45,6 +28,9 @@ jobs:
           node-version: 23
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Resolve release constants
+        run: node release-config.mjs >> "$GITHUB_ENV"
 
       - name: Cache dependencies
         id: cache-dependencies
@@ -97,12 +83,16 @@ jobs:
         with:
           node-version: 23
 
+      - name: Resolve release constants
+        working-directory: .
+        run: node release-config.mjs >> "$GITHUB_ENV"
+
       - name: Cache dependencies
         id: cache-dependencies
         uses: actions/cache@v5
         with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('package-lock.json') }}
+          path: preview/node_modules
+          key: preview_node_modules-${{ hashFiles('preview/package-lock.json') }}
 
       - name: Install dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'

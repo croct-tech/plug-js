@@ -61,7 +61,7 @@
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "rollup": "^4.0.0",
-    "schema-dts": "^1.1.5",
+    "schema-dts": "^2.0.0",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.2",
     "tsup": "^8.4.0",

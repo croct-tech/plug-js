@@ -90,20 +90,16 @@ window.addEventListener('DOMContentLoaded', () => {
         .ready
         .then(onLoad);
 
-    function removeItem(id) {
-        document.getElementById(id)
-            .closest('li')
-            .remove();
-    }
-
-    const previewModeLabels = {
-        slotDefaultContent: 'Default content',
-        fallbackContent: 'Fallback content',
-    };
+    const slotContentLabels = new Map([
+        ['slotDefaultContent', 'Default content'],
+        ['fallbackContent', 'Fallback content'],
+    ]);
 
     function renderExperience(previewMode, experience) {
-        if(previewMode !== null) {
-            removeItem('preview-experience');
+        if (slotContentLabels.has(previewMode)) {
+            document.getElementById('preview-experience')
+                .closest('li')
+                .remove();
 
             return;
         }
@@ -112,8 +108,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAudience(previewMode, audience) {
-        if (previewMode !== null) {
-            removeItem('preview-audience');
+        if (slotContentLabels.has(previewMode)) {
+            document.getElementById('preview-audience')
+                .closest('li')
+                .remove();
 
             return;
         }
@@ -122,17 +120,22 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderExperiment(previewMode, variant, experiment) {
-        if (previewMode !== null) {
-            removeItem('preview-experiment');
-
-            document.getElementById('preview-content').textContent = previewModeLabels[previewMode] ?? previewMode;
+        if (slotContentLabels.has(previewMode)) {
+            document.getElementById('preview-experiment')
+                .closest('li')
+                .remove();
 
             return;
         }
 
         if (experiment === null) {
-            removeItem('preview-content');
-            removeItem('preview-experiment');
+            document.getElementById('preview-content')
+                .closest('li')
+                .remove();
+
+            document.getElementById('preview-experiment')
+                .closest('li')
+                .remove();
 
             return;
         }
@@ -145,8 +148,22 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderSlot(previewMode, slot) {
-        if (previewMode === null || slot === null) {
-            removeItem('preview-slot');
+        const contentLabel = slotContentLabels.get(previewMode);
+
+        if (contentLabel === undefined) {
+            document.getElementById('preview-slot')
+                .closest('li')
+                .remove();
+
+            return;
+        }
+
+        document.getElementById('preview-content').textContent = contentLabel;
+
+        if (slot === null) {
+            document.getElementById('preview-slot')
+                .closest('li')
+                .remove();
 
             return;
         }
@@ -156,7 +173,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function renderLocale(locale) {
         if (locale === null) {
-            removeItem('preview-locale');
+            document.getElementById('preview-locale')
+                .closest('li')
+                .remove();
 
             return;
         }

@@ -236,6 +236,7 @@ describe('A Preview plugin', () => {
         const src = new URL(widget.getAttribute('src')!);
 
         expect(src.searchParams.has('previewMode')).toBe(false);
+        expect(src.searchParams.has('slot')).toBe(false);
         expect(src.searchParams.has('experience')).toBe(false);
         expect(src.searchParams.has('experiment')).toBe(false);
         expect(src.searchParams.has('audience')).toBe(false);
@@ -274,6 +275,38 @@ describe('A Preview plugin', () => {
         expect(src.searchParams.get('audience')).toBe(metadata.audienceName);
         expect(src.searchParams.get('variant')).toBe(metadata.variantName);
         expect(src.searchParams.get('locale')).toBe(metadata.locale);
+        expect(src.searchParams.has('slot')).toBe(false);
+    });
+
+    it('should insert the widget with the slot information', () => {
+        const plugin = new PreviewPlugin(configuration);
+
+        const metadata = {
+            previewMode: 'slotDefaultContent',
+            slotId: '2e7ec10a-e27e-4269-9c16-3fc05271c817',
+            slotName: 'Home banner',
+            locale: 'en-us',
+        };
+
+        configuration.tokenStore.setToken(Token.of(tokenData.headers, {
+            ...tokenData.payload,
+            metadata: metadata,
+        }));
+
+        plugin.enable();
+
+        const widget = document.body.querySelector('iframe') as HTMLIFrameElement;
+
+        const src = new URL(widget.getAttribute('src')!);
+
+        expect(src.searchParams.get('previewMode')).toBe(metadata.previewMode);
+        expect(src.searchParams.get('slot')).toBe(metadata.slotName);
+        expect(src.searchParams.get('locale')).toBe(metadata.locale);
+        expect(src.searchParams.has('slotId')).toBe(false);
+        expect(src.searchParams.has('experience')).toBe(false);
+        expect(src.searchParams.has('experiment')).toBe(false);
+        expect(src.searchParams.has('audience')).toBe(false);
+        expect(src.searchParams.has('variant')).toBe(false);
     });
 
     it('should insert the widget when the document is ready', () => {

@@ -16,6 +16,7 @@ export type Configuration = {
 export class PreviewPlugin implements Plugin {
     private static readonly PREVIEW_PARAMS = {
         previewMode: 'previewMode',
+        slotName: 'slot',
         experienceName: 'experience',
         experimentName: 'experiment',
         audienceName: 'audience',

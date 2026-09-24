@@ -33,6 +33,7 @@ test.describe('Preview widget', () => {
 
     test('should expand clicking on the widget', async ({page}) => {
         await open(page, {
+            previewMode: 'publishedContent',
             experience: 'Experience',
             experiment: 'Experiment',
             audience: 'Audience',
@@ -47,13 +48,13 @@ test.describe('Preview widget', () => {
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
         await expect(page.locator('#minimize-button')).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experience')).toBeAttached();
+        await expect(page.locator('#preview-experience')).toHaveText('Experience');
 
-        await expect(page.locator('#preview-experiment')).toBeAttached();
+        await expect(page.locator('#preview-experiment')).toHaveText('Experiment');
 
-        await expect(page.locator('#preview-audience')).toBeAttached();
+        await expect(page.locator('#preview-audience')).toHaveText('Audience');
 
-        await expect(page.locator('#preview-content')).toBeAttached();
+        await expect(page.locator('#preview-content')).toHaveText('Variant');
 
         await expect(page.locator('#preview-locale')).toBeAttached();
 
@@ -149,6 +150,34 @@ test.describe('Preview widget', () => {
         await expect(page.locator('#preview-experience')).not.toBeAttached();
 
         await expect(page.locator('#preview-experiment')).not.toBeAttached();
+    });
+
+    test('should display the experience when previewing the slot timeline', async ({page}) => {
+        await open(page, {
+            previewMode: 'slotTimeline',
+            slot: 'Home banner',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-experience')).toHaveText('Experience');
+
+        await expect(page.locator('#preview-experiment')).toHaveText('Experiment');
+
+        await expect(page.locator('#preview-audience')).toHaveText('Audience');
+
+        await expect(page.locator('#preview-content')).toHaveText('Variant');
+
+        await expect(page.locator('#preview-slot')).not.toBeAttached();
     });
 
     test('should display the experiment default content if no variant is specified', async ({page}) => {

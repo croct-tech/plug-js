@@ -152,6 +152,34 @@ test.describe('Preview widget', () => {
         await expect(page.locator('#preview-experiment')).not.toBeAttached();
     });
 
+    test('should hide the experience when previewing the fallback content', async ({page}) => {
+        await open(page, {
+            previewMode: 'fallbackContent',
+            slot: 'Home banner',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-experience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page.locator('#preview-audience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-content')).toHaveText('Fallback content');
+
+        await expect(page.locator('.options .title')).toHaveText(['Slot', 'Content', 'Locale']);
+    });
+
     test('should display the experience when previewing the slot timeline', async ({page}) => {
         await open(page, {
             previewMode: 'slotTimeline',

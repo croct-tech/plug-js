@@ -90,11 +90,20 @@ window.addEventListener('DOMContentLoaded', () => {
         .ready
         .then(onLoad);
 
+    function removeItem(id) {
+        document.getElementById(id)
+            .closest('li')
+            .remove();
+    }
+
+    const previewModeLabels = {
+        slotDefaultContent: 'Default content',
+        fallbackContent: 'Fallback content',
+    };
+
     function renderExperience(previewMode, experience) {
-        if(previewMode === 'slotDefaultContent') {
-            document.getElementById('preview-experience')
-                .closest('li')
-                .remove();
+        if(previewMode !== null) {
+            removeItem('preview-experience');
 
             return;
         }
@@ -103,8 +112,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAudience(previewMode, audience) {
-        if(previewMode === 'slotDefaultContent') {
-            document.getElementById('preview-audience').textContent = 'None';
+        if (previewMode !== null) {
+            removeItem('preview-audience');
 
             return;
         }
@@ -113,14 +122,17 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderExperiment(previewMode, variant, experiment) {
-        if (previewMode === 'slotDefaultContent' || experiment === null) {
-            document.getElementById('preview-content')
-                .closest('li')
-                .remove();
+        if (previewMode !== null) {
+            removeItem('preview-experiment');
 
-            document.getElementById('preview-experiment')
-                .closest('li')
-                .remove();
+            document.getElementById('preview-content').textContent = previewModeLabels[previewMode] ?? previewMode;
+
+            return;
+        }
+
+        if (experiment === null) {
+            removeItem('preview-content');
+            removeItem('preview-experiment');
 
             return;
         }
@@ -132,11 +144,19 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function renderSlot(previewMode, slot) {
+        if (previewMode === null || slot === null) {
+            removeItem('preview-slot');
+
+            return;
+        }
+
+        document.getElementById('preview-slot').textContent = slot;
+    }
+
     function renderLocale(locale) {
         if (locale === null) {
-            document.getElementById('preview-locale')
-                .closest('li')
-                .remove();
+            removeItem('preview-locale');
 
             return;
         }
@@ -157,6 +177,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
 
     const previewMode = params.get('previewMode');
+    const slot = params.get('slot');
     const experience = params.get('experience');
     const audience = params.get('audience');
     const experiment = params.get('experiment');
@@ -168,6 +189,8 @@ window.addEventListener('DOMContentLoaded', () => {
     renderAudience(previewMode, audience);
 
     renderExperiment(previewMode, variant, experiment);
+
+    renderSlot(previewMode, slot);
 
     renderLocale(locale);
 });

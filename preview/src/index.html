@@ -50,6 +50,7 @@
 
         return {
             previewMode: metadata?.previewMode ?? null,
+            slot: metadata?.slotName ?? null,
             audience: metadata?.audienceName ?? null,
             experience: metadata?.experienceName ?? null,
             experiment: metadata?.experimentName ?? null,
@@ -71,6 +72,10 @@
 
         if (previewInfo.previewMode !== null) {
             params.append('previewMode', previewInfo.previewMode);
+        }
+
+        if (previewInfo.slot !== null) {
+            params.append('slot', previewInfo.slot);
         }
 
         if (previewInfo.audience !== null) {

@@ -90,8 +90,13 @@ window.addEventListener('DOMContentLoaded', () => {
         .ready
         .then(onLoad);
 
+    const slotContentLabels = new Map([
+        ['slotDefaultContent', 'Default content'],
+        ['fallbackContent', 'Fallback content'],
+    ]);
+
     function renderExperience(previewMode, experience) {
-        if(previewMode === 'slotDefaultContent') {
+        if (slotContentLabels.has(previewMode)) {
             document.getElementById('preview-experience')
                 .closest('li')
                 .remove();
@@ -103,8 +108,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAudience(previewMode, audience) {
-        if(previewMode === 'slotDefaultContent') {
-            document.getElementById('preview-audience').textContent = 'None';
+        if (slotContentLabels.has(previewMode)) {
+            document.getElementById('preview-audience')
+                .closest('li')
+                .remove();
 
             return;
         }
@@ -113,7 +120,17 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderExperiment(previewMode, variant, experiment) {
-        if (previewMode === 'slotDefaultContent' || experiment === null) {
+        if (slotContentLabels.has(previewMode)) {
+            document.getElementById('preview-experiment')
+                .closest('li')
+                .remove();
+
+            document.getElementById('preview-content').textContent = slotContentLabels.get(previewMode);
+
+            return;
+        }
+
+        if (experiment === null) {
             document.getElementById('preview-content')
                 .closest('li')
                 .remove();
@@ -130,6 +147,18 @@ window.addEventListener('DOMContentLoaded', () => {
         if (variant !== null){
             document.getElementById('preview-content').textContent = variant;
         }
+    }
+
+    function renderSlot(slot) {
+        if (slot === null) {
+            document.getElementById('preview-slot')
+                .closest('li')
+                .remove();
+
+            return;
+        }
+
+        document.getElementById('preview-slot').textContent = slot;
     }
 
     function renderLocale(locale) {
@@ -157,6 +186,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
 
     const previewMode = params.get('previewMode');
+    const slot = params.get('slot');
     const experience = params.get('experience');
     const audience = params.get('audience');
     const experiment = params.get('experiment');
@@ -168,6 +198,8 @@ window.addEventListener('DOMContentLoaded', () => {
     renderAudience(previewMode, audience);
 
     renderExperiment(previewMode, variant, experiment);
+
+    renderSlot(slot);
 
     renderLocale(locale);
 });

@@ -33,6 +33,7 @@ test.describe('Preview widget', () => {
 
     test('should expand clicking on the widget', async ({page}) => {
         await open(page, {
+            previewMode: 'publishedContent',
             experience: 'Experience',
             experiment: 'Experiment',
             audience: 'Audience',
@@ -47,15 +48,17 @@ test.describe('Preview widget', () => {
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
         await expect(page.locator('#minimize-button')).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-experience')).toBeAttached();
+        await expect(page.locator('#preview-experience')).toHaveText('Experience');
 
-        await expect(page.locator('#preview-experiment')).toBeAttached();
+        await expect(page.locator('#preview-experiment')).toHaveText('Experiment');
 
-        await expect(page.locator('#preview-audience')).toBeAttached();
+        await expect(page.locator('#preview-audience')).toHaveText('Audience');
 
-        await expect(page.locator('#preview-content')).toBeAttached();
+        await expect(page.locator('#preview-content')).toHaveText('Variant');
 
         await expect(page.locator('#preview-locale')).toBeAttached();
+
+        await expect(page.locator('#preview-slot')).not.toBeAttached();
 
         await expect(page).toHaveScreenshot('widget-expanded.png');
     });
@@ -78,9 +81,83 @@ test.describe('Preview widget', () => {
         await expect(page).toHaveScreenshot('widget-truncated.png');
     });
 
-    test('should not indicate any specific audience when previewing the default content', async ({page}) => {
+    test('should display the slot when previewing the default content', async ({page}) => {
         await open(page, {
             previewMode: 'slotDefaultContent',
+            slot: 'Home banner',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-content')).toHaveText('Default content');
+
+        await expect(page.locator('#preview-slot')).toHaveText('Home banner');
+
+        await expect(page.locator('.options .title')).toHaveText(['Slot', 'Content', 'Locale']);
+
+        await expect(page.locator('#preview-audience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-experience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page).toHaveScreenshot('widget-slot-default-content.png');
+    });
+
+    test('should not display the slot if not specified when previewing the default content', async ({page}) => {
+        await open(page, {
+            previewMode: 'slotDefaultContent',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-content')).toHaveText('Default content');
+
+        await expect(page.locator('#preview-slot')).not.toBeAttached();
+    });
+
+    test('should display the slot when previewing the fallback content', async ({page}) => {
+        await open(page, {
+            previewMode: 'fallbackContent',
+            slot: 'Home banner',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-content')).toHaveText('Fallback content');
+
+        await expect(page.locator('#preview-slot')).toHaveText('Home banner');
+
+        await expect(page.locator('.options .title')).toHaveText(['Slot', 'Content', 'Locale']);
+
+        await expect(page.locator('#preview-audience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-experience')).not.toBeAttached();
+
+        await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page).toHaveScreenshot('widget-slot-fallback-content.png');
+    });
+
+    test('should hide the experience when previewing the fallback content', async ({page}) => {
+        await open(page, {
+            previewMode: 'fallbackContent',
+            slot: 'Home banner',
             experience: 'Experience',
             experiment: 'Experiment',
             audience: 'Audience',
@@ -94,15 +171,43 @@ test.describe('Preview widget', () => {
 
         await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
 
-        await expect(page.locator('#preview-audience')).toHaveText('None');
-
         await expect(page.locator('#preview-experience')).not.toBeAttached();
 
         await expect(page.locator('#preview-experiment')).not.toBeAttached();
 
-        await expect(page.locator('#preview-content')).not.toBeAttached();
+        await expect(page.locator('#preview-audience')).not.toBeAttached();
 
-        await expect(page).toHaveScreenshot('widget-slot-default-content.png');
+        await expect(page.locator('#preview-content')).toHaveText('Fallback content');
+
+        await expect(page.locator('.options .title')).toHaveText(['Slot', 'Content', 'Locale']);
+    });
+
+    test('should display the slot along with the experience when previewing the slot timeline', async ({page}) => {
+        await open(page, {
+            previewMode: 'slotTimeline',
+            slot: 'Home banner',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-slot')).toHaveText('Home banner');
+
+        await expect(page.locator('#preview-experience')).toHaveText('Experience');
+
+        await expect(page.locator('#preview-audience')).toHaveText('Audience');
+
+        await expect(page.locator('#preview-experiment')).toHaveText('Experiment');
+
+        await expect(page.locator('#preview-content')).toHaveText('Variant');
     });
 
     test('should display the experiment default content if no variant is specified', async ({page}) => {
@@ -249,14 +354,12 @@ test.describe('Preview widget', () => {
 
         await expect(page.locator('#disclosure')).toHaveAttribute('aria-expanded', 'true');
 
-        await expect.poll(() => events.length).toBeGreaterThan(0);
-
-        events.splice(0, events.length);
-
         await page.locator('#leave-button').click();
 
-        await expect.poll(() => events.length).toBe(1);
+        const getLeaveEvents = (): WidgetEvent[] => events.filter(event => event.type === 'croct:preview:leave');
 
-        expect(events[0].type).toEqual('croct:preview:leave');
+        await expect.poll(() => getLeaveEvents().length).toBe(1);
+
+        expect(getLeaveEvents()).toEqual([{type: 'croct:preview:leave'}]);
     });
 });

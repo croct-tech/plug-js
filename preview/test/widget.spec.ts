@@ -180,6 +180,34 @@ test.describe('Preview widget', () => {
         await expect(page.locator('.options .title')).toHaveText(['Slot', 'Content', 'Locale']);
     });
 
+    test('should display the slot along with the experience when previewing the slot timeline', async ({page}) => {
+        await open(page, {
+            previewMode: 'slotTimeline',
+            slot: 'Home banner',
+            experience: 'Experience',
+            experiment: 'Experiment',
+            audience: 'Audience',
+            variant: 'Variant',
+            locale: 'en-us',
+        });
+
+        const disclosure = page.locator('#disclosure');
+
+        await disclosure.click();
+
+        await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
+
+        await expect(page.locator('#preview-slot')).toHaveText('Home banner');
+
+        await expect(page.locator('#preview-experience')).toHaveText('Experience');
+
+        await expect(page.locator('#preview-audience')).toHaveText('Audience');
+
+        await expect(page.locator('#preview-experiment')).toHaveText('Experiment');
+
+        await expect(page.locator('#preview-content')).toHaveText('Variant');
+    });
+
     test('should display the experiment default content if no variant is specified', async ({page}) => {
         await open(page, {
             experience: 'Experience',

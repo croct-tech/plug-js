@@ -125,6 +125,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 .closest('li')
                 .remove();
 
+            document.getElementById('preview-content').textContent = slotContentLabels.get(previewMode);
+
             return;
         }
 
@@ -147,19 +149,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderSlot(previewMode, slot) {
-        const contentLabel = slotContentLabels.get(previewMode);
-
-        if (contentLabel === undefined) {
-            document.getElementById('preview-slot')
-                .closest('li')
-                .remove();
-
-            return;
-        }
-
-        document.getElementById('preview-content').textContent = contentLabel;
-
+    function renderSlot(slot) {
         if (slot === null) {
             document.getElementById('preview-slot')
                 .closest('li')
@@ -209,7 +199,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     renderExperiment(previewMode, variant, experiment);
 
-    renderSlot(previewMode, slot);
+    renderSlot(slot);
 
     renderLocale(locale);
 });

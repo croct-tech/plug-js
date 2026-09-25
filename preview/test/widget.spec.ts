@@ -150,6 +150,8 @@ test.describe('Preview widget', () => {
         await expect(page.locator('#preview-experience')).not.toBeAttached();
 
         await expect(page.locator('#preview-experiment')).not.toBeAttached();
+
+        await expect(page).toHaveScreenshot('widget-slot-fallback-content.png');
     });
 
     test('should hide the experience when previewing the fallback content', async ({page}) => {

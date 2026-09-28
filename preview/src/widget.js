@@ -90,13 +90,13 @@ window.addEventListener('DOMContentLoaded', () => {
         .ready
         .then(onLoad);
 
-    const slotContentLabels = new Map([
-        ['slotDefaultContent', 'Default content'],
-        ['fallbackContent', 'Fallback content'],
-    ]);
+    const slotContentLabels = {
+        slotDefaultContent: 'Default content',
+        fallbackContent: 'Fallback content',
+    };
 
     function renderExperience(previewMode, experience) {
-        if (slotContentLabels.has(previewMode)) {
+        if (slotContentLabels[previewMode] !== undefined) {
             document.getElementById('preview-experience')
                 .closest('li')
                 .remove();
@@ -108,7 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAudience(previewMode, audience) {
-        if (slotContentLabels.has(previewMode)) {
+        if (slotContentLabels[previewMode] !== undefined) {
             document.getElementById('preview-audience')
                 .closest('li')
                 .remove();
@@ -120,12 +120,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderExperiment(previewMode, variant, experiment) {
-        if (slotContentLabels.has(previewMode)) {
+        if (slotContentLabels[previewMode] !== undefined) {
             document.getElementById('preview-experiment')
                 .closest('li')
                 .remove();
 
-            document.getElementById('preview-content').textContent = slotContentLabels.get(previewMode);
+            document.getElementById('preview-content').textContent = slotContentLabels[previewMode];
 
             return;
         }

@@ -137,6 +137,22 @@ describe('track', () => {
         expect(mockPublish).toHaveBeenCalledWith(request, {});
     });
 
+    it('should pass the logger to the publisher', async () => {
+        const logger: Logger = {
+            debug: jest.fn(),
+            info: jest.fn(),
+            warn: jest.fn(),
+            error: jest.fn(),
+        };
+
+        await track(event, {appId: appId, logger: logger});
+
+        expect(EventPublisher).toHaveBeenCalledWith({
+            appId: appId,
+            logger: logger,
+        });
+    });
+
     it('should log and rethrow errors', async () => {
         const logger: Logger = {
             debug: jest.fn(),

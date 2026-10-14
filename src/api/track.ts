@@ -45,6 +45,8 @@ export function track(event: TrackedEvent, options: TrackOptions): Promise<void>
     const publisher = new EventPublisher({
         ...auth,
         ...(baseEndpointUrl !== undefined ? {baseEndpointUrl: baseEndpointUrl} : {}),
+        // Lets the publisher report problems such as suspended tracking
+        ...(logger !== undefined ? {logger: logger} : {}),
     });
 
     return publisher.publish(createRequest(event), publishOptions)

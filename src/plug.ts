@@ -216,6 +216,7 @@ export class GlobalPlug implements Plug {
         this.watchPluginRegistry(context, configurations);
 
         const pending: Array<Promise<void>> = [];
+        const unregistered: string[] = [];
 
         const defaultEnabledPlugins = Object.fromEntries(
             Object.keys(this.pluginFactories)
@@ -223,12 +224,31 @@ export class GlobalPlug implements Plug {
         );
 
         for (const [name, options] of Object.entries({...defaultEnabledPlugins, ...configurations})) {
-            const promise = this.enablePlugin(name, options, context);
+            if (isReservedPluginName(name)) {
+                logger.error(`The plugin name "${name}" is reserved and cannot be used, ignoring it.`);
+
+                continue;
+            }
+
+            const factory = hasOwn(this.pluginFactories, name) ? this.pluginFactories[name] : undefined;
+
+            if (factory === undefined) {
+                // A script loaded later may still declare it on the global registry
+                logger.debug(`Plugin "${name}" is not registered yet, it will be enabled once registered.`);
+
+                unregistered.push(name);
+
+                continue;
+            }
+
+            const promise = this.enablePlugin(name, factory, options, context);
 
             if (promise instanceof Promise) {
                 pending.push(promise);
             }
         }
+
+        this.reportUnregisteredPlugins(unregistered, context);
 
         Promise.all(pending)
             .then(() => {
@@ -266,12 +286,14 @@ export class GlobalPlug implements Plug {
                 const result = Reflect.set(target, property, factory);
 
                 if (result && this.instance === sdk && typeof property === 'string') {
-                    if (this.registerExternalPlugin(property, factory, logger)) {
+                    const registered = this.registerExternalPlugin(property, factory, logger);
+
+                    if (registered !== null) {
                         // Read the options as an own property only, so inherited keys
                         // such as `toString` are treated as "not configured".
                         const options = hasOwn(configurations, property) ? configurations[property] : true;
 
-                        void this.enablePlugin(property, options, context);
+                        void this.enablePlugin(property, registered, options, context);
                     }
                 }
 
@@ -298,19 +320,19 @@ export class GlobalPlug implements Plug {
      * already registered under the same name is silently ignored, allowing the
      * registry to be safely re-scanned across re-plugs.
      *
-     * @returns Whether the factory was newly registered.
+     * @returns The factory if newly registered, or null otherwise.
      */
-    private registerExternalPlugin(name: string, factory: unknown, logger: Logger): boolean {
+    private registerExternalPlugin(name: string, factory: unknown, logger: Logger): PluginFactory | null {
         if (isReservedPluginName(name)) {
             logger.error(`The plugin name "${name}" is reserved and cannot be used, ignoring it.`);
 
-            return false;
+            return null;
         }
 
         if (typeof factory !== 'function') {
             logger.error(`The plugin "${name}" declared globally is not a valid factory, ignoring it.`);
 
-            return false;
+            return null;
         }
 
         const registered = hasOwn(this.pluginFactories, name) ? this.pluginFactories[name] : undefined;
@@ -320,12 +342,51 @@ export class GlobalPlug implements Plug {
                 logger.warn(`Plugin "${name}" is already registered, ignoring global registration.`);
             }
 
-            return false;
+            return null;
         }
 
         this.pluginFactories[name] = factory as PluginFactory;
 
-        return true;
+        return this.pluginFactories[name];
+    }
+
+    /**
+     * Reports the configured plugins that were never registered.
+     *
+     * Plugins declared on the global registry may be registered after the plug
+     * is loaded, such as by a script loaded asynchronously, so the report waits
+     * until the page has loaded, when all scripts in the page have run.
+     */
+    private reportUnregisteredPlugins(names: string[], context: PluginContext): void {
+        if (names.length === 0) {
+            return;
+        }
+
+        const {sdk, logger} = context;
+
+        const report = (): void => {
+            // Ignore reports from a previous session, after the plug is unplugged or plugged again
+            if (this.instance !== sdk) {
+                return;
+            }
+
+            for (const name of names) {
+                if (!hasOwn(this.pluginFactories, name)) {
+                    logger.error(`Plugin "${name}" is not registered.`);
+                }
+            }
+        };
+
+        // Defer to a new task, so scripts registering on the load event itself run first
+        const deferReport = (): void => {
+            setTimeout(report, 0);
+        };
+
+        if (document.readyState === 'complete') {
+            deferReport();
+        } else {
+            window.addEventListener('load', deferReport, {once: true});
+        }
     }
 
     /**
@@ -334,24 +395,15 @@ export class GlobalPlug implements Plug {
      * @returns A promise that resolves once the plugin is enabled, or nothing if
      *          the plugin is synchronous, disabled, or could not be initialized.
      */
-    private enablePlugin(name: string, options: unknown, context: PluginContext): Promise<void> | void {
+    private enablePlugin(
+        name: string,
+        factory: PluginFactory,
+        options: unknown,
+        context: PluginContext,
+    ): Promise<void> | void {
         const {sdk, appId, logger} = context;
 
-        if (isReservedPluginName(name)) {
-            logger.error(`The plugin name "${name}" is reserved and cannot be used, ignoring it.`);
-
-            return;
-        }
-
         logger.debug(`Initializing plugin "${name}"...`);
-
-        const factory = hasOwn(this.pluginFactories, name) ? this.pluginFactories[name] : undefined;
-
-        if (factory === undefined) {
-            logger.error(`Plugin "${name}" is not registered.`);
-
-            return;
-        }
 
         if (typeof options !== 'boolean' && (options === null || typeof options !== 'object')) {
             logger.error(

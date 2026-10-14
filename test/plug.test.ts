@@ -288,13 +288,23 @@ describe('The Croct plug', () => {
         );
     });
 
-    it('should log an error if a plugin is not registered', () => {
-        const logger: Logger = {
+    function createLogger(): Logger {
+        return {
             debug: jest.fn(),
             info: jest.fn(),
             warn: jest.fn(),
             error: jest.fn(),
         };
+    }
+
+    function waitNextTask(): Promise<void> {
+        return new Promise(resolve => {
+            setTimeout(resolve, 0);
+        });
+    }
+
+    it('should defer reporting a configured plugin that is not registered until the page loads', async () => {
+        const logger = createLogger();
 
         croct.plug({
             appId: APP_ID,
@@ -302,7 +312,89 @@ describe('The Croct plug', () => {
             logger: logger,
         });
 
+        expect(logger.debug).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered yet, it will be enabled once registered.'),
+        );
+
+        expect(logger.error).not.toHaveBeenCalled();
+
+        await waitNextTask();
+
         expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered.'),
+        );
+    });
+
+    it('should report a configured plugin that is not registered after the load event', async () => {
+        jest.spyOn(document, 'readyState', 'get').mockReturnValue('loading');
+
+        const logger = createLogger();
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {foo: true},
+            logger: logger,
+        });
+
+        await waitNextTask();
+
+        expect(logger.error).not.toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered.'),
+        );
+
+        window.dispatchEvent(new Event('load'));
+
+        await waitNextTask();
+
+        expect(logger.error).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered.'),
+        );
+    });
+
+    it('should enable a configured plugin registered after the plug is loaded', async () => {
+        jest.spyOn(document, 'readyState', 'get').mockReturnValue('loading');
+
+        const logger = createLogger();
+        const enable = jest.fn();
+        const fooFactory: PluginFactory = jest.fn().mockReturnValue({enable: enable});
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {foo: {bar: 'baz'}},
+            logger: logger,
+        });
+
+        PluginSdk.register('foo', fooFactory);
+
+        window.dispatchEvent(new Event('load'));
+
+        await waitNextTask();
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {bar: 'baz'}}));
+        expect(enable).toHaveBeenCalled();
+        expect(logger.error).not.toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered.'),
+        );
+    });
+
+    it('should not report unregistered plugins of a previous session', async () => {
+        jest.spyOn(document, 'readyState', 'get').mockReturnValue('loading');
+
+        const logger = createLogger();
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {foo: true},
+            logger: logger,
+        });
+
+        await croct.unplug();
+
+        window.dispatchEvent(new Event('load'));
+
+        await waitNextTask();
+
+        expect(logger.error).not.toHaveBeenCalledWith(
             expect.stringContaining('Plugin "foo" is not registered.'),
         );
     });

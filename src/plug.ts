@@ -216,7 +216,6 @@ export class GlobalPlug implements Plug {
         this.watchPluginRegistry(context, configurations);
 
         const pending: Array<Promise<void>> = [];
-        const unregistered: string[] = [];
 
         const defaultEnabledPlugins = Object.fromEntries(
             Object.keys(this.pluginFactories)
@@ -236,8 +235,6 @@ export class GlobalPlug implements Plug {
                 // A script loaded later may still declare it on the global registry
                 logger.debug(`Plugin "${name}" is not registered yet, it will be enabled once registered.`);
 
-                unregistered.push(name);
-
                 continue;
             }
 
@@ -247,8 +244,6 @@ export class GlobalPlug implements Plug {
                 pending.push(promise);
             }
         }
-
-        this.reportUnregisteredPlugins(unregistered, context);
 
         Promise.all(pending)
             .then(() => {
@@ -348,45 +343,6 @@ export class GlobalPlug implements Plug {
         this.pluginFactories[name] = factory as PluginFactory;
 
         return this.pluginFactories[name];
-    }
-
-    /**
-     * Reports the configured plugins that were never registered.
-     *
-     * Plugins declared on the global registry may be registered after the plug
-     * is loaded, such as by a script loaded asynchronously, so the report waits
-     * until the page has loaded, when all scripts in the page have run.
-     */
-    private reportUnregisteredPlugins(names: string[], context: PluginContext): void {
-        if (names.length === 0) {
-            return;
-        }
-
-        const {sdk, logger} = context;
-
-        const report = (): void => {
-            // Ignore reports from a previous session, after the plug is unplugged or plugged again
-            if (this.instance !== sdk) {
-                return;
-            }
-
-            for (const name of names) {
-                if (!hasOwn(this.pluginFactories, name)) {
-                    logger.error(`Plugin "${name}" is not registered.`);
-                }
-            }
-        };
-
-        // Defer to a new task, so scripts registering on the load event itself run first
-        const deferReport = (): void => {
-            setTimeout(report, 0);
-        };
-
-        if (document.readyState === 'complete') {
-            deferReport();
-        } else {
-            window.addEventListener('load', deferReport, {once: true});
-        }
     }
 
     /**

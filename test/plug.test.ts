@@ -288,7 +288,7 @@ describe('The Croct plug', () => {
         );
     });
 
-    it('should log an error if a plugin is not registered', () => {
+    it('should wait for a configured plugin that is not registered yet', () => {
         const logger: Logger = {
             debug: jest.fn(),
             info: jest.fn(),
@@ -302,9 +302,24 @@ describe('The Croct plug', () => {
             logger: logger,
         });
 
-        expect(logger.error).toHaveBeenCalledWith(
-            expect.stringContaining('Plugin "foo" is not registered.'),
+        expect(logger.debug).toHaveBeenCalledWith(
+            expect.stringContaining('Plugin "foo" is not registered yet, it will be enabled once registered.'),
         );
+    });
+
+    it('should enable a configured plugin registered after the plug is loaded', () => {
+        const enable = jest.fn();
+        const fooFactory: PluginFactory = jest.fn().mockReturnValue({enable: enable});
+
+        croct.plug({
+            appId: APP_ID,
+            plugins: {foo: {bar: 'baz'}},
+        });
+
+        PluginSdk.register('foo', fooFactory);
+
+        expect(fooFactory).toHaveBeenCalledWith(expect.objectContaining({options: {bar: 'baz'}}));
+        expect(enable).toHaveBeenCalled();
     });
 
     it('should log an error if a plugin options is invalid', () => {

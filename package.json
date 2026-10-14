@@ -32,6 +32,7 @@
     "url": "https://github.com/croct-tech/plug-js/issues"
   },
   "homepage": "https://github.com/croct-tech/plug-js",
+  "sideEffects": false,
   "scripts": {
     "lint": "eslint 'src/**/*.ts' 'test/**/*.ts'",
     "test": "jest -c jest.config.mjs --coverage",
